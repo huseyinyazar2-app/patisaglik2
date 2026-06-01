@@ -98,7 +98,28 @@ async function handlePackageRisk(req, res) {
   if (!result.data?.level || !Array.isArray(result.data?.prepare)) {
     return sendJson(res, 502, { ok: false, reason: 'invalid_schema' });
   }
-  return sendJson(res, 200, { ok: true, data: result.data });
+  return sendJson(res, 200, { ok: true, data: sanitizePackageRiskResult(result.data) });
+}
+
+function sanitizePackageRiskResult(data) {
+  const unsafeHomeAdvice = /bal|şeker|seker|sür|sur|kustur|aktif kömür|aktif komur|ilaç ver|ilac ver|tuzlu su|süt ver|sut ver/i;
+  const cleanList = (items, fallback = []) => {
+    const list = Array.isArray(items) ? items : [];
+    const cleaned = list
+      .map(item => String(item || '').trim())
+      .filter(Boolean)
+      .filter(item => !unsafeHomeAdvice.test(item));
+    return cleaned.length ? cleaned.slice(0, 4) : fallback;
+  };
+  return {
+    ...data,
+    doNotDo: Array.isArray(data.doNotDo) ? data.doNotDo.slice(0, 3).map(String) : [],
+    prepare: cleanList(data.prepare, ['Ambalajı, zaman bilgisini ve yaklaşık miktarı veteriner için hazırla.']),
+    askVet: cleanList(data.askVet, [
+      'Acil kliniğe doğrudan gelmem gerekiyor mu?',
+      'Yolda yalnızca gözlemlemem gereken belirtiler neler?'
+    ]).slice(0, 3)
+  };
 }
 
 function safeSegment(value, fallback) {
