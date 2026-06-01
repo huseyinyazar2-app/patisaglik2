@@ -405,6 +405,9 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
 - [x] Gerçek belge OCR ilk fazı eklendi: Gemini ile belge/foto/PDF okunup özet, tahlil, ilaç, fatura ve takip görevi çıktıları kayda yazılıyor; rapor detayında gösteriliyor.
 - [x] Hibrit medya/server kararı uygulama notlarına işlendi: medya lokal öncelikli, raporlar kalıcı, AI girdileri 90 gün geçici, B2 private bucket signed URL ile kullanılacak.
 - [x] Production API ilk fazı eklendi: `/api/health`, `/api/media/sign-upload`, `/api/media/complete`, `/api/media/sign-download`; Docker/Coolify deploy dosyası hazırlandı.
+- [x] Belge formu server destekli AI/OCR ve B2 signed upload akışına bağlandı; API yoksa yerel kayıt fallback'i korunuyor.
+- [x] Ambalaj risk AI özeti server endpointine taşındı; local Gemini fallback sadece geliştirme için kaldı.
+- [x] Coolify `patisaglik2-api` server env değerleri yazıldı: B2, Gemini, Turso ve CORS.
 - [x] GitHub ilk push yapıldı: `huseyinyazar2-app/patisaglik2.git` `main` branch.
 - [x] Coolify'da `patisaglik2` projesi ve `patisaglik2-api` uygulaması oluşturuldu; repo public yapıldıktan sonra deploy geçti ve app `running:healthy` oldu.
 - [x] Sonuç ekranındaki risk dili aciliyet trafik ışığına çevrildi: yeşil, sarı, turuncu, kırmızı; dil teşhis değil yönlendirme/aciliyet riski olarak tutuldu.

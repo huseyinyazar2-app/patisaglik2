@@ -15,6 +15,10 @@ async function postJson(path, body) {
   return data;
 }
 
+export async function postApiJson(path, body) {
+  return postJson(path, body);
+}
+
 export async function requestMediaUpload({ userId, petId, category, file }) {
   return postJson('/api/media/sign-upload', {
     userId,

@@ -5,6 +5,7 @@ import { submitFeatureForm } from '../../services/formSubmissions.js';
 import { showToast } from '../../ui/toast.js';
 import { buildPetRiskContext } from '../../services/petContext.js';
 import { generateGeminiJson, isGeminiConfigured } from '../../services/geminiClient.js';
+import { postApiJson } from '../../services/apiClient.js';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -343,7 +344,7 @@ export function afterRender() {
 
     button.disabled = true;
     const originalText = button.textContent;
-    button.textContent = isGeminiConfigured() ? 'AI ile taranıyor...' : 'Taranıyor...';
+    button.textContent = 'AI ile taranıyor...';
 
     lastResult = analyzeExposure({
       productName,
@@ -354,13 +355,15 @@ export function afterRender() {
       petContext
     });
 
-    if (isGeminiConfigured()) {
-      try {
-        const ai = await generateGeminiJson({
+    try {
+      
+        const prompt = buildAiPrompt({ productName, ingredientText, amount, timing, symptoms, petContext }, lastResult);
+        let ai = await postApiJson('/api/ai/package-risk', { prompt }).catch(() => null);
+        if (!ai?.ok && isGeminiConfigured()) ai = await generateGeminiJson({
           system: 'Sen veteriner yerine geçmeyen, güvenli aciliyet yönlendirmesi yapan bir pet sağlık asistanısın.',
-          prompt: buildAiPrompt({ productName, ingredientText, amount, timing, symptoms, petContext }, lastResult)
+          prompt
         });
-        if (ai.ok) {
+        if (ai?.ok) {
           lastResult.ai = normalizeAiResult(ai.data);
           if (lastResult.ai?.level && lastResult.ai.level !== 'unknown') {
             const order = ['unknown', 'watch', 'foreign', 'high', 'critical'];
@@ -373,7 +376,6 @@ export function afterRender() {
       } catch {
         lastResult.ai = null;
       }
-    }
 
     const output = document.getElementById('packageRiskResult');
     output.innerHTML = renderResult(lastResult);

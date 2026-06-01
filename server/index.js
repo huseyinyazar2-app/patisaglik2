@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { mediaCategories, optionalEnv } from './config.js';
 import { insertMediaMetadata } from './db.js';
 import { presignGetObject, presignPutObject } from './s3Presign.js';
+import { documentOcrPrompt, generateGeminiJson, normalizeOcrResult } from './ai.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -39,7 +40,7 @@ function readBody(req) {
     let body = '';
     req.on('data', (chunk) => {
       body += chunk;
-      if (body.length > 1024 * 1024) {
+      if (body.length > 24 * 1024 * 1024) {
         reject(new Error('body_too_large'));
         req.destroy();
       }
@@ -53,6 +54,34 @@ function readBody(req) {
       }
     });
   });
+}
+
+async function handleDocumentOcr(req, res) {
+  const body = await readBody(req);
+  if (!body.fileBase64) return sendJson(res, 400, { ok: false, error: 'missing_file' });
+  const { system, prompt } = documentOcrPrompt(body);
+  const result = await generateGeminiJson({
+    system,
+    prompt,
+    parts: [{
+      inlineData: {
+        mimeType: body.mimeType || 'application/octet-stream',
+        data: body.fileBase64
+      }
+    }]
+  });
+  if (!result.ok) return sendJson(res, 502, result);
+  return sendJson(res, 200, { ok: true, data: normalizeOcrResult(result.data, body.documentKind) });
+}
+
+async function handlePackageRisk(req, res) {
+  const body = await readBody(req);
+  const result = await generateGeminiJson({
+    system: 'Sen veteriner yerine geçmeyen, güvenli aciliyet yönlendirmesi yapan bir pet sağlık asistanısın.',
+    prompt: body.prompt || ''
+  });
+  if (!result.ok) return sendJson(res, 502, result);
+  return sendJson(res, 200, { ok: true, data: result.data });
 }
 
 function safeSegment(value, fallback) {
@@ -185,6 +214,8 @@ async function route(req, res) {
     if (req.method === 'POST' && url.pathname === '/api/media/sign-upload') return handleSignUpload(req, res);
     if (req.method === 'POST' && url.pathname === '/api/media/complete') return handleCompleteUpload(req, res);
     if (req.method === 'GET' && url.pathname === '/api/media/sign-download') return handleSignDownload(req, res, url);
+    if (req.method === 'POST' && url.pathname === '/api/ai/document-ocr') return handleDocumentOcr(req, res);
+    if (req.method === 'POST' && url.pathname === '/api/ai/package-risk') return handlePackageRisk(req, res);
     if (url.pathname.startsWith('/api/')) return sendJson(res, 404, { ok: false, error: 'not_found' });
     return serveStatic(req, res, url);
   } catch (err) {

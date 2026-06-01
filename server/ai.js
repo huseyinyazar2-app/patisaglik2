@@ -1,18 +1,56 @@
-import { generateGeminiJsonWithParts, isGeminiConfigured } from './geminiClient.js';
-import { postApiJson } from './apiClient.js';
+const GEMINI_MODEL = 'gemini-1.5-flash';
 
-const MAX_INLINE_FILE_BYTES = 8 * 1024 * 1024;
-
-function fileToBase64(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(String(reader.result || '').split(',')[1] || '');
-    reader.onerror = () => reject(new Error('Dosya okunamadı.'));
-    reader.readAsDataURL(file);
-  });
+function apiKey() {
+  return process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || '';
 }
 
-function normalizeOcrResult(value, fallbackKind) {
+function extractJson(text) {
+  const cleaned = String(text || '').trim().replace(/^```json|```$/g, '').trim();
+  try {
+    return JSON.parse(cleaned);
+  } catch {
+    const match = cleaned.match(/\{[\s\S]*\}/);
+    if (!match) return null;
+    try {
+      return JSON.parse(match[0]);
+    } catch {
+      return null;
+    }
+  }
+}
+
+export function isAiConfigured() {
+  return Boolean(apiKey());
+}
+
+export async function generateGeminiJson({ system, prompt, parts = [] }) {
+  const key = apiKey();
+  if (!key) return { ok: false, reason: 'missing_key' };
+  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(key)}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      generationConfig: {
+        temperature: 0.2,
+        responseMimeType: 'application/json'
+      },
+      contents: [{
+        role: 'user',
+        parts: [
+          { text: `${system}\n\n${prompt}` },
+          ...parts
+        ]
+      }]
+    })
+  });
+  if (!response.ok) return { ok: false, reason: `http_${response.status}` };
+  const data = await response.json();
+  const text = data?.candidates?.[0]?.content?.parts?.map(part => part.text || '').join('\n') || '';
+  const json = extractJson(text);
+  return json ? { ok: true, data: json } : { ok: false, reason: 'invalid_json' };
+}
+
+export function normalizeOcrResult(value, fallbackKind = '') {
   const result = value && typeof value === 'object' ? value : {};
   return {
     status: result.status || 'needs_review',
@@ -33,30 +71,7 @@ function normalizeOcrResult(value, fallbackKind) {
   };
 }
 
-export function isDocumentOcrConfigured() {
-  return true;
-}
-
-export async function runDocumentOcr({ file, documentKind, readGoal, extractionOptions = [], note = '' }) {
-  if (!file) return { ok: false, reason: 'missing_file' };
-  if (file.size > MAX_INLINE_FILE_BYTES) return { ok: false, reason: 'file_too_large' };
-
-  const base64 = await fileToBase64(file);
-  try {
-    const server = await postApiJson('/api/ai/document-ocr', {
-      fileBase64: base64,
-      mimeType: file.type || 'application/octet-stream',
-      documentKind,
-      readGoal,
-      extractionOptions,
-      note
-    });
-    if (server.ok) return server;
-  } catch {
-    // Local Vite dev server has no API; fall back to browser Gemini when configured.
-  }
-
-  if (!isGeminiConfigured()) return { ok: false, reason: 'missing_key' };
+export function documentOcrPrompt({ documentKind, readGoal, extractionOptions = [], note = '' }) {
   const system = [
     'Sen veteriner belgeleri için güvenli OCR ve veri ayrıştırma yardımcısısın.',
     'Yalnızca belgede görünen metni ve net çıkarımları yaz. Tahmin uydurma.',
@@ -87,21 +102,5 @@ JSON şeması:
   "warnings": [""],
   "confidence": 0
 }`;
-
-  const response = await generateGeminiJsonWithParts({
-    system,
-    prompt,
-    parts: [{
-      inlineData: {
-        mimeType: file.type || 'application/octet-stream',
-        data: base64
-      }
-    }]
-  });
-
-  if (!response.ok) return response;
-  return {
-    ok: true,
-    data: normalizeOcrResult(response.data, documentKind)
-  };
+  return { system, prompt };
 }

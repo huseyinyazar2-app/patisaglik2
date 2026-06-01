@@ -3,6 +3,7 @@ import { getState } from '../../store.js';
 import { getActivePet } from '../../mock/pets.js';
 import { submitFeatureForm } from '../../services/formSubmissions.js';
 import { isDocumentOcrConfigured, runDocumentOcr } from '../../services/documentOcr.js';
+import { uploadMediaFile } from '../../services/apiClient.js';
 import QRCode from 'qrcode';
 
 function escapeHtml(value) {
@@ -600,7 +601,7 @@ export function afterRender() {
       return;
     }
     if (!isDocumentOcrConfigured()) {
-      showNotice('Gemini API anahtarı bulunamadı. VITE_GEMINI_API_KEY env değeri ile dev server yeniden başlatılınca gerçek OCR aktif olur.', 'error');
+      showNotice('AI/OCR servisi şu an hazır değil. Canlı API env değerleri tanımlanınca aktif olur.', 'error');
       return;
     }
 
@@ -675,12 +676,35 @@ export function afterRender() {
 
     try {
       const featureCode = window.location.hash.split('/feature/')[1]?.split('?')[0] || 'unknown';
+      const featurePayload = collectPayload();
+      if (featureCode === 'document-ai') {
+        const file = document.querySelector('.feature-upload-input')?.files?.[0];
+        if (file) {
+          try {
+            const uploaded = await uploadMediaFile({
+              userId: state.user?.id || 'user-1',
+              petId: state.activePetId || 'pet-1',
+              category: 'documents',
+              file,
+              relatedEntityType: 'document'
+            });
+            featurePayload.__media_files = (featurePayload.__media_files || []).map((item) => item.name === file.name ? {
+              ...item,
+              object_key: uploaded.objectKey,
+              media_id: uploaded.id || '',
+              storage: 'b2'
+            } : item);
+          } catch {
+            showNotice('Belge yerel kayda alınacak; bulut upload daha sonra tekrar denenebilir.', 'info');
+          }
+        }
+      }
       const result = await submitFeatureForm({
         userId: state.user?.id || 'user-1',
         petId: state.activePetId || 'pet-1',
         featureCode,
         locale: state.user?.locale || 'tr',
-        payload: collectPayload()
+        payload: featurePayload
       });
       if (result.storage === 'turso') {
         const target = result.domainTable ? ` ve ${result.domainTable} tablosuna işlendi` : '';
