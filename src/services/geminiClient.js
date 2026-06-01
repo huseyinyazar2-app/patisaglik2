@@ -1,4 +1,4 @@
-const GEMINI_MODEL = import.meta.env?.VITE_GEMINI_MODEL || 'gemini-3.1-flash-lite';
+const GEMINI_STANDARD_MODEL = import.meta.env?.VITE_GEMINI_STANDARD_MODEL || 'gemini-3-flash-preview';
 
 function getApiKey() {
   return import.meta.env?.VITE_GEMINI_API_KEY || '';
@@ -23,19 +23,20 @@ export function isGeminiConfigured() {
   return Boolean(getApiKey());
 }
 
-export async function generateGeminiJson({ system, prompt }) {
+export async function generateGeminiJson({ system, prompt, model = GEMINI_STANDARD_MODEL }) {
   return generateGeminiJsonWithParts({
     system,
     prompt,
-    parts: []
+    parts: [],
+    model
   });
 }
 
-export async function generateGeminiJsonWithParts({ system, prompt, parts = [] }) {
+export async function generateGeminiJsonWithParts({ system, prompt, parts = [], model = GEMINI_STANDARD_MODEL }) {
   const apiKey = getApiKey();
   if (!apiKey) return { ok: false, reason: 'missing_key' };
 
-  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`, {
+  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

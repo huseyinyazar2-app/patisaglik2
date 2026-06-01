@@ -63,6 +63,7 @@ async function handleDocumentOcr(req, res) {
   const result = await generateGeminiJson({
     system,
     prompt,
+    model: process.env.GEMINI_STANDARD_MODEL || 'gemini-3-flash-preview',
     parts: [{
       inlineData: {
         mimeType: body.mimeType || 'application/octet-stream',
@@ -79,6 +80,7 @@ async function handlePackageRisk(req, res) {
   const result = await generateGeminiJson({
     system: 'Sen veteriner yerine geçmeyen, güvenli aciliyet yönlendirmesi yapan bir pet sağlık asistanısın.',
     prompt: body.prompt || '',
+    model: process.env.GEMINI_CRITICAL_MODEL || 'gemini-3.5-flash',
     responseSchema: {
       type: 'object',
       properties: {

@@ -361,7 +361,8 @@ export function afterRender() {
         let ai = await postApiJson('/api/ai/package-risk', { prompt }).catch(() => null);
         if (!ai?.ok && isGeminiConfigured()) ai = await generateGeminiJson({
           system: 'Sen veteriner yerine geçmeyen, güvenli aciliyet yönlendirmesi yapan bir pet sağlık asistanısın.',
-          prompt
+          prompt,
+          model: import.meta.env?.VITE_GEMINI_CRITICAL_MODEL || 'gemini-3.5-flash'
         });
         if (ai?.ok) {
           lastResult.ai = normalizeAiResult(ai.data);

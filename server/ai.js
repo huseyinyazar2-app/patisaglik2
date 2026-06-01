@@ -1,4 +1,5 @@
-const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.1-flash-lite';
+const GEMINI_STANDARD_MODEL = process.env.GEMINI_STANDARD_MODEL || 'gemini-3-flash-preview';
+const GEMINI_CRITICAL_MODEL = process.env.GEMINI_CRITICAL_MODEL || 'gemini-3.5-flash';
 
 function apiKey() {
   return process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY || '';
@@ -23,10 +24,10 @@ export function isAiConfigured() {
   return Boolean(apiKey());
 }
 
-export async function generateGeminiJson({ system, prompt, parts = [], responseSchema = null }) {
+export async function generateGeminiJson({ system, prompt, parts = [], responseSchema = null, model = GEMINI_STANDARD_MODEL }) {
   const key = apiKey();
   if (!key) return { ok: false, reason: 'missing_key' };
-  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(key)}`, {
+  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
