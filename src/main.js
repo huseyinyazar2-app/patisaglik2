@@ -3,6 +3,7 @@ import { registerRoute, initRouter, navigate, setBeforeNavigate } from './router
 import { getState } from './store.js';
 import { startReminderScheduler } from './services/reminderScheduler.js';
 import { cleanupSmokeTestArtifacts } from './services/devHygiene.js';
+import { t } from './i18n/tr.js';
 
 // SVG Icons for tab bar
 const icons = {
@@ -48,7 +49,7 @@ window.__icons = icons;
 
 // Tab bar configuration
 const tabRoutes = ['/home', '/check', '/history', '/reports', '/profile'];
-const tabLabels = ['Ana Sayfa', 'Pati AI', 'Geçmiş', 'Raporlar', 'Profil'];
+const tabLabelKeys = ['tabs.home', 'tabs.check', 'tabs.history', 'tabs.reports', 'tabs.profile'];
 const tabIcons = ['home', 'spark', 'history', 'reports', 'profile'];
 
 // Routes that show tab bar
@@ -75,7 +76,7 @@ function renderTabBar(activeTab) {
         ${tabRoutes.map((route, i) => `
           <button class="tab-item ${activeTab === route ? 'active' : ''}" data-route="${route}">
             ${icons[tabIcons[i]]}
-            <span class="tab-item-label">${tabLabels[i]}</span>
+            <span class="tab-item-label">${t(tabLabelKeys[i])}</span>
           </button>
         `).join('')}
       </div>

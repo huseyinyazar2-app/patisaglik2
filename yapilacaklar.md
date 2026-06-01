@@ -439,6 +439,9 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
   - [x] Kullanıcı profilinde telefon, ülke, il, ilçe, mahalle, dil ve saat dilimi gösterilip düzenlenebiliyor.
   - [x] Kullanıcı lokasyon bilgisi `users.metadata` / local fallback içinde saklanıyor; canlı DB şemasında geniş kolon zorunluluğu oluşturulmadı.
   - [x] Profil ekranında eksik telefon/il/ilçe bilgisi görünür “tamamla” uyarısı olarak işaretleniyor.
+- [x] Dil altyapısı ilk faz güçlendirildi: `tr/en` sözlükleri, aktif profile göre `t()` seçimi, hesap ekranı dil seçimi ve tab bar çeviri bağlantısı eklendi.
+- [x] I18N audit script'i ve raporu eklendi: `scripts/audit-i18n.mjs`, `docs/I18N_AUDIT.md`.
+- [ ] Kalan hardcoded Türkçe metinler i18n'e taşınacak: son audit `1076` string literal / `74` dosya.
 - [x] Pet profil bağlamı AI karar motoruna bağlandı.
   - [x] Pet yaşından yaşam evresi hesaplanıyor: `newborn`, `young`, `adult`, `senior`, `geriatric`.
   - [x] Tür, ırk, kısa burunlu/büyük ırk/yavru/yaşlı/kronik durum gibi risk etiketleri üretiliyor.

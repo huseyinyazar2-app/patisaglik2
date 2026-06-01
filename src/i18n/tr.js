@@ -1,4 +1,6 @@
 // Pati Sağlık — i18n Turkish translations
+import en from './en.js';
+
 const tr = {
   app: { name: 'Pati Sağlık', tagline: 'Evcil dostunuzun sağlık geçmişini takip edin, değişimleri erken fark edin.' },
   splash: { start: 'Başlayalım', login: 'Giriş Yap' },
@@ -176,6 +178,27 @@ const tr = {
     save_settings: 'Ayarları Kaydet', download_data: 'Verilerimi İndir',
     delete_all: 'Hesabımı ve Verilerimi Sil'
   },
+  account: {
+    title: 'Hesap Bilgileri',
+    kicker: 'Telefon öncelikli profil',
+    heading: 'İletişim ve konum',
+    desc: 'Acil yönlendirme, bildirim ve yerel ayarlar için temel hesap bilgileri.',
+    phone: 'Telefon',
+    full_name: 'Ad soyad',
+    email: 'E-posta',
+    optional: 'Opsiyonel',
+    country: 'Ülke',
+    province: 'İl',
+    district: 'İlçe',
+    neighborhood: 'Mahalle',
+    language: 'Dil',
+    timezone: 'Saat dilimi',
+    privacy_note: 'Konum mahalle düzeyinde tutulur; klinik/yakın destek yönlendirmesi için kullanılır. Hassas canlı konum paylaşımı bu formda alınmaz.',
+    phone_required: 'Telefon ana giriş bilgisi olarak gereklidir.',
+    saving: 'Kaydediliyor...',
+    saved: 'Hesap bilgileri kaydedildi.',
+    save_failed: 'Hesap kaydedilemedi'
+  },
   notifications: {
     title: 'Bildirimler',
     reminder_title: 'Hatırlatıcı Bildirimleri',
@@ -225,20 +248,52 @@ const tr = {
     loading: 'Yükleniyor...', error: 'Bir hata oluştu', retry: 'Tekrar Dene',
     confirm: 'Onayla', yes: 'Evet', no: 'Hayır',
     photos: 'fotoğraf', videos: 'video', audio: 'ses kaydı', measurements: 'ölçüm'
+  },
+  tabs: {
+    home: 'Ana Sayfa',
+    check: 'Pati AI',
+    history: 'Geçmiş',
+    reports: 'Raporlar',
+    profile: 'Profil'
   }
 };
 
-export function t(key) {
+const dictionaries = { tr, en };
+
+export function getLocale() {
+  try {
+    const profile = JSON.parse(localStorage.getItem('pati_user_profile') || '{}');
+    return profile.locale || 'tr';
+  } catch {
+    return 'tr';
+  }
+}
+
+export function setLocale(locale) {
+  const nextLocale = dictionaries[locale] ? locale : 'tr';
+  try {
+    const profile = JSON.parse(localStorage.getItem('pati_user_profile') || '{}');
+    localStorage.setItem('pati_user_profile', JSON.stringify({ ...profile, locale: nextLocale }));
+  } catch {}
+  return nextLocale;
+}
+
+function readValue(dictionary, key) {
   const keys = key.split('.');
-  let val = tr;
+  let val = dictionary;
   for (const k of keys) {
     if (val && typeof val === 'object' && k in val) {
       val = val[k];
     } else {
-      return key;
+      return undefined;
     }
   }
   return val;
+}
+
+export function t(key) {
+  const locale = getLocale();
+  return readValue(dictionaries[locale] || tr, key) ?? readValue(tr, key) ?? key;
 }
 
 export default tr;

@@ -4037,7 +4037,8 @@
 }
 
 .feature-field input,
-.feature-field textarea {
+.feature-field textarea,
+.feature-field select {
   border-radius: 14px;
   border: 1px solid var(--border-color);
   background: linear-gradient(180deg, #FFFFFF 0%, #F8FBFC 100%);

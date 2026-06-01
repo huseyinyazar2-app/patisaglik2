@@ -2,6 +2,7 @@ import { goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { getLocalUserProfile, saveUserProfile } from '../../services/users.js';
 import { showToast } from '../../ui/toast.js';
+import { setLocale, t } from '../../i18n/tr.js';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -26,7 +27,7 @@ export function render() {
         <div class="header-left">
           <button class="header-icon" id="btnBack">${window.__icons?.back}</button>
         </div>
-        <div class="header-title">Hesap Bilgileri</div>
+        <div class="header-title">${t('account.title')}</div>
         <div class="header-right">
           <span class="premium-header-shield">${window.__icons?.profile}</span>
         </div>
@@ -36,57 +37,60 @@ export function render() {
         <div class="feature-form-hero teal">
           <div class="premium-icon-box">${window.__icons?.profile}</div>
           <div>
-            <div class="premium-screen-kicker">Telefon öncelikli profil</div>
-            <h1>İletişim ve konum</h1>
-            <p>Acil yönlendirme, bildirim ve yerel ayarlar için temel hesap bilgileri.</p>
+            <div class="premium-screen-kicker">${t('account.kicker')}</div>
+            <h1>${t('account.heading')}</h1>
+            <p>${t('account.desc')}</p>
           </div>
         </div>
 
         <div class="feature-form-card">
           <label class="feature-field">
-            <span>Telefon</span>
+            <span>${t('account.phone')}</span>
             <input id="accountPhone" type="tel" autocomplete="tel" placeholder="+90 5xx xxx xx xx" value="${escapeHtml(profile.phone)}" />
           </label>
 
           <label class="feature-field">
-            <span>Ad soyad</span>
-            <input id="accountName" autocomplete="name" placeholder="Ad Soyad" value="${escapeHtml(profile.name)}" />
+            <span>${t('account.full_name')}</span>
+            <input id="accountName" autocomplete="name" placeholder="${t('account.full_name')}" value="${escapeHtml(profile.name)}" />
           </label>
 
           <label class="feature-field">
-            <span>E-posta</span>
-            <input id="accountEmail" type="email" autocomplete="email" placeholder="Opsiyonel" value="${escapeHtml(profile.email)}" />
+            <span>${t('account.email')}</span>
+            <input id="accountEmail" type="email" autocomplete="email" placeholder="${t('account.optional')}" value="${escapeHtml(profile.email)}" />
           </label>
 
           <div class="feature-photo-pair">
             <label class="feature-field">
-              <span>Ülke</span>
+              <span>${t('account.country')}</span>
               <input id="accountCountry" autocomplete="country-name" value="${escapeHtml(profile.location.country)}" />
             </label>
             <label class="feature-field">
-              <span>İl</span>
+              <span>${t('account.province')}</span>
               <input id="accountProvince" autocomplete="address-level1" placeholder="İstanbul" value="${escapeHtml(profile.location.province)}" />
             </label>
           </div>
 
           <div class="feature-photo-pair">
             <label class="feature-field">
-              <span>İlçe</span>
+              <span>${t('account.district')}</span>
               <input id="accountDistrict" autocomplete="address-level2" placeholder="Kadıköy" value="${escapeHtml(profile.location.district)}" />
             </label>
             <label class="feature-field">
-              <span>Mahalle</span>
+              <span>${t('account.neighborhood')}</span>
               <input id="accountNeighborhood" placeholder="Moda" value="${escapeHtml(profile.location.neighborhood)}" />
             </label>
           </div>
 
           <div class="feature-photo-pair">
             <label class="feature-field">
-              <span>Dil</span>
-              <input id="accountLocale" value="${escapeHtml(profile.locale)}" />
+              <span>${t('account.language')}</span>
+              <select id="accountLocale">
+                <option value="tr" ${profile.locale === 'tr' ? 'selected' : ''}>Türkçe</option>
+                <option value="en" ${profile.locale === 'en' ? 'selected' : ''}>English</option>
+              </select>
             </label>
             <label class="feature-field">
-              <span>Saat dilimi</span>
+              <span>${t('account.timezone')}</span>
               <input id="accountTimezone" value="${escapeHtml(profile.timezone)}" />
             </label>
           </div>
@@ -94,12 +98,12 @@ export function render() {
 
         <div class="info-box info mt-3">
           <span class="info-box-icon">${window.__icons?.shield}</span>
-          <span>Konum mahalle düzeyinde tutulur; klinik/yakın destek yönlendirmesi için kullanılır. Hassas canlı konum paylaşımı bu formda alınmaz.</span>
+          <span>${t('account.privacy_note')}</span>
         </div>
 
         <div class="feature-bottom-actions">
-          <button class="btn btn-primary btn-full" id="btnSaveAccount">Kaydet</button>
-          <button class="btn btn-ghost btn-full" id="btnCancel">Vazgeç</button>
+          <button class="btn btn-primary btn-full" id="btnSaveAccount">${t('common.save')}</button>
+          <button class="btn btn-ghost btn-full" id="btnCancel">${t('common.cancel')}</button>
         </div>
       </div>
     </div>
@@ -115,13 +119,13 @@ export function afterRender() {
     const phone = value('accountPhone');
     if (!phone) {
       document.getElementById('accountPhone')?.focus();
-      showToast('Telefon ana giriş bilgisi olarak gereklidir.');
+      showToast(t('account.phone_required'));
       return;
     }
 
     const original = button.textContent;
     button.disabled = true;
-    button.textContent = 'Kaydediliyor...';
+    button.textContent = t('account.saving');
 
     try {
       const state = getState();
@@ -145,10 +149,11 @@ export function afterRender() {
       setState(current => {
         current.user = { ...current.user, ...result.profile, isLoggedIn: true };
       });
-      showToast('Hesap bilgileri kaydedildi.');
+      setLocale(value('accountLocale') || 'tr');
+      showToast(t('account.saved'));
       goBack();
     } catch (err) {
-      showToast(`Hesap kaydedilemedi: ${err.message}`);
+      showToast(`${t('account.save_failed')}: ${err.message}`);
       button.disabled = false;
       button.textContent = original;
     }
