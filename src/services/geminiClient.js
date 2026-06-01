@@ -1,4 +1,4 @@
-const GEMINI_MODEL = 'gemini-1.5-flash';
+const GEMINI_MODEL = import.meta.env?.VITE_GEMINI_MODEL || 'gemini-2.5-flash';
 
 function getApiKey() {
   return import.meta.env?.VITE_GEMINI_API_KEY || '';
