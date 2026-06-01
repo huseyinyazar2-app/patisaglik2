@@ -328,6 +328,114 @@ const tr = {
       }
     ]
   },
+  freeRecords: {
+    common: {
+      no_date: 'Tarih yok',
+      other: 'Diğer',
+      record: 'Kayıt',
+      no_records_yet: 'Henüz kayıt yok',
+      none_yet: 'Henüz yok',
+      expense: 'Masraf',
+      general_expense: 'Genel masraf',
+      reminder: 'Hatırlatıcı',
+      once: 'Tek sefer',
+      scheduled: 'Planlı',
+      completed: 'Tamamlandı',
+      health_record: 'Sağlık kaydı',
+      form_record: 'Form kaydı'
+    },
+    types: {
+      poop_score: 'Dışkı',
+      photo_followup: 'Foto',
+      diet_log: 'Beslenme',
+      issue: 'Sorun',
+      chronic_followup: 'Kronik',
+      postop_followup: 'Operasyon',
+      reproduction_followup: 'Üreme',
+      senior_followup: 'Yaşlı',
+      toxin_foreign_body: 'Acil'
+    },
+    list: {
+      configs: {
+        expenses: {
+          title: 'Masraf Takibi',
+          eyebrow: 'Ücretsiz kayıtlar',
+          desc: 'mama, veteriner, aşı, ilaç ve bakım harcamaları',
+          empty: 'Henüz masraf kaydı yok.',
+          button: 'Masraf Ekle'
+        },
+        reminders: {
+          title: 'Aşı / İlaç / Randevu',
+          eyebrow: 'Takvim',
+          desc: 'planlanan sağlık işleri ve tekrar eden hatırlatıcılar',
+          empty: 'Henüz hatırlatıcı yok.',
+          button: 'Hatırlatıcı Ekle'
+        },
+        health: {
+          title: 'Sağlık Dosyaları',
+          eyebrow: 'Takip arşivi',
+          desc: 'dışkı skoru, foto takip, beslenme ve takip şablonları',
+          empty: 'Henüz sağlık kaydı yok.',
+          button: 'Takip Kaydı Ekle'
+        }
+      },
+      tabs: { expenses: 'Masraf', reminders: 'Takvim', health: 'Sağlık' },
+      filters: {
+        expenses: [['all', 'Hepsi'], ['veteriner', 'Veteriner'], ['mama', 'Mama'], ['aşı', 'Aşı'], ['ilaç', 'İlaç'], ['bakım', 'Bakım']],
+        reminders: [['all', 'Hepsi'], ['scheduled', 'Planlı'], ['aşı', 'Aşı'], ['ilaç', 'İlaç'], ['randevu', 'Randevu']],
+        health: [['all', 'Hepsi'], ['poop_score', 'Dışkı'], ['photo_followup', 'Foto'], ['diet_log', 'Beslenme'], ['issue', 'Sorun'], ['chronic_followup', 'Kronik'], ['postop_followup', 'Operasyon'], ['reproduction_followup', 'Üreme'], ['senior_followup', 'Yaşlı'], ['toxin_foreign_body', 'Acil']]
+      },
+      sorts: {
+        expenses: [['newest', 'Yeni'], ['amount_desc', 'Tutar ↓'], ['amount_asc', 'Tutar ↑']],
+        reminders: [['due_asc', 'Yakın'], ['due_desc', 'Uzak'], ['newest', 'Yeni']],
+        health: [['newest', 'Yeni'], ['oldest', 'Eski'], ['type', 'Türe göre']]
+      },
+      healthActions: {
+        poop_score: 'Dışkı Kaydı Ekle',
+        photo_followup: 'Foto Takip Ekle',
+        diet_log: 'Beslenme Kaydı Ekle',
+        issue: 'Sorun Kaydı Ekle',
+        chronic_followup: 'Kronik Takip Ekle',
+        postop_followup: 'Operasyon Takibi Ekle',
+        reproduction_followup: 'Üreme Takibi Ekle',
+        senior_followup: 'Yaşlı Pet Kaydı Ekle',
+        toxin_foreign_body: 'Acil Kayıt Ekle'
+      },
+      programs: {
+        chronic_followup: { title: 'Kronik takip', cadence: 'Haftalık durum' },
+        postop_followup: { title: 'Operasyon sonrası', cadence: 'Yara ve ilaç kontrolü' },
+        diet_log: { title: 'Beslenme geçişi', cadence: 'Reaksiyon takibi' },
+        poop_score: { title: 'Dışkı skoru', cadence: 'Günlük kalite' },
+        reproduction_followup: { title: 'Üreme takibi', cadence: 'Takvim ve belirti' },
+        senior_followup: { title: 'Senior izlem', cadence: 'Hassasiyet takibi' }
+      },
+      filter: 'Filtre',
+      sort: 'Sıralama',
+      programs_title: 'Takip programları',
+      programs_summary: 'Şablon durum özeti',
+      last_7_days: 'Son 7 gün yoğunluğu',
+      no_distribution: 'Henüz dağılım yok.',
+      summary: 'Özet',
+      records_preparing: 'Kayıtlar hazırlanıyor',
+      distribution: 'Dağılım',
+      waiting_data: 'Veri bekleniyor',
+      total: 'Toplam',
+      top: 'En yoğun',
+      expense_count: '{count} masraf kaydı',
+      record_count: '{count} kayıt',
+      seven_days: '7 gün',
+      upcoming_task: 'yaklaşan iş',
+      next: 'Sıradaki',
+      no_plan: 'Plan yok',
+      health_count: 'sağlık kaydı',
+      last_record: 'Son kayıt',
+      records_loading: 'Kayıtlar getiriliyor...',
+      empty_filter: 'Bu filtrede kayıt yok.',
+      empty_filter_desc: 'Farklı bir filtre seçerek tekrar deneyebilirsin.',
+      empty_desc: 'Yeni kayıt eklediğinde burada listelenecek.',
+      pet_desc: '{name} için {desc}'
+    }
+  },
   notifications: {
     title: 'Bildirimler',
     reminder_title: 'Hatırlatıcı Bildirimleri',

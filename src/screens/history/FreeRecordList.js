@@ -2,44 +2,37 @@ import { navigate, goBack } from '../../router.js';
 import { getState } from '../../store.js';
 import { getActivePet } from '../../mock/pets.js';
 import { getFreeRecords } from '../../services/freeRecords.js';
+import { getLocale, t } from '../../i18n/tr.js';
 
-const configs = {
-  expenses: {
-    title: 'Masraf Takibi',
-    eyebrow: 'Ücretsiz kayıtlar',
-    desc: 'Mama, veteriner, aşı, ilaç ve bakım harcamaları',
-    icon: 'briefcase',
-    addRoute: '/feature/expense',
-    empty: 'Henüz masraf kaydı yok.',
-    button: 'Masraf Ekle'
-  },
-  reminders: {
-    title: 'Aşı / İlaç / Randevu',
-    eyebrow: 'Takvim',
-    desc: 'Planlanan sağlık işleri ve tekrar eden hatırlatıcılar',
-    icon: 'calendar',
-    addRoute: '/feature/reminders',
-    empty: 'Henüz hatırlatıcı yok.',
-    button: 'Hatırlatıcı Ekle'
-  },
-  health: {
-    title: 'Sağlık Dosyaları',
-    eyebrow: 'Takip arşivi',
-    desc: 'Dışkı skoru, foto takip, beslenme ve takip şablonları',
-    icon: 'heartPulse',
-    addRoute: '/feature/photo-followup',
-    empty: 'Henüz sağlık kaydı yok.',
-    button: 'Takip Kaydı Ekle'
-  }
+const staticConfig = {
+  expenses: { icon: 'briefcase', addRoute: '/feature/expense' },
+  reminders: { icon: 'calendar', addRoute: '/feature/reminders' },
+  health: { icon: 'heartPulse', addRoute: '/feature/photo-followup' }
 };
 
+function localeTag() {
+  const locale = getLocale();
+  if (locale === 'tr') return 'tr-TR';
+  if (locale === 'en') return 'en-US';
+  return locale;
+}
+
+function configFor(type) {
+  const localized = t(`freeRecords.list.configs.${type}`);
+  const fallback = t('freeRecords.list.configs.health');
+  return {
+    ...(staticConfig[type] || staticConfig.health),
+    ...(typeof localized === 'object' ? localized : fallback)
+  };
+}
+
 function formatShortDate(date) {
-  if (!date) return 'Tarih yok';
-  return new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(date));
+  if (!date) return t('freeRecords.common.no_date');
+  return new Intl.DateTimeFormat(localeTag(), { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(date));
 }
 
 function formatMoney(amountCents, currency = 'TRY') {
-  return new Intl.NumberFormat('tr-TR', {
+  return new Intl.NumberFormat(localeTag(), {
     style: 'currency',
     currency,
     maximumFractionDigits: 0
@@ -49,9 +42,9 @@ function formatMoney(amountCents, currency = 'TRY') {
 function renderTabs(activeType) {
   return `
     <div class="free-record-tabs">
-      <button class="${activeType === 'expenses' ? 'active' : ''}" data-record-tab="/history/expenses">Masraf</button>
-      <button class="${activeType === 'reminders' ? 'active' : ''}" data-record-tab="/history/reminders">Takvim</button>
-      <button class="${activeType === 'health' ? 'active' : ''}" data-record-tab="/history/health-records">Sağlık</button>
+      <button class="${activeType === 'expenses' ? 'active' : ''}" data-record-tab="/history/expenses">${t('freeRecords.list.tabs.expenses')}</button>
+      <button class="${activeType === 'reminders' ? 'active' : ''}" data-record-tab="/history/reminders">${t('freeRecords.list.tabs.reminders')}</button>
+      <button class="${activeType === 'health' ? 'active' : ''}" data-record-tab="/history/health-records">${t('freeRecords.list.tabs.health')}</button>
     </div>
   `;
 }
@@ -68,84 +61,36 @@ function defaultSort(type) {
 }
 
 function normalizeText(value) {
-  return String(value || '').toLocaleLowerCase('tr-TR').replace(/\s+/g, '');
+  return String(value || '').toLocaleLowerCase(localeTag()).replace(/\s+/g, '');
 }
 
 function filterOptions(type) {
-  if (type === 'expenses') {
-    return [
-      ['all', 'Hepsi'],
-      ['veteriner', 'Veteriner'],
-      ['mama', 'Mama'],
-      ['aşı', 'Aşı'],
-      ['ilaç', 'İlaç'],
-      ['bakım', 'Bakım']
-    ];
-  }
-
-  if (type === 'reminders') {
-    return [
-      ['all', 'Hepsi'],
-      ['scheduled', 'Planlı'],
-      ['aşı', 'Aşı'],
-      ['ilaç', 'İlaç'],
-      ['randevu', 'Randevu']
-    ];
-  }
-
-  return [
-    ['all', 'Hepsi'],
-    ['poop_score', 'Dışkı'],
-    ['photo_followup', 'Foto'],
-    ['diet_log', 'Beslenme'],
-    ['issue', 'Sorun'],
-    ['chronic_followup', 'Kronik'],
-    ['postop_followup', 'Operasyon'],
-    ['reproduction_followup', 'Üreme'],
-    ['senior_followup', 'Yaşlı'],
-    ['toxin_foreign_body', 'Acil']
-  ];
+  const options = t(`freeRecords.list.filters.${type}`);
+  return Array.isArray(options) ? options : t('freeRecords.list.filters.health');
 }
 
 function sortOptions(type) {
-  if (type === 'expenses') {
-    return [
-      ['newest', 'Yeni'],
-      ['amount_desc', 'Tutar ↓'],
-      ['amount_asc', 'Tutar ↑']
-    ];
-  }
-
-  if (type === 'reminders') {
-    return [
-      ['due_asc', 'Yakın'],
-      ['due_desc', 'Uzak'],
-      ['newest', 'Yeni']
-    ];
-  }
-
-  return [
-    ['newest', 'Yeni'],
-    ['oldest', 'Eski'],
-    ['type', 'Türe göre']
-  ];
+  const options = t(`freeRecords.list.sorts.${type}`);
+  return Array.isArray(options) ? options : t('freeRecords.list.sorts.health');
 }
 
 const healthAddActions = {
-  poop_score: { route: '/feature/poop-score', label: 'Dışkı Kaydı Ekle' },
-  photo_followup: { route: '/feature/photo-followup', label: 'Foto Takip Ekle' },
-  diet_log: { route: '/feature/diet-log', label: 'Beslenme Kaydı Ekle' },
-  issue: { route: '/history/issues/new', label: 'Sorun Kaydı Ekle' },
-  chronic_followup: { route: '/feature/chronic', label: 'Kronik Takip Ekle' },
-  postop_followup: { route: '/feature/postop', label: 'Operasyon Takibi Ekle' },
-  reproduction_followup: { route: '/feature/reproduction', label: 'Üreme Takibi Ekle' },
-  senior_followup: { route: '/feature/senior', label: 'Yaşlı Pet Kaydı Ekle' },
-  toxin_foreign_body: { route: '/feature/toxic', label: 'Acil Kayıt Ekle' }
+  poop_score: { route: '/feature/poop-score', labelKey: 'poop_score' },
+  photo_followup: { route: '/feature/photo-followup', labelKey: 'photo_followup' },
+  diet_log: { route: '/feature/diet-log', labelKey: 'diet_log' },
+  issue: { route: '/history/issues/new', labelKey: 'issue' },
+  chronic_followup: { route: '/feature/chronic', labelKey: 'chronic_followup' },
+  postop_followup: { route: '/feature/postop', labelKey: 'postop_followup' },
+  reproduction_followup: { route: '/feature/reproduction', labelKey: 'reproduction_followup' },
+  senior_followup: { route: '/feature/senior', labelKey: 'senior_followup' },
+  toxin_foreign_body: { route: '/feature/toxic', labelKey: 'toxin_foreign_body' }
 };
 
 function addActionFor(type, filter = 'all') {
-  if (type !== 'health') return { route: configs[type]?.addRoute || configs.health.addRoute, label: configs[type]?.button || configs.health.button };
-  return healthAddActions[filter] || { route: configs.health.addRoute, label: configs.health.button };
+  const config = configFor(type);
+  if (type !== 'health') return { route: config.addRoute, label: config.button };
+  const action = healthAddActions[filter];
+  return action ? { route: action.route, label: t(`freeRecords.list.healthActions.${action.labelKey}`) } : { route: config.addRoute, label: config.button };
 }
 
 function renderListControls(type, query = {}) {
@@ -155,7 +100,7 @@ function renderListControls(type, query = {}) {
   return `
     <div class="record-filter-panel">
       <div>
-        <span>Filtre</span>
+        <span>${t('freeRecords.list.filter')}</span>
         <div class="record-filter-row">
           ${filterOptions(type).map(([value, label]) => `
             <button class="${activeFilter === value ? 'active' : ''}" data-filter="${value}">${label}</button>
@@ -163,7 +108,7 @@ function renderListControls(type, query = {}) {
         </div>
       </div>
       <div>
-        <span>Sıralama</span>
+        <span>${t('freeRecords.list.sort')}</span>
         <div class="record-filter-row compact">
           ${sortOptions(type).map(([value, label]) => `
             <button class="${activeSort === value ? 'active' : ''}" data-sort="${value}">${label}</button>
@@ -208,7 +153,7 @@ function filterAndSortItems(type, items, query = {}) {
     if (activeSort === 'due_asc') return new Date(itemDate(type, a) || 0) - new Date(itemDate(type, b) || 0);
     if (activeSort === 'due_desc') return new Date(itemDate(type, b) || 0) - new Date(itemDate(type, a) || 0);
     if (activeSort === 'oldest') return new Date(itemDate(type, a) || 0) - new Date(itemDate(type, b) || 0);
-    if (activeSort === 'type') return String(a.record_type || '').localeCompare(String(b.record_type || ''), 'tr');
+    if (activeSort === 'type') return String(a.record_type || '').localeCompare(String(b.record_type || ''), localeTag());
     return new Date(itemDate(type, b) || 0) - new Date(itemDate(type, a) || 0);
   });
 
@@ -216,23 +161,15 @@ function filterAndSortItems(type, items, query = {}) {
 }
 
 function typeLabel(value) {
-  const labels = {
-    poop_score: 'Dışkı',
-    photo_followup: 'Foto',
-    diet_log: 'Beslenme',
-    issue: 'Sorun',
-    chronic_followup: 'Kronik',
-    postop_followup: 'Operasyon',
-    reproduction_followup: 'Üreme',
-    senior_followup: 'Yaşlı',
-    toxin_foreign_body: 'Acil'
-  };
-  return labels[value] || value || 'Kayıt';
+  if (!value) return t('freeRecords.common.record');
+  const key = `freeRecords.types.${value}`;
+  const label = t(key);
+  return label === key ? value : label;
 }
 
 function countBy(items, keyFn) {
   return items.reduce((acc, item) => {
-    const key = keyFn(item) || 'Diğer';
+    const key = keyFn(item) || t('freeRecords.common.other');
     acc[key] = (acc[key] || 0) + 1;
     return acc;
   }, {});
@@ -252,12 +189,12 @@ function payloadFirst(payload, labels, fallback = '') {
 }
 
 const healthPrograms = [
-  { type: 'chronic_followup', title: 'Kronik takip', icon: 'clipboard', cadence: 'Haftalık durum', filter: 'chronic_followup' },
-  { type: 'postop_followup', title: 'Operasyon sonrası', icon: 'shield', cadence: 'Yara ve ilaç kontrolü', filter: 'postop_followup' },
-  { type: 'diet_log', title: 'Beslenme geçişi', icon: 'heartPulse', cadence: 'Reaksiyon takibi', filter: 'diet_log' },
-  { type: 'poop_score', title: 'Dışkı skoru', icon: 'activity', cadence: 'Günlük kalite', filter: 'poop_score' },
-  { type: 'reproduction_followup', title: 'Üreme takibi', icon: 'calendar', cadence: 'Takvim ve belirti', filter: 'reproduction_followup' },
-  { type: 'senior_followup', title: 'Senior izlem', icon: 'heartPulse', cadence: 'Hassasiyet takibi', filter: 'senior_followup' }
+  { type: 'chronic_followup', icon: 'clipboard', filter: 'chronic_followup' },
+  { type: 'postop_followup', icon: 'shield', filter: 'postop_followup' },
+  { type: 'diet_log', icon: 'heartPulse', filter: 'diet_log' },
+  { type: 'poop_score', icon: 'activity', filter: 'poop_score' },
+  { type: 'reproduction_followup', icon: 'calendar', filter: 'reproduction_followup' },
+  { type: 'senior_followup', icon: 'heartPulse', filter: 'senior_followup' }
 ];
 
 function recordStatus(item) {
@@ -286,9 +223,9 @@ function renderHealthProgramPanel(items = []) {
       <button class="program-insight-card" data-program-route="${href}">
         <span class="program-insight-icon">${window.__icons?.[program.icon] || window.__icons?.clipboard}</span>
         <span>
-          <small>${program.cadence}</small>
-          <strong>${program.title}</strong>
-          <em>${last ? `${recordStatus(last)} · ${formatShortDate(itemDate('health', last))}` : 'Henüz kayıt yok'}</em>
+          <small>${t(`freeRecords.list.programs.${program.type}.cadence`)}</small>
+          <strong>${t(`freeRecords.list.programs.${program.type}.title`)}</strong>
+          <em>${last ? `${recordStatus(last)} · ${formatShortDate(itemDate('health', last))}` : t('freeRecords.common.no_records_yet')}</em>
         </span>
         <b>${programItems.length}</b>
         <i style="--program-fill:${Math.min(100, Math.max(12, recentCount * 28))}%"></i>
@@ -300,10 +237,10 @@ function renderHealthProgramPanel(items = []) {
     <div class="program-insight-panel">
       <div class="program-insight-head">
         <div>
-          <span>Takip programları</span>
-          <strong>Şablon durum özeti</strong>
+          <span>${t('freeRecords.list.programs_title')}</span>
+          <strong>${t('freeRecords.list.programs_summary')}</strong>
         </div>
-        <small>Son 7 gün yoğunluğu</small>
+        <small>${t('freeRecords.list.last_7_days')}</small>
       </div>
       <div class="program-insight-grid">${programCards}</div>
     </div>
@@ -313,7 +250,7 @@ function renderHealthProgramPanel(items = []) {
 function renderMiniBars(counts, labelFn = (value) => value) {
   const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 4);
   const max = Math.max(...entries.map(([, count]) => count), 1);
-  if (!entries.length) return '<p>Henüz dağılım yok.</p>';
+  if (!entries.length) return `<p>${t('freeRecords.list.no_distribution')}</p>`;
 
   return entries.map(([label, count]) => `
     <div class="record-mini-bar">
@@ -329,8 +266,8 @@ function renderSummary(type, records = null) {
     return `
       <div class="record-summary-panel">
         <div class="record-summary-grid">
-          <div><span>Özet</span><strong>Yükleniyor</strong><small>Kayıtlar hazırlanıyor</small></div>
-          <div><span>Dağılım</span><strong>-</strong><small>Veri bekleniyor</small></div>
+          <div><span>${t('freeRecords.list.summary')}</span><strong>${t('common.loading')}</strong><small>${t('freeRecords.list.records_preparing')}</small></div>
+          <div><span>${t('freeRecords.list.distribution')}</span><strong>-</strong><small>${t('freeRecords.list.waiting_data')}</small></div>
         </div>
       </div>
     `;
@@ -338,13 +275,13 @@ function renderSummary(type, records = null) {
 
   if (type === 'expenses') {
     const total = records.expenses.reduce((sum, item) => sum + Number(item.amount_cents || 0), 0);
-    const counts = countBy(records.expenses, (item) => item.category || 'Diğer');
+    const counts = countBy(records.expenses, (item) => item.category || t('freeRecords.common.other'));
     const top = topEntry(counts);
     return `
       <div class="record-summary-panel">
         <div class="record-summary-grid">
-          <div><span>Toplam</span><strong>${formatMoney(total)}</strong><small>${records.expenses.length} masraf kaydı</small></div>
-          <div><span>En yoğun</span><strong>${top ? top[0] : '-'}</strong><small>${top ? `${top[1]} kayıt` : 'Henüz yok'}</small></div>
+          <div><span>${t('freeRecords.list.total')}</span><strong>${formatMoney(total)}</strong><small>${t('freeRecords.list.expense_count').replace('{count}', records.expenses.length)}</small></div>
+          <div><span>${t('freeRecords.list.top')}</span><strong>${top ? top[0] : '-'}</strong><small>${top ? t('freeRecords.list.record_count').replace('{count}', top[1]) : t('freeRecords.common.none_yet')}</small></div>
         </div>
         <div class="record-mini-bars">${renderMiniBars(counts)}</div>
       </div>
@@ -359,12 +296,12 @@ function renderSummary(type, records = null) {
       return item.status === 'scheduled' && due >= now && due <= nextWeek;
     });
     const next = [...records.reminders].sort((a, b) => new Date(a.due_at || 0) - new Date(b.due_at || 0))[0];
-    const counts = countBy(records.reminders, (item) => item.reminder_type || 'Hatırlatıcı');
+    const counts = countBy(records.reminders, (item) => item.reminder_type || t('freeRecords.common.reminder'));
     return `
       <div class="record-summary-panel">
         <div class="record-summary-grid">
-          <div><span>7 gün</span><strong>${upcoming.length}</strong><small>yaklaşan iş</small></div>
-          <div><span>Sıradaki</span><strong>${next ? formatShortDate(next.due_at) : '-'}</strong><small>${next ? next.title : 'Plan yok'}</small></div>
+          <div><span>${t('freeRecords.list.seven_days')}</span><strong>${upcoming.length}</strong><small>${t('freeRecords.list.upcoming_task')}</small></div>
+          <div><span>${t('freeRecords.list.next')}</span><strong>${next ? formatShortDate(next.due_at) : '-'}</strong><small>${next ? next.title : t('freeRecords.list.no_plan')}</small></div>
         </div>
         <div class="record-mini-bars">${renderMiniBars(counts)}</div>
       </div>
@@ -377,8 +314,8 @@ function renderSummary(type, records = null) {
   return `
     <div class="record-summary-panel">
       <div class="record-summary-grid">
-        <div><span>Toplam</span><strong>${records.healthRecords.length}</strong><small>sağlık kaydı</small></div>
-        <div><span>Son kayıt</span><strong>${last ? formatShortDate(itemDate(type, last)) : '-'}</strong><small>${last ? last.title : 'Henüz yok'}</small></div>
+        <div><span>${t('freeRecords.list.total')}</span><strong>${records.healthRecords.length}</strong><small>${t('freeRecords.list.health_count')}</small></div>
+        <div><span>${t('freeRecords.list.last_record')}</span><strong>${last ? formatShortDate(itemDate(type, last)) : '-'}</strong><small>${last ? last.title : t('freeRecords.common.none_yet')}</small></div>
       </div>
       <div class="record-mini-bars">${renderMiniBars(counts, typeLabel)}</div>
     </div>
@@ -391,8 +328,8 @@ function renderExpenseList(items) {
     <button class="record-list-card" data-record-id="${item.id}">
       <div class="premium-icon-box">${window.__icons?.briefcase}</div>
       <div>
-        <strong>${item.title || item.category || 'Masraf'}</strong>
-        <p>${formatShortDate(item.spent_at)} · ${item.note || item.category || 'Genel masraf'}</p>
+        <strong>${item.title || item.category || t('freeRecords.common.expense')}</strong>
+        <p>${formatShortDate(item.spent_at)} · ${item.note || item.category || t('freeRecords.common.general_expense')}</p>
       </div>
       <span>${formatMoney(item.amount_cents, item.currency)}</span>
     </button>
@@ -404,10 +341,10 @@ function renderReminderList(items) {
     <button class="record-list-card" data-record-id="${item.id}">
       <div class="premium-icon-box">${window.__icons?.calendar}</div>
       <div>
-        <strong>${item.title || item.reminder_type || 'Hatırlatıcı'}</strong>
-        <p>${formatShortDate(item.due_at)} · ${item.repeat_rule || 'Tek sefer'}${item.note ? ` · ${item.note}` : ''}</p>
+        <strong>${item.title || item.reminder_type || t('freeRecords.common.reminder')}</strong>
+        <p>${formatShortDate(item.due_at)} · ${item.repeat_rule || t('freeRecords.common.once')}${item.note ? ` · ${item.note}` : ''}</p>
       </div>
-      <span>${item.status === 'scheduled' ? 'Planlı' : item.status === 'completed' ? 'Tamamlandı' : item.status}</span>
+      <span>${item.status === 'scheduled' ? t('freeRecords.common.scheduled') : item.status === 'completed' ? t('freeRecords.common.completed') : item.status}</span>
     </button>
   `).join('');
 }
@@ -417,18 +354,18 @@ function renderHealthList(items) {
     <button class="record-list-card" data-record-id="${item.id}">
       <div class="premium-icon-box">${window.__icons?.heartPulse}</div>
       <div>
-        <strong>${item.title || 'Sağlık kaydı'}</strong>
-        <p>${formatShortDate(item.occurred_at || item.created_at)} · ${item.summary || item.record_type || 'Form kaydı'}</p>
+        <strong>${item.title || t('freeRecords.common.health_record')}</strong>
+        <p>${formatShortDate(item.occurred_at || item.created_at)} · ${item.summary || item.record_type || t('freeRecords.common.form_record')}</p>
       </div>
-      <span>Kayıt</span>
+      <span>${t('freeRecords.common.record')}</span>
     </button>
   `).join('');
 }
 
 function renderRecords(type, records = null, query = {}) {
-  const config = configs[type] || configs.health;
+  const config = configFor(type);
   if (!records) {
-    return '<div class="free-record-panel"><p>Kayıtlar getiriliyor...</p></div>';
+    return `<div class="free-record-panel"><p>${t('freeRecords.list.records_loading')}</p></div>`;
   }
 
   const allItems = getItems(type, records);
@@ -437,8 +374,8 @@ function renderRecords(type, records = null, query = {}) {
     return `
       <div class="empty-state">
         <div class="empty-state-icon">${window.__icons?.[config.icon] || ''}</div>
-        <div class="empty-state-title">${allItems.length ? 'Bu filtrede kayıt yok.' : config.empty}</div>
-        <div class="empty-state-desc">${allItems.length ? 'Farklı bir filtre seçerek tekrar deneyebilirsin.' : 'Yeni kayıt eklediğinde burada listelenecek.'}</div>
+        <div class="empty-state-title">${allItems.length ? t('freeRecords.list.empty_filter') : config.empty}</div>
+        <div class="empty-state-desc">${allItems.length ? t('freeRecords.list.empty_filter_desc') : t('freeRecords.list.empty_desc')}</div>
       </div>
     `;
   }
@@ -450,7 +387,7 @@ function renderRecords(type, records = null, query = {}) {
 
 export function render(params = {}, query = {}) {
   const type = params.type || 'health';
-  const config = configs[type] || configs.health;
+  const config = configFor(type);
   const addAction = addActionFor(type, query.filter || 'all');
   const state = getState();
   const pet = getActivePet(state.activePetId);
@@ -473,7 +410,7 @@ export function render(params = {}, query = {}) {
           <div>
             <div class="premium-screen-kicker">${config.eyebrow}</div>
             <h1>${config.title}</h1>
-            <p>${pet.name} için ${config.desc}</p>
+            <p>${t('freeRecords.list.pet_desc').replace('{name}', pet.name).replace('{desc}', config.desc)}</p>
           </div>
         </div>
 
@@ -496,7 +433,7 @@ export function render(params = {}, query = {}) {
 
 export function afterRender(params = {}, query = {}) {
   const type = params.type || 'health';
-  const config = configs[type] || configs.health;
+  const config = configFor(type);
   const state = getState();
   const activeFilter = query.filter || 'all';
   const activeSort = query.sort || defaultSort(type);

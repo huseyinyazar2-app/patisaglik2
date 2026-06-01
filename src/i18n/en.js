@@ -299,6 +299,114 @@ const en = {
       }
     ]
   },
+  freeRecords: {
+    common: {
+      no_date: 'No date',
+      other: 'Other',
+      record: 'Record',
+      no_records_yet: 'No records yet',
+      none_yet: 'None yet',
+      expense: 'Expense',
+      general_expense: 'General expense',
+      reminder: 'Reminder',
+      once: 'One time',
+      scheduled: 'Scheduled',
+      completed: 'Completed',
+      health_record: 'Health record',
+      form_record: 'Form record'
+    },
+    types: {
+      poop_score: 'Stool',
+      photo_followup: 'Photo',
+      diet_log: 'Nutrition',
+      issue: 'Issue',
+      chronic_followup: 'Chronic',
+      postop_followup: 'Post-op',
+      reproduction_followup: 'Reproduction',
+      senior_followup: 'Senior',
+      toxin_foreign_body: 'Urgent'
+    },
+    list: {
+      configs: {
+        expenses: {
+          title: 'Expense Tracking',
+          eyebrow: 'Free records',
+          desc: 'food, vet, vaccine, medication and care expenses',
+          empty: 'No expense records yet.',
+          button: 'Add Expense'
+        },
+        reminders: {
+          title: 'Vaccine / Medication / Appointment',
+          eyebrow: 'Calendar',
+          desc: 'planned health tasks and recurring reminders',
+          empty: 'No reminders yet.',
+          button: 'Add Reminder'
+        },
+        health: {
+          title: 'Health Files',
+          eyebrow: 'Tracking archive',
+          desc: 'stool scores, photo follow-ups, nutrition and tracking templates',
+          empty: 'No health records yet.',
+          button: 'Add Tracking Record'
+        }
+      },
+      tabs: { expenses: 'Expense', reminders: 'Calendar', health: 'Health' },
+      filters: {
+        expenses: [['all', 'All'], ['veteriner', 'Vet'], ['mama', 'Food'], ['aşı', 'Vaccine'], ['ilaç', 'Medication'], ['bakım', 'Care']],
+        reminders: [['all', 'All'], ['scheduled', 'Scheduled'], ['aşı', 'Vaccine'], ['ilaç', 'Medication'], ['randevu', 'Appointment']],
+        health: [['all', 'All'], ['poop_score', 'Stool'], ['photo_followup', 'Photo'], ['diet_log', 'Nutrition'], ['issue', 'Issue'], ['chronic_followup', 'Chronic'], ['postop_followup', 'Post-op'], ['reproduction_followup', 'Reproduction'], ['senior_followup', 'Senior'], ['toxin_foreign_body', 'Urgent']]
+      },
+      sorts: {
+        expenses: [['newest', 'Newest'], ['amount_desc', 'Amount ↓'], ['amount_asc', 'Amount ↑']],
+        reminders: [['due_asc', 'Soonest'], ['due_desc', 'Latest'], ['newest', 'Newest']],
+        health: [['newest', 'Newest'], ['oldest', 'Oldest'], ['type', 'By type']]
+      },
+      healthActions: {
+        poop_score: 'Add Stool Record',
+        photo_followup: 'Add Photo Follow-up',
+        diet_log: 'Add Nutrition Record',
+        issue: 'Add Issue Record',
+        chronic_followup: 'Add Chronic Follow-up',
+        postop_followup: 'Add Post-op Follow-up',
+        reproduction_followup: 'Add Reproduction Follow-up',
+        senior_followup: 'Add Senior Pet Record',
+        toxin_foreign_body: 'Add Urgent Record'
+      },
+      programs: {
+        chronic_followup: { title: 'Chronic tracking', cadence: 'Weekly status' },
+        postop_followup: { title: 'Post-op follow-up', cadence: 'Wound and medication check' },
+        diet_log: { title: 'Nutrition transition', cadence: 'Reaction tracking' },
+        poop_score: { title: 'Stool score', cadence: 'Daily quality' },
+        reproduction_followup: { title: 'Reproduction tracking', cadence: 'Calendar and signs' },
+        senior_followup: { title: 'Senior monitoring', cadence: 'Sensitivity tracking' }
+      },
+      filter: 'Filter',
+      sort: 'Sort',
+      programs_title: 'Tracking programs',
+      programs_summary: 'Template status summary',
+      last_7_days: 'Last 7 days',
+      no_distribution: 'No distribution yet.',
+      summary: 'Summary',
+      records_preparing: 'Preparing records',
+      distribution: 'Distribution',
+      waiting_data: 'Waiting for data',
+      total: 'Total',
+      top: 'Top category',
+      expense_count: '{count} expense records',
+      record_count: '{count} records',
+      seven_days: '7 days',
+      upcoming_task: 'upcoming tasks',
+      next: 'Next',
+      no_plan: 'No plan',
+      health_count: 'health records',
+      last_record: 'Latest record',
+      records_loading: 'Loading records...',
+      empty_filter: 'No records in this filter.',
+      empty_filter_desc: 'Try again with a different filter.',
+      empty_desc: 'New records will appear here after you add them.',
+      pet_desc: '{desc} for {name}'
+    }
+  },
   notifications: {
     title: 'Notifications',
     reminder_title: 'Reminder Notifications',
