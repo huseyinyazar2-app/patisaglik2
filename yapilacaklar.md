@@ -405,6 +405,8 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
 - [x] Gerçek belge OCR ilk fazı eklendi: Gemini ile belge/foto/PDF okunup özet, tahlil, ilaç, fatura ve takip görevi çıktıları kayda yazılıyor; rapor detayında gösteriliyor.
 - [x] Hibrit medya/server kararı uygulama notlarına işlendi: medya lokal öncelikli, raporlar kalıcı, AI girdileri 90 gün geçici, B2 private bucket signed URL ile kullanılacak.
 - [x] Production API ilk fazı eklendi: `/api/health`, `/api/media/sign-upload`, `/api/media/complete`, `/api/media/sign-download`; Docker/Coolify deploy dosyası hazırlandı.
+- [x] GitHub ilk push yapıldı: `huseyinyazar2-app/patisaglik2.git` `main` branch.
+- [x] Coolify'da `patisaglik2` projesi ve `patisaglik2-api` uygulaması oluşturuldu; deploy repo erişimi nedeniyle durdu. Coolify server logu GitHub clone için kimlik istediğini gösteriyor.
 - [x] Sonuç ekranındaki risk dili aciliyet trafik ışığına çevrildi: yeşil, sarı, turuncu, kırmızı; dil teşhis değil yönlendirme/aciliyet riski olarak tutuldu.
 - [x] AI ön kontrol sonucundan veteriner için çıktı/PDF yerine paylaşılabilir link üreten `Veteriner Linki Oluştur` akışı eklendi; link `/public/report/:reportId` ekranında anamnez, kırmızı bayrak, yanıt, görev, güvenli takip ve uyarıları gösteriyor.
 - [x] Tedavi Sonrası Takip Asistanı ilk fazı güçlendirildi: reçete/epikriz yükleme alanı, veteriner planı, ilaç/uygulama saatleri, yan etki check-in, yara/foto kontrolü, kontrol randevusu ve takip geçmişi eklendi.
