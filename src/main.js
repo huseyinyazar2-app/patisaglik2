@@ -137,12 +137,15 @@ function getActiveTab(path) {
 
 // Screen module loader cache
 const screenModules = {};
+const screenLoaders = import.meta.glob('./screens/**/*.js');
 
 // Dynamic screen loader
 async function loadScreen(modulePath, params = {}, query = {}) {
   try {
     if (!screenModules[modulePath]) {
-      screenModules[modulePath] = await import(modulePath);
+      const loader = screenLoaders[modulePath];
+      if (!loader) throw new Error(`Screen module not found: ${modulePath}`);
+      screenModules[modulePath] = await loader();
     }
     const mod = screenModules[modulePath];
     const html = mod.render(params, query);
