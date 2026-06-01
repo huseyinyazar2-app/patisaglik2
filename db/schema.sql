@@ -396,6 +396,26 @@ CREATE TABLE IF NOT EXISTS audit_logs (
   FOREIGN KEY (actor_user_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
+CREATE TABLE IF NOT EXISTS admin_accounts (
+  id TEXT PRIMARY KEY,
+  username TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  role TEXT NOT NULL DEFAULT 'super_admin',
+  permissions TEXT NOT NULL DEFAULT '[]',
+  status TEXT NOT NULL DEFAULT 'active',
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  last_login_at TEXT
+);
+
+CREATE TABLE IF NOT EXISTS admin_sessions (
+  token TEXT PRIMARY KEY,
+  admin_id TEXT NOT NULL,
+  expires_at TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  FOREIGN KEY (admin_id) REFERENCES admin_accounts(id) ON DELETE CASCADE
+);
+
 CREATE INDEX IF NOT EXISTS idx_pets_owner ON pets(primary_owner_user_id);
 CREATE INDEX IF NOT EXISTS idx_pet_members_pet ON pet_members(pet_id);
 CREATE INDEX IF NOT EXISTS idx_pet_members_user ON pet_members(user_id);

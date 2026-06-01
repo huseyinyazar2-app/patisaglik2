@@ -30,8 +30,8 @@ function sendJson(res, status, data) {
   res.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': optionalEnv('CORS_ORIGIN', '*'),
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Admin-Token',
-    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS'
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Admin-Token, X-Admin-Session',
+    'Access-Control-Allow-Methods': 'GET,POST,DELETE,OPTIONS'
   });
   res.end(JSON.stringify(data));
 }

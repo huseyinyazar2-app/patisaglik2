@@ -431,6 +431,9 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
 - [x] Web admin ilk fazı eklendi: `/admin` API sağlık durumu, kayıt metrikleri, son kayıtlar, belge/OCR listesi, Gemini model katmanları ve kritik AI test aksiyonu gösteriliyor.
 - [x] Gerçek admin API eklendi: token korumalı `/api/admin/overview`, `/users`, `/pets`, `/records`, `/usage`, `/documents` canlı Turso verisini okuyor.
 - [x] `/admin` paneli token ile gerçek admin API'ye bağlandı; kullanıcı, pet, son hareket, belge ve kredi/özellik kullanım listeleri yönetim görünümünde gösteriliyor.
+- [x] Geçici admin login eklendi: `admin / admin123` ile giriş, admin session ve ayarlardan şifre değiştirme çalışıyor.
+- [x] Admin yetki sistemi eklendi: `super_admin` rolü ve kullanıcı/pet/kredi/plan/kayıt yönetimi izinleri server tarafında kontrol ediliyor.
+- [x] Admin aksiyonları eklendi: kullanıcı askıya alma/aktif etme, pet arşivleme/aktif etme, kredi düzenleme, plan atama ve kayıt silme audit log ile çalışıyor.
 - [x] Kullanıcı hesabı telefon öncelikli giriş/profil yapısına genişletildi.
   - [x] Kayıt ekranında telefon ana alan oldu; e-posta opsiyonel destek alanı olarak kaldı.
   - [x] Kullanıcı profilinde telefon, ülke, il, ilçe, mahalle, dil ve saat dilimi gösterilip düzenlenebiliyor.
