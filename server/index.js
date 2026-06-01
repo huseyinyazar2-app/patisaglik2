@@ -78,9 +78,24 @@ async function handlePackageRisk(req, res) {
   const body = await readBody(req);
   const result = await generateGeminiJson({
     system: 'Sen veteriner yerine geçmeyen, güvenli aciliyet yönlendirmesi yapan bir pet sağlık asistanısın.',
-    prompt: body.prompt || ''
+    prompt: body.prompt || '',
+    responseSchema: {
+      type: 'object',
+      properties: {
+        level: { type: 'string', enum: ['critical', 'high', 'foreign', 'watch', 'unknown'] },
+        headline: { type: 'string' },
+        reason: { type: 'string' },
+        doNotDo: { type: 'array', items: { type: 'string' } },
+        prepare: { type: 'array', items: { type: 'string' } },
+        askVet: { type: 'array', items: { type: 'string' } }
+      },
+      required: ['level', 'headline', 'reason', 'doNotDo', 'prepare', 'askVet']
+    }
   });
   if (!result.ok) return sendJson(res, 502, result);
+  if (!result.data?.level || !Array.isArray(result.data?.prepare)) {
+    return sendJson(res, 502, { ok: false, reason: 'invalid_schema' });
+  }
   return sendJson(res, 200, { ok: true, data: result.data });
 }
 

@@ -23,7 +23,7 @@ export function isAiConfigured() {
   return Boolean(apiKey());
 }
 
-export async function generateGeminiJson({ system, prompt, parts = [] }) {
+export async function generateGeminiJson({ system, prompt, parts = [], responseSchema = null }) {
   const key = apiKey();
   if (!key) return { ok: false, reason: 'missing_key' };
   const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(key)}`, {
@@ -32,7 +32,8 @@ export async function generateGeminiJson({ system, prompt, parts = [] }) {
     body: JSON.stringify({
       generationConfig: {
         temperature: 0.2,
-        responseMimeType: 'application/json'
+        responseMimeType: 'application/json',
+        ...(responseSchema ? { responseSchema } : {})
       },
       contents: [{
         role: 'user',
