@@ -1,0 +1,128 @@
+const SETTINGS_KEY = 'pati_notification_settings';
+const NATIVE_IDS_KEY = 'pati_native_notification_ids';
+
+function nativeLocalNotifications() {
+  return window.Capacitor?.Plugins?.LocalNotifications || window.Capacitor?.LocalNotifications || null;
+}
+
+function nativePlatform() {
+  return window.Capacitor?.getPlatform?.() || window.Capacitor?.platform || 'web';
+}
+
+function notificationId(value) {
+  const raw = String(value || 'pati');
+  let hash = 0;
+  for (let index = 0; index < raw.length; index += 1) {
+    hash = ((hash << 5) - hash) + raw.charCodeAt(index);
+    hash |= 0;
+  }
+  return Math.abs(hash % 2_000_000_000) + 10_000;
+}
+
+function readNativeIds() {
+  try {
+    return JSON.parse(localStorage.getItem(NATIVE_IDS_KEY) || '[]');
+  } catch {
+    return [];
+  }
+}
+
+export function getNotificationPermissionState() {
+  if (!('Notification' in window)) return 'unsupported';
+  return Notification.permission || 'default';
+}
+
+export function getNotificationSettings() {
+  return {
+    reminders: true,
+    dailySummary: false,
+    quietHours: '22:00-08:00',
+    ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}')
+  };
+}
+
+export function saveNotificationSettings(settings) {
+  const next = { ...getNotificationSettings(), ...settings };
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(next));
+  return next;
+}
+
+export async function requestNotificationPermission() {
+  if (!('Notification' in window)) return 'unsupported';
+  if (Notification.permission === 'granted') return 'granted';
+  return Notification.requestPermission();
+}
+
+export function getNativeNotificationState() {
+  return {
+    available: Boolean(nativeLocalNotifications()),
+    platform: nativePlatform()
+  };
+}
+
+export async function requestNativeNotificationPermission() {
+  const plugin = nativeLocalNotifications();
+  if (!plugin) return 'unsupported';
+  const result = await plugin.requestPermissions?.();
+  return result?.display || result?.receive || 'granted';
+}
+
+export function sendTestNotification() {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return false;
+  new Notification('Pati Sağlık', {
+    body: 'Hatırlatıcı bildirimleri bu cihazda aktif.',
+    tag: 'pati-test-notification'
+  });
+  return true;
+}
+
+export async function syncNativeReminderPlan(plan = []) {
+  const plugin = nativeLocalNotifications();
+  if (!plugin) return { ok: false, reason: 'unsupported', scheduled: 0 };
+
+  const permission = await requestNativeNotificationPermission();
+  if (!['granted', 'prompt-with-rationale'].includes(permission)) {
+    return { ok: false, reason: 'permission', permission, scheduled: 0 };
+  }
+
+  const previousIds = readNativeIds();
+  if (previousIds.length && plugin.cancel) {
+    await plugin.cancel({ notifications: previousIds.map((id) => ({ id })) });
+  }
+
+  const now = Date.now();
+  const notifications = plan
+    .filter((item) => item.dueAt && new Date(item.dueAt).getTime() > now)
+    .slice(0, 16)
+    .map((item) => ({
+      id: notificationId(`${item.id}-${item.dueAt}`),
+      title: 'Pati Sağlık Hatırlatıcı',
+      body: `${item.title || item.type || 'Hatırlatıcı'} zamanı yaklaşıyor.`,
+      schedule: { at: new Date(item.dueAt) },
+      extra: { reminderId: item.id, dueAt: item.dueAt, type: item.type }
+    }));
+
+  if (!notifications.length) {
+    localStorage.setItem(NATIVE_IDS_KEY, '[]');
+    return { ok: true, reason: 'empty', scheduled: 0 };
+  }
+
+  await plugin.schedule({ notifications });
+  localStorage.setItem(NATIVE_IDS_KEY, JSON.stringify(notifications.map((item) => item.id)));
+  return { ok: true, reason: 'scheduled', scheduled: notifications.length };
+}
+
+export function getReminderNotificationPlan(reminders = []) {
+  const now = new Date();
+  return reminders
+    .filter((item) => item.status === 'scheduled' && item.due_at && new Date(item.due_at) >= now)
+    .sort((a, b) => new Date(a.due_at) - new Date(b.due_at))
+    .slice(0, 8)
+    .map((item) => ({
+      id: item.id,
+      title: item.title || item.reminder_type || 'Hatırlatıcı',
+      type: item.reminder_type || 'Genel',
+      dueAt: item.due_at,
+      repeatRule: item.repeat_rule || 'Tek sefer'
+    }));
+}

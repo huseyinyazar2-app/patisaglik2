@@ -1,0 +1,1352 @@
+[
+  {
+    "id": "vomiting.followup.low",
+    "complaint_type_id": "vomiting",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 48,
+    "followup_question_set_ids": [
+      "vomiting_followup_short"
+    ],
+    "followup_task_keys": [
+      "vomit_photo",
+      "behavior_video"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "vomiting.followup.medium",
+    "complaint_type_id": "vomiting",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 24,
+    "followup_question_set_ids": [
+      "vomiting_followup_short"
+    ],
+    "followup_task_keys": [
+      "vomit_photo",
+      "behavior_video"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "vomiting.followup.high",
+    "complaint_type_id": "vomiting",
+    "risk_level": "high",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "vomiting_followup_short"
+    ],
+    "followup_task_keys": [
+      "vomit_photo",
+      "behavior_video"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "diarrhea.followup.low",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 48,
+    "followup_question_set_ids": [
+      "diarrhea_followup_short"
+    ],
+    "followup_task_keys": [
+      "stool_photo",
+      "water_intake_note"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "diarrhea.followup.medium",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 24,
+    "followup_question_set_ids": [
+      "diarrhea_followup_short"
+    ],
+    "followup_task_keys": [
+      "stool_photo",
+      "water_intake_note"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "diarrhea.followup.high",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "high",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "diarrhea_followup_short"
+    ],
+    "followup_task_keys": [
+      "stool_photo",
+      "water_intake_note"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "loss_of_appetite.followup.low",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 48,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "behavior_video",
+      "weight_measurement"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "loss_of_appetite.followup.medium",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 24,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "behavior_video",
+      "weight_measurement"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "loss_of_appetite.followup.high",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "high",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "behavior_video",
+      "weight_measurement"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "lethargy.followup.low",
+    "complaint_type_id": "lethargy",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 48,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "behavior_video",
+      "temperature_measurement"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "lethargy.followup.medium",
+    "complaint_type_id": "lethargy",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 24,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "behavior_video",
+      "temperature_measurement"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "lethargy.followup.high",
+    "complaint_type_id": "lethargy",
+    "risk_level": "high",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "behavior_video",
+      "temperature_measurement"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "cough.followup.low",
+    "complaint_type_id": "cough",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 24,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "cough_audio",
+      "breathing_video"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "cough.followup.medium",
+    "complaint_type_id": "cough",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "cough_audio",
+      "breathing_video"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "cough.followup.high",
+    "complaint_type_id": "cough",
+    "risk_level": "high",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "cough_audio",
+      "breathing_video"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "breathing_issue.followup.low",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 24,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "breathing_video",
+      "breathing_audio"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "breathing_issue.followup.medium",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "breathing_video",
+      "breathing_audio"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "breathing_issue.followup.high",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "high",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "breathing_video",
+      "breathing_audio"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "eye_problem.followup.low",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 48,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "eye_photo",
+      "two_eye_comparison_photo"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "eye_problem.followup.medium",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 24,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "eye_photo",
+      "two_eye_comparison_photo"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "eye_problem.followup.high",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "high",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "eye_photo",
+      "two_eye_comparison_photo"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "ear_problem.followup.low",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 48,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "ear_outer_photo",
+      "ear_inner_camera"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "ear_problem.followup.medium",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 24,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "ear_outer_photo",
+      "ear_inner_camera"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "ear_problem.followup.high",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "high",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "ear_outer_photo",
+      "ear_inner_camera"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "skin_itching.followup.low",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 48,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "skin_photo",
+      "itching_video"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "skin_itching.followup.medium",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 24,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "skin_photo",
+      "itching_video"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "skin_itching.followup.high",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "high",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "skin_photo",
+      "itching_video"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "wound_swelling.followup.low",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 48,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "wound_photo",
+      "close_skin_camera"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "wound_swelling.followup.medium",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 24,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "wound_photo",
+      "close_skin_camera"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "wound_swelling.followup.high",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "high",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "wound_photo",
+      "close_skin_camera"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "urination_problem.followup.low",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 24,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "urine_note",
+      "urine_color_photo"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "urination_problem.followup.medium",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "urine_note",
+      "urine_color_photo"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "urination_problem.followup.high",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "high",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "urine_note",
+      "urine_color_photo"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "limping.followup.low",
+    "complaint_type_id": "limping",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 48,
+    "followup_question_set_ids": [
+      "limping_followup_short"
+    ],
+    "followup_task_keys": [
+      "gait_video_side",
+      "gait_video_front"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "limping.followup.medium",
+    "complaint_type_id": "limping",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 24,
+    "followup_question_set_ids": [
+      "limping_followup_short"
+    ],
+    "followup_task_keys": [
+      "gait_video_side",
+      "gait_video_front"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "limping.followup.high",
+    "complaint_type_id": "limping",
+    "risk_level": "high",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "limping_followup_short"
+    ],
+    "followup_task_keys": [
+      "gait_video_side",
+      "gait_video_front"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "pain.followup.low",
+    "complaint_type_id": "pain",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 48,
+    "followup_question_set_ids": [
+      "pain_followup_short"
+    ],
+    "followup_task_keys": [
+      "pain_behavior_video",
+      "pain_area_photo"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "pain.followup.medium",
+    "complaint_type_id": "pain",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 24,
+    "followup_question_set_ids": [
+      "pain_followup_short"
+    ],
+    "followup_task_keys": [
+      "pain_behavior_video",
+      "pain_area_photo"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "pain.followup.high",
+    "complaint_type_id": "pain",
+    "risk_level": "high",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "pain_followup_short"
+    ],
+    "followup_task_keys": [
+      "pain_behavior_video",
+      "pain_area_photo"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "neurologic.followup.low",
+    "complaint_type_id": "neurologic",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 48,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "neuro_video",
+      "behavior_video"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "neurologic.followup.medium",
+    "complaint_type_id": "neurologic",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 24,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "neuro_video",
+      "behavior_video"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "neurologic.followup.high",
+    "complaint_type_id": "neurologic",
+    "risk_level": "high",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "neuro_video",
+      "behavior_video"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "toxin_foreign_body.followup.low",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 24,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "toxin_package_photo",
+      "vomit_photo"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "toxin_foreign_body.followup.medium",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "toxin_package_photo",
+      "vomit_photo"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "toxin_foreign_body.followup.high",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "high",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "toxin_package_photo",
+      "vomit_photo"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "mouth_dental.followup.low",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 48,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "mouth_photo",
+      "gum_photo"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "mouth_dental.followup.medium",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 24,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "mouth_photo",
+      "gum_photo"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "mouth_dental.followup.high",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "high",
+    "recommended": true,
+    "interval_hours": 12,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "mouth_photo",
+      "gum_photo"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "weight_change.followup.low",
+    "complaint_type_id": "weight_change",
+    "risk_level": "low",
+    "recommended": true,
+    "interval_hours": 168,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "weight_measurement",
+      "body_condition_photos"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "weight_change.followup.medium",
+    "complaint_type_id": "weight_change",
+    "risk_level": "medium",
+    "recommended": true,
+    "interval_hours": 168,
+    "followup_question_set_ids": [
+      "general_condition_basic"
+    ],
+    "followup_task_keys": [
+      "weight_measurement",
+      "body_condition_photos"
+    ],
+    "escalation_rules": [
+      "new_red_flag",
+      "symptom_worsening",
+      "blood_seen",
+      "severe_lethargy",
+      "breathing_difficulty"
+    ],
+    "close_rules": [
+      "symptom_resolved",
+      "risk_lower_than_previous",
+      "user_reports_normal_behavior"
+    ],
+    "review_status": "draft_ai_generated"
+  }
+]

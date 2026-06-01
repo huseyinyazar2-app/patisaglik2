@@ -1,0 +1,3902 @@
+[
+  {
+    "id": "vomiting.low.safe_followup_steps",
+    "complaint_type_id": "vomiting",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Kusma sayısını, saatini ve görünümünü kaydedin.",
+      "İştah ve su içme durumunu takip edin.",
+      "Kusmuk fotoğrafı varsa rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "vomiting.low.avoid_actions",
+    "complaint_type_id": "vomiting",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner yönlendirmesi olmadan kusturmaya çalışmayın.",
+      "İnsan mide ilacı veya ağrı kesici vermeyin.",
+      "Kan, yabancı cisim veya sürekli kusma varsa evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "vomiting.low.when_not_to_wait",
+    "complaint_type_id": "vomiting",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "vomiting.low.vet_preparation",
+    "complaint_type_id": "vomiting",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "vomiting.low.followup_plan",
+    "complaint_type_id": "vomiting",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "vomiting.medium.safe_followup_steps",
+    "complaint_type_id": "vomiting",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Kusma sayısını, saatini ve görünümünü kaydedin.",
+      "İştah ve su içme durumunu takip edin.",
+      "Kusmuk fotoğrafı varsa rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "vomiting.medium.avoid_actions",
+    "complaint_type_id": "vomiting",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner yönlendirmesi olmadan kusturmaya çalışmayın.",
+      "İnsan mide ilacı veya ağrı kesici vermeyin.",
+      "Kan, yabancı cisim veya sürekli kusma varsa evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "vomiting.medium.when_not_to_wait",
+    "complaint_type_id": "vomiting",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Kanlı kusma görülürse beklemeyin.",
+      "Sürekli kusma veya su tutamama varsa beklemeyin.",
+      "Zehirlenme veya yabancı cisim ihtimali varsa hızlıca veterinerle görüşün."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "vomiting.medium.vet_preparation",
+    "complaint_type_id": "vomiting",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "vomiting.medium.followup_plan",
+    "complaint_type_id": "vomiting",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "vomiting.high.safe_followup_steps",
+    "complaint_type_id": "vomiting",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Kusma sayısını, saatini ve görünümünü kaydedin.",
+      "İştah ve su içme durumunu takip edin.",
+      "Kusmuk fotoğrafı varsa rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "vomiting.high.avoid_actions",
+    "complaint_type_id": "vomiting",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner yönlendirmesi olmadan kusturmaya çalışmayın.",
+      "İnsan mide ilacı veya ağrı kesici vermeyin.",
+      "Kan, yabancı cisim veya sürekli kusma varsa evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "vomiting.high.when_not_to_wait",
+    "complaint_type_id": "vomiting",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Kanlı kusma görülürse beklemeyin.",
+      "Sürekli kusma veya su tutamama varsa beklemeyin.",
+      "Zehirlenme veya yabancı cisim ihtimali varsa hızlıca veterinerle görüşün."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "vomiting.high.vet_preparation",
+    "complaint_type_id": "vomiting",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "vomiting.high.followup_plan",
+    "complaint_type_id": "vomiting",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea.low.safe_followup_steps",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "İshal / Dışkı Değişimi ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea.low.avoid_actions",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea.low.when_not_to_wait",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea.low.vet_preparation",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea.low.followup_plan",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea.medium.safe_followup_steps",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "İshal / Dışkı Değişimi ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea.medium.avoid_actions",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea.medium.when_not_to_wait",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea.medium.vet_preparation",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea.medium.followup_plan",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea.high.safe_followup_steps",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "İshal / Dışkı Değişimi ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea.high.avoid_actions",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea.high.when_not_to_wait",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea.high.vet_preparation",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea.high.followup_plan",
+    "complaint_type_id": "diarrhea",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "loss_of_appetite.low.safe_followup_steps",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "İştahsızlık ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "loss_of_appetite.low.avoid_actions",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "loss_of_appetite.low.when_not_to_wait",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "loss_of_appetite.low.vet_preparation",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "loss_of_appetite.low.followup_plan",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "loss_of_appetite.medium.safe_followup_steps",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "İştahsızlık ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "loss_of_appetite.medium.avoid_actions",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "loss_of_appetite.medium.when_not_to_wait",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "loss_of_appetite.medium.vet_preparation",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "loss_of_appetite.medium.followup_plan",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "loss_of_appetite.high.safe_followup_steps",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "İştahsızlık ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "loss_of_appetite.high.avoid_actions",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "loss_of_appetite.high.when_not_to_wait",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "loss_of_appetite.high.vet_preparation",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "loss_of_appetite.high.followup_plan",
+    "complaint_type_id": "loss_of_appetite",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "lethargy.low.safe_followup_steps",
+    "complaint_type_id": "lethargy",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Halsizlik / Genel Durum ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "lethargy.low.avoid_actions",
+    "complaint_type_id": "lethargy",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "lethargy.low.when_not_to_wait",
+    "complaint_type_id": "lethargy",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "lethargy.low.vet_preparation",
+    "complaint_type_id": "lethargy",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "lethargy.low.followup_plan",
+    "complaint_type_id": "lethargy",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "lethargy.medium.safe_followup_steps",
+    "complaint_type_id": "lethargy",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Halsizlik / Genel Durum ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "lethargy.medium.avoid_actions",
+    "complaint_type_id": "lethargy",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "lethargy.medium.when_not_to_wait",
+    "complaint_type_id": "lethargy",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "lethargy.medium.vet_preparation",
+    "complaint_type_id": "lethargy",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "lethargy.medium.followup_plan",
+    "complaint_type_id": "lethargy",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "lethargy.high.safe_followup_steps",
+    "complaint_type_id": "lethargy",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Halsizlik / Genel Durum ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "lethargy.high.avoid_actions",
+    "complaint_type_id": "lethargy",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "lethargy.high.when_not_to_wait",
+    "complaint_type_id": "lethargy",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "lethargy.high.vet_preparation",
+    "complaint_type_id": "lethargy",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "lethargy.high.followup_plan",
+    "complaint_type_id": "lethargy",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "cough.low.safe_followup_steps",
+    "complaint_type_id": "cough",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Öksürük ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "cough.low.avoid_actions",
+    "complaint_type_id": "cough",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "cough.low.when_not_to_wait",
+    "complaint_type_id": "cough",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "cough.low.vet_preparation",
+    "complaint_type_id": "cough",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "cough.low.followup_plan",
+    "complaint_type_id": "cough",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "cough.medium.safe_followup_steps",
+    "complaint_type_id": "cough",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Öksürük ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "cough.medium.avoid_actions",
+    "complaint_type_id": "cough",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "cough.medium.when_not_to_wait",
+    "complaint_type_id": "cough",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "cough.medium.vet_preparation",
+    "complaint_type_id": "cough",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "cough.medium.followup_plan",
+    "complaint_type_id": "cough",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "cough.high.safe_followup_steps",
+    "complaint_type_id": "cough",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Öksürük ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "cough.high.avoid_actions",
+    "complaint_type_id": "cough",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "cough.high.when_not_to_wait",
+    "complaint_type_id": "cough",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "cough.high.vet_preparation",
+    "complaint_type_id": "cough",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "cough.high.followup_plan",
+    "complaint_type_id": "cough",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "breathing_issue.low.safe_followup_steps",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Dinlenirken solunum videosu ve kısa ses kaydı eklenebilir.",
+      "Öksürük/hırıltı zamanını ve sıklığını kaydedin.",
+      "Dinlenme solunum sayısını not edin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "breathing_issue.low.avoid_actions",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Nefes zorluğunda video çekmekle vakit kaybetmeyin.",
+      "İnsan öksürük şurubu veya ilaç vermeyin.",
+      "Boğazına yabancı cisim şüphesinde evde müdahale etmeye çalışmayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "breathing_issue.low.when_not_to_wait",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "breathing_issue.low.vet_preparation",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "breathing_issue.low.followup_plan",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "breathing_issue.medium.safe_followup_steps",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Dinlenirken solunum videosu ve kısa ses kaydı eklenebilir.",
+      "Öksürük/hırıltı zamanını ve sıklığını kaydedin.",
+      "Dinlenme solunum sayısını not edin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "breathing_issue.medium.avoid_actions",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Nefes zorluğunda video çekmekle vakit kaybetmeyin.",
+      "İnsan öksürük şurubu veya ilaç vermeyin.",
+      "Boğazına yabancı cisim şüphesinde evde müdahale etmeye çalışmayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "breathing_issue.medium.when_not_to_wait",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes almakta zorlanıyorsa beklemeyin.",
+      "Ağız açık nefes alma, morarma veya bayılma varsa acil olabilir.",
+      "Kedide ağzı açık nefes alma özellikle ciddiye alınmalıdır."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "breathing_issue.medium.vet_preparation",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "breathing_issue.medium.followup_plan",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "breathing_issue.high.safe_followup_steps",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Dinlenirken solunum videosu ve kısa ses kaydı eklenebilir.",
+      "Öksürük/hırıltı zamanını ve sıklığını kaydedin.",
+      "Dinlenme solunum sayısını not edin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "breathing_issue.high.avoid_actions",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Nefes zorluğunda video çekmekle vakit kaybetmeyin.",
+      "İnsan öksürük şurubu veya ilaç vermeyin.",
+      "Boğazına yabancı cisim şüphesinde evde müdahale etmeye çalışmayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "breathing_issue.high.when_not_to_wait",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes almakta zorlanıyorsa beklemeyin.",
+      "Ağız açık nefes alma, morarma veya bayılma varsa acil olabilir.",
+      "Kedide ağzı açık nefes alma özellikle ciddiye alınmalıdır."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "breathing_issue.high.vet_preparation",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "breathing_issue.high.followup_plan",
+    "complaint_type_id": "breathing_issue",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_problem.low.safe_followup_steps",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Göz Akıntısı / Kızarıklık ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_problem.low.avoid_actions",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_problem.low.when_not_to_wait",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_problem.low.vet_preparation",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_problem.low.followup_plan",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_problem.medium.safe_followup_steps",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Göz Akıntısı / Kızarıklık ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_problem.medium.avoid_actions",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_problem.medium.when_not_to_wait",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_problem.medium.vet_preparation",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_problem.medium.followup_plan",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_problem.high.safe_followup_steps",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Göz Akıntısı / Kızarıklık ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_problem.high.avoid_actions",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_problem.high.when_not_to_wait",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_problem.high.vet_preparation",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_problem.high.followup_plan",
+    "complaint_type_id": "eye_problem",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_problem.low.safe_followup_steps",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Kulak Kaşıma / Koku / Akıntı ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_problem.low.avoid_actions",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_problem.low.when_not_to_wait",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_problem.low.vet_preparation",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_problem.low.followup_plan",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_problem.medium.safe_followup_steps",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Kulak Kaşıma / Koku / Akıntı ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_problem.medium.avoid_actions",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_problem.medium.when_not_to_wait",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_problem.medium.vet_preparation",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_problem.medium.followup_plan",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_problem.high.safe_followup_steps",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Kulak Kaşıma / Koku / Akıntı ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_problem.high.avoid_actions",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_problem.high.when_not_to_wait",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_problem.high.vet_preparation",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_problem.high.followup_plan",
+    "complaint_type_id": "ear_problem",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_itching.low.safe_followup_steps",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Kaşıntı / Deri / Tüy ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_itching.low.avoid_actions",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_itching.low.when_not_to_wait",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_itching.low.vet_preparation",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_itching.low.followup_plan",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_itching.medium.safe_followup_steps",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Kaşıntı / Deri / Tüy ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_itching.medium.avoid_actions",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_itching.medium.when_not_to_wait",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_itching.medium.vet_preparation",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_itching.medium.followup_plan",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_itching.high.safe_followup_steps",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Kaşıntı / Deri / Tüy ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_itching.high.avoid_actions",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_itching.high.when_not_to_wait",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_itching.high.vet_preparation",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_itching.high.followup_plan",
+    "complaint_type_id": "skin_itching",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "wound_swelling.low.safe_followup_steps",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Yara / Şişlik ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "wound_swelling.low.avoid_actions",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "wound_swelling.low.when_not_to_wait",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "wound_swelling.low.vet_preparation",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "wound_swelling.low.followup_plan",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "wound_swelling.medium.safe_followup_steps",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Yara / Şişlik ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "wound_swelling.medium.avoid_actions",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "wound_swelling.medium.when_not_to_wait",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "wound_swelling.medium.vet_preparation",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "wound_swelling.medium.followup_plan",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "wound_swelling.high.safe_followup_steps",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Yara / Şişlik ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "wound_swelling.high.avoid_actions",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "wound_swelling.high.when_not_to_wait",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "wound_swelling.high.vet_preparation",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "wound_swelling.high.followup_plan",
+    "complaint_type_id": "wound_swelling",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urination_problem.low.safe_followup_steps",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Kum kabına gitme sıklığını ve idrar olup olmadığını kaydedin.",
+      "İdrar rengi değişimi varsa fotoğraf veya not ekleyin.",
+      "Basic Kit varsa idrar strip sonucunu kayıt olarak ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urination_problem.low.avoid_actions",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "İdrar yapamama durumunda evde beklemeyin.",
+      "Özellikle erkek kedide zorlanmayı stres deyip geçmeyin.",
+      "Evde ilaç veya bitkisel ürün vermeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urination_problem.low.when_not_to_wait",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urination_problem.low.vet_preparation",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urination_problem.low.followup_plan",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urination_problem.medium.safe_followup_steps",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Kum kabına gitme sıklığını ve idrar olup olmadığını kaydedin.",
+      "İdrar rengi değişimi varsa fotoğraf veya not ekleyin.",
+      "Basic Kit varsa idrar strip sonucunu kayıt olarak ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urination_problem.medium.avoid_actions",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "İdrar yapamama durumunda evde beklemeyin.",
+      "Özellikle erkek kedide zorlanmayı stres deyip geçmeyin.",
+      "Evde ilaç veya bitkisel ürün vermeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urination_problem.medium.when_not_to_wait",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Hiç idrar yapamıyorsa beklemeyin.",
+      "Erkek kedide idrar zorlanması varsa acil olabilir.",
+      "Kanlı idrar veya ağrılı idrar varsa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urination_problem.medium.vet_preparation",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urination_problem.medium.followup_plan",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urination_problem.high.safe_followup_steps",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Kum kabına gitme sıklığını ve idrar olup olmadığını kaydedin.",
+      "İdrar rengi değişimi varsa fotoğraf veya not ekleyin.",
+      "Basic Kit varsa idrar strip sonucunu kayıt olarak ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urination_problem.high.avoid_actions",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "İdrar yapamama durumunda evde beklemeyin.",
+      "Özellikle erkek kedide zorlanmayı stres deyip geçmeyin.",
+      "Evde ilaç veya bitkisel ürün vermeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urination_problem.high.when_not_to_wait",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Hiç idrar yapamıyorsa beklemeyin.",
+      "Erkek kedide idrar zorlanması varsa acil olabilir.",
+      "Kanlı idrar veya ağrılı idrar varsa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urination_problem.high.vet_preparation",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urination_problem.high.followup_plan",
+    "complaint_type_id": "urination_problem",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "limping.low.safe_followup_steps",
+    "complaint_type_id": "limping",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Topallama / Hareket ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "limping.low.avoid_actions",
+    "complaint_type_id": "limping",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "limping.low.when_not_to_wait",
+    "complaint_type_id": "limping",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "limping.low.vet_preparation",
+    "complaint_type_id": "limping",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "limping.low.followup_plan",
+    "complaint_type_id": "limping",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "limping.medium.safe_followup_steps",
+    "complaint_type_id": "limping",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Topallama / Hareket ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "limping.medium.avoid_actions",
+    "complaint_type_id": "limping",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "limping.medium.when_not_to_wait",
+    "complaint_type_id": "limping",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "limping.medium.vet_preparation",
+    "complaint_type_id": "limping",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "limping.medium.followup_plan",
+    "complaint_type_id": "limping",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "limping.high.safe_followup_steps",
+    "complaint_type_id": "limping",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Topallama / Hareket ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "limping.high.avoid_actions",
+    "complaint_type_id": "limping",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "limping.high.when_not_to_wait",
+    "complaint_type_id": "limping",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "limping.high.vet_preparation",
+    "complaint_type_id": "limping",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "limping.high.followup_plan",
+    "complaint_type_id": "limping",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain.low.safe_followup_steps",
+    "complaint_type_id": "pain",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Ağrı / Dokununca Tepki ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain.low.avoid_actions",
+    "complaint_type_id": "pain",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain.low.when_not_to_wait",
+    "complaint_type_id": "pain",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain.low.vet_preparation",
+    "complaint_type_id": "pain",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain.low.followup_plan",
+    "complaint_type_id": "pain",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain.medium.safe_followup_steps",
+    "complaint_type_id": "pain",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Ağrı / Dokununca Tepki ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain.medium.avoid_actions",
+    "complaint_type_id": "pain",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain.medium.when_not_to_wait",
+    "complaint_type_id": "pain",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain.medium.vet_preparation",
+    "complaint_type_id": "pain",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain.medium.followup_plan",
+    "complaint_type_id": "pain",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain.high.safe_followup_steps",
+    "complaint_type_id": "pain",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Ağrı / Dokununca Tepki ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain.high.avoid_actions",
+    "complaint_type_id": "pain",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain.high.when_not_to_wait",
+    "complaint_type_id": "pain",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain.high.vet_preparation",
+    "complaint_type_id": "pain",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain.high.followup_plan",
+    "complaint_type_id": "pain",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic.low.safe_followup_steps",
+    "complaint_type_id": "neurologic",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Nörolojik / Denge / Nöbet ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic.low.avoid_actions",
+    "complaint_type_id": "neurologic",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic.low.when_not_to_wait",
+    "complaint_type_id": "neurologic",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic.low.vet_preparation",
+    "complaint_type_id": "neurologic",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic.low.followup_plan",
+    "complaint_type_id": "neurologic",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic.medium.safe_followup_steps",
+    "complaint_type_id": "neurologic",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Nörolojik / Denge / Nöbet ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic.medium.avoid_actions",
+    "complaint_type_id": "neurologic",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic.medium.when_not_to_wait",
+    "complaint_type_id": "neurologic",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic.medium.vet_preparation",
+    "complaint_type_id": "neurologic",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic.medium.followup_plan",
+    "complaint_type_id": "neurologic",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic.high.safe_followup_steps",
+    "complaint_type_id": "neurologic",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Nörolojik / Denge / Nöbet ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic.high.avoid_actions",
+    "complaint_type_id": "neurologic",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic.high.when_not_to_wait",
+    "complaint_type_id": "neurologic",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic.high.vet_preparation",
+    "complaint_type_id": "neurologic",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic.high.followup_plan",
+    "complaint_type_id": "neurologic",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "toxin_foreign_body.low.safe_followup_steps",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Yenen/yalalanan maddeyi ve ambalajını saklayın.",
+      "Ne zaman ve yaklaşık ne kadar alındığını not edin.",
+      "Madde/ambalaj fotoğrafını rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "toxin_foreign_body.low.avoid_actions",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner yönlendirmesi olmadan kusturmaya çalışmayın.",
+      "Evde bekleyip belirti çıkmasını izlemekle yetinmeyin.",
+      "İnsan ilacı, aktif kömür veya ev karışımı vermeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "toxin_foreign_body.low.when_not_to_wait",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "toxin_foreign_body.low.vet_preparation",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "toxin_foreign_body.low.followup_plan",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "toxin_foreign_body.medium.safe_followup_steps",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Yenen/yalalanan maddeyi ve ambalajını saklayın.",
+      "Ne zaman ve yaklaşık ne kadar alındığını not edin.",
+      "Madde/ambalaj fotoğrafını rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "toxin_foreign_body.medium.avoid_actions",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner yönlendirmesi olmadan kusturmaya çalışmayın.",
+      "Evde bekleyip belirti çıkmasını izlemekle yetinmeyin.",
+      "İnsan ilacı, aktif kömür veya ev karışımı vermeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "toxin_foreign_body.medium.when_not_to_wait",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Zehirli madde veya insan ilacı ihtimali varsa beklemeyin.",
+      "Kusma, salya, titreme, nöbet veya halsizlik varsa acil olabilir.",
+      "Nefes zorluğu varsa hemen veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "toxin_foreign_body.medium.vet_preparation",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "toxin_foreign_body.medium.followup_plan",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "toxin_foreign_body.high.safe_followup_steps",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Yenen/yalalanan maddeyi ve ambalajını saklayın.",
+      "Ne zaman ve yaklaşık ne kadar alındığını not edin.",
+      "Madde/ambalaj fotoğrafını rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "toxin_foreign_body.high.avoid_actions",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner yönlendirmesi olmadan kusturmaya çalışmayın.",
+      "Evde bekleyip belirti çıkmasını izlemekle yetinmeyin.",
+      "İnsan ilacı, aktif kömür veya ev karışımı vermeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "toxin_foreign_body.high.when_not_to_wait",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Zehirli madde veya insan ilacı ihtimali varsa beklemeyin.",
+      "Kusma, salya, titreme, nöbet veya halsizlik varsa acil olabilir.",
+      "Nefes zorluğu varsa hemen veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "toxin_foreign_body.high.vet_preparation",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "toxin_foreign_body.high.followup_plan",
+    "complaint_type_id": "toxin_foreign_body",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "mouth_dental.low.safe_followup_steps",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Ağız / Diş / Salya ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "mouth_dental.low.avoid_actions",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "mouth_dental.low.when_not_to_wait",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "mouth_dental.low.vet_preparation",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "mouth_dental.low.followup_plan",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "mouth_dental.medium.safe_followup_steps",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Ağız / Diş / Salya ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "mouth_dental.medium.avoid_actions",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "mouth_dental.medium.when_not_to_wait",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "mouth_dental.medium.vet_preparation",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "mouth_dental.medium.followup_plan",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "mouth_dental.high.safe_followup_steps",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Ağız / Diş / Salya ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "mouth_dental.high.avoid_actions",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "mouth_dental.high.when_not_to_wait",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "mouth_dental.high.vet_preparation",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "mouth_dental.high.followup_plan",
+    "complaint_type_id": "mouth_dental",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_change.low.safe_followup_steps",
+    "complaint_type_id": "weight_change",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Kilo Değişimi ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_change.low.avoid_actions",
+    "complaint_type_id": "weight_change",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_change.low.when_not_to_wait",
+    "complaint_type_id": "weight_change",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_change.low.vet_preparation",
+    "complaint_type_id": "weight_change",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_change.low.followup_plan",
+    "complaint_type_id": "weight_change",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_change.medium.safe_followup_steps",
+    "complaint_type_id": "weight_change",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Kilo Değişimi ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_change.medium.avoid_actions",
+    "complaint_type_id": "weight_change",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_change.medium.when_not_to_wait",
+    "complaint_type_id": "weight_change",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_change.medium.vet_preparation",
+    "complaint_type_id": "weight_change",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_change.medium.followup_plan",
+    "complaint_type_id": "weight_change",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_change.high.safe_followup_steps",
+    "complaint_type_id": "weight_change",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Kilo Değişimi ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_change.high.avoid_actions",
+    "complaint_type_id": "weight_change",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_change.high.when_not_to_wait",
+    "complaint_type_id": "weight_change",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_change.high.vet_preparation",
+    "complaint_type_id": "weight_change",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_change.high.followup_plan",
+    "complaint_type_id": "weight_change",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_vaccine_medication.low.safe_followup_steps",
+    "complaint_type_id": "post_vaccine_medication",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Aşı / İlaç Sonrası Takip ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_vaccine_medication.low.avoid_actions",
+    "complaint_type_id": "post_vaccine_medication",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_vaccine_medication.low.when_not_to_wait",
+    "complaint_type_id": "post_vaccine_medication",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_vaccine_medication.low.vet_preparation",
+    "complaint_type_id": "post_vaccine_medication",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_vaccine_medication.low.followup_plan",
+    "complaint_type_id": "post_vaccine_medication",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_vaccine_medication.medium.safe_followup_steps",
+    "complaint_type_id": "post_vaccine_medication",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Aşı / İlaç Sonrası Takip ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_vaccine_medication.medium.avoid_actions",
+    "complaint_type_id": "post_vaccine_medication",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_vaccine_medication.medium.when_not_to_wait",
+    "complaint_type_id": "post_vaccine_medication",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_vaccine_medication.medium.vet_preparation",
+    "complaint_type_id": "post_vaccine_medication",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_vaccine_medication.medium.followup_plan",
+    "complaint_type_id": "post_vaccine_medication",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_vaccine_medication.high.safe_followup_steps",
+    "complaint_type_id": "post_vaccine_medication",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Aşı / İlaç Sonrası Takip ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_vaccine_medication.high.avoid_actions",
+    "complaint_type_id": "post_vaccine_medication",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_vaccine_medication.high.when_not_to_wait",
+    "complaint_type_id": "post_vaccine_medication",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_vaccine_medication.high.vet_preparation",
+    "complaint_type_id": "post_vaccine_medication",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_vaccine_medication.high.followup_plan",
+    "complaint_type_id": "post_vaccine_medication",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_operation.low.safe_followup_steps",
+    "complaint_type_id": "post_operation",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Operasyon / Tedavi Sonrası Takip ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_operation.low.avoid_actions",
+    "complaint_type_id": "post_operation",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_operation.low.when_not_to_wait",
+    "complaint_type_id": "post_operation",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_operation.low.vet_preparation",
+    "complaint_type_id": "post_operation",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_operation.low.followup_plan",
+    "complaint_type_id": "post_operation",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_operation.medium.safe_followup_steps",
+    "complaint_type_id": "post_operation",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Operasyon / Tedavi Sonrası Takip ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_operation.medium.avoid_actions",
+    "complaint_type_id": "post_operation",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_operation.medium.when_not_to_wait",
+    "complaint_type_id": "post_operation",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_operation.medium.vet_preparation",
+    "complaint_type_id": "post_operation",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_operation.medium.followup_plan",
+    "complaint_type_id": "post_operation",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_operation.high.safe_followup_steps",
+    "complaint_type_id": "post_operation",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Operasyon / Tedavi Sonrası Takip ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_operation.high.avoid_actions",
+    "complaint_type_id": "post_operation",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_operation.high.when_not_to_wait",
+    "complaint_type_id": "post_operation",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_operation.high.vet_preparation",
+    "complaint_type_id": "post_operation",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_operation.high.followup_plan",
+    "complaint_type_id": "post_operation",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "routine_check.low.safe_followup_steps",
+    "complaint_type_id": "routine_check",
+    "risk_level": "low",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Rutin Kontrol / Sağlık Dosyası ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "routine_check.low.avoid_actions",
+    "complaint_type_id": "routine_check",
+    "risk_level": "low",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "routine_check.low.when_not_to_wait",
+    "complaint_type_id": "routine_check",
+    "risk_level": "low",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Belirti belirgin kötüleşirse beklemeyin.",
+      "Nefes zorluğu, bayılma, nöbet, kanama veya şiddetli ağrı eklenirse acil destek alın.",
+      "Takip sırasında yeni ciddi belirti oluşursa veteriner değerlendirmesi önerilir."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "routine_check.low.vet_preparation",
+    "complaint_type_id": "routine_check",
+    "risk_level": "low",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "routine_check.low.followup_plan",
+    "complaint_type_id": "routine_check",
+    "risk_level": "low",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "routine_check.medium.safe_followup_steps",
+    "complaint_type_id": "routine_check",
+    "risk_level": "medium",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Rutin Kontrol / Sağlık Dosyası ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "routine_check.medium.avoid_actions",
+    "complaint_type_id": "routine_check",
+    "risk_level": "medium",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "routine_check.medium.when_not_to_wait",
+    "complaint_type_id": "routine_check",
+    "risk_level": "medium",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "routine_check.medium.vet_preparation",
+    "complaint_type_id": "routine_check",
+    "risk_level": "medium",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "routine_check.medium.followup_plan",
+    "complaint_type_id": "routine_check",
+    "risk_level": "medium",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Belirti devam ederse takip kontrolü oluşturun.",
+      "Takipte önceki kayıtla değişim karşılaştırılacaktır.",
+      "Hatırlatma kurarak belirlenen zamanda tekrar kontrol yapabilirsiniz."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "routine_check.high.safe_followup_steps",
+    "complaint_type_id": "routine_check",
+    "risk_level": "high",
+    "block_type": "safe_followup_steps",
+    "items_tr": [
+      "Rutin Kontrol / Sağlık Dosyası ile ilgili belirtilerin başlangıç zamanı, sıklığı ve değişimini kaydedin.",
+      "Yeni belirti eklenirse sağlık geçmişine not olarak ekleyin.",
+      "Varsa fotoğraf/video/ses/ölçüm kayıtlarını aynı dosyada toplayın."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "routine_check.high.avoid_actions",
+    "complaint_type_id": "routine_check",
+    "risk_level": "high",
+    "block_type": "avoid_actions",
+    "items_tr": [
+      "Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.",
+      "Ev tipi karışım, damla, krem veya bitkisel ürün uygulamayın.",
+      "Belirti kötüleşirse evde beklemeyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "routine_check.high.when_not_to_wait",
+    "complaint_type_id": "routine_check",
+    "risk_level": "high",
+    "block_type": "when_not_to_wait",
+    "items_tr": [
+      "Nefes zorluğu, bayılma, nöbet veya şiddetli halsizlik olursa beklemeyin.",
+      "Kanama, kanlı kusma/dışkı/idrar veya şiddetli ağrı varsa beklemeyin.",
+      "Durum hızlı kötüleşirse veteriner kliniğine başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "routine_check.high.vet_preparation",
+    "complaint_type_id": "routine_check",
+    "risk_level": "high",
+    "block_type": "vet_preparation",
+    "items_tr": [
+      "Belirtinin ne zaman başladığını ve nasıl değiştiğini not edin.",
+      "Kullandığı ilaçları, son mama değişimini ve kronik hastalık bilgisini rapora ekleyin.",
+      "Varsa medya kayıtlarını ve ölçümleri veterinerle paylaşılacak rapora ekleyin."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "routine_check.high.followup_plan",
+    "complaint_type_id": "routine_check",
+    "risk_level": "high",
+    "block_type": "followup_plan",
+    "items_tr": [
+      "Bu risk seviyesinde takip planı tek başına yeterli değildir; kısa sürede veteriner değerlendirmesi önerilir.",
+      "Takip dosyası, veterinerle paylaşılacak kayıt hazırlığı için kullanılmalıdır.",
+      "Belirti kötüleşirse beklemeden kliniğe başvurun."
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  }
+]

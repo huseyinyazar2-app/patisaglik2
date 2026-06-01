@@ -1,0 +1,187 @@
+import { navigate, goBack } from '../../router.js';
+import { getState, setState } from '../../store.js';
+import { t } from '../../i18n/tr.js';
+import { getActivePet } from '../../mock/pets.js';
+import {
+  symptomChips,
+  classifyComplaint,
+  getCompatibleComplaintLabels,
+  getComplaintTypeByLabel,
+  getIncompatibleComplaintLabels
+} from '../../mock/questions.js';
+import { showToast } from '../../ui/toast.js';
+
+export function render() {
+  const state = getState();
+  const pet = getActivePet(state.activePetId) || { name: 'pet' };
+  const session = state.session || {};
+  const primaryComplaintLabel = session.primaryComplaintLabel || session.selectedChips?.[0] || '';
+  const compatibleLabels = primaryComplaintLabel ? getCompatibleComplaintLabels(primaryComplaintLabel) : [];
+  const secondaryLabels = compatibleLabels.filter(label => label !== primaryComplaintLabel);
+
+  const primaryChipsHtml = symptomChips.map(chip => {
+    const isSelected = primaryComplaintLabel === chip;
+    return `<button class="chip ${isSelected ? 'selected' : ''}" type="button" data-primary-complaint="${chip}">${chip}</button>`;
+  }).join('');
+
+  const secondaryChipsHtml = secondaryLabels.map(chip => {
+    const isSelected = session.selectedChips?.includes(chip);
+    return `<button class="chip ${isSelected ? 'selected' : ''}" type="button" data-secondary-complaint="${chip}">${chip}</button>`;
+  }).join('');
+
+  return `
+    <div class="screen premium-check">
+      <div class="header premium-soft-header">
+        <div class="header-left">
+          <button class="header-icon" id="btnBack">${window.__icons?.back}</button>
+        </div>
+        <div class="header-title">${t('check.title')}</div>
+        <div class="header-right"></div>
+      </div>
+
+      <div class="section pt-4" style="padding-bottom: 120px;">
+        <div class="premium-screen-kicker mb-2">AI Ön Kontrol</div>
+        <h2 class="text-xl font-bold mb-2">${t('check.whats_wrong').replace('{name}', pet.name)}</h2>
+        <p class="text-sm text-secondary mb-4">Önce ana şikayeti seçin. Sonra sadece ilişkili ek bulguları ekleyin; alakasız sorunlar ayrı kontrol olarak ele alınır.</p>
+
+        <div class="card mb-4">
+          <div class="form-group" style="margin-bottom: 0;">
+            <textarea id="complaintInput" class="complaint-textarea" placeholder="${t('check.placeholder')}" style="background: rgba(255, 255, 255, 0.35); border: 1.5px solid rgba(226, 232, 240, 0.5);">${session.complaintText || ''}</textarea>
+            <div class="mt-2 flex" style="justify-content: flex-end;">
+              <button class="voice-btn" id="btnVoice" style="border-radius: var(--radius-full); display: flex; align-items: center; gap: 6px; padding: 6px 14px; font-weight: 600;">
+                <span style="width: 16px; height: 16px; display: inline-flex; align-items: center;">${window.__icons?.mic}</span> ${t('check.voice')}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider" style="margin: 24px 0 16px 0;">
+          <span class="divider-text" style="font-weight: 600; color: var(--text-tertiary);">ana şikayet</span>
+        </div>
+
+        <div class="card mb-4" style="padding: 16px;">
+          <div class="chip-group" id="chipGroup">
+            ${primaryChipsHtml}
+          </div>
+        </div>
+
+        <div class="card mb-4 ${primaryComplaintLabel ? '' : 'hidden'}" style="padding: 16px;" id="secondaryComplaintCard">
+          <div class="text-xs font-bold text-tertiary mb-3" style="text-transform: uppercase; letter-spacing: .05em;">İlişkili ek bulgular</div>
+          <div class="chip-group" id="secondaryChipGroup">
+            ${secondaryChipsHtml}
+          </div>
+          <div class="text-xs text-tertiary mt-3">En fazla 3 ek bulgu seçin. Listede yoksa ayrı kontrol açmak daha doğru olur.</div>
+        </div>
+
+        <div class="info-box info" style="background: var(--primary-50); border-color: var(--primary-100);">
+          <span class="info-box-icon" style="width: 18px; display: inline-flex;">${window.__icons?.shield}</span>
+          <span>Önce şikayeti anlayıp acil durumları ayıracağız. Sonra sadece ilgili soruları ve gerekli medya/ölçüm kayıtlarını isteyeceğiz.</span>
+        </div>
+      </div>
+
+      <div class="card" style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: var(--max-width); border-radius: 24px 24px 0 0; padding: 20px 24px; box-shadow: var(--shadow-xl); z-index: 10; border-top: 1px solid rgba(229, 222, 209, 0.8); background: rgba(255, 254, 251, 0.86); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">
+        <button class="btn btn-primary btn-full mb-3" id="btnContinue" style="padding: 14px; font-size: var(--font-size-md); border-radius: var(--radius-lg);">${t('check.continue')}</button>
+        <button class="btn btn-ghost btn-full text-secondary" id="btnCancel">${t('check.cancel')}</button>
+      </div>
+    </div>
+  `;
+}
+
+export function afterRender() {
+  const state = getState();
+  const pet = getActivePet(state.activePetId) || { name: 'pet' };
+
+  document.getElementById('btnBack')?.addEventListener('click', () => goBack());
+  document.getElementById('btnCancel')?.addEventListener('click', () => goBack());
+
+  document.querySelectorAll('[data-primary-complaint]').forEach(chip => {
+    chip.addEventListener('click', e => {
+      const value = e.currentTarget.dataset.primaryComplaint;
+      setState(current => {
+        current.session.primaryComplaintLabel = value;
+        current.session.primaryComplaintId = getComplaintTypeByLabel(value)?.id || null;
+        current.session.selectedChips = [value];
+      });
+      navigate('/check/new/complaint?ts=' + Date.now());
+    });
+  });
+
+  document.querySelectorAll('[data-secondary-complaint]').forEach(chip => {
+    chip.addEventListener('click', e => {
+      const value = e.currentTarget.dataset.secondaryComplaint;
+      const primary = getState().session.primaryComplaintLabel;
+      const incompatible = getIncompatibleComplaintLabels(primary);
+      if (incompatible.includes(value)) {
+        showToast('Bu belirti ayrı bir şikayet gibi görünüyor. Yeni kontrol açmak daha doğru olur.');
+        return;
+      }
+      const selected = Array.from(document.querySelectorAll('#secondaryChipGroup .chip.selected')).map(c => c.dataset.secondaryComplaint);
+      if (!e.currentTarget.classList.contains('selected') && selected.length >= 3) {
+        showToast('Akışı kısa tutmak için en fazla 3 ilişkili ek bulgu seçin.');
+        return;
+      }
+      e.currentTarget.classList.toggle('selected');
+    });
+  });
+
+  document.getElementById('btnVoice')?.addEventListener('click', () => {
+    const input = document.getElementById('complaintInput');
+    const original = input.value;
+    input.value = original + (original ? ' ' : '') + 'Sesli dinleniyor...';
+    setTimeout(() => {
+      input.value = original + (original ? ' ' : '') + 'Kusma ve iştahsızlık var, çok halsiz duruyor.';
+      setState(current => {
+        current.session.primaryComplaintLabel = 'Kusma';
+        current.session.primaryComplaintId = getComplaintTypeByLabel('Kusma')?.id || null;
+        current.session.selectedChips = ['Kusma', 'İştahsızlık', 'Halsizlik / Genel Durum'];
+      });
+      document.querySelectorAll('.chip').forEach(c => {
+        if (['Kusma', 'İştahsızlık', 'Halsizlik / Genel Durum'].includes(c.dataset.primaryComplaint || c.dataset.secondaryComplaint)) {
+          c.classList.add('selected');
+        }
+      });
+    }, 900);
+  });
+
+  document.getElementById('btnContinue')?.addEventListener('click', () => {
+    const complaintText = document.getElementById('complaintInput').value.trim();
+    const primaryComplaint = document.querySelector('[data-primary-complaint].selected')?.dataset.primaryComplaint || '';
+    const secondaryChips = Array.from(document.querySelectorAll('#secondaryChipGroup .chip.selected')).map(c => c.dataset.secondaryComplaint);
+    const selectedChips = [primaryComplaint, ...secondaryChips].filter(Boolean);
+
+    if (!complaintText && selectedChips.length === 0) {
+      showToast('Lütfen şikayeti yazın veya belirti seçin.');
+      return;
+    }
+
+    if (secondaryChips.length > 3) {
+      showToast('En fazla 3 ilişkili ek bulgu seçin.');
+      return;
+    }
+
+    const classification = classifyComplaint(selectedChips, complaintText, state.deviceMode, pet);
+
+    setState(current => {
+      current.session.complaintText = complaintText;
+      current.session.selectedChips = selectedChips;
+      current.session.primaryComplaintId = classification.primaryComplaintId || getComplaintTypeByLabel(primaryComplaint)?.id || null;
+      current.session.primaryComplaintLabel = classification.primaryComplaintLabel || primaryComplaint;
+      current.session.duration = null;
+      current.session.severity = null;
+      current.session.primaryCategories = classification.primaryCategories || [];
+      current.session.secondaryCategories = classification.secondaryCategories || [];
+      current.session.categories = [...(classification.primaryCategories || []), ...(classification.secondaryCategories || [])];
+      current.session.questionSetIds = classification.questionSetIds || [];
+      current.session.initialQuestionSetIds = classification.questionSetIds || [];
+      current.session.tasks = classification.suggestedTasks || [];
+      current.session.redFlagGroups = classification.redFlagGroups || ['general'];
+      current.session.triageWarnings = classification.triageWarnings || [];
+      current.session.petRiskContext = classification.petRiskContext || null;
+      current.session.matchedComplaintIds = classification.matchedComplaintIds || [];
+      current.session.classifierConfidence = classification.confidence;
+      current.session.classifierReasons = classification.classifierReasons || {};
+    });
+
+    navigate('/check/new/history');
+  });
+}

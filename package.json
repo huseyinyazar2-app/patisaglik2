@@ -1,0 +1,22 @@
+{
+  "name": "pati-saglik",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node server/index.js",
+    "server": "node server/index.js",
+    "db:migrate": "node scripts/migrate-turso.mjs",
+    "db:smoke": "node scripts/db-smoke-test.mjs"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.17.3",
+    "qrcode": "^1.5.4"
+  }
+}

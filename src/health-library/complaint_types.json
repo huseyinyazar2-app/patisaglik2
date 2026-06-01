@@ -1,0 +1,588 @@
+[
+  {
+    "id": "vomiting",
+    "name_tr": "Kusma",
+    "category": "appetite_digestive",
+    "subcategories": [
+      "vomiting",
+      "nausea"
+    ],
+    "default_question_set_ids": [
+      "vomiting_basic",
+      "hydration_basic"
+    ],
+    "default_task_keys": [
+      "vomit_photo",
+      "behavior_video"
+    ],
+    "history_lookup_keys": [
+      "vomiting",
+      "appetite",
+      "weight",
+      "temperature"
+    ],
+    "red_flag_groups": [
+      "general"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 1,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "diarrhea",
+    "name_tr": "İshal / Dışkı Değişimi",
+    "category": "urine_stool",
+    "subcategories": [
+      "diarrhea",
+      "stool_change"
+    ],
+    "default_question_set_ids": [
+      "diarrhea_basic",
+      "hydration_basic"
+    ],
+    "default_task_keys": [
+      "stool_photo",
+      "behavior_video"
+    ],
+    "history_lookup_keys": [
+      "diarrhea",
+      "stool",
+      "hydration",
+      "food_change"
+    ],
+    "red_flag_groups": [
+      "general"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 2,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "loss_of_appetite",
+    "name_tr": "İştahsızlık",
+    "category": "appetite_digestive",
+    "subcategories": [
+      "loss_of_appetite",
+      "reduced_food_intake"
+    ],
+    "default_question_set_ids": [
+      "digestive_appetite_basic",
+      "hydration_basic"
+    ],
+    "default_task_keys": [
+      "behavior_video",
+      "weight_measurement",
+      "temperature_measurement"
+    ],
+    "history_lookup_keys": [
+      "appetite",
+      "weight",
+      "medication",
+      "chronic"
+    ],
+    "red_flag_groups": [
+      "general"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 3,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "lethargy",
+    "name_tr": "Halsizlik / Genel Durum",
+    "category": "general",
+    "subcategories": [
+      "lethargy",
+      "reduced_activity"
+    ],
+    "default_question_set_ids": [
+      "general_condition_basic",
+      "activity_behavior_basic"
+    ],
+    "default_task_keys": [
+      "behavior_video",
+      "temperature_measurement",
+      "weight_measurement"
+    ],
+    "history_lookup_keys": [
+      "lethargy",
+      "activity",
+      "appetite",
+      "temperature"
+    ],
+    "red_flag_groups": [
+      "general"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 4,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "cough",
+    "name_tr": "Öksürük",
+    "category": "respiratory_cough",
+    "subcategories": [
+      "cough"
+    ],
+    "default_question_set_ids": [
+      "cough_basic"
+    ],
+    "default_task_keys": [
+      "breathing_video",
+      "cough_audio"
+    ],
+    "history_lookup_keys": [
+      "cough",
+      "breathing",
+      "heart",
+      "allergy"
+    ],
+    "red_flag_groups": [
+      "general",
+      "respiratory"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 5,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "breathing_issue",
+    "name_tr": "Solunum Sorunu / Hırıltı",
+    "category": "respiratory_cough",
+    "subcategories": [
+      "wheezing",
+      "labored_breathing"
+    ],
+    "default_question_set_ids": [
+      "breathing_basic"
+    ],
+    "default_task_keys": [
+      "breathing_video",
+      "breathing_audio"
+    ],
+    "history_lookup_keys": [
+      "breathing",
+      "cough",
+      "heart",
+      "allergy"
+    ],
+    "red_flag_groups": [
+      "general",
+      "respiratory"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 6,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "eye_problem",
+    "name_tr": "Göz Akıntısı / Kızarıklık",
+    "category": "eye",
+    "subcategories": [
+      "eye_discharge",
+      "red_eye",
+      "squinting"
+    ],
+    "default_question_set_ids": [
+      "eye_basic"
+    ],
+    "default_task_keys": [
+      "eye_photo"
+    ],
+    "history_lookup_keys": [
+      "eye",
+      "eye_photo",
+      "allergy",
+      "trauma"
+    ],
+    "red_flag_groups": [
+      "general"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 7,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "ear_problem",
+    "name_tr": "Kulak Kaşıma / Koku / Akıntı",
+    "category": "ear",
+    "subcategories": [
+      "ear_scratching",
+      "ear_smell",
+      "ear_discharge"
+    ],
+    "default_question_set_ids": [
+      "ear_basic",
+      "pain_basic"
+    ],
+    "default_task_keys": [
+      "ear_outer_photo"
+    ],
+    "history_lookup_keys": [
+      "ear",
+      "ear_photo",
+      "head_shaking",
+      "pain"
+    ],
+    "red_flag_groups": [
+      "general"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 8,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "skin_itching",
+    "name_tr": "Kaşıntı / Deri / Tüy",
+    "category": "skin_fur",
+    "subcategories": [
+      "itching",
+      "redness",
+      "hair_loss"
+    ],
+    "default_question_set_ids": [
+      "skin_basic",
+      "itching_basic"
+    ],
+    "default_task_keys": [
+      "skin_photo",
+      "itching_video"
+    ],
+    "history_lookup_keys": [
+      "skin",
+      "itching",
+      "allergy",
+      "photo_compare"
+    ],
+    "red_flag_groups": [
+      "general"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 9,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "wound_swelling",
+    "name_tr": "Yara / Şişlik",
+    "category": "skin_fur",
+    "subcategories": [
+      "wound",
+      "lump_swelling"
+    ],
+    "default_question_set_ids": [
+      "wound_basic",
+      "pain_basic"
+    ],
+    "default_task_keys": [
+      "wound_photo"
+    ],
+    "history_lookup_keys": [
+      "wound",
+      "swelling",
+      "photo_compare",
+      "trauma"
+    ],
+    "red_flag_groups": [
+      "general"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 10,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "urination_problem",
+    "name_tr": "İdrar Sorunu",
+    "category": "urine_stool",
+    "subcategories": [
+      "urination_difficulty",
+      "blood_in_urine"
+    ],
+    "default_question_set_ids": [
+      "urination_basic"
+    ],
+    "default_task_keys": [
+      "urine_note",
+      "urine_color_photo",
+      "urine_strip"
+    ],
+    "history_lookup_keys": [
+      "urination",
+      "water_intake",
+      "urine_strip",
+      "weight"
+    ],
+    "red_flag_groups": [
+      "general",
+      "urinary"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 11,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "limping",
+    "name_tr": "Topallama / Hareket",
+    "category": "movement_gait",
+    "subcategories": [
+      "lameness",
+      "not_bearing_weight"
+    ],
+    "default_question_set_ids": [
+      "movement_lameness_basic"
+    ],
+    "default_task_keys": [
+      "gait_video_side",
+      "gait_video_front"
+    ],
+    "history_lookup_keys": [
+      "movement",
+      "gait",
+      "trauma",
+      "pain"
+    ],
+    "red_flag_groups": [
+      "general"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 12,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "pain",
+    "name_tr": "Ağrı / Dokununca Tepki",
+    "category": "general",
+    "subcategories": [
+      "pain",
+      "touch_sensitivity"
+    ],
+    "default_question_set_ids": [
+      "pain_basic"
+    ],
+    "default_task_keys": [
+      "pain_behavior_video",
+      "pain_area_photo",
+      "temperature_measurement"
+    ],
+    "history_lookup_keys": [
+      "pain",
+      "trauma",
+      "movement",
+      "behavior"
+    ],
+    "red_flag_groups": [
+      "general"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 13,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "neurologic",
+    "name_tr": "Nörolojik / Denge / Nöbet",
+    "category": "behavior",
+    "subcategories": [
+      "seizure",
+      "tremor",
+      "balance_issue"
+    ],
+    "default_question_set_ids": [
+      "neurologic_basic"
+    ],
+    "default_task_keys": [
+      "neuro_video"
+    ],
+    "history_lookup_keys": [
+      "seizure",
+      "balance",
+      "toxin",
+      "medication"
+    ],
+    "red_flag_groups": [
+      "general"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 14,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "toxin_foreign_body",
+    "name_tr": "Zehirlenme / Yabancı Cisim",
+    "category": "general",
+    "subcategories": [
+      "toxic_ingestion",
+      "foreign_body"
+    ],
+    "default_question_set_ids": [
+      "foreign_body_toxin_basic",
+      "vomiting_basic"
+    ],
+    "default_task_keys": [
+      "toxin_package_photo",
+      "vomit_photo",
+      "behavior_video"
+    ],
+    "history_lookup_keys": [
+      "toxin",
+      "vomiting",
+      "seizure",
+      "foreign_body"
+    ],
+    "red_flag_groups": [
+      "general",
+      "toxin"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 15,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "mouth_dental",
+    "name_tr": "Ağız / Diş / Salya",
+    "category": "mouth_dental",
+    "subcategories": [
+      "bad_breath",
+      "drooling",
+      "oral_pain"
+    ],
+    "default_question_set_ids": [
+      "mouth_dental_basic",
+      "pain_basic"
+    ],
+    "default_task_keys": [
+      "mouth_photo",
+      "gum_photo",
+      "eating_video"
+    ],
+    "history_lookup_keys": [
+      "mouth",
+      "appetite",
+      "drooling",
+      "dental"
+    ],
+    "red_flag_groups": [
+      "general"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 16,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "weight_change",
+    "name_tr": "Kilo Değişimi",
+    "category": "general",
+    "subcategories": [
+      "weight_loss",
+      "weight_gain"
+    ],
+    "default_question_set_ids": [
+      "weight_change_basic"
+    ],
+    "default_task_keys": [
+      "weight_measurement",
+      "body_condition_photos",
+      "food_intake_note"
+    ],
+    "history_lookup_keys": [
+      "weight",
+      "appetite",
+      "water_intake",
+      "urination"
+    ],
+    "red_flag_groups": [
+      "general"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 17,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "post_vaccine_medication",
+    "name_tr": "Aşı / İlaç Sonrası Takip",
+    "category": "general",
+    "subcategories": [
+      "post_vaccine",
+      "medication_reaction_possible"
+    ],
+    "default_question_set_ids": [
+      "post_vaccine_medication_basic",
+      "skin_basic"
+    ],
+    "default_task_keys": [
+      "injection_site_photo",
+      "behavior_video",
+      "temperature_measurement"
+    ],
+    "history_lookup_keys": [
+      "vaccine",
+      "medication",
+      "allergy",
+      "temperature"
+    ],
+    "red_flag_groups": [
+      "general"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 18,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "post_operation",
+    "name_tr": "Operasyon / Tedavi Sonrası Takip",
+    "category": "skin_fur",
+    "subcategories": [
+      "post_operation",
+      "wound_followup"
+    ],
+    "default_question_set_ids": [
+      "post_operation_basic",
+      "wound_basic"
+    ],
+    "default_task_keys": [
+      "post_operation_wound_photo",
+      "temperature_measurement",
+      "behavior_video"
+    ],
+    "history_lookup_keys": [
+      "operation",
+      "wound",
+      "medication",
+      "temperature"
+    ],
+    "red_flag_groups": [
+      "general"
+    ],
+    "default_followup_recommended": true,
+    "priority_order": 19,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "routine_check",
+    "name_tr": "Rutin Kontrol / Sağlık Dosyası",
+    "category": "routine_check",
+    "subcategories": [
+      "wellness",
+      "health_record_update"
+    ],
+    "default_question_set_ids": [
+      "routine_wellness_basic",
+      "general_condition_basic"
+    ],
+    "default_task_keys": [
+      "weight_measurement",
+      "routine_body_photo",
+      "food_intake_note"
+    ],
+    "history_lookup_keys": [
+      "weight",
+      "activity",
+      "vaccination",
+      "routine"
+    ],
+    "red_flag_groups": [
+      "general"
+    ],
+    "default_followup_recommended": false,
+    "priority_order": 20,
+    "review_status": "draft_ai_generated"
+  }
+]

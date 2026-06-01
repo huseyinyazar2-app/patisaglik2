@@ -1,0 +1,440 @@
+# Pati Sağlık - Yapılacak Yeni Özellikler
+
+Aşağıdaki 15 özellik, uygulamanın değerini artırmak, kullanıcı bağlılığı yaratmak ve premium modele geçişi teşvik etmek amacıyla sisteme eklenecektir.
+
+- [x] 5. Toksik Madde / Yabancı Cisim Acil Kontrolü: Zehirlenme/yutma durumları için spesifik asistan.
+- [x] 7. Fotoğraf Karşılaştırmalı Takip: Deri rahatsızlıkları ve yaralar için gelişim takibi.
+- [x] 8. Belge / Tahlil / Fatura AI Okuma: Veteriner belgelerinin AI ile okunup dosyaya işlenmesi.
+- [x] 9. QR Sağlık Kartı: Her pet için paylaşılabilir QR kodlu sağlık kartı.
+- [x] 10. Bakıcı Modu: Pet sitter veya aile üyeleri için paylaşımlı/sınırlı erişim.
+- [x] 11. Masraf Takibi: Mama, veteriner, aşı vb. harcamaların kategorize edilip takibi.
+- [x] 12. Sigorta / Klinik Hazırlık Dosyası: Petin tüm geçmişinin detaylı bir dosya (PDF vb.) olarak dışa aktarımı.
+- [x] 13. Gönüllü / Sokak Hayvanı Profili: Sahipli olmayan hayvanlar için özel profil tipi ve takibi.
+- [x] 14. Kronik Hastalık Takip Şablonları: Böbrek, diyabet gibi tanısı konmuş hastalıklar için özel takip modülleri.
+- [x] 15. Operasyon Sonrası Takip: Kısırlaştırma veya diğer ameliyatlar sonrası yara, iştah ve durum takibi.
+- [x] 16. Mama / Beslenme Değişimi Günlüğü: Yeni mamaya geçiş süreçlerindeki reaksiyonların takibi.
+- [x] 17. Dışkı Skoru: Dışkı kalitesinin görsel bir skala ile günlük olarak kaydedilmesi.
+- [x] 18. Kızgınlık / Gebelik / Doğum Takibi: Üreme döngüsü ve doğum süreçlerinin takvimlendirilmesi.
+- [x] 19. Yaşlı Pet Modu: Senior petlerin hassas durumlarına (su, kilo, ağrı) yönelik özel takip.
+- [x] 20. Kliniğe Hazırlık Modu: Veteriner ziyareti öncesi soruların cevaplanıp rapor haline getirilmesi.
+
+### Rakiplerde Olup Bizde Mutlaka Olması Gerekenler (Temel Takvim ve Hatırlatıcılar)
+- [x] 21. Aşı ve İlaç Hatırlatıcı Takvimi: Düzenli ilaç kullanımları ve aşı periyotları için bildirim sistemi (Rakiplerin en temel özelliği).
+- [x] 22. Veteriner Randevu Kaydı: Gelecek ziyaretlerin takvime işlenmesi ve kullanıcının uyarılması.
+- [x] 23. Çoklu Pet Gelişmiş Yönetim Paneli: Abonelik/premium modelinde birden fazla hayvanı olanlar için detaylı panel.
+
+## Tasarım / Akış Entegrasyon Durumu
+
+Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/local fallback kayıt, canlı liste, detay ve temel paylaşım akışlarına bağlandı. Gerçek production API, native push scheduler, ödeme/abonelik ve AI/OCR işlemenin server tarafına taşınması hâlâ ayrı aşama olarak duruyor.
+
+### Veritabani Entegrasyon Notu
+
+- [x] Turso/libSQL semasi olusturuldu: `db/schema.sql`
+- [x] Mimari notu eklendi: `docs/DATABASE_ARCHITECTURE.md`
+- [x] Migration scripti eklendi: `scripts/migrate-turso.mjs`
+- [x] Smoke test scripti eklendi: `scripts/db-smoke-test.mjs`
+- [x] Turso test veritabaninda tablolar olusturuldu ve seed kayitlar kontrol edildi.
+- [x] Gorsel formlar `form_submissions` tablosuna yazabilecek ortak servise baglandi.
+- [x] Ucretsiz form mapper'i eklendi: masraf `expenses`, hatirlatici `reminders`, takip formlari `health_records`.
+- [x] Ücretsiz form ekranlarındaki eski `Önizlemeyi Kaydet` / mock buton izi kaldırıldı; gerçek kayıt aksiyonu `Kaydet` olarak hizalandı.
+- [x] Plan/abonelik okuma servisi eklendi: `plans`, `subscriptions` ve `credit_wallets` tabloları tek hesap plan modeline çevriliyor.
+- [x] Özellik kullanımı `feature_usage` tablosuna plan kodu ve kredi maliyetiyle yazılacak şekilde bağlandı.
+- [x] Ham belge arşivi ve klinik hazırlık dosyası ücretsiz akışta bırakıldı; kredi maliyeti AI/Pro fazına ayrıldı.
+- [x] Pati AI sekmesindeki belge OCR/AI kartı ücretsiz ham belge arşivine yönlendirmeyecek şekilde sonraki faz olarak pasifleştirildi.
+- [x] Pati AI sekmesindeki toksik madde AI triyaj kartı ücretsiz acil kayıt formuna yönlendirmeyecek şekilde sonraki faz olarak pasifleştirildi.
+- [x] Profil plan açıklaması ücretsiz ham kayıtlar ile kredi/Pro AI-OCR alanını net ayıracak şekilde güncellendi.
+- [x] Production icin ilk server/API katmani eklendi: Node API, Dockerfile, health endpoint ve B2 signed upload/download ilk fazı.
+- [x] Pet ekleme/secme ve listeleme ekranlari DB okuma-yazma + local fallback hattina baglandi.
+- [ ] Native plugin kurulumu/store build, odeme/abonelik ve production API servisleri kodlanmadi; AI/OCR frontend ilk fazı var, canlıda server/API katmanına taşınacak.
+
+- [x] 5. Toksik Madde / Yabancı Cisim Acil Kontrolü
+  - Ekran tasarımı yapıldı: `/feature/toxic`
+  - Form tasarımı yapıldı: yutulan madde, zaman, belirti, detay alanları.
+  - DB/local kayıt yapıldı: form `health_records` arşivinde `toxin_foreign_body` sağlık kaydı olarak tutuluyor.
+  - Ücretsiz acil kayıt aracı Ana Sayfa ücretsiz takip araçlarına eklendi.
+  - Pati AI tarafındaki otomatik toksik madde triyajı kartı sonraki AI fazı olarak pasifleştirildi.
+  - Detay ekranında riskli belirti, zaman ve madde bilgisine göre kural tabanlı acil veteriner yönlendirme paneli eklendi.
+  - Acil paneline yakındaki veteriner kliniklerini haritada arama aksiyonu eklendi.
+  - Sağlık arşivi, zaman akışı ve rapor etiketleri toksik/yabancı cisim kaydını ayırt edecek şekilde genişletildi.
+  - Kodlama yapılmadı: AI triyaj.
+- [x] 7. Fotoğraf Karşılaştırmalı Takip
+  - Ekran tasarımı yapıldı: `/feature/photo-followup`
+  - Form tasarımı yapıldı: önceki fotoğraf, bugünkü fotoğraf, değişim chipleri, not alanı.
+  - DB yazma yapıldı: `form_submissions` + `health_records`; seçilen dosya metadata kayıtları `media_files` tablosuna bağlandı.
+  - Medya metadata ilişkisi sağlık kayıt detayında galeri kartları olarak gösterilecek şekilde bağlandı.
+  - Önceki / bugünkü fotoğraf etiketleri detay ekranında karşılaştırma paneli olarak ayrıştırıldı.
+  - Detay ekranına görsel değişim seçimi ve medya metadata üzerinden kural tabanlı karşılaştırma özeti eklendi.
+  - Kodlama yapılmadı: piksel tabanlı görsel analiz ve medya CDN yükleme.
+- [x] 8. Belge / Tahlil / Fatura Arşivi (AI okuma sonraki faz)
+  - Ekran tasarımı yapıldı: `/feature/document-ai`
+  - Form tasarımı yapıldı: belge yükleme, belge türü, işaretlenecek bilgiler ve ek not alanları.
+  - Ham belge arşivi yapıldı: form kaydı `documents` tablosunda `health_document` olarak saklanıyor.
+  - Raporlar/zaman akışı belge listesi klinik dosyalarıyla birlikte ham sağlık belgelerini de okuyacak şekilde genişletildi.
+  - UI metinleri Premium AI/OCR sinyalinden ayrıldı; ekran ücretsiz ham belge arşivi olarak gösteriliyor.
+  - Gerçek OCR ilk fazı yapıldı: Gemini multimodal okuma, özet, tahlil değerleri, ilaç/reçete, fatura tutarı ve takip görevi çıkarımı forma bağlandı.
+  - OCR sonucu `documents.ai_ocr` verisine ve rapor detay ekranına işleniyor.
+  - Production notu: API anahtarı frontendde kalmamalı; canlı sistemde bu işlem server/API katmanına taşınacak.
+- [x] 9. QR Sağlık Kartı
+  - Ekran tasarımı yapıldı: `/feature/qr`
+  - Form tasarımı yapıldı: QR kart önizleme, paylaşılacak bilgiler, erişim süresi.
+  - DB yazma yapıldı: `form_submissions`, `pets.public_profile_token` ve pet metadata paylaşım ayarları.
+  - Public web görüntüleme sayfası yapıldı: `/public/pet/:token`.
+  - Gerçek QR bitmap üretimi `qrcode` paketiyle forma bağlandı.
+- [x] 10. Bakıcı Modu
+  - Ekran tasarımı yapıldı: `/feature/sitter`
+  - Form tasarımı yapıldı: davet kişi bilgisi, izinler, erişim süresi.
+  - DB yazma yapıldı: `users`, `pet_members`, `pet_member_permission_overrides`.
+  - Paylaşılabilir davet taslağı yapıldı: kayıt sonucu `/invite/sitter/:inviteId` bağlantısı ve paylaşım/kopyalama metni üretiliyor.
+  - Public davet ekranı yapıldı: davet kodu, durum ve bağlantı kopyalama akışı gösteriliyor.
+  - Public davet ekranına kabul/ret aksiyonu ve cihazda tutulan davet durumu eklendi.
+  - Kodlama yapılmadı: SMS/e-posta gönderimi ve production auth ile gerçek hesap kabulü.
+- [x] 11. Masraf Takibi
+  - Ekran tasarımı yapıldı: `/feature/expense`
+  - Form tasarımı yapıldı: kategori, tutar, tarih, fatura/belge, not.
+  - DB yazma yapıldı: `form_submissions` + `expenses`.
+  - Liste, detay, filtre/sıralama ve mini özet bandı yapıldı.
+  - Fatura/belge dosyaları `media_files` ilişkisiyle masraf detayında medya kartı olarak gösterilecek şekilde bağlandı.
+- [x] 12. Sigorta / Klinik Hazırlık Dosyası
+  - Ekran tasarımı yapıldı: `/feature/clinic-export`
+  - Form tasarımı yapıldı: dahil edilecek bölümler, dosya amacı, veteriner notu.
+  - Ücretsiz klinik dosyası formundaki AI özeti seçeneği kaldırılıp kural tabanlı notlar olarak hizalandı.
+  - DB yazma yapıldı: `form_submissions` + `documents`; rapor ekranı canlı liste ve önizlemeye bağlandı.
+  - İndirme tarayıcı PDF/print akışına, paylaşım Web Share API'ye bağlandı.
+  - Rapor önizlemesi indirilebilir HTML dosyası olarak paketleniyor; Web Share dosya paylaşımı destekleyen cihazlarda dosya olarak gönderiliyor.
+  - Kodlama yapılmadı: server-side PDF üretimi.
+- [x] 13. Gönüllü / Sokak Hayvanı Profili
+  - Ekran tasarımı mevcut pet ekleme formunda sahiplik/bakım durumu olarak görünüyor.
+  - DB yazma yapıldı: `pets.ownership_type`, pet metadata konum ve gönüllü/bakım notu.
+  - Pet profilleri ve public QR kartı konumdan harita açma/paylaşma akışına bağlandı.
+  - Ayrı gönüllü ağı ekranı yapıldı: `/profile/volunteer-network`.
+  - Gönüllü ağı kartlarından destek talebi formu açılıp `form_submissions` içine `volunteer-help` kaydı oluşturuyor.
+  - Kodlama yapılmadı: gerçek çok kullanıcılı auth kabulü, moderasyon ve başvuru eşleştirme paneli.
+- [x] 14. Kronik Hastalık Takip Şablonları
+  - Ekran tasarımı yapıldı: `/feature/chronic`
+  - Form tasarımı yapıldı: şablon tipi, günlük durum, ölçüm/gözlem, takip notu.
+  - DB yazma yapıldı: `form_submissions` + `health_records`.
+  - Sağlık arşivinde takip programı özeti ve son 7 gün yoğunluk göstergesi yapıldı.
+  - Detay ekranında kayıt türüne özel takip planı paneli yapıldı.
+  - Detay ekranında kötüleşme / ilaç atlama için kural tabanlı dikkat uyarısı yapıldı.
+- [x] 15. Operasyon Sonrası Takip
+  - Ekran tasarımı yapıldı: `/feature/postop`
+  - Form tasarımı yapıldı: operasyon günü, yara durumu, yara fotoğrafı, genel durum.
+  - Form tasarımı genişletildi: ilaç kullanımı ve sonraki doz/kontrol tarihi alanları eklendi.
+  - DB yazma yapıldı: `form_submissions` + `health_records`.
+  - Sağlık arşivinde takip programı özeti ve son 7 gün yoğunluk göstergesi yapıldı.
+  - Detay ekranında operasyon sonrası takip planı paneli yapıldı.
+  - Detay ekranında akıntı, kızarıklık ve şişlik için kural tabanlı dikkat uyarısı yapıldı.
+  - Detay ekranında ilaç atlandı/yan etki var durumları için kural tabanlı uyarı eklendi.
+  - Takip planından ilaç/kontrol hatırlatıcısı formuna ön dolu geçiş eklendi.
+  - Yara durumu ve medya varlığına göre kural tabanlı yara karşılaştırma özeti eklendi.
+  - Kodlama yapılmadı: piksel tabanlı gelişmiş yara analizi.
+- [x] 16. Mama / Beslenme Değişimi Günlüğü
+  - Ekran tasarımı yapıldı: `/feature/diet-log`
+  - Form tasarımı yapıldı: yeni mama, geçiş günü, reaksiyonlar, beslenme notu.
+  - DB yazma yapıldı: `form_submissions` + `health_records`.
+  - Sağlık arşivinde reaksiyon durum özeti ve son 7 gün yoğunluk göstergesi yapıldı.
+  - Detay ekranında beslenme geçiş planı paneli yapıldı.
+  - Detay ekranında kusma, ishal, kaşıntı ve gaz için kural tabanlı dikkat uyarısı yapıldı.
+- [x] 17. Dışkı Skoru
+  - Ekran tasarımı yapıldı: `/feature/poop-score`
+  - Form tasarımı yapıldı: skor, ek bulgu, fotoğraf, not.
+  - DB yazma yapıldı: `form_submissions` + `health_records`.
+  - Sağlık arşivinde skor durum özeti ve son 7 gün yoğunluk göstergesi yapıldı.
+  - Detay ekranında dışkı takip planı paneli yapıldı.
+  - Detay ekranında uç skor, kan, mukus, çok sulu ve çok sert bulguları için kural tabanlı dikkat uyarısı yapıldı.
+- [x] 18. Kızgınlık / Gebelik / Doğum Takibi
+  - Ekran tasarımı yapıldı: `/feature/reproduction`
+  - Form tasarımı yapıldı: takip türü, başlangıç tarihi, belirtiler, not.
+  - DB yazma yapıldı: `form_submissions` + `health_records`.
+  - Sağlık arşivinde üreme takip kartı ve filtre kısayolu yapıldı.
+  - Detay ekranında üreme takip planı paneli yapıldı.
+  - Detay ekranında akıntı ve iştah değişimi için kural tabanlı dikkat uyarısı yapıldı.
+  - Takip planından kontrol hatırlatıcısı formuna ön dolu geçiş eklendi.
+  - Başlangıç tarihinden 7 gün sonrası için otomatik kontrol hatırlatıcısı oluşturma eklendi.
+  - Kodlama yapılmadı: native arka plan bildirimi.
+- [x] 19. Yaşlı Pet Modu
+  - Ekran tasarımı yapıldı: `/feature/senior`
+  - Form tasarımı yapıldı: günlük durum, odak alanı, gözlem, not.
+  - DB yazma yapıldı: `form_submissions` + `health_records`.
+  - Sağlık arşivinde senior takip kartı ve son 7 gün yoğunluk göstergesi yapıldı.
+  - Detay ekranında senior hassasiyet takip planı paneli yapıldı.
+  - Detay ekranında ağrı ve iştahsızlık için kural tabanlı hassasiyet uyarısı yapıldı.
+- [x] 20. Kliniğe Hazırlık Modu
+  - Ekran tasarımı yapıldı: `/feature/vet-prep`
+  - Form tasarımı yapıldı: ziyaret nedeni, aciliyet, yanında götürülecekler, sorular.
+  - Sigorta / klinik hazırlık formu yapıldı: `/feature/clinic-export`
+  - DB yazma yapıldı: `form_submissions` + `documents`.
+  - `/feature/vet-prep` formu da `documents` arşivine `vet_prep` belge tipi olarak bağlandı.
+  - Raporlar ekranında canlı klinik hazırlık dosyaları listeleniyor ve önizleme ekranına bağlandı.
+  - Kliniğe hazırlık formu kayıttan sonra Raporlar ekranına dönecek şekilde akışa bağlandı.
+  - Kodlama yapılmadı: server-side gerçek PDF üretimi ve AI özet.
+- [x] 21. Aşı ve İlaç Hatırlatıcı Takvimi
+  - Ekran tasarımı yapıldı: `/feature/reminders`
+  - Form tasarımı yapıldı: tür, başlık, tarih, tekrar, not.
+  - DB yazma yapıldı: `form_submissions` + `reminders`.
+  - Liste, detay, durum güncelleme, web bildirim izin/test ekranı ve canlı bildirim planı yapıldı.
+  - Hatırlatıcı detayından `.ics` takvim dosyası üretme/indirme aksiyonu eklendi.
+  - Capacitor LocalNotifications plugini varsa yaklaşan hatırlatıcıları native cihaz planına yazacak opsiyonel köprü eklendi.
+  - Kodlama yapılmadı: native plugin kurulumu, store build testi ve arka plan push teslimi.
+- [x] 22. Veteriner Randevu Kaydı
+  - Ekran tasarımı yapıldı: `/feature/reminders`
+  - Form tasarımı yapıldı: randevu türü aynı hatırlatıcı formunda.
+  - DB yazma yapıldı: `form_submissions` + `reminders`.
+  - Hatırlatıcı listesi, detay ve bildirim planı ekranına dahil edildi.
+  - Hatırlatıcı detayından OS takvimlerine eklenebilecek `.ics` dosyası oluşturma eklendi.
+  - Kodlama yapılmadı: doğrudan OS takvim senkronizasyonu.
+- [x] 23. Çoklu Pet Gelişmiş Yönetim Paneli
+  - Ekran tasarımı mevcut: `/pets/select`
+  - Plan/limit görünümü yapıldı.
+  - Pet seçme/listeleme DB okuma hattına, pet ekleme DB yazma hattına bağlandı.
+  - Pet limiti `plans/subscriptions/credit_wallets` okuyan hesap plan servisine bağlandı.
+  - Profil altında plan ve kredi ekranı yapıldı: `/profile/plan`.
+  - Özellik kullanım kayıtları plan/kredi ayrımını `feature_usage` içine yazıyor.
+  - Kodlama yapılmadı: ödeme sağlayıcısı ile gerçek abonelik tahsilatı ve doğrulaması.
+
+## Veritabanı Bağlantı Durumu - 31.05.2026
+
+- [x] Turso test şeması kuruldu ve `db/schema.sql`, `db/README.md`, `docs/DATABASE_ARCHITECTURE.md` altında belgelendi.
+- [x] Ücretsiz form kayıtları genel iz için `form_submissions` tablosuna yazılıyor.
+- [x] Masraf Takibi formu `expenses` tablosuna bağlandı ve UI smoke test ile doğrulandı.
+- [x] Aşı / ilaç / randevu hatırlatıcı formu `reminders` tablosuna bağlandı ve UI smoke test ile doğrulandı.
+- [x] Foto takip, dışkı skoru, beslenme, kronik, postop, üreme ve yaşlı pet formları `health_records` tablosuna bağlandı.
+- [x] Ana sayfa ücretsiz kayıt özeti canlı `expenses`, `reminders`, `health_records` verilerinden besleniyor.
+- [x] Geçmiş ekranına ücretsiz kayıt paneli eklendi; sağlık, masraf ve takvim özeti gösteriliyor.
+- [x] Geçmiş menüsündeki Masraf Takibi kartı `/history/expenses` canlı liste ekranına bağlandı.
+- [x] Geçmiş menüsündeki Aşı / İlaç / Randevu Takvimi kartı `/history/reminders` canlı liste ekranına bağlandı.
+- [x] Geçmiş menüsündeki Sağlık Dosyaları, Takip Şablonları ve Yaşlı Pet İzlemi kartları `/history/health-records` canlı liste ekranına bağlandı.
+- [x] Liste ekranlarında yeni kayıt butonları ilgili ücretsiz formlara yönleniyor.
+- [x] Masraf, hatırlatıcı ve sağlık kayıtları için `/history/records/:type/:recordId` detay ekranı eklendi.
+- [x] Liste kartlarına tıklama ile kayıt detayı açılıyor; masraf, takvim ve sağlık kayıtları UI smoke test ile doğrulandı.
+- [x] Masraf listesine kategori filtresi ve tutara göre sıralama eklendi.
+- [x] Hatırlatıcı listesine durum/tür filtresi ve tarihe göre sıralama eklendi.
+- [x] Sağlık kayıtları listesine kayıt türü filtresi ve tarih/tür sıralama eklendi.
+- [x] Filtre ve sıralama seçimleri URL query ile taşınıyor; geri/yenileme akışında seçim korunuyor.
+- [x] Masraf listesine toplam harcama, kayıt sayısı ve kategori dağılımı mini özet bandı eklendi.
+- [x] Hatırlatıcı listesine yaklaşan 7 gün, sıradaki iş ve tür dağılımı mini özet bandı eklendi.
+- [x] Sağlık kayıtları listesine toplam kayıt, son kayıt ve kayıt türü dağılımı mini özet bandı eklendi.
+- [x] Hatırlatıcı detayına bildirim hazırlığı paneli eklendi.
+- [x] Hatırlatıcı detayı üzerinden `Tamamlandı` ve `Yarın Hatırlat` aksiyonları eklendi.
+- [x] `Yarın Hatırlat` aksiyonu Turso kaydını güncelliyor ve listeye geri dönüyor.
+- [x] Takip planı satırları hatırlatıcı formuna URL query ile ön dolu geçiş yapıyor.
+- [x] Hatırlatıcı formu `type/title/date/repeat/note` query parametrelerini chip/input alanlarına uyguluyor.
+- [x] Hatırlatıcı ön dolum akışı build ve `/feature/reminders?...` tarayıcı kontrolüyle doğrulandı.
+- [x] Operasyon sonrası formuna ilaç kullanımı ve sonraki doz/kontrol alanları eklendi; build ve `/feature/postop` tarayıcı kontrolüyle doğrulandı.
+- [x] Operasyon sonrası `Sonraki doz / kontrol` tarihi girilirse otomatik ilaç/kontrol hatırlatıcısı üretiliyor.
+- [x] Üreme takibinde `Başlangıç tarihi` girilirse 7 gün sonrası için otomatik kontrol hatırlatıcısı üretiliyor.
+- [x] Otomatik hatırlatıcı üretimi local-fallback servis testi ve build ile doğrulandı.
+- [x] Ölçüm formu `measurements` tablosuna yazacak şekilde bağlandı.
+- [x] Ölçümler ekranına canlı Turso ölçüm paneli eklendi; son ölçüm, ortalama ve son kayıtlar gösteriliyor.
+- [x] `scripts/db-smoke-test.mjs` tablo sayımına `measurements` eklendi.
+- [x] Ölçüm canlı liste doğrulandı: test kilo kaydı `4.8 kg` olarak ekranda göründü.
+- [x] Ölçümler ekranındaki trend, istatistik ve geçmiş liste mock ölçüm verisinden çıkarıldı; canlı `measurements` servisiyle besleniyor.
+- [x] Ölçümler ekranına canlı nabız ve idrar pH sekmeleri eklendi.
+- [x] Sağlık sorunu ekleme formu mock akıştan çıkarıldı ve `form_submissions` + `health_records` hattına bağlandı.
+- [x] Sağlık sorunları liste ve detay ekranları mock `sessions` verisinden çıkarıldı; canlı `health_records` içindeki `issue` kayıtlarıyla besleniyor.
+- [x] Sağlık kayıtları listesine `Sorun` filtresi eklendi.
+- [x] Sağlık sorunu canlı liste doğrulandı: test sorun kaydı sağlık kayıtlarında göründü.
+- [x] Ölçümler, ölçüm ekleme, zaman akışı ve cihaz ekranlarındaki eski emoji ikonlar modern SVG ikon sistemine taşındı.
+- [x] Alt menüdeki `Pati AI` etiketi emoji yerine mevcut spark SVG ikonu ile bırakıldı.
+- [x] Görünür sağlık/geçmiş/cihaz ekranlarında eski emoji ikon kalmadığı tarayıcıda doğrulandı.
+- [x] Cihaz modu, eski pet seçimi, ölçüm ekleme, acil yönlendirme ve sorun detayı ekranlarındaki kalan emoji ikonlar SVG ikonlarla değiştirildi.
+- [x] İkon temizliği sonrası `/pets/device-mode` ve `/history/measurements/new` tarayıcıda doğrulandı.
+- [x] Cihaz modu seçimi `pati_device_mode` local ayarına kalıcı yazılacak şekilde bağlandı.
+- [x] Basic Kit test bağlantısı mock alert yerine local cihaz durum kaydı ve ekranda `Native eşleşme hazır` geri bildirimi üretiyor.
+- [x] Cihaz ekranı build ve `/profile/devices` tarayıcı smoke testiyle doğrulandı.
+- [x] `scripts/db-smoke-test.mjs` tablo sayımına `expenses`, `reminders`, `health_records` eklendi.
+- [x] Sigorta / klinik hazırlık formu `documents` tablosuna bağlandı.
+- [x] Raporlar ekranına canlı klinik hazırlık dosyaları bölümü eklendi.
+- [x] Klinik hazırlık dosyaları `/reports/:reportId` önizleme ekranına bağlandı.
+- [x] Klinik hazırlık formu kayıttan sonra Raporlar ekranına dönecek şekilde akışa bağlandı.
+- [x] `/reports/new` eski AI rapor seçenekleri yerine gerçek ücretsiz dosya akış merkezi olarak düzenlendi.
+- [x] `/reports/new` üzerinden klinik/sigorta dosyası, veteriner hazırlığı ve ham belge arşivi formlarına doğrudan geçiş eklendi.
+- [x] Klinik hazırlık önizlemesi ücretsiz sağlık kayıtları, hatırlatıcılar, masraflar ve ölçüm özetlerini gösterecek şekilde genişletildi.
+- [x] Raporlar ekranındaki AI/mock rapor alanı ücretsiz klinik hazırlık akışından ayrıştırıldı.
+- [x] Raporlar sekmesindeki eski AI/mock rapor geçmişi kaldırıldı; ekran canlı `documents` klinik dosyası, veteriner hazırlığı ve belge arşivi kayıtlarına odaklandı.
+- [x] Rapor detayındaki pet bilgisi ilk seed pet yerine belgenin `pet_id` değerinden okunacak şekilde düzeltildi.
+- [x] Rapor detayındaki kullanılmayan eski mock AI rapor renderer'ı ve risk rozeti kodu kaldırıldı.
+- [x] Kullanılmayan `src/mock/reports.js` mock rapor verisi kaldırıldı; raporlar artık canlı belge/dosya akışında tutuluyor.
+- [x] `scripts/db-smoke-test.mjs` tablo sayımına `documents` eklendi.
+- [x] Tüm Zaman Akışı mock veriden çıkarıldı; `health_records`, `reminders`, `expenses`, `measurements` ve `documents` canlı verileriyle beslenecek şekilde bağlandı.
+- [x] Tüm Zaman Akışı filtreleri ücretsiz kayıt tiplerine göre güncellendi: sağlık, ölçüm, takvim, masraf ve rapor.
+- [x] Tüm Zaman Akışı kartları ilgili detay ekranlarına yönlenecek şekilde bağlandı.
+- [x] Pet profilleri için canlı DB/local fallback servisi eklendi.
+- [x] Pet seçme ekranı mock listeden çıkarıldı ve canlı pet listesine bağlandı.
+- [x] Kullanılmayan eski `src/screens/pets/PetSelect.js` mock pet seçme ekranı kaldırıldı; `/pets/select` canlı `profile/PetProfiles.js` ekranını kullanıyor.
+- [x] Turso'dan gelen canlı pet profilleri `pati_pets` yerel önbelleğine senkronize ediliyor; Home/Geçmiş/Form gibi senkron pet başlıkları aktif pet bilgisini yanlış seed kayda düşmeden okuyabiliyor.
+- [x] Pet ekleme formu kedi/köpek dışındaki türleri de destekleyecek şekilde genişletildi.
+- [x] Pet ekleme formu `pets` + `pet_members` DB kayıtlarına bağlandı; kayıt sonrası aktif pet güncelleniyor.
+- [x] QR Sağlık Kartı formu `pets.public_profile_token` ve pet metadata içindeki paylaşım ayarlarına bağlandı.
+- [x] QR Sağlık Kartı önizlemesi aktif pet bilgilerini gösterecek şekilde güncellendi.
+- [x] QR Sağlık Kartı token'ı `/public/pet/:token` acil kart sayfasına bağlandı.
+- [x] QR formu kayıttan sonra oluşan public karta yönlenecek şekilde güncellendi.
+- [x] QR Sağlık Kartı formunda scannable PNG QR görseli `qrcode` paketiyle üretiliyor.
+- [x] QR bitmap üretimi build ve `/feature/qr` tarayıcı kontrolüyle doğrulandı.
+- [x] Bildirimler için ayrı `/profile/notifications` ekranı eklendi.
+- [x] Bildirim ayarları local kalıcı ayara bağlandı; web Notification izin/test akışı eklendi.
+- [x] Bildirim ekranı yaklaşan `reminders` kayıtlarından canlı bildirim planı gösteriyor.
+- [x] Uygulama açıkken çalışan PWA uyumlu foreground reminder scheduler eklendi.
+- [x] Reminder scheduler sessiz saatlere ve tekrar bildirim engeline uyacak şekilde local durum tutuyor.
+- [x] Bildirim ekranına scheduler durumu ve `Şimdi Kontrol Et` aksiyonu eklendi.
+- [x] Ücretsiz formlardaki dosya/foto alanları gerçek `input[type=file]` seçimine bağlandı.
+- [x] Seçilen dosyaların ad, tür ve boyut bilgisi form payload'una ekleniyor.
+- [x] Seçilen dosya metadata kayıtları `media_files` tablosuna `form_submission` ilişkisiyle yazılıyor.
+- [x] `scripts/db-smoke-test.mjs` tablo sayımına `media_files` eklendi.
+- [x] Bakıcı Modu formu davet edilen kişi için `users` + `pet_members` kayıtlarına bağlandı.
+- [x] Bakıcı izinleri `pet_member_permission_overrides` tablosuna yazılacak şekilde bağlandı.
+- [x] `scripts/db-smoke-test.mjs` tablo sayımına `pet_members` ve `pet_member_permission_overrides` eklendi.
+- [x] Bakıcı Modu için paylaşılabilir davet bağlantısı/metni ve `/invite/sitter/:inviteId` public davet ekranı eklendi.
+- [x] Bakıcı davet bağlantısı local-fallback servis testi, build ve `/invite/sitter/invite-smoke-123` tarayıcı smoke testiyle doğrulandı.
+- [x] Bakıcı public davet ekranına kabul/ret durumu eklendi; build ve `/invite/sitter/invite-smoke-accept-3` tarayıcı tıklama testiyle doğrulandı.
+- [x] Sokak/gönüllü pet profilleri için konum ve bakım notu alanları pet metadata kaydına eklendi.
+- [x] Pet profilleri listesinde sahiplik durumu, konum ve gönüllü notu görünür hale getirildi.
+- [x] Sokak/gönüllü pet profillerinde konumu Google Maps aramasıyla açma ve Web Share/clipboard ile paylaşma aksiyonları eklendi.
+- [x] Public QR sağlık kartında sokak/geçici yuva petleri için bakım konumu satırı ve haritada açma aksiyonu eklendi.
+- [x] Konum paylaşımı build ve `/pets/select` smoke kontrolüyle doğrulandı; sahipli petlerde aksiyonlar gizli kalıyor.
+- [x] Rapor önizleme indirme aksiyonu tarayıcı/cihaz PDF yazdırma akışına bağlandı.
+- [x] Rapor paylaşım aksiyonu Web Share API destekliyse cihaz paylaşım menüsünü açacak şekilde bağlandı.
+- [x] Rapor detayında önizleme HTML dosyası Blob tabanlı indirilebilir hale getirildi.
+- [x] Rapor paylaşımı `File` API destekleyen cihazlarda HTML dosyasını Web Share ile gönderecek, desteklemeyenlerde link/metin veya indirme fallback kullanacak şekilde güncellendi.
+- [x] Rapor ekranındaki PDF vaadi indirilebilir dosya metniyle düzeltildi.
+- [x] Rapor HTML dışa aktarımı canlı `documents` rapor önizleme akışına bağlandı; build ve `/reports` tarayıcı smoke testiyle doğrulandı.
+- [x] Belge / Tahlil / Fatura formu AI'sız ham belge arşivi olarak `documents` kayıtlarına bağlandı.
+- [x] Ham belge arşivi local-fallback servis testi ve build ile doğrulandı.
+- [x] Toksik/yabancı cisim formu `health_records` kayıt hattına bağlandı; local-fallback servis testi ve build ile doğrulandı.
+- [x] Toksik/yabancı cisim sağlık detayına kural tabanlı acil risk/veteriner yönlendirme paneli eklendi.
+- [x] Toksik/yabancı cisim acil paneline veteriner kliniği harita arama aksiyonu eklendi; build ile doğrulandı.
+- [x] Sağlık arşivine kronik, operasyon, beslenme, dışkı, üreme ve senior takipleri için program özeti paneli eklendi.
+- [x] Program özeti kartları ilgili sağlık kaydı filtresine yönlenecek şekilde bağlandı.
+- [x] Program özeti paneli build ve `/history/health-records` tarayıcı kontrolüyle doğrulandı.
+- [x] Sağlık kayıt detayları `media_files` ilişkili dosyaları medya kartı/galeri özeti olarak gösterecek şekilde güncellendi.
+- [x] Medya galeri değişikliği build ve mevcut sağlık kayıt detayı tarayıcı kontrolüyle doğrulandı.
+- [x] Masraf kayıt detayları `media_files` ilişkili fatura/belge dosyalarını medya kartı olarak gösterecek şekilde güncellendi.
+- [x] Masraf medya bağlantısı build ve mevcut masraf detay ekranı tarayıcı kontrolüyle doğrulandı.
+- [x] Foto takip dosyaları için önceki / bugünkü kayıt etiketlerinden karşılaştırma paneli üretildi.
+- [x] Foto takip ve operasyon sonrası medya detaylarında kural tabanlı karşılaştırma/yorum paneli eklendi.
+- [x] Karşılaştırma paneli build ve kod bağlantı kontrolüyle doğrulandı; canlı test verisinde medya kaydı olmadığı için görünür UI testi doğal olarak sınırlı kaldı.
+- [x] Önce/sonra medya paneli build ile doğrulandı.
+- [x] Sağlık kayıt detaylarına kronik, operasyon, beslenme, dışkı, üreme ve senior kayıtlar için takip planı paneli eklendi.
+- [x] Takip planı paneli build ve dışkı skoru detay ekranı tarayıcı kontrolüyle doğrulandı.
+- [x] Ücretsiz sağlık kayıt detaylarına AI kullanmadan kural tabanlı dikkat/hassasiyet uyarı paneli eklendi.
+- [x] Kural tabanlı uyarı paneli build ve skor 5 dışkı kaydı oluşturularak tarayıcıda doğrulandı.
+- [x] Hatırlatıcı detayına `.ics` takvim dışa aktarım butonu eklendi.
+- [x] Takvim dışa aktarımı build ve hatırlatıcı detay ekranında buton görünürlüğüyle doğrulandı; in-app browser indirme event'i desteklemediği için dosya indirme olayı tarayıcı aracıyla yakalanamadı.
+- [x] Yeni pet profili, pet listesi ve bildirim ekranındaki ana metinler mevcut `i18n/tr.js` anahtarlarına taşındı.
+- [x] Genişleyen pet türleri ve gönüllü/sokak profili metinleri i18n altyapısında karşılık buluyor.
+- [x] Profil menüsüne Gönüllü Ağı ekranı eklendi; sokak/geçici yuva profilleri konum, not, harita ve paylaşım aksiyonlarıyla listeleniyor.
+- [x] Gönüllü Ağı build ve `/profile/volunteer-network` tarayıcı smoke testiyle doğrulandı.
+- [x] Gönüllü Ağı destek talebi modalı eklendi; `volunteer-help` form kaydı local-fallback servis testi ve build ile doğrulandı.
+- [x] Bildirim ekranına opsiyonel Capacitor LocalNotifications cihaz planı köprüsü eklendi; fake-Capacitor servis testi, build ve `/profile/notifications` tarayıcı smoke testiyle doğrulandı.
+- [x] Plan/abonelik servisi local-fallback testiyle doğrulandı; `/profile/plan` ekranı ve `/pets/select` pet limit göstergesi tarayıcıda test edildi.
+- [x] `feature_usage` plan/kredi kaydı güncellendi; ham belge arşivi ve klinik hazırlık ücretsiz, kredi maliyeti sonraki AI/Pro fazı ve paylaşım özellikleri için ayrıldı.
+- [x] Kliniğe Hazırlık formu `vet_prep` belge arşivine bağlandı; local-fallback servis testi, build ve `/feature/vet-prep` tarayıcı kontrolüyle doğrulandı.
+- [x] Gizlilik ekranındaki veri dışa aktarma mock akışı gerçek JSON indirme akışına bağlandı; yerel sağlık verisi temizleme aksiyonu ilgili local kayıt anahtarlarını siliyor.
+- [x] Gizlilik ekranındaki `Hesabımı sil` aksiyonu local hesap oturumu + yerel veri temizleme ve auth splash yönlendirmesine bağlandı.
+- [x] Gizlilik ekranındaki kalan emoji aksiyon ikonları SVG ikonlarla değiştirildi; build ve `/profile/privacy` tarayıcı export smoke testiyle doğrulandı.
+- [x] Hesap silme aksiyonu sonrası gizlilik ekranı build ve `/profile/privacy` tarayıcı smoke testiyle doğrulandı; veri silmemek için destructive tıklama yapılmadı.
+- [x] Rapor oluşturma ekranı build ve `/reports/new` tarayıcı smoke testiyle doğrulandı; eski AI risk seçenekleri görünmüyor.
+- [x] Ölçümler ekranı build ve `/history/measurements?type=weight&range=90d` tarayıcı smoke testiyle doğrulandı; trend/geçmiş liste canlı kayıt gösteriyor.
+- [x] Sağlık sorunları ekranları build ve `/history/issues` + `/history/issues/:issueId` tarayıcı smoke testiyle doğrulandı; liste/detay canlı kayıt gösteriyor.
+- [x] Raporlar sekmesi build ve `/reports` tarayıcı smoke testiyle doğrulandı; eski AI/mock rapor geçmişi görünmüyor.
+- [x] Pet profil senkronu build ve `/pets/select` tarayıcı smoke testiyle doğrulandı; canlı profil listesi ve plan rozeti render ediliyor.
+- [x] Ücretsiz feature form kayıt butonu build ve `/feature/expense` tarayıcı smoke testiyle doğrulandı; `Önizlemeyi Kaydet` görünmüyor.
+- [x] Rapor detay pet eşleştirme düzeltmesi build ve `/reports` smoke testiyle doğrulandı; rapor listesi hata vermeden canlı belge akışını gösteriyor.
+- [x] Rapor detay mock kod temizliği build ve `/reports` smoke testiyle doğrulandı; eski AI rapor metni görünmüyor.
+- [x] Kullanılmayan mock rapor veri dosyası kaldırıldı ve build ile doğrulandı.
+- [x] Belge arşivi ücretsiz ham arşiv olarak ayrıştırıldı; `/feature/document-ai` ve `/reports/new` smoke testlerinde Premium AI/OCR metni görünmüyor.
+- [x] Pati AI belge OCR kartı build ve `/check` smoke testiyle doğrulandı; kart sonraki faz olarak pasif ve ücretsiz belge arşivine yönlendirmiyor.
+- [x] Eski mock pet seçme ekranı kaldırıldı; build ve `/pets/select` smoke testi canlı pet profilleri ekranının korunduğunu doğruladı.
+- [x] Acil kayıt / toksik AI triyaj ayrımı build ve `/home`, `/check`, `/feature/toxic` smoke testleriyle doğrulandı; ücretsiz form erişilebilir, AI kartı pasif.
+- [x] Klinik dosyası formunda AI özeti seçeneği kaldırıldı; ücretsiz dosya kapsamı kural tabanlı notlarla hizalandı.
+- [x] Ana sayfa kayıt özeti canlı cihaz/ölçüm hissi vermeyecek şekilde `Son kayıtlar` diline çekildi.
+- [x] Profil ücretsiz/kredi açıklaması build ve `/profile` smoke testiyle doğrulandı; ham kayıtlar ücretsiz, AI/OCR kredi/Pro fazı olarak görünüyor.
+- [x] Ölçümler ekranındaki `Canlı Trend` başlığı kayıt bazlı veriyle uyumlu olacak şekilde `Kayıt Trendi` yapıldı.
+- [x] Feature form yerel fallback uyarısındaki prototip dili `yerel yedek kayıt` olarak güncellendi.
+- [x] Sağlık arşivindeki filtreli ekleme akışı tamamlandı; Dışkı/Beslenme/Kronik/Operasyon/Üreme/Yaşlı/Acil filtrelerinde ekle butonu ilgili forma yönleniyor.
+- [x] Geçmiş menüsündeki Takip Şablonları ve Yaşlı Pet İzlemi kartları doğrudan ilgili sağlık arşivi filtresiyle açılacak şekilde bağlandı.
+- [x] Filtreli sağlık arşivi ekleme akışı build ve `/history/health-records?filter=poop_score`, `/history/health-records?filter=senior_followup` smoke testleriyle doğrulandı.
+- [x] Local fallback sağlık arşivi daraltıldı; QR, bakıcı, belge ve klinik dosyaları yanlışlıkla sağlık kaydı listesine düşmüyor.
+- [x] Local fallback sağlık arşivi düzeltmesi build ve `/history/health-records` smoke testiyle doğrulandı.
+- [x] `FeatureForm` form id'leri ile `formSubmissions` domain mapper karşılıkları mekanik olarak karşılaştırıldı; eksik mapper yok.
+- [x] Ücretsiz form rota audit'i yapıldı: toksik, foto takip, ham belge arşivi, QR, masraf, klinik dosyası, kronik, operasyon, beslenme, dışkı, üreme, yaşlı, klinik hazırlık ve hatırlatıcı formları tarayıcıda açılıyor; `Kaydet` aksiyonu görünüyor, eski prototip/AI karışık dili görünmüyor.
+- [x] Ücretsiz form kayıt sonucundaki native `alert()` akışı PWA/Capacitor uyumlu in-app durum bildirimiyle değiştirildi.
+- [x] Kayıt sonrası gecikmeli yönlendirme kaldırıldı; form kaydı tamamlanınca hedef ekrana doğrudan geçiliyor.
+- [x] Temsilci kayıt smoke testi tamamlandı: masraf, hatırlatıcı, dışkı skoru ve ham belge arşivi formları kaydedilip ilgili liste/rapor ekranında sentetik kayıtla doğrulandı.
+- [x] Ölçüm ve sağlık sorunu ekleme ekranlarındaki kayıt/validasyon hataları native alert yerine in-app toast/durum bildirimiyle gösteriliyor.
+- [x] Ölçüm ve sağlık sorunu validasyon bildirimleri build ve `/history/measurements/new`, `/history/issues/new` smoke testleriyle doğrulandı.
+- [x] Ortak toast yardımcısı eklendi; rapor paylaşımı, pet/gönüllü konum paylaşımı, gizlilik, bildirimler, pet ekleme, public QR/davet ve hatırlatıcı detay hata bildirimlerinde native alert kullanımı kaldırıldı.
+- [x] Toast geçişi build ve `/profile/privacy`, `/profile/notifications`, `/pets/new`, `/profile/volunteer-network`, `/pets/select`, `/reports/:id`, `/public/pet/:token`, `/invite/sitter/:inviteId` smoke testleriyle doğrulandı.
+- [x] Localhost smoke testlerinden kalan `smoke-` işaretli local/Turso test kayıtlarını ve ilişkili kullanım kayıtlarını temizleyen güvenli hijyen fonksiyonu eklendi.
+- [x] Smoke test kayıt temizliği build ve `/home` tarayıcı kontrolüyle doğrulandı; ekranda `smoke-` / `diskismoke` test izi kalmadı.
+- [x] Ölçüm ekranındaki kalan `Canlı kayıt / Canlı ölçüm` metinleri kayıt bazlı dile çekildi; zaman akışı solunum tipi mevcut `respiratory` koduyla hizalandı.
+- [x] Smoke test hijyeni ölçüm kayıtlarını da kapsayacak şekilde genişletildi.
+- [x] Raporlar yükleme metni ve rapor detay ölçüm etiketi de kayıt bazlı dil / `respiratory` tip koduyla hizalandı.
+- [x] Ölçüm/rapor kayıt dili build ve `/history/measurements?type=respiratory&range=90d`, `/reports` smoke testleriyle doğrulandı; yanıltıcı canlı ölçüm metni görünmüyor.
+- [x] Zaman akışı, rapor detay yükleme ve sağlık sorunları ekranındaki kalan `canlı` metinleri kayıt/arşiv diliyle değiştirildi.
+- [x] Smoke test hijyeni eski `UI smoke test` ve `DB dogrulamasi` marker'lı test kayıtlarını da kapsayacak şekilde genişletildi.
+- [x] Timeline test izi temizliği build ve `/history/timeline` smoke testiyle doğrulandı; `smoke-`, `diskismoke`, `UI smoke test`, `DB dogrulamasi` ve yanıltıcı canlı metin görünmüyor.
+- [x] Eski `/history/session/:sessionId` mock kontrol ekranı canlı arşiv uyumlu yönlendirme ekranına çevrildi; kullanıcıya sahte oturum/şikayet verisi gösterilmiyor.
+- [x] Kullanılmayan `src/mock/sessions.js` kaldırıldı; build ve `/history/session/session-1` smoke testiyle doğrulandı.
+- [x] Bilinmeyen `/feature/:featureId` rotalarının yanlışlıkla Foto Takip formuna düşmesi engellendi; artık güvenli bulunamadı ekranı gösteriliyor.
+- [x] Bilinmeyen feature rota düzeltmesi build ve `/feature/not-real-feature` smoke testiyle doğrulandı.
+- [x] Pro/kredi alanındaki Bakıcı Modu doğrudan URL ile ücretsiz planda açılmayacak şekilde kilitlendi; ücretsiz alan ile ücretli paylaşım akışı ayrımı güçlendirildi.
+- [x] Bakıcı Modu erişim ayrımı build, ücretsiz plan gate smoke testi ve mevcut ücretli plan form smoke testiyle doğrulandı.
+- [x] Feature form link audit'i tekrarlandı; ana sayfa, profil, geçmiş, raporlar ve Pati AI ekranlarındaki `/feature/*` bağlantılarının tamamı mevcut form id'leriyle eşleşiyor.
+- [x] Kalan native `alert()` kullanımları PWA/Capacitor uyumlu toast bildirimlerine çevrildi; `src` içinde `alert(` kalmadı.
+- [x] Lazy yüklenen followup ve fiziksel muayene ekranlarındaki kaçışlı template literal parse sorunu düzeltildi; build ve `/followups/*`, `/check/new/physical-exam/:taskId` smoke testleriyle doğrulandı.
+- [x] Kayıtlı 73 route örnek parametrelerle tarayıcıda smoke test edildi; hiçbirinde `Ekran yüklenemedi` runtime hatası görülmedi.
+- [x] Kalan native `confirm()` pencereleri ortak in-app onay modalına taşındı; `src` içinde `alert(` / `confirm(` kalmadı.
+- [x] Yeni onay modalı build ve `/profile/privacy`, `/check/new/questions`, `/followups/:caseId` smoke testleriyle doğrulandı; destructive tıklamalar iptal edilerek veri silinmedi.
+- [x] Ücretsiz kapsam kapanış audit'i yapıldı: açık kalan yapılacaklar AI/OCR, native/store build, production API ve Turso token taşıma fazları; ücretsiz form, arşiv, liste, detay, route ve PWA bildirim eksikleri için açık madde kalmadı.
+- [x] AI ön kontrol şikayet seçimi ana şikayet + ilişkili ek bulgu mantığına taşındı; alakasız şikayetler ayrı kontrol uyarısı olarak sınıflandırılıyor.
+- [x] `classifyComplaint()` uyumluluk modeliyle güncellendi; birincil şikayet, uyumlu eşleşmeler, uyumsuz şikayet uyarıları ve daraltılmış soru/görev çıktısı üretiyor.
+- [x] AI test akışına kısa pet sağlık öyküsü ekranı eklendi: kronik durum, ilaç, alerji, son değişiklik, önceki benzer şikayet ve evde müdahale bilgileri session snapshot olarak tutuluyor.
+- [x] Soru akışı gereksiz uzamayı azaltacak şekilde akıllı listelemeye geçti; ana soru setleri 8 temel soruyla sınırlandı, cevapla tetiklenen follow-up setleri görünür kalıyor.
+- [x] AI ölçüm görevleri `measurements` servisine kalıcı kayıt olarak yazılıyor; Turso hatasında local fallback çalışıyor ve metadata içinde `source: ai_triage` tutuluyor.
+- [x] Sonuç ekranına veteriner sonucu/geri bildirim akışı eklendi; tanı, tedavi, yönlendirme doğruluğu ve güncel durum `ai-vet-outcome` form kaydı olarak saklanıyor.
+- [x] AI akışı build ve tarayıcı smoke testleriyle doğrulandı: ana şikayet filtresi, sağlık öyküsü, daraltılmış soru sayısı, ölçüm ekranı, sonuç ekranı ve veteriner sonucu ekranı runtime hatası vermiyor.
+- [x] AI akışında aktif pet bulunamazsa ekran kırılmaması ve sesli örnek şikayetin yeni ana şikayet/ek bulgu state yapısına yazılması için küçük sağlamlaştırma yapıldı; build ve ana akış smoke testi geçti.
+- [x] Acil Bilgi Bankası eklendi: toksik/zehirlenme, yabancı cisim, kusma-ishal, solunum, nöbet/bayılma, sıcak çarpması, göz yaralanması, yara/kanama, idrar yapamama ve doğum komplikasyonu konuları güvenli “yapma / hazırla / acil veteriner” formatında yazıldı.
+- [x] Bilgi bankası Pati AI merkezine bağlandı; `Ambalaj Risk Kontrolü` kartı sonraki AI adımı olarak konumlandırıldı. Build ve `/check`, `/check/knowledge`, `/check/knowledge/toxic` smoke testleri geçti.
+- [x] `Ambalaj Risk Kontrolü` çalışır ilk faz olarak eklendi: ambalaj fotoğrafı, ürün adı, içerik metni, miktar, zaman ve belirti girişi alıyor; ksilitol/çikolata/üzüm/ilaç/kimyasal/yabancı cisim gibi anahtar riskleri güvenli kural tabanlı tarıyor.
+- [x] Ambalaj risk sonucu “kesin güvenli” hükmü vermeden acil/yüksek/yabancı cisim/takip/belirsiz seviyeleriyle gösteriliyor; sonuçtan mevcut `toxic` acil kayıt hattına kayıt oluşturma butonu bağlandı.
+- [x] Ambalaj risk akışı build ve `/check` -> `/check/package-risk` tarayıcı smoke testiyle doğrulandı; xylitol örneği acil risk olarak yakalandı, testte veritabanına kayıt bırakılmadı.
+- [x] Belge / tahlil / fatura AI okuma ilk fazı eklendi: form artık okuma hedefi, işaretlenecek alanlar ve elle görünen önemli değerleri topluyor; kayıt `documents` içinde `ai_pending` durumuyla AI/OCR kuyruğuna hazırlanıyor.
+- [x] Belge detay ekranına AI/OCR okuma hazırlığı bölümü eklendi; gerçek OCR/AI ayrıştırma server/API katmanına bağlanacak ayrı üretim işi olarak bırakıldı.
+- [x] Gerçek belge OCR ilk fazı eklendi: Gemini ile belge/foto/PDF okunup özet, tahlil, ilaç, fatura ve takip görevi çıktıları kayda yazılıyor; rapor detayında gösteriliyor.
+- [x] Hibrit medya/server kararı uygulama notlarına işlendi: medya lokal öncelikli, raporlar kalıcı, AI girdileri 90 gün geçici, B2 private bucket signed URL ile kullanılacak.
+- [x] Production API ilk fazı eklendi: `/api/health`, `/api/media/sign-upload`, `/api/media/complete`, `/api/media/sign-download`; Docker/Coolify deploy dosyası hazırlandı.
+- [x] Sonuç ekranındaki risk dili aciliyet trafik ışığına çevrildi: yeşil, sarı, turuncu, kırmızı; dil teşhis değil yönlendirme/aciliyet riski olarak tutuldu.
+- [x] AI ön kontrol sonucundan veteriner için çıktı/PDF yerine paylaşılabilir link üreten `Veteriner Linki Oluştur` akışı eklendi; link `/public/report/:reportId` ekranında anamnez, kırmızı bayrak, yanıt, görev, güvenli takip ve uyarıları gösteriyor.
+- [x] Tedavi Sonrası Takip Asistanı ilk fazı güçlendirildi: reçete/epikriz yükleme alanı, veteriner planı, ilaç/uygulama saatleri, yan etki check-in, yara/foto kontrolü, kontrol randevusu ve takip geçmişi eklendi.
+- [x] Tedavi takip günlük kontrol akışı eklendi: genel durum, ilaç uyumu, bulgular, yan etki, foto ve not kaydı alınıyor; sonuç ekranı güvenli sınırları gösterip takip dosyasına geçmiş olarak işliyor.
+- [x] Ambalaj Risk Kontrolü Gemini destekli AI özet altyapısına bağlandı; `VITE_GEMINI_API_KEY` yoksa güvenli kural motoruyla çalışmaya devam ediyor, anahtar kaynak koda gömülmedi.
+- [x] Gemini istemcisi eklendi: JSON çıktılı güvenli değerlendirme, tedavi/doz/kusturma talimatı vermeyen prompt sınırları ve başarısızlıkta kural tabanlı fallback var.
+- [x] Genel audit sonucu tedavi takip dosyalarının sadece RAM'de kalması mantık açığı olarak düzeltildi; `pati_followups` local yedeği eklendi.
+- [x] Pet Sağlık Pasaportu ilk fazı eklendi: aktif pet profili, risk bağlamı, sağlık kayıtları, ölçümler, belgeler, hatırlatıcılar, masraf özeti ve QR/klinik dosya aksiyonları tek ekranda toplandı.
+- [x] Mama / İlaç / Ürün Güvenlik Radarı ilk fazı eklendi: ürün türü, marka, barkod, lot/SKT girişi; toksik ambalaj kontrolünden ayrı çalışıyor ve ücretsiz openFDA Food Enforcement recall araması yapıyor.
+- [x] Kullanıcı hesabı telefon öncelikli giriş/profil yapısına genişletildi.
+  - [x] Kayıt ekranında telefon ana alan oldu; e-posta opsiyonel destek alanı olarak kaldı.
+  - [x] Kullanıcı profilinde telefon, ülke, il, ilçe, mahalle, dil ve saat dilimi gösterilip düzenlenebiliyor.
+  - [x] Kullanıcı lokasyon bilgisi `users.metadata` / local fallback içinde saklanıyor; canlı DB şemasında geniş kolon zorunluluğu oluşturulmadı.
+  - [x] Profil ekranında eksik telefon/il/ilçe bilgisi görünür “tamamla” uyarısı olarak işaretleniyor.
+- [x] Pet profil bağlamı AI karar motoruna bağlandı.
+  - [x] Pet yaşından yaşam evresi hesaplanıyor: `newborn`, `young`, `adult`, `senior`, `geriatric`.
+  - [x] Tür, ırk, kısa burunlu/büyük ırk/yavru/yaşlı/kronik durum gibi risk etiketleri üretiliyor.
+  - [x] Pet kayıtlarında otomatik risk bağlamı metadata/local profile içine yazılıyor.
+  - [x] AI şikayet sınıflandırıcısı pet bağlamına göre risk uyarısı ve görev/soru önceliği üretiyor.
+  - [x] Ambalaj risk kontrolü de tür/yaşam evresi/kilo bağlamını sonuç açıklamasına dahil ediyor.
+  - [x] Build, pet bağlamı yardımcı testi ve `/profile`, `/profile/account`, `/auth/register`, `/auth/login`, `/check/package-risk` browser smoke testleri geçti.
+- [ ] Ürün yönü / eklenecek değer modülleri.
+  - [x] Pet Sağlık Pasaportu ürün dili güçlendirildi: profil, sağlık arşivi, ölçümler, belgeler, aşı/parazit, masraf, QR ve geçmiş tek “pasaport” çatısı altında ilk faz olarak gösteriliyor.
+  - [x] AI Ön Şikayet Dosyası “Veterinere Hazır Rapor” olarak ilk faz ürünleştirildi: anamnez, kırmızı bayrak, yanıtlar, görev/medya durumu, güvenli takip ve uyarılar paylaşılabilir link ekranında gösteriliyor; PDF/çıktı üretimi özellikle yapılmadı.
+  - [x] Aciliyet seviyesi trafik ışığı diliyle netleştirildi: yeşil, sarı, turuncu, kırmızı. Dil teşhis değil “aciliyet riski / yönlendirme” olarak tutuldu.
+  - [x] Tedavi Sonrası Takip Asistanı güçlendirildi: reçete/ilaç saatleri, yan etki check-in, yara/foto takibi, kontrol randevusu ve takip geçmişi ilk faz olarak çalışıyor.
+  - [x] Mama / İlaç / Ürün Güvenlik Radarı ayrı modül olarak eklendi. Bu modül toksik ambalaj kontrolüyle karıştırılmıyor; geri çağırma, lot/seri, ürün adı, barkod ve güvenlik uyarısı takibinin ilk fazını yapıyor.
+  - [x] Ambalaj Risk Kontrolü ayrı kaldı: zehirlenme/yabancı cisim şüphesinde ambalaj/fotoğraf/içerik üzerinden hızlı risk tarama, acil kayıt akışı ve opsiyonel Gemini güvenli özeti çalışıyor.
+  - [x] Çevresel Risk Asistanı ve Hafif Veteriner Inbox kullanıcı kararıyla şimdilik kapsam dışına alındı.
+  - [ ] API entegrasyonları sadece ücretsiz, makul limitli veya ticari olarak sürdürülebilir ise eklenecek; ücretli/karmaşık API’ler ürün çekirdeği hazır olana kadar ertelenecek.
+  - [ ] Değerlendirilecek API adayları: openFDA recall/adverse events, Open Pet Food Facts, Open-Meteo hava/air quality. Google Places/Foursquare ve wearable API’leri ücret/erişim durumuna göre daha sonraya bırakılacak.
+- [ ] AI işleme, native plugin kurulumu/store build testi ve arka plan push teslimi henüz yapılmadı.
+- [x] Turso token frontend için sadece test amaçlı bırakıldı; canlı sistem için server/API katmanı ve B2 signed upload modeli başlatıldı.

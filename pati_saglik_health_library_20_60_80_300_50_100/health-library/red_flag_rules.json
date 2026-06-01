@@ -1,0 +1,1742 @@
+[
+  {
+    "id": "rf_breathing_difficulty",
+    "name_tr": "Nefes almakta zorlanma",
+    "severity": "emergency",
+    "complaint_type_id": "breathing_issue",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Nefes almakta zorlanıyorsa analiz bekletmeden acil veteriner yönlendirmesi göster.",
+    "force_emergency_screen": true,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_open_mouth_cat",
+    "name_tr": "Kedide ağzı açık nefes alma",
+    "severity": "emergency",
+    "complaint_type_id": "breathing_issue",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Kedide ağzı açık nefes alma acil kabul edilir.",
+    "force_emergency_screen": true,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_blue_gums",
+    "name_tr": "Mor/mavi/gri diş eti",
+    "severity": "emergency",
+    "complaint_type_id": "mouth_dental",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Diş eti rengi anormal ve mor/mavi/gri ise acil yönlendirme.",
+    "force_emergency_screen": true,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_collapse",
+    "name_tr": "Bayılma / bilinç kaybı",
+    "severity": "emergency",
+    "complaint_type_id": "lethargy",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Bayılma veya bilinç kaybı acil yönlendirme.",
+    "force_emergency_screen": true,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_seizure_active",
+    "name_tr": "Aktif nöbet",
+    "severity": "emergency",
+    "complaint_type_id": "neurologic",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Aktif nöbet durumunda acil yönlendirme.",
+    "force_emergency_screen": true,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_repeated_seizure",
+    "name_tr": "Tekrarlayan nöbet",
+    "severity": "emergency",
+    "complaint_type_id": "neurologic",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Aynı gün birden fazla nöbet yüksek/acil risk.",
+    "force_emergency_screen": true,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_severe_bleeding",
+    "name_tr": "Şiddetli kanama",
+    "severity": "emergency",
+    "complaint_type_id": "wound_swelling",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Şiddetli veya durmayan kanama acil yönlendirme.",
+    "force_emergency_screen": true,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_toxin",
+    "name_tr": "Zehirlenme ihtimali",
+    "severity": "emergency",
+    "complaint_type_id": "toxin_foreign_body",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Zehirli madde veya insan ilacı ihtimali acil/yüksek risk.",
+    "force_emergency_screen": true,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_unable_urinate",
+    "name_tr": "İdrar yapamama",
+    "severity": "emergency",
+    "complaint_type_id": "urination_problem",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "İdrar yapamama acil olabilir.",
+    "force_emergency_screen": true,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_male_cat_urine",
+    "name_tr": "Erkek kedide idrar zorlanması",
+    "severity": "emergency",
+    "complaint_type_id": "urination_problem",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Erkek kedide idrar yapamama şüphesi acil.",
+    "force_emergency_screen": true,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_traffic_fall",
+    "name_tr": "Trafik kazası / yüksekten düşme",
+    "severity": "emergency",
+    "complaint_type_id": "limping",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Ciddi travmada acil yönlendirme.",
+    "force_emergency_screen": true,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_choking",
+    "name_tr": "Boğulma / tıkanma şüphesi",
+    "severity": "emergency",
+    "complaint_type_id": "breathing_issue",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Boğazına cisim kaçma veya tıkanma acil.",
+    "force_emergency_screen": true,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_continuous_vomiting",
+    "name_tr": "Sürekli kusma",
+    "severity": "high",
+    "complaint_type_id": "vomiting",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Sürekli kusma yüksek/acil risk.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_blood_vomit",
+    "name_tr": "Kanlı kusma",
+    "severity": "high",
+    "complaint_type_id": "vomiting",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Kanlı kusma yüksek risk.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_black_stool",
+    "name_tr": "Siyah katran gibi dışkı",
+    "severity": "high",
+    "complaint_type_id": "diarrhea",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Siyah/katran dışkı yüksek risk.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_blood_stool",
+    "name_tr": "Kanlı dışkı",
+    "severity": "high",
+    "complaint_type_id": "diarrhea",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Dışkıda kan yüksek risk.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_eye_trauma",
+    "name_tr": "Göz travması",
+    "severity": "high",
+    "complaint_type_id": "eye_problem",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Göz travması hızlı veteriner değerlendirmesi gerektirebilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_eye_cannot_open",
+    "name_tr": "Gözünü açamama",
+    "severity": "high",
+    "complaint_type_id": "eye_problem",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Gözünü açamama yüksek risk.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_ear_balance",
+    "name_tr": "Kulak şikayeti + denge kaybı",
+    "severity": "high",
+    "complaint_type_id": "ear_problem",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Kulak şikayetine denge kaybı eşlik ediyorsa yüksek risk.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_limb_no_weight",
+    "name_tr": "Bacağa hiç basamama",
+    "severity": "high",
+    "complaint_type_id": "limping",
+    "condition": {
+      "answer_value_in": [
+        "Evet",
+        "Kanlı",
+        "Şiddetli",
+        "Sürekli kusuyor",
+        "Hiç yapmıyor gibi",
+        "Hayır"
+      ]
+    },
+    "action_tr": "Hiç basamama ve ağrı yüksek risk.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_vomiting_severe_lethargy",
+    "name_tr": "Kusma: Belirgin halsizlik / çökme",
+    "severity": "high",
+    "complaint_type_id": "vomiting",
+    "condition": {
+      "flag": "severe_lethargy",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Kusma takibinde belirgin halsizlik / çökme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_vomiting_cannot_keep_water",
+    "name_tr": "Kusma: Su tutamama",
+    "severity": "high",
+    "complaint_type_id": "vomiting",
+    "condition": {
+      "flag": "cannot_keep_water",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Kusma takibinde su tutamama bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_vomiting_worsening_fast",
+    "name_tr": "Kusma: Hızlı kötüleşme",
+    "severity": "high",
+    "complaint_type_id": "vomiting",
+    "condition": {
+      "flag": "worsening_fast",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Kusma takibinde hızlı kötüleşme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_vomiting_severe_pain",
+    "name_tr": "Kusma: Şiddetli ağrı",
+    "severity": "high",
+    "complaint_type_id": "vomiting",
+    "condition": {
+      "flag": "severe_pain",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Kusma takibinde şiddetli ağrı bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_vomiting_blood_seen",
+    "name_tr": "Kusma: Kan görülmesi",
+    "severity": "high",
+    "complaint_type_id": "vomiting",
+    "condition": {
+      "flag": "blood_seen",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Kusma takibinde kan görülmesi bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_diarrhea_severe_lethargy",
+    "name_tr": "İshal / Dışkı Değişimi: Belirgin halsizlik / çökme",
+    "severity": "high",
+    "complaint_type_id": "diarrhea",
+    "condition": {
+      "flag": "severe_lethargy",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "İshal / Dışkı Değişimi takibinde belirgin halsizlik / çökme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_diarrhea_cannot_keep_water",
+    "name_tr": "İshal / Dışkı Değişimi: Su tutamama",
+    "severity": "high",
+    "complaint_type_id": "diarrhea",
+    "condition": {
+      "flag": "cannot_keep_water",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "İshal / Dışkı Değişimi takibinde su tutamama bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_diarrhea_worsening_fast",
+    "name_tr": "İshal / Dışkı Değişimi: Hızlı kötüleşme",
+    "severity": "high",
+    "complaint_type_id": "diarrhea",
+    "condition": {
+      "flag": "worsening_fast",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "İshal / Dışkı Değişimi takibinde hızlı kötüleşme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_diarrhea_severe_pain",
+    "name_tr": "İshal / Dışkı Değişimi: Şiddetli ağrı",
+    "severity": "high",
+    "complaint_type_id": "diarrhea",
+    "condition": {
+      "flag": "severe_pain",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "İshal / Dışkı Değişimi takibinde şiddetli ağrı bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_diarrhea_blood_seen",
+    "name_tr": "İshal / Dışkı Değişimi: Kan görülmesi",
+    "severity": "high",
+    "complaint_type_id": "diarrhea",
+    "condition": {
+      "flag": "blood_seen",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "İshal / Dışkı Değişimi takibinde kan görülmesi bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_loss_of_appetite_severe_lethargy",
+    "name_tr": "İştahsızlık: Belirgin halsizlik / çökme",
+    "severity": "high",
+    "complaint_type_id": "loss_of_appetite",
+    "condition": {
+      "flag": "severe_lethargy",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "İştahsızlık takibinde belirgin halsizlik / çökme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_loss_of_appetite_cannot_keep_water",
+    "name_tr": "İştahsızlık: Su tutamama",
+    "severity": "high",
+    "complaint_type_id": "loss_of_appetite",
+    "condition": {
+      "flag": "cannot_keep_water",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "İştahsızlık takibinde su tutamama bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_loss_of_appetite_worsening_fast",
+    "name_tr": "İştahsızlık: Hızlı kötüleşme",
+    "severity": "high",
+    "complaint_type_id": "loss_of_appetite",
+    "condition": {
+      "flag": "worsening_fast",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "İştahsızlık takibinde hızlı kötüleşme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_loss_of_appetite_severe_pain",
+    "name_tr": "İştahsızlık: Şiddetli ağrı",
+    "severity": "high",
+    "complaint_type_id": "loss_of_appetite",
+    "condition": {
+      "flag": "severe_pain",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "İştahsızlık takibinde şiddetli ağrı bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_loss_of_appetite_blood_seen",
+    "name_tr": "İştahsızlık: Kan görülmesi",
+    "severity": "high",
+    "complaint_type_id": "loss_of_appetite",
+    "condition": {
+      "flag": "blood_seen",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "İştahsızlık takibinde kan görülmesi bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_lethargy_severe_lethargy",
+    "name_tr": "Halsizlik / Genel Durum: Belirgin halsizlik / çökme",
+    "severity": "high",
+    "complaint_type_id": "lethargy",
+    "condition": {
+      "flag": "severe_lethargy",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Halsizlik / Genel Durum takibinde belirgin halsizlik / çökme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_lethargy_cannot_keep_water",
+    "name_tr": "Halsizlik / Genel Durum: Su tutamama",
+    "severity": "high",
+    "complaint_type_id": "lethargy",
+    "condition": {
+      "flag": "cannot_keep_water",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Halsizlik / Genel Durum takibinde su tutamama bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_lethargy_worsening_fast",
+    "name_tr": "Halsizlik / Genel Durum: Hızlı kötüleşme",
+    "severity": "high",
+    "complaint_type_id": "lethargy",
+    "condition": {
+      "flag": "worsening_fast",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Halsizlik / Genel Durum takibinde hızlı kötüleşme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_lethargy_severe_pain",
+    "name_tr": "Halsizlik / Genel Durum: Şiddetli ağrı",
+    "severity": "high",
+    "complaint_type_id": "lethargy",
+    "condition": {
+      "flag": "severe_pain",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Halsizlik / Genel Durum takibinde şiddetli ağrı bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_lethargy_blood_seen",
+    "name_tr": "Halsizlik / Genel Durum: Kan görülmesi",
+    "severity": "high",
+    "complaint_type_id": "lethargy",
+    "condition": {
+      "flag": "blood_seen",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Halsizlik / Genel Durum takibinde kan görülmesi bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_cough_severe_lethargy",
+    "name_tr": "Öksürük: Belirgin halsizlik / çökme",
+    "severity": "high",
+    "complaint_type_id": "cough",
+    "condition": {
+      "flag": "severe_lethargy",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Öksürük takibinde belirgin halsizlik / çökme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_cough_cannot_keep_water",
+    "name_tr": "Öksürük: Su tutamama",
+    "severity": "high",
+    "complaint_type_id": "cough",
+    "condition": {
+      "flag": "cannot_keep_water",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Öksürük takibinde su tutamama bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_cough_worsening_fast",
+    "name_tr": "Öksürük: Hızlı kötüleşme",
+    "severity": "high",
+    "complaint_type_id": "cough",
+    "condition": {
+      "flag": "worsening_fast",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Öksürük takibinde hızlı kötüleşme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_cough_severe_pain",
+    "name_tr": "Öksürük: Şiddetli ağrı",
+    "severity": "high",
+    "complaint_type_id": "cough",
+    "condition": {
+      "flag": "severe_pain",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Öksürük takibinde şiddetli ağrı bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_cough_blood_seen",
+    "name_tr": "Öksürük: Kan görülmesi",
+    "severity": "high",
+    "complaint_type_id": "cough",
+    "condition": {
+      "flag": "blood_seen",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Öksürük takibinde kan görülmesi bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_breathing_issue_severe_lethargy",
+    "name_tr": "Solunum Sorunu / Hırıltı: Belirgin halsizlik / çökme",
+    "severity": "high",
+    "complaint_type_id": "breathing_issue",
+    "condition": {
+      "flag": "severe_lethargy",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Solunum Sorunu / Hırıltı takibinde belirgin halsizlik / çökme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_breathing_issue_cannot_keep_water",
+    "name_tr": "Solunum Sorunu / Hırıltı: Su tutamama",
+    "severity": "high",
+    "complaint_type_id": "breathing_issue",
+    "condition": {
+      "flag": "cannot_keep_water",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Solunum Sorunu / Hırıltı takibinde su tutamama bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_breathing_issue_worsening_fast",
+    "name_tr": "Solunum Sorunu / Hırıltı: Hızlı kötüleşme",
+    "severity": "high",
+    "complaint_type_id": "breathing_issue",
+    "condition": {
+      "flag": "worsening_fast",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Solunum Sorunu / Hırıltı takibinde hızlı kötüleşme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_breathing_issue_severe_pain",
+    "name_tr": "Solunum Sorunu / Hırıltı: Şiddetli ağrı",
+    "severity": "high",
+    "complaint_type_id": "breathing_issue",
+    "condition": {
+      "flag": "severe_pain",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Solunum Sorunu / Hırıltı takibinde şiddetli ağrı bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_breathing_issue_blood_seen",
+    "name_tr": "Solunum Sorunu / Hırıltı: Kan görülmesi",
+    "severity": "high",
+    "complaint_type_id": "breathing_issue",
+    "condition": {
+      "flag": "blood_seen",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Solunum Sorunu / Hırıltı takibinde kan görülmesi bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_eye_problem_severe_lethargy",
+    "name_tr": "Göz Akıntısı / Kızarıklık: Belirgin halsizlik / çökme",
+    "severity": "high",
+    "complaint_type_id": "eye_problem",
+    "condition": {
+      "flag": "severe_lethargy",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Göz Akıntısı / Kızarıklık takibinde belirgin halsizlik / çökme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_eye_problem_cannot_keep_water",
+    "name_tr": "Göz Akıntısı / Kızarıklık: Su tutamama",
+    "severity": "high",
+    "complaint_type_id": "eye_problem",
+    "condition": {
+      "flag": "cannot_keep_water",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Göz Akıntısı / Kızarıklık takibinde su tutamama bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_eye_problem_worsening_fast",
+    "name_tr": "Göz Akıntısı / Kızarıklık: Hızlı kötüleşme",
+    "severity": "high",
+    "complaint_type_id": "eye_problem",
+    "condition": {
+      "flag": "worsening_fast",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Göz Akıntısı / Kızarıklık takibinde hızlı kötüleşme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_eye_problem_severe_pain",
+    "name_tr": "Göz Akıntısı / Kızarıklık: Şiddetli ağrı",
+    "severity": "high",
+    "complaint_type_id": "eye_problem",
+    "condition": {
+      "flag": "severe_pain",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Göz Akıntısı / Kızarıklık takibinde şiddetli ağrı bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_eye_problem_blood_seen",
+    "name_tr": "Göz Akıntısı / Kızarıklık: Kan görülmesi",
+    "severity": "high",
+    "complaint_type_id": "eye_problem",
+    "condition": {
+      "flag": "blood_seen",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Göz Akıntısı / Kızarıklık takibinde kan görülmesi bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_ear_problem_severe_lethargy",
+    "name_tr": "Kulak Kaşıma / Koku / Akıntı: Belirgin halsizlik / çökme",
+    "severity": "high",
+    "complaint_type_id": "ear_problem",
+    "condition": {
+      "flag": "severe_lethargy",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Kulak Kaşıma / Koku / Akıntı takibinde belirgin halsizlik / çökme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_ear_problem_cannot_keep_water",
+    "name_tr": "Kulak Kaşıma / Koku / Akıntı: Su tutamama",
+    "severity": "high",
+    "complaint_type_id": "ear_problem",
+    "condition": {
+      "flag": "cannot_keep_water",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Kulak Kaşıma / Koku / Akıntı takibinde su tutamama bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_ear_problem_worsening_fast",
+    "name_tr": "Kulak Kaşıma / Koku / Akıntı: Hızlı kötüleşme",
+    "severity": "high",
+    "complaint_type_id": "ear_problem",
+    "condition": {
+      "flag": "worsening_fast",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Kulak Kaşıma / Koku / Akıntı takibinde hızlı kötüleşme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_ear_problem_severe_pain",
+    "name_tr": "Kulak Kaşıma / Koku / Akıntı: Şiddetli ağrı",
+    "severity": "high",
+    "complaint_type_id": "ear_problem",
+    "condition": {
+      "flag": "severe_pain",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Kulak Kaşıma / Koku / Akıntı takibinde şiddetli ağrı bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_ear_problem_blood_seen",
+    "name_tr": "Kulak Kaşıma / Koku / Akıntı: Kan görülmesi",
+    "severity": "high",
+    "complaint_type_id": "ear_problem",
+    "condition": {
+      "flag": "blood_seen",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Kulak Kaşıma / Koku / Akıntı takibinde kan görülmesi bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_skin_itching_severe_lethargy",
+    "name_tr": "Kaşıntı / Deri / Tüy: Belirgin halsizlik / çökme",
+    "severity": "high",
+    "complaint_type_id": "skin_itching",
+    "condition": {
+      "flag": "severe_lethargy",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Kaşıntı / Deri / Tüy takibinde belirgin halsizlik / çökme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_skin_itching_cannot_keep_water",
+    "name_tr": "Kaşıntı / Deri / Tüy: Su tutamama",
+    "severity": "high",
+    "complaint_type_id": "skin_itching",
+    "condition": {
+      "flag": "cannot_keep_water",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Kaşıntı / Deri / Tüy takibinde su tutamama bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_skin_itching_worsening_fast",
+    "name_tr": "Kaşıntı / Deri / Tüy: Hızlı kötüleşme",
+    "severity": "high",
+    "complaint_type_id": "skin_itching",
+    "condition": {
+      "flag": "worsening_fast",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Kaşıntı / Deri / Tüy takibinde hızlı kötüleşme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_skin_itching_severe_pain",
+    "name_tr": "Kaşıntı / Deri / Tüy: Şiddetli ağrı",
+    "severity": "high",
+    "complaint_type_id": "skin_itching",
+    "condition": {
+      "flag": "severe_pain",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Kaşıntı / Deri / Tüy takibinde şiddetli ağrı bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_skin_itching_blood_seen",
+    "name_tr": "Kaşıntı / Deri / Tüy: Kan görülmesi",
+    "severity": "high",
+    "complaint_type_id": "skin_itching",
+    "condition": {
+      "flag": "blood_seen",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Kaşıntı / Deri / Tüy takibinde kan görülmesi bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_wound_swelling_severe_lethargy",
+    "name_tr": "Yara / Şişlik: Belirgin halsizlik / çökme",
+    "severity": "high",
+    "complaint_type_id": "wound_swelling",
+    "condition": {
+      "flag": "severe_lethargy",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Yara / Şişlik takibinde belirgin halsizlik / çökme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_wound_swelling_cannot_keep_water",
+    "name_tr": "Yara / Şişlik: Su tutamama",
+    "severity": "high",
+    "complaint_type_id": "wound_swelling",
+    "condition": {
+      "flag": "cannot_keep_water",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Yara / Şişlik takibinde su tutamama bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_wound_swelling_worsening_fast",
+    "name_tr": "Yara / Şişlik: Hızlı kötüleşme",
+    "severity": "high",
+    "complaint_type_id": "wound_swelling",
+    "condition": {
+      "flag": "worsening_fast",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Yara / Şişlik takibinde hızlı kötüleşme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_wound_swelling_severe_pain",
+    "name_tr": "Yara / Şişlik: Şiddetli ağrı",
+    "severity": "high",
+    "complaint_type_id": "wound_swelling",
+    "condition": {
+      "flag": "severe_pain",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Yara / Şişlik takibinde şiddetli ağrı bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_wound_swelling_blood_seen",
+    "name_tr": "Yara / Şişlik: Kan görülmesi",
+    "severity": "high",
+    "complaint_type_id": "wound_swelling",
+    "condition": {
+      "flag": "blood_seen",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Yara / Şişlik takibinde kan görülmesi bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_urination_problem_severe_lethargy",
+    "name_tr": "İdrar Sorunu: Belirgin halsizlik / çökme",
+    "severity": "high",
+    "complaint_type_id": "urination_problem",
+    "condition": {
+      "flag": "severe_lethargy",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "İdrar Sorunu takibinde belirgin halsizlik / çökme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_urination_problem_cannot_keep_water",
+    "name_tr": "İdrar Sorunu: Su tutamama",
+    "severity": "high",
+    "complaint_type_id": "urination_problem",
+    "condition": {
+      "flag": "cannot_keep_water",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "İdrar Sorunu takibinde su tutamama bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_urination_problem_worsening_fast",
+    "name_tr": "İdrar Sorunu: Hızlı kötüleşme",
+    "severity": "high",
+    "complaint_type_id": "urination_problem",
+    "condition": {
+      "flag": "worsening_fast",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "İdrar Sorunu takibinde hızlı kötüleşme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_urination_problem_severe_pain",
+    "name_tr": "İdrar Sorunu: Şiddetli ağrı",
+    "severity": "high",
+    "complaint_type_id": "urination_problem",
+    "condition": {
+      "flag": "severe_pain",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "İdrar Sorunu takibinde şiddetli ağrı bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_urination_problem_blood_seen",
+    "name_tr": "İdrar Sorunu: Kan görülmesi",
+    "severity": "high",
+    "complaint_type_id": "urination_problem",
+    "condition": {
+      "flag": "blood_seen",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "İdrar Sorunu takibinde kan görülmesi bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_limping_severe_lethargy",
+    "name_tr": "Topallama / Hareket: Belirgin halsizlik / çökme",
+    "severity": "high",
+    "complaint_type_id": "limping",
+    "condition": {
+      "flag": "severe_lethargy",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Topallama / Hareket takibinde belirgin halsizlik / çökme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_limping_cannot_keep_water",
+    "name_tr": "Topallama / Hareket: Su tutamama",
+    "severity": "high",
+    "complaint_type_id": "limping",
+    "condition": {
+      "flag": "cannot_keep_water",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Topallama / Hareket takibinde su tutamama bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_limping_worsening_fast",
+    "name_tr": "Topallama / Hareket: Hızlı kötüleşme",
+    "severity": "high",
+    "complaint_type_id": "limping",
+    "condition": {
+      "flag": "worsening_fast",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Topallama / Hareket takibinde hızlı kötüleşme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_limping_severe_pain",
+    "name_tr": "Topallama / Hareket: Şiddetli ağrı",
+    "severity": "high",
+    "complaint_type_id": "limping",
+    "condition": {
+      "flag": "severe_pain",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Topallama / Hareket takibinde şiddetli ağrı bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_limping_blood_seen",
+    "name_tr": "Topallama / Hareket: Kan görülmesi",
+    "severity": "high",
+    "complaint_type_id": "limping",
+    "condition": {
+      "flag": "blood_seen",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Topallama / Hareket takibinde kan görülmesi bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_pain_severe_lethargy",
+    "name_tr": "Ağrı / Dokununca Tepki: Belirgin halsizlik / çökme",
+    "severity": "high",
+    "complaint_type_id": "pain",
+    "condition": {
+      "flag": "severe_lethargy",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Ağrı / Dokununca Tepki takibinde belirgin halsizlik / çökme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_pain_cannot_keep_water",
+    "name_tr": "Ağrı / Dokununca Tepki: Su tutamama",
+    "severity": "high",
+    "complaint_type_id": "pain",
+    "condition": {
+      "flag": "cannot_keep_water",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Ağrı / Dokununca Tepki takibinde su tutamama bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_pain_worsening_fast",
+    "name_tr": "Ağrı / Dokununca Tepki: Hızlı kötüleşme",
+    "severity": "high",
+    "complaint_type_id": "pain",
+    "condition": {
+      "flag": "worsening_fast",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Ağrı / Dokununca Tepki takibinde hızlı kötüleşme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_pain_severe_pain",
+    "name_tr": "Ağrı / Dokununca Tepki: Şiddetli ağrı",
+    "severity": "high",
+    "complaint_type_id": "pain",
+    "condition": {
+      "flag": "severe_pain",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Ağrı / Dokununca Tepki takibinde şiddetli ağrı bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_pain_blood_seen",
+    "name_tr": "Ağrı / Dokununca Tepki: Kan görülmesi",
+    "severity": "high",
+    "complaint_type_id": "pain",
+    "condition": {
+      "flag": "blood_seen",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Ağrı / Dokununca Tepki takibinde kan görülmesi bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_neurologic_severe_lethargy",
+    "name_tr": "Nörolojik / Denge / Nöbet: Belirgin halsizlik / çökme",
+    "severity": "high",
+    "complaint_type_id": "neurologic",
+    "condition": {
+      "flag": "severe_lethargy",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Nörolojik / Denge / Nöbet takibinde belirgin halsizlik / çökme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_neurologic_cannot_keep_water",
+    "name_tr": "Nörolojik / Denge / Nöbet: Su tutamama",
+    "severity": "high",
+    "complaint_type_id": "neurologic",
+    "condition": {
+      "flag": "cannot_keep_water",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Nörolojik / Denge / Nöbet takibinde su tutamama bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_neurologic_worsening_fast",
+    "name_tr": "Nörolojik / Denge / Nöbet: Hızlı kötüleşme",
+    "severity": "high",
+    "complaint_type_id": "neurologic",
+    "condition": {
+      "flag": "worsening_fast",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Nörolojik / Denge / Nöbet takibinde hızlı kötüleşme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_neurologic_severe_pain",
+    "name_tr": "Nörolojik / Denge / Nöbet: Şiddetli ağrı",
+    "severity": "high",
+    "complaint_type_id": "neurologic",
+    "condition": {
+      "flag": "severe_pain",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Nörolojik / Denge / Nöbet takibinde şiddetli ağrı bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_neurologic_blood_seen",
+    "name_tr": "Nörolojik / Denge / Nöbet: Kan görülmesi",
+    "severity": "high",
+    "complaint_type_id": "neurologic",
+    "condition": {
+      "flag": "blood_seen",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Nörolojik / Denge / Nöbet takibinde kan görülmesi bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_toxin_foreign_body_severe_lethargy",
+    "name_tr": "Zehirlenme / Yabancı Cisim: Belirgin halsizlik / çökme",
+    "severity": "high",
+    "complaint_type_id": "toxin_foreign_body",
+    "condition": {
+      "flag": "severe_lethargy",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Zehirlenme / Yabancı Cisim takibinde belirgin halsizlik / çökme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_toxin_foreign_body_cannot_keep_water",
+    "name_tr": "Zehirlenme / Yabancı Cisim: Su tutamama",
+    "severity": "high",
+    "complaint_type_id": "toxin_foreign_body",
+    "condition": {
+      "flag": "cannot_keep_water",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Zehirlenme / Yabancı Cisim takibinde su tutamama bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_toxin_foreign_body_worsening_fast",
+    "name_tr": "Zehirlenme / Yabancı Cisim: Hızlı kötüleşme",
+    "severity": "high",
+    "complaint_type_id": "toxin_foreign_body",
+    "condition": {
+      "flag": "worsening_fast",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Zehirlenme / Yabancı Cisim takibinde hızlı kötüleşme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_toxin_foreign_body_severe_pain",
+    "name_tr": "Zehirlenme / Yabancı Cisim: Şiddetli ağrı",
+    "severity": "high",
+    "complaint_type_id": "toxin_foreign_body",
+    "condition": {
+      "flag": "severe_pain",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Zehirlenme / Yabancı Cisim takibinde şiddetli ağrı bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_toxin_foreign_body_blood_seen",
+    "name_tr": "Zehirlenme / Yabancı Cisim: Kan görülmesi",
+    "severity": "high",
+    "complaint_type_id": "toxin_foreign_body",
+    "condition": {
+      "flag": "blood_seen",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Zehirlenme / Yabancı Cisim takibinde kan görülmesi bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_mouth_dental_severe_lethargy",
+    "name_tr": "Ağız / Diş / Salya: Belirgin halsizlik / çökme",
+    "severity": "high",
+    "complaint_type_id": "mouth_dental",
+    "condition": {
+      "flag": "severe_lethargy",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Ağız / Diş / Salya takibinde belirgin halsizlik / çökme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_mouth_dental_cannot_keep_water",
+    "name_tr": "Ağız / Diş / Salya: Su tutamama",
+    "severity": "high",
+    "complaint_type_id": "mouth_dental",
+    "condition": {
+      "flag": "cannot_keep_water",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Ağız / Diş / Salya takibinde su tutamama bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_mouth_dental_worsening_fast",
+    "name_tr": "Ağız / Diş / Salya: Hızlı kötüleşme",
+    "severity": "high",
+    "complaint_type_id": "mouth_dental",
+    "condition": {
+      "flag": "worsening_fast",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Ağız / Diş / Salya takibinde hızlı kötüleşme bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_mouth_dental_severe_pain",
+    "name_tr": "Ağız / Diş / Salya: Şiddetli ağrı",
+    "severity": "high",
+    "complaint_type_id": "mouth_dental",
+    "condition": {
+      "flag": "severe_pain",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Ağız / Diş / Salya takibinde şiddetli ağrı bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  },
+  {
+    "id": "rf_mouth_dental_blood_seen",
+    "name_tr": "Ağız / Diş / Salya: Kan görülmesi",
+    "severity": "high",
+    "complaint_type_id": "mouth_dental",
+    "condition": {
+      "flag": "blood_seen",
+      "answer_value_in": [
+        "Evet",
+        "Şiddetli",
+        "Belirgin kötüleşti"
+      ]
+    },
+    "action_tr": "Ağız / Diş / Salya takibinde kan görülmesi bildirilirse risk yükseltilir ve veteriner değerlendirmesi önerilir.",
+    "force_emergency_screen": false,
+    "review_status": "draft_ai_generated"
+  }
+]

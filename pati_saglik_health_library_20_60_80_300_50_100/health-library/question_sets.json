@@ -1,0 +1,5175 @@
+[
+  {
+    "id": "red_flags_general",
+    "title_tr": "Genel Acil Belirti Kontrolü",
+    "category": "general",
+    "questions": [
+      {
+        "id": "rf_breathing_difficulty",
+        "text_tr": "Nefes almakta zorlanıyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "rf_collapse",
+        "text_tr": "Bayılma, yere yığılma veya bilinç kaybı oldu mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "rf_seizure",
+        "text_tr": "Nöbet, kasılma veya kontrolsüz titreme oldu mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "rf_severe_bleeding",
+        "text_tr": "Şiddetli veya durmayan kanama var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "rf_toxic_ingestion",
+        "text_tr": "Zehirli olabilecek bir şey yeme/içme ihtimali var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "rf_unable_to_urinate",
+        "text_tr": "İdrar yapmak istiyor ama hiç yapamıyor gibi mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "rf_major_trauma",
+        "text_tr": "Trafik kazası, yüksekten düşme veya ciddi darbe oldu mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "rf_abnormal_gums",
+        "text_tr": "Diş etleri mor, mavi, gri veya çok soluk mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "respiratory_red_flags",
+    "title_tr": "Solunum Acil Kontrolü",
+    "category": "respiratory_cough",
+    "questions": [
+      {
+        "id": "resp_open_mouth",
+        "text_tr": "Ağzı açık şekilde nefes alıyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "resp_blue_gums",
+        "text_tr": "Dili veya diş etleri mor/mavi görünüyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "resp_labored_rest",
+        "text_tr": "Dinlenirken bile nefes almakta zorlanıyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "resp_choking",
+        "text_tr": "Boğazına bir şey kaçmış veya tıkanmış gibi mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "resp_fainting",
+        "text_tr": "Öksürük veya nefes zorluğu sırasında bayılma oldu mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urinary_red_flags",
+    "title_tr": "İdrar Acil Kontrolü",
+    "category": "urine_stool",
+    "questions": [
+      {
+        "id": "ur_no_urine",
+        "text_tr": "İdrar yapmak için zorlanıyor ama hiç idrar yapamıyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "ur_male_cat",
+        "text_tr": "Erkek kedi ise kum kabında zorlanıp idrar yapamıyor gibi mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "ur_pain",
+        "text_tr": "İdrar yapmaya çalışırken ağlama/acı belirtisi var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "ur_blood",
+        "text_tr": "İdrarda gözle görülen kan var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "ur_lethargy",
+        "text_tr": "İdrar sorunu ile birlikte belirgin halsizlik var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic_red_flags",
+    "title_tr": "Nörolojik Acil Kontrol",
+    "category": "behavior",
+    "questions": [
+      {
+        "id": "neuro_active_seizure",
+        "text_tr": "Nöbet şu anda devam ediyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "neuro_repeated_seizure",
+        "text_tr": "Bugün birden fazla nöbet oldu mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "neuro_not_recovered",
+        "text_tr": "Nöbet/titreme sonrası normale dönemedi mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "neuro_hind_weakness",
+        "text_tr": "Arka bacaklarda ani güçsüzlük var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "neuro_toxin_possible",
+        "text_tr": "Zehirli madde veya ilaç yeme ihtimali var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "trauma_red_flags",
+    "title_tr": "Travma Acil Kontrol",
+    "category": "movement_gait",
+    "questions": [
+      {
+        "id": "trauma_car_fall",
+        "text_tr": "Trafik kazası, yüksekten düşme veya ciddi darbe oldu mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "trauma_bleeding",
+        "text_tr": "Kanama şiddetli veya devam ediyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "trauma_breathing",
+        "text_tr": "Travma sonrası nefes almasında değişiklik oldu mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "trauma_cannot_walk",
+        "text_tr": "Travma sonrası yürüyemiyor veya hiç basamıyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "trauma_severe_pain",
+        "text_tr": "Şiddetli ağrı belirtisi var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "general_condition_basic",
+    "title_tr": "Genel Durum",
+    "category": "general",
+    "questions": [
+      {
+        "id": "gen_duration",
+        "text_tr": "Bu durum ne zamandır var?",
+        "type": "duration",
+        "required": true,
+        "options": [
+          "Bugün",
+          "1-2 gündür",
+          "3-7 gündür",
+          "1 haftadan uzun",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "gen_activity",
+        "text_tr": "Hareketliliği normalden az mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Normal",
+          "Biraz az",
+          "Belirgin az",
+          "Neredeyse hiç hareket etmiyor",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "gen_response",
+        "text_tr": "Size ve çevresine tepkisi normal mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Normal",
+          "Daha sakin",
+          "Saklanıyor/kaçıyor",
+          "Tepkisiz gibi",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "gen_appetite",
+        "text_tr": "İştahında değişiklik var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Normal",
+          "Azaldı",
+          "Hiç yemiyor",
+          "Arttı",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "gen_water",
+        "text_tr": "Su içmesinde belirgin değişiklik var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Normal",
+          "Daha az",
+          "Daha çok",
+          "Hiç içmiyor",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "gen_temperature",
+        "text_tr": "Ateş ölçtünüz mü?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Hayır",
+          "Evet normal",
+          "Evet yüksek",
+          "Evet düşük",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "activity_behavior_basic",
+    "title_tr": "Aktivite / Davranış",
+    "category": "behavior",
+    "questions": [
+      {
+        "id": "act_sleep",
+        "text_tr": "Normalden daha fazla uyuyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "act_hiding",
+        "text_tr": "Saklanma veya yalnız kalma isteği arttı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "act_aggression",
+        "text_tr": "Normalden daha agresif veya huzursuz mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "act_play",
+        "text_tr": "Oyun/yürüyüş isteği azaldı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "act_video",
+        "text_tr": "Bu davranışı gösteren kısa video eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "behavior_video",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "digestive_appetite_basic",
+    "title_tr": "İştah",
+    "category": "appetite_digestive",
+    "questions": [
+      {
+        "id": "app_duration",
+        "text_tr": "İştah değişikliği ne zamandır var?",
+        "type": "duration",
+        "required": true,
+        "options": [
+          "Bugün",
+          "1-2 gündür",
+          "3-7 gündür",
+          "1 haftadan uzun",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "app_level",
+        "text_tr": "Ne kadar yemek yiyor?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Normal",
+          "Normalden az",
+          "Çok az",
+          "Hiç yemiyor",
+          "Sadece seçici yiyor",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "app_water",
+        "text_tr": "Su içmesi nasıl?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Normal",
+          "Azaldı",
+          "Arttı",
+          "Hiç içmiyor",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "app_interest",
+        "text_tr": "Mamaya ilgi gösterip sonra vazgeçiyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "app_mouth",
+        "text_tr": "Yemek yerken ağzını kullanmakta zorlanıyor veya salya akıtıyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "app_weight",
+        "text_tr": "Son dönemde kilo kaybı fark ettiniz mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "vomiting_basic",
+    "title_tr": "Kusma",
+    "category": "appetite_digestive",
+    "questions": [
+      {
+        "id": "vom_started",
+        "text_tr": "Kusma ne zaman başladı?",
+        "type": "duration",
+        "required": true,
+        "options": [
+          "Bugün",
+          "1-2 gündür",
+          "3-7 gündür",
+          "1 haftadan uzun",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "vom_count",
+        "text_tr": "Son 24 saatte kaç kez kustu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Hiç",
+          "1 kez",
+          "2-3 kez",
+          "4 veya daha fazla",
+          "Sürekli kusuyor",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Sürekli kusuyor"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "vom_blood",
+        "text_tr": "Kusmukta kan veya kahve telvesi gibi koyu parçalar gördünüz mü?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "vom_color",
+        "text_tr": "Kusmuk daha çok nasıl görünüyor?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Mama gibi",
+          "Sarı/safra gibi",
+          "Köpüklü",
+          "Kanlı",
+          "Yabancı madde var",
+          "Bilmiyorum"
+        ],
+        "red_flag_values": [
+          "Kanlı",
+          "Yabancı madde var"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "vom_water",
+        "text_tr": "Su içtiğinde de kusuyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "vom_foreign",
+        "text_tr": "Oyuncak, ip, kemik, çöp veya yabancı cisim yeme ihtimali var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea_basic",
+    "title_tr": "İshal",
+    "category": "urine_stool",
+    "questions": [
+      {
+        "id": "dia_duration",
+        "text_tr": "İshal ne zamandır var?",
+        "type": "duration",
+        "required": true,
+        "options": [
+          "Bugün",
+          "1-2 gündür",
+          "3-7 gündür",
+          "1 haftadan uzun",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "dia_frequency",
+        "text_tr": "Son 24 saatte kaç kez sulu dışkı yaptı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "1 kez",
+          "2-3 kez",
+          "4+ kez",
+          "Çok sık/tutamıyor",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "dia_blood",
+        "text_tr": "Dışkıda kan gördünüz mü?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "dia_black",
+        "text_tr": "Dışkı siyah, katran gibi veya çok koyu görünüyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "dia_mucus",
+        "text_tr": "Dışkıda mukus/jölemsi yapı var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "dia_photo",
+        "text_tr": "Dışkı fotoğrafı eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "stool_photo",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "constipation_basic",
+    "title_tr": "Kabızlık / Dışkı Yapamama",
+    "category": "urine_stool",
+    "questions": [
+      {
+        "id": "con_duration",
+        "text_tr": "Ne zamandır dışkı yapmadı veya zorlanıyor?",
+        "type": "duration",
+        "required": true,
+        "options": [
+          "Bugün",
+          "1-2 gündür",
+          "3-7 gündür",
+          "1 haftadan uzun",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "con_straining",
+        "text_tr": "Dışkı yapmak için zorlanıyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "con_pain",
+        "text_tr": "Zorlanırken ağrı, miyavlama veya inleme var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "con_vomit",
+        "text_tr": "Kusma da var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "con_appetite",
+        "text_tr": "İştahında azalma var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "con_urine_confusion",
+        "text_tr": "Bu durum idrar yapamama ile karışıyor olabilir mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "hydration_basic",
+    "title_tr": "Su Tüketimi / Sıvı Kaybı",
+    "category": "general",
+    "questions": [
+      {
+        "id": "hyd_water",
+        "text_tr": "Su içmesi nasıl değişti?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Normal",
+          "Azaldı",
+          "Arttı",
+          "Hiç içmiyor",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "hyd_urine",
+        "text_tr": "İdrar miktarında veya sıklığında değişiklik var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Normal",
+          "Arttı",
+          "Azaldı",
+          "Zorlanıyor",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "hyd_gums",
+        "text_tr": "Diş etleri kuru/yapışkan gibi mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "hyd_vomit_diarrhea",
+        "text_tr": "Kusma veya ishal nedeniyle sıvı kaybı olabilir mi?",
+        "type": "multi_choice",
+        "required": true,
+        "options": [
+          "Kusma var",
+          "İshal var",
+          "İkisi de var",
+          "Yok",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "hyd_behavior",
+        "text_tr": "Sıvı kaybı ile birlikte belirgin halsizlik var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "cough_basic",
+    "title_tr": "Öksürük",
+    "category": "respiratory_cough",
+    "questions": [
+      {
+        "id": "cough_duration",
+        "text_tr": "Öksürük ne zamandır var?",
+        "type": "duration",
+        "required": true,
+        "options": [
+          "Bugün",
+          "1-2 gündür",
+          "3-7 gündür",
+          "1 haftadan uzun",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "cough_frequency",
+        "text_tr": "Öksürük ne sıklıkta oluyor?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Ara sıra",
+          "Günde birkaç kez",
+          "Sık sık",
+          "Nöbet gibi",
+          "Sürekli"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "cough_type",
+        "text_tr": "Öksürük nasıl duyuluyor?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Kuru",
+          "Islak/balgamlı gibi",
+          "Boğazına bir şey takılmış gibi",
+          "Havlar gibi sert",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "cough_exercise",
+        "text_tr": "Egzersiz/oyun/yürüyüş sonrası artıyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "cough_breathing",
+        "text_tr": "Öksürük dışında nefes almakta zorlanma var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "cough_audio",
+        "text_tr": "Öksürük sesini kaydetmek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "cough_audio",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "breathing_basic",
+    "title_tr": "Solunum",
+    "category": "respiratory_cough",
+    "questions": [
+      {
+        "id": "bre_fast",
+        "text_tr": "Dinlenirken nefesi normalden hızlı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "bre_effort",
+        "text_tr": "Nefes alırken göğüs/karın hareketleri belirgin zorlanıyor gibi mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "bre_noise",
+        "text_tr": "Nefes alırken hırıltı, ıslık veya tıkanma sesi var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "breathing_audio",
+            "if_value": "Evet"
+          }
+        ]
+      },
+      {
+        "id": "bre_position",
+        "text_tr": "Rahat nefes almak için boynunu uzatma veya oturur pozisyonda kalma var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "bre_video",
+        "text_tr": "Dinlenirken kısa solunum videosu eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "breathing_video",
+            "if_value": "Evet"
+          }
+        ]
+      },
+      {
+        "id": "bre_rate",
+        "text_tr": "Dinlenirken 1 dakikadaki nefes sayısını girmek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "resting_respiratory_rate",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_basic",
+    "title_tr": "Göz",
+    "category": "eye",
+    "questions": [
+      {
+        "id": "eye_side",
+        "text_tr": "Hangi gözde sorun var?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Sağ göz",
+          "Sol göz",
+          "İki göz",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "eye_discharge",
+        "text_tr": "Akıntı var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Yok",
+          "Şeffaf/sulu",
+          "Sarı/yeşil",
+          "Kanlı",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Kanlı"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "eye_redness",
+        "text_tr": "Kızarıklık var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "eye_squint",
+        "text_tr": "Gözünü kısıyor veya kapalı tutuyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "eye_swelling",
+        "text_tr": "Göz veya göz çevresinde şişlik var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "eye_photo",
+        "text_tr": "Göz fotoğrafı eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "eye_photo",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_trauma_basic",
+    "title_tr": "Göz Travma Kontrolü",
+    "category": "eye",
+    "questions": [
+      {
+        "id": "eye_trauma",
+        "text_tr": "Göze darbe, çizilme veya yabancı cisim kaçma ihtimali var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "eye_cannot_open",
+        "text_tr": "Gözünü açamıyor veya sürekli kapalı tutuyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "eye_cloudy",
+        "text_tr": "Gözde belirgin bulanıklık/beyazlık görüyor musunuz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "eye_bleeding",
+        "text_tr": "Gözde veya çevresinde kanama var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "eye_pain",
+        "text_tr": "Göze dokunulunca şiddetli tepki veriyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_basic",
+    "title_tr": "Kulak",
+    "category": "ear",
+    "questions": [
+      {
+        "id": "ear_side",
+        "text_tr": "Hangi kulakta sorun var?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Sağ kulak",
+          "Sol kulak",
+          "İki kulak",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "ear_scratching",
+        "text_tr": "Kulağını kaşıyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "ear_head_shaking",
+        "text_tr": "Başını sık sık sallıyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "ear_smell",
+        "text_tr": "Kötü koku var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "ear_discharge",
+        "text_tr": "Akıntı veya yoğun kir var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Yok",
+          "Kahverengi/siyah kir",
+          "Sarı/yeşil akıntı",
+          "Kanlı",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Kanlı"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "ear_pain",
+        "text_tr": "Kulağa dokununca acı/tepki veriyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "ear_balance",
+        "text_tr": "Denge kaybı, baş eğik tutma veya yürürken sapma var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_basic",
+    "title_tr": "Deri / Tüy",
+    "category": "skin_fur",
+    "questions": [
+      {
+        "id": "skin_location",
+        "text_tr": "Sorun hangi bölgede?",
+        "type": "body_location",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "skin_type",
+        "text_tr": "Ne tür bir değişiklik görüyorsunuz?",
+        "type": "multi_choice",
+        "required": true,
+        "options": [
+          "Kızarıklık",
+          "Tüy dökülmesi",
+          "Kabuklanma",
+          "Yara",
+          "Şişlik",
+          "Kepeklenme",
+          "Akıntı",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "skin_itch",
+        "text_tr": "Kaşıntı veya sürekli yalama var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "skin_duration",
+        "text_tr": "Ne zamandır fark ediyorsunuz?",
+        "type": "duration",
+        "required": true,
+        "options": [
+          "Bugün",
+          "1-2 gündür",
+          "3-7 gündür",
+          "1 haftadan uzun",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "skin_spreading",
+        "text_tr": "Alan büyüyor veya yayılıyor gibi mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "skin_photo",
+        "text_tr": "Bölgenin fotoğrafını eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "skin_photo",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "itching_basic",
+    "title_tr": "Kaşıntı",
+    "category": "skin_fur",
+    "questions": [
+      {
+        "id": "itch_frequency",
+        "text_tr": "Ne sıklıkta kaşınıyor veya yalıyor?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Ara sıra",
+          "Günde birkaç kez",
+          "Sık sık",
+          "Neredeyse sürekli",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "itch_location",
+        "text_tr": "En çok hangi bölgeyi kaşıyor/yalıyor?",
+        "type": "body_location",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "itch_skin_change",
+        "text_tr": "Kaşınan bölgede kızarıklık, yara veya tüy dökülmesi var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "itch_parasite",
+        "text_tr": "Pire, kene veya siyah küçük parçacıklar fark ettiniz mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "itch_new_food_env",
+        "text_tr": "Son dönemde mama, şampuan, temizlik ürünü veya ortam değişti mi?",
+        "type": "multi_choice",
+        "required": true,
+        "options": [
+          "Mama",
+          "Şampuan",
+          "Temizlik ürünü",
+          "Ortam",
+          "Yok",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "itch_video",
+        "text_tr": "Kaşıma/yalama davranışını gösteren video eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "itching_video",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "wound_basic",
+    "title_tr": "Yara / Şişlik",
+    "category": "skin_fur",
+    "questions": [
+      {
+        "id": "wound_location",
+        "text_tr": "Yara veya şişlik hangi bölgede?",
+        "type": "body_location",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "wound_type",
+        "text_tr": "Nasıl görünüyor?",
+        "type": "multi_choice",
+        "required": true,
+        "options": [
+          "Kesik",
+          "Sıyrık",
+          "Delik/ısırık gibi",
+          "Şişlik",
+          "Kızarıklık",
+          "Akıntı",
+          "Kanama",
+          "Kabuk",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "wound_bleeding",
+        "text_tr": "Kanama var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Yok",
+          "Az",
+          "Devam ediyor",
+          "Şiddetli",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Şiddetli"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "wound_depth",
+        "text_tr": "Yara derin görünüyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "wound_pain",
+        "text_tr": "Dokununca ağrı/tepki var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "wound_photo",
+        "text_tr": "Yara/şişlik fotoğrafı eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "wound_photo",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "mouth_dental_basic",
+    "title_tr": "Ağız / Diş",
+    "category": "mouth_dental",
+    "questions": [
+      {
+        "id": "mouth_issue",
+        "text_tr": "Ağız veya dişle ilgili ne fark ettiniz?",
+        "type": "multi_choice",
+        "required": true,
+        "options": [
+          "Ağız kokusu",
+          "Diş eti kızarıklığı",
+          "Diş taşı gibi",
+          "Salya artışı",
+          "Yemek yerken zorlanma",
+          "Ağızda yara",
+          "Kanama",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "mouth_eating",
+        "text_tr": "Yemek yerken zorlanıyor veya ağzının bir tarafını kullanıyor gibi mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "mouth_drooling",
+        "text_tr": "Normalden fazla salya var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "mouth_gum_color",
+        "text_tr": "Diş etlerinin rengi normal pembe görünüyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Pembe/normal",
+          "Çok soluk",
+          "Mor/mavi/gri",
+          "Çok kırmızı",
+          "Bilmiyorum"
+        ],
+        "red_flag_values": [
+          "Mor/mavi/gri",
+          "Çok soluk"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "mouth_bleeding",
+        "text_tr": "Ağızda veya diş etinde kanama var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "mouth_photo",
+        "text_tr": "Ağız/diş fotoğrafı eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "mouth_photo",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urination_basic",
+    "title_tr": "İdrar",
+    "category": "urine_stool",
+    "questions": [
+      {
+        "id": "uri_frequency",
+        "text_tr": "İdrar sıklığında değişiklik var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Normal",
+          "Daha sık",
+          "Daha az",
+          "Hiç yapmıyor gibi",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Hiç yapmıyor gibi"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "uri_straining",
+        "text_tr": "İdrar yaparken zorlanıyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "uri_blood",
+        "text_tr": "İdrarda kan veya pembe/kırmızı renk gördünüz mü?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "uri_accidents",
+        "text_tr": "Ev içine/kum dışına idrar yapma başladı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "uri_thirst",
+        "text_tr": "Su içmesi arttı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "uri_strip",
+        "text_tr": "İdrar strip testi eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "urine_strip",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "movement_lameness_basic",
+    "title_tr": "Hareket / Topallama",
+    "category": "movement_gait",
+    "questions": [
+      {
+        "id": "mov_duration",
+        "text_tr": "Topallama veya hareket sorunu ne zamandır var?",
+        "type": "duration",
+        "required": true,
+        "options": [
+          "Bugün",
+          "1-2 gündür",
+          "3-7 gündür",
+          "1 haftadan uzun",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "mov_limb",
+        "text_tr": "Hangi bacak/pati etkilenmiş görünüyor?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Sağ ön",
+          "Sol ön",
+          "Sağ arka",
+          "Sol arka",
+          "Birden fazla",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "mov_bearing",
+        "text_tr": "Etkilenen bacağa basabiliyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Normal",
+          "Az basıyor",
+          "Hiç basmıyor",
+          "Bazen basıyor",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Hiç basmıyor"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "mov_trauma",
+        "text_tr": "Düşme, çarpma, kavga veya travma oldu mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "mov_swelling",
+        "text_tr": "Pati/bacakta şişlik, yara veya kanama görüyor musunuz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "mov_video",
+        "text_tr": "Yandan yürüyüş videosu eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "gait_video_side",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "trauma_basic",
+    "title_tr": "Travma",
+    "category": "movement_gait",
+    "questions": [
+      {
+        "id": "tra_type",
+        "text_tr": "Ne tür bir olay oldu?",
+        "type": "multi_choice",
+        "required": true,
+        "options": [
+          "Düşme",
+          "Çarpma",
+          "Trafik kazası",
+          "Kavga/ısırık",
+          "Sıkışma",
+          "Üzerine basıldı",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Trafik kazası"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "tra_time",
+        "text_tr": "Olay ne zaman oldu?",
+        "type": "duration",
+        "required": true,
+        "options": [
+          "Az önce",
+          "Bugün",
+          "Dün",
+          "Daha önce",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "tra_bleeding",
+        "text_tr": "Kanama var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Yok",
+          "Az",
+          "Devam ediyor",
+          "Şiddetli",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Şiddetli"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "tra_breathing",
+        "text_tr": "Olaydan sonra nefes almasında değişiklik oldu mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "tra_walk",
+        "text_tr": "Olaydan sonra yürüyebiliyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Zorlanıyor",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Hayır"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "tra_media",
+        "text_tr": "Etkilenen bölgenin fotoğrafını veya kısa videosunu eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "trauma_media",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain_basic",
+    "title_tr": "Ağrı",
+    "category": "general",
+    "questions": [
+      {
+        "id": "pain_location",
+        "text_tr": "Ağrı nerede gibi görünüyor?",
+        "type": "body_location",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "pain_severity",
+        "text_tr": "Ağrı tepkisi ne kadar şiddetli?",
+        "type": "scale",
+        "required": true,
+        "options": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "pain_touch",
+        "text_tr": "Dokununca tepki veriyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "pain_vocal",
+        "text_tr": "İnleme, ağlama veya çığlık var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "pain_behavior",
+        "text_tr": "Saklanma, saldırganlık veya huzursuzluk arttı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "pain_media",
+        "text_tr": "Ağrı davranışını veya bölgeyi gösteren kayıt eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "pain_media",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "neurologic_balance_basic",
+    "title_tr": "Nörolojik / Denge",
+    "category": "behavior",
+    "questions": [
+      {
+        "id": "neu_balance",
+        "text_tr": "Dengesiz yürüme veya düşme var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "neu_head_tilt",
+        "text_tr": "Başını sürekli eğik tutuyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "neu_eye_move",
+        "text_tr": "Gözlerde istemsiz hareket veya garip bakış var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "neu_tremor",
+        "text_tr": "Kontrolsüz titreme var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "neu_weak_limbs",
+        "text_tr": "Bacaklarda ani güçsüzlük var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "neu_video",
+        "text_tr": "Yürüyüş/dengesizlik videosu eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "neuro_video",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "seizure_basic",
+    "title_tr": "Nöbet",
+    "category": "behavior",
+    "questions": [
+      {
+        "id": "sei_now",
+        "text_tr": "Nöbet şu anda devam ediyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "sei_duration",
+        "text_tr": "Nöbet yaklaşık ne kadar sürdü?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "1 dakikadan az",
+          "1-3 dakika",
+          "3-5 dakika",
+          "5 dakikadan uzun",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "5 dakikadan uzun"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "sei_count",
+        "text_tr": "Bugün birden fazla nöbet oldu mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "sei_recovery",
+        "text_tr": "Nöbetten sonra normale döndü mü?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Hayır"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "sei_toxin",
+        "text_tr": "Zehirli madde veya ilaç yeme ihtimali var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Evet"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "sei_video",
+        "text_tr": "Güvenliyse nöbet/titreme videosu eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "seizure_video",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "foreign_body_toxin_basic",
+    "title_tr": "Zehirlenme / Yabancı Cisim",
+    "category": "general",
+    "questions": [
+      {
+        "id": "tox_item",
+        "text_tr": "Ne yemiş/içmiş/yalamış olabilir?",
+        "type": "multi_choice",
+        "required": true,
+        "options": [
+          "İnsan ilacı",
+          "Çikolata/kakao",
+          "Soğan/sarımsak",
+          "Üzüm/kuru üzüm",
+          "Temizlik ürünü",
+          "Bitki",
+          "Oyuncak/ip/plastik",
+          "Kemik",
+          "Fare/haşere zehiri",
+          "Bilmiyorum"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "tox_time",
+        "text_tr": "Ne zaman oldu?",
+        "type": "duration",
+        "required": true,
+        "options": [
+          "Az önce",
+          "Bugün",
+          "Dün",
+          "Daha önce",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "tox_amount",
+        "text_tr": "Yaklaşık ne kadar aldığı biliniyor mu?",
+        "type": "text",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "tox_symptoms",
+        "text_tr": "Şu belirtilerden biri var mı?",
+        "type": "multi_choice",
+        "required": true,
+        "options": [
+          "Kusma",
+          "İshal",
+          "Salya",
+          "Titreme",
+          "Nöbet",
+          "Halsizlik",
+          "Nefes zorluğu",
+          "Yok",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Nöbet",
+          "Nefes zorluğu"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "tox_photo",
+        "text_tr": "Yediği/yaladığı şeyin veya ambalajın fotoğrafını eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "toxin_package_photo",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_change_basic",
+    "title_tr": "Kilo Değişimi",
+    "category": "general",
+    "questions": [
+      {
+        "id": "wgt_current",
+        "text_tr": "Güncel kilosunu biliyor musunuz?",
+        "type": "number",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "wgt_direction",
+        "text_tr": "Kilo değişimi nasıl?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Kilo kaybetti",
+          "Kilo aldı",
+          "Emin değilim",
+          "Değişim yok"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "wgt_duration",
+        "text_tr": "Bu değişimi ne kadar sürede fark ettiniz?",
+        "type": "duration",
+        "required": true,
+        "options": [
+          "1 hafta",
+          "2-4 hafta",
+          "1-3 ay",
+          "Daha uzun",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "wgt_appetite",
+        "text_tr": "İştahı nasıl?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Normal",
+          "Azaldı",
+          "Arttı",
+          "Hiç yemiyor",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "wgt_thirst",
+        "text_tr": "Su içme veya idrar miktarı arttı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "wgt_photos",
+        "text_tr": "Vücut kondisyonu için üstten/yandan fotoğraf eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "body_condition_photos",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_vaccine_medication_basic",
+    "title_tr": "Aşı / İlaç Sonrası",
+    "category": "general",
+    "questions": [
+      {
+        "id": "med_event",
+        "text_tr": "Son dönemde ne oldu?",
+        "type": "multi_choice",
+        "required": true,
+        "options": [
+          "Aşı oldu",
+          "Yeni ilaç başladı",
+          "İlaç dozu değişti",
+          "Parazit uygulaması",
+          "Operasyon/işlem",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "med_time",
+        "text_tr": "Bu işlem/ilaç ne zaman oldu?",
+        "type": "duration",
+        "required": true,
+        "options": [
+          "Bugün",
+          "1-2 gün önce",
+          "3-7 gün önce",
+          "Daha önce",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "med_symptoms",
+        "text_tr": "Sonrasında ne fark ettiniz?",
+        "type": "multi_choice",
+        "required": true,
+        "options": [
+          "Halsizlik",
+          "Kusma",
+          "İshal",
+          "Kaşıntı",
+          "Yüz/göz çevresi şişlik",
+          "Nefes zorluğu",
+          "Aşı yerinde şişlik",
+          "İştahsızlık",
+          "Diğer"
+        ],
+        "red_flag_values": [
+          "Nefes zorluğu",
+          "Yüz/göz çevresi şişlik"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "med_photo",
+        "text_tr": "Aşı/uygulama bölgesi fotoğrafı eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "injection_site_photo",
+            "if_value": "Evet"
+          }
+        ]
+      },
+      {
+        "id": "med_name",
+        "text_tr": "İlaç/aşı adını biliyorsanız yazın.",
+        "type": "text",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "post_operation_basic",
+    "title_tr": "Operasyon Sonrası",
+    "category": "skin_fur",
+    "questions": [
+      {
+        "id": "post_type",
+        "text_tr": "Hangi işlem/operasyon sonrası takip yapıyorsunuz?",
+        "type": "text",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "post_date",
+        "text_tr": "İşlem ne zaman yapıldı?",
+        "type": "duration",
+        "required": true,
+        "options": [
+          "Bugün",
+          "1-2 gün önce",
+          "3-7 gün önce",
+          "Daha önce",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "post_wound",
+        "text_tr": "Operasyon/yara bölgesinde ne fark ettiniz?",
+        "type": "multi_choice",
+        "required": true,
+        "options": [
+          "Kızarıklık",
+          "Şişlik",
+          "Akıntı",
+          "Kanama",
+          "Kötü koku",
+          "Dikiş açılması",
+          "Sürekli yalama",
+          "Normal",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "post_appetite",
+        "text_tr": "Operasyondan sonra iştahı nasıl?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Normal",
+          "Azaldı",
+          "Hiç yemiyor",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "post_pain",
+        "text_tr": "Ağrı belirtisi var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "post_photo",
+        "text_tr": "Yara/operasyon bölgesi fotoğrafı eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "post_operation_wound_photo",
+            "if_value": "Evet"
+          }
+        ]
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pregnancy_birth_basic",
+    "title_tr": "Gebelik / Doğum / Yavru",
+    "category": "general",
+    "questions": [
+      {
+        "id": "preg_status",
+        "text_tr": "Durum hangisine daha yakın?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Gebelik şüphesi",
+          "Doğum başladı",
+          "Doğum sonrası takip",
+          "Yavru takibi",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "preg_vet",
+        "text_tr": "Bu süreç için veteriner kontrolü yapıldı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "preg_red",
+        "text_tr": "Aşağıdakilerden biri var mı?",
+        "type": "multi_choice",
+        "required": true,
+        "options": [
+          "Şiddetli kanama",
+          "Uzun süredir doğum ilerlemiyor",
+          "Anne çok halsiz",
+          "Kötü kokulu akıntı",
+          "Yavru nefes almıyor/ememiyor",
+          "Yok",
+          "Emin değilim"
+        ],
+        "red_flag_values": [
+          "Şiddetli kanama",
+          "Anne çok halsiz"
+        ],
+        "task_triggers": []
+      },
+      {
+        "id": "preg_temp",
+        "text_tr": "Ateş ölçümü var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "preg_note",
+        "text_tr": "Eklemek istediğiniz not var mı?",
+        "type": "text",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "routine_wellness_basic",
+    "title_tr": "Rutin Sağlık Kontrolü",
+    "category": "routine_check",
+    "questions": [
+      {
+        "id": "rou_goal",
+        "text_tr": "Bugün neyi kaydetmek istiyorsunuz?",
+        "type": "multi_choice",
+        "required": true,
+        "options": [
+          "Genel durum",
+          "Kilo",
+          "Aşı/ilaç",
+          "Diş/ağız",
+          "Deri/tüy",
+          "Aktivite",
+          "Rutin fotoğraf",
+          "Diğer"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "rou_appetite",
+        "text_tr": "İştahı normal mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "rou_activity",
+        "text_tr": "Hareketliliği normal mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "rou_weight",
+        "text_tr": "Kilo ölçümü eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "weight_measurement",
+            "if_value": "Evet"
+          }
+        ]
+      },
+      {
+        "id": "rou_photos",
+        "text_tr": "Rutin karşılaştırma için fotoğraf eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": [
+          {
+            "task_key": "routine_body_photo",
+            "if_value": "Evet"
+          }
+        ]
+      },
+      {
+        "id": "rou_notes",
+        "text_tr": "Bugünkü genel notunuz var mı?",
+        "type": "text",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "food_change_basic",
+    "title_tr": "Mama Değişikliği",
+    "category": "appetite_digestive",
+    "questions": [
+      {
+        "id": "food_change_basic_q1",
+        "text_tr": "Mama değişikliği ne zaman oldu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "food_change_basic_q2",
+        "text_tr": "Yeni mamaya geçiş ani mi oldu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "food_change_basic_q3",
+        "text_tr": "Kusma/ishal eşlik ediyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "food_change_basic_q4",
+        "text_tr": "İştah nasıl?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "food_change_basic_q5",
+        "text_tr": "Mama paket/fotoğraf notu eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "environment_exposure_basic",
+    "title_tr": "Ortam / Kimyasal Temas",
+    "category": "general",
+    "questions": [
+      {
+        "id": "environment_exposure_basic_q1",
+        "text_tr": "Temizlik ürünü, bitki veya kimyasal temas oldu mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "environment_exposure_basic_q2",
+        "text_tr": "Temas ne zaman oldu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "environment_exposure_basic_q3",
+        "text_tr": "Salya/kusma/titreme var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "environment_exposure_basic_q4",
+        "text_tr": "Cilt veya göz teması var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "environment_exposure_basic_q5",
+        "text_tr": "Ambalaj fotoğrafı eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "allergy_skin_basic",
+    "title_tr": "Alerji Benzeri Deri Belirtileri",
+    "category": "skin_fur",
+    "questions": [
+      {
+        "id": "allergy_skin_basic_q1",
+        "text_tr": "Kaşıntı aniden mi başladı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "allergy_skin_basic_q2",
+        "text_tr": "Yüz/göz çevresinde şişlik var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "allergy_skin_basic_q3",
+        "text_tr": "Yeni mama/şampuan/ilaç var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "allergy_skin_basic_q4",
+        "text_tr": "Nefes zorluğu var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "allergy_skin_basic_q5",
+        "text_tr": "Fotoğraf eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "gum_color_basic",
+    "title_tr": "Diş Eti Rengi Kontrolü",
+    "category": "mouth_dental",
+    "questions": [
+      {
+        "id": "gum_color_basic_q1",
+        "text_tr": "Diş eti rengi nasıl?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "gum_color_basic_q2",
+        "text_tr": "Normalden soluk mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "gum_color_basic_q3",
+        "text_tr": "Mor/mavi/gri ton var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "gum_color_basic_q4",
+        "text_tr": "Halsizlik eşlik ediyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "gum_color_basic_q5",
+        "text_tr": "Diş eti fotoğrafı eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "body_condition_basic",
+    "title_tr": "Vücut Kondisyonu",
+    "category": "general",
+    "questions": [
+      {
+        "id": "body_condition_basic_q1",
+        "text_tr": "Kaburgalar belirgin mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "body_condition_basic_q2",
+        "text_tr": "Bel hattı belirgin mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "body_condition_basic_q3",
+        "text_tr": "Karın sarkması/artışı var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "body_condition_basic_q4",
+        "text_tr": "Son kilo ne zaman ölçüldü?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "body_condition_basic_q5",
+        "text_tr": "Üstten/yandan fotoğraf eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "senior_pet_basic",
+    "title_tr": "Yaşlı Pet Kontrolü",
+    "category": "chronic_tracking",
+    "questions": [
+      {
+        "id": "senior_pet_basic_q1",
+        "text_tr": "Hareketlilikte azalma var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "senior_pet_basic_q2",
+        "text_tr": "Su içme/idrar değişimi var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "senior_pet_basic_q3",
+        "text_tr": "İştah değişimi var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "senior_pet_basic_q4",
+        "text_tr": "Öksürük/nefes değişimi var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "senior_pet_basic_q5",
+        "text_tr": "Kilo değişimi var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "chronic_kidney_basic",
+    "title_tr": "Kronik Böbrek Takibi",
+    "category": "chronic_tracking",
+    "questions": [
+      {
+        "id": "chronic_kidney_basic_q1",
+        "text_tr": "Su içmesi arttı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "chronic_kidney_basic_q2",
+        "text_tr": "İdrar miktarı değişti mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "chronic_kidney_basic_q3",
+        "text_tr": "İştahı nasıl?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "chronic_kidney_basic_q4",
+        "text_tr": "Kilo kaybı var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "chronic_kidney_basic_q5",
+        "text_tr": "Son veteriner/kan tahlili notu var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "chronic_diabetes_basic",
+    "title_tr": "Diyabet Takibi",
+    "category": "chronic_tracking",
+    "questions": [
+      {
+        "id": "chronic_diabetes_basic_q1",
+        "text_tr": "Su içmesi arttı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "chronic_diabetes_basic_q2",
+        "text_tr": "İdrar sıklığı arttı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "chronic_diabetes_basic_q3",
+        "text_tr": "İştah artarken kilo kaybı var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "chronic_diabetes_basic_q4",
+        "text_tr": "Halsizlik var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "chronic_diabetes_basic_q5",
+        "text_tr": "İlaç/insülin planı veteriner tarafından verildi mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "chronic_heart_basic",
+    "title_tr": "Kalp / Öksürük Takibi",
+    "category": "chronic_tracking",
+    "questions": [
+      {
+        "id": "chronic_heart_basic_q1",
+        "text_tr": "Öksürük arttı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "chronic_heart_basic_q2",
+        "text_tr": "Dinlenirken nefes hızlı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "chronic_heart_basic_q3",
+        "text_tr": "Egzersiz toleransı azaldı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "chronic_heart_basic_q4",
+        "text_tr": "Bayılma oldu mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "chronic_heart_basic_q5",
+        "text_tr": "Solunum videosu eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "parasite_basic",
+    "title_tr": "Pire / Kene / Parazit Şüphesi",
+    "category": "skin_fur",
+    "questions": [
+      {
+        "id": "parasite_basic_q1",
+        "text_tr": "Pire/kene gördünüz mü?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "parasite_basic_q2",
+        "text_tr": "Siyah küçük parçacıklar var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "parasite_basic_q3",
+        "text_tr": "Kaşıntı nerede yoğun?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "parasite_basic_q4",
+        "text_tr": "Son parazit uygulaması ne zaman?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "parasite_basic_q5",
+        "text_tr": "Fotoğraf eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "anal_gland_basic",
+    "title_tr": "Popo Sürme / Anal Bölge",
+    "category": "skin_fur",
+    "questions": [
+      {
+        "id": "anal_gland_basic_q1",
+        "text_tr": "Poposunu yere sürtüyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "anal_gland_basic_q2",
+        "text_tr": "Anal bölgede şişlik/kızarıklık var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "anal_gland_basic_q3",
+        "text_tr": "Kötü koku/akıntı var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "anal_gland_basic_q4",
+        "text_tr": "Dışkı değişimi var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "anal_gland_basic_q5",
+        "text_tr": "Fotoğraf eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "vomiting_followup_short",
+    "title_tr": "Kusma Takibi Kısa Sorular",
+    "category": "appetite_digestive",
+    "questions": [
+      {
+        "id": "vomiting_followup_short_q1",
+        "text_tr": "Son kontrolden beri kaç kez kustu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "vomiting_followup_short_q2",
+        "text_tr": "Kan/yabancı cisim gördünüz mü?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "vomiting_followup_short_q3",
+        "text_tr": "İştahı nasıl?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "vomiting_followup_short_q4",
+        "text_tr": "Su içebiliyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "vomiting_followup_short_q5",
+        "text_tr": "Halsizlik arttı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "diarrhea_followup_short",
+    "title_tr": "İshal Takibi Kısa Sorular",
+    "category": "urine_stool",
+    "questions": [
+      {
+        "id": "diarrhea_followup_short_q1",
+        "text_tr": "Dışkı sayısı arttı mı azaldı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "diarrhea_followup_short_q2",
+        "text_tr": "Kan/siyahlık var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "diarrhea_followup_short_q3",
+        "text_tr": "Su içmesi nasıl?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "diarrhea_followup_short_q4",
+        "text_tr": "Halsizlik var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "diarrhea_followup_short_q5",
+        "text_tr": "Fotoğraf eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "limping_followup_short",
+    "title_tr": "Topallama Takibi Kısa Sorular",
+    "category": "movement_gait",
+    "questions": [
+      {
+        "id": "limping_followup_short_q1",
+        "text_tr": "Etkilenen bacağa daha iyi basıyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "limping_followup_short_q2",
+        "text_tr": "Ağrı arttı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "limping_followup_short_q3",
+        "text_tr": "Şişlik/yara oluştu mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "limping_followup_short_q4",
+        "text_tr": "Yürüyüş videosu eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "limping_followup_short_q5",
+        "text_tr": "Travma sonrası kötüleşme var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "eye_followup_short",
+    "title_tr": "Göz Takibi Kısa Sorular",
+    "category": "eye",
+    "questions": [
+      {
+        "id": "eye_followup_short_q1",
+        "text_tr": "Akıntı azaldı mı arttı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "eye_followup_short_q2",
+        "text_tr": "Kızarıklık azaldı mı arttı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "eye_followup_short_q3",
+        "text_tr": "Gözünü daha fazla mı kısıyor?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "eye_followup_short_q4",
+        "text_tr": "Şişlik var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "eye_followup_short_q5",
+        "text_tr": "Yeni fotoğraf eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_followup_short",
+    "title_tr": "Kulak Takibi Kısa Sorular",
+    "category": "ear",
+    "questions": [
+      {
+        "id": "ear_followup_short_q1",
+        "text_tr": "Kaşıma azaldı mı arttı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "ear_followup_short_q2",
+        "text_tr": "Baş sallama devam ediyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "ear_followup_short_q3",
+        "text_tr": "Kötü koku/akıntı var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "ear_followup_short_q4",
+        "text_tr": "Dokununca ağrı var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "ear_followup_short_q5",
+        "text_tr": "Yeni görüntü eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "skin_followup_short",
+    "title_tr": "Deri/Yara Takibi Kısa Sorular",
+    "category": "skin_fur",
+    "questions": [
+      {
+        "id": "skin_followup_short_q1",
+        "text_tr": "Alan büyüdü mü küçüldü mü?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "skin_followup_short_q2",
+        "text_tr": "Kızarıklık arttı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "skin_followup_short_q3",
+        "text_tr": "Akıntı/koku oluştu mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "skin_followup_short_q4",
+        "text_tr": "Pet bölgeyi yalıyor/kaşıyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "skin_followup_short_q5",
+        "text_tr": "Yeni fotoğraf eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "respiratory_followup_short",
+    "title_tr": "Solunum/Öksürük Takibi Kısa Sorular",
+    "category": "respiratory_cough",
+    "questions": [
+      {
+        "id": "respiratory_followup_short_q1",
+        "text_tr": "Öksürük sıklığı arttı mı azaldı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "respiratory_followup_short_q2",
+        "text_tr": "Dinlenirken nefes daha rahat mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "respiratory_followup_short_q3",
+        "text_tr": "Hırıltı devam ediyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "respiratory_followup_short_q4",
+        "text_tr": "Nefes zorluğu/morarma/bayılma oldu mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "respiratory_followup_short_q5",
+        "text_tr": "Yeni ses/video eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "urinary_followup_short",
+    "title_tr": "İdrar Takibi Kısa Sorular",
+    "category": "urine_stool",
+    "questions": [
+      {
+        "id": "urinary_followup_short_q1",
+        "text_tr": "İdrar yapabiliyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "urinary_followup_short_q2",
+        "text_tr": "Sık kum kabına gitme devam ediyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "urinary_followup_short_q3",
+        "text_tr": "Kan gördünüz mü?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "urinary_followup_short_q4",
+        "text_tr": "Su içmesi arttı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "urinary_followup_short_q5",
+        "text_tr": "Strip sonucu eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "operation_followup_short",
+    "title_tr": "Operasyon Takibi Kısa Sorular",
+    "category": "skin_fur",
+    "questions": [
+      {
+        "id": "operation_followup_short_q1",
+        "text_tr": "Yara bölgesi önceki kontrole göre nasıl?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "operation_followup_short_q2",
+        "text_tr": "Akıntı/koku/kanama var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "operation_followup_short_q3",
+        "text_tr": "İştahı nasıl?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "operation_followup_short_q4",
+        "text_tr": "Ateş ölçtünüz mü?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "operation_followup_short_q5",
+        "text_tr": "Yeni fotoğraf eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "weight_followup_short",
+    "title_tr": "Kilo Takibi Kısa Sorular",
+    "category": "general",
+    "questions": [
+      {
+        "id": "weight_followup_short_q1",
+        "text_tr": "Yeni kilo ölçümü var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "weight_followup_short_q2",
+        "text_tr": "İştah değişti mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "weight_followup_short_q3",
+        "text_tr": "Su/idrar değişti mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "weight_followup_short_q4",
+        "text_tr": "Aktivite değişti mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "weight_followup_short_q5",
+        "text_tr": "Mama miktarı değişti mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "pain_followup_short",
+    "title_tr": "Ağrı Takibi Kısa Sorular",
+    "category": "general",
+    "questions": [
+      {
+        "id": "pain_followup_short_q1",
+        "text_tr": "Ağrı tepkisi azaldı mı arttı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "pain_followup_short_q2",
+        "text_tr": "Dokununca tepki devam ediyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "pain_followup_short_q3",
+        "text_tr": "Hareket daha rahat mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "pain_followup_short_q4",
+        "text_tr": "Yeni belirti eklendi mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "pain_followup_short_q5",
+        "text_tr": "Video/fotoğraf eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "toxin_followup_short",
+    "title_tr": "Zehirlenme/Yabancı Cisim Takibi",
+    "category": "general",
+    "questions": [
+      {
+        "id": "toxin_followup_short_q1",
+        "text_tr": "Veterinerle görüşüldü mü?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "toxin_followup_short_q2",
+        "text_tr": "Kusma/salya/titreme oldu mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "toxin_followup_short_q3",
+        "text_tr": "Yabancı madde dışkıyla çıktı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "toxin_followup_short_q4",
+        "text_tr": "Halsizlik var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "toxin_followup_short_q5",
+        "text_tr": "Yeni belirti var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "newborn_basic",
+    "title_tr": "Yavru Takibi",
+    "category": "general",
+    "questions": [
+      {
+        "id": "newborn_basic_q1",
+        "text_tr": "Yavru emiyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "newborn_basic_q2",
+        "text_tr": "Kilo alımı takip ediliyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "newborn_basic_q3",
+        "text_tr": "Halsizlik/soğukluk var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "newborn_basic_q4",
+        "text_tr": "Anne ilgileniyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "newborn_basic_q5",
+        "text_tr": "Acil belirti var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "heatstroke_basic",
+    "title_tr": "Sıcak Çarpması Şüphesi",
+    "category": "general",
+    "questions": [
+      {
+        "id": "heatstroke_basic_q1",
+        "text_tr": "Sıcağa maruz kaldı mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "heatstroke_basic_q2",
+        "text_tr": "Aşırı soluma var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "heatstroke_basic_q3",
+        "text_tr": "Halsizlik/çökme var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "heatstroke_basic_q4",
+        "text_tr": "Kusma/ishal var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "heatstroke_basic_q5",
+        "text_tr": "Diş eti rengi normal mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "bloat_basic",
+    "title_tr": "Karın Şişliği / Öğürme",
+    "category": "appetite_digestive",
+    "questions": [
+      {
+        "id": "bloat_basic_q1",
+        "text_tr": "Karın aniden şişti mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "bloat_basic_q2",
+        "text_tr": "Öğürüyor ama kusamıyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "bloat_basic_q3",
+        "text_tr": "Huzursuzluk var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "bloat_basic_q4",
+        "text_tr": "Nefes zorluğu var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "bloat_basic_q5",
+        "text_tr": "Acil veteriner yönlendirmesi gerekli mi?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  },
+  {
+    "id": "ear_balance_basic",
+    "title_tr": "Kulak + Denge Kontrolü",
+    "category": "ear",
+    "questions": [
+      {
+        "id": "ear_balance_basic_q1",
+        "text_tr": "Baş eğik duruyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "ear_balance_basic_q2",
+        "text_tr": "Denge kaybı var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "ear_balance_basic_q3",
+        "text_tr": "Kusma eşlik ediyor mu?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "ear_balance_basic_q4",
+        "text_tr": "Kulak ağrısı/akıntı var mı?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      },
+      {
+        "id": "ear_balance_basic_q5",
+        "text_tr": "Video eklemek ister misiniz?",
+        "type": "single_choice",
+        "required": true,
+        "options": [
+          "Evet",
+          "Hayır",
+          "Emin değilim"
+        ],
+        "red_flag_values": [],
+        "task_triggers": []
+      }
+    ],
+    "review_status": "draft_ai_generated",
+    "version": 1
+  }
+]

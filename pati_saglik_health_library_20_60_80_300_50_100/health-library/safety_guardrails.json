@@ -1,0 +1,22 @@
+{
+  "banned_recommendation_patterns_tr": [
+    "ilaç verin",
+    "doz",
+    "antibiyotik verin",
+    "ağrı kesici verin",
+    "parasetamol verin",
+    "ibuprofen verin",
+    "damla damlatın",
+    "krem sürün",
+    "kusturun",
+    "aç bırakın",
+    "su vermeyin",
+    "tavuk pirinç verin",
+    "veterinere gerek yok",
+    "evde geçer",
+    "kesin teşhis",
+    "hastalık var"
+  ],
+  "required_disclaimer_tr": "Bu değerlendirme veteriner muayenesinin yerine geçmez. Acil veya kötüleşen belirtilerde beklemeden veteriner kliniğine başvurun.",
+  "ai_role_tr": "AI öneri metni serbest üretmez; kategori, risk, soru seti, görev, öneri bloğu ve takip protokolü ID'lerini seçer."
+}

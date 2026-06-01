@@ -1,0 +1,571 @@
+/* ============================================
+   PATI SAĞLIK — Design System
+   Premium Light Mode Mobile UI
+   ============================================ */
+
+/* ---------- CSS Custom Properties ---------- */
+:root {
+  /* Primary Palette */
+  --primary: #005B4C;
+  --primary-light: #0F766E;
+  --primary-dark: #003D34;
+  --primary-50: #EDF7F4;
+  --primary-100: #D6EEE7;
+  --primary-200: #A9D8CE;
+
+  /* Secondary — Warm Orange/Coral */
+  --secondary: #B8893B;
+  --secondary-light: #D7B36A;
+  --secondary-dark: #8C6426;
+  --secondary-50: #FFF8E8;
+  --secondary-100: #F6E2A9;
+
+  /* Accent — Rose/Pink (pati/love) */
+  --accent: #475569;
+  --accent-light: #94A3B8;
+  --accent-dark: #1E293B;
+  --accent-50: #F1F5F9;
+
+  /* Teal — Health */
+  --teal: #0F766E;
+  --teal-light: #2A9D8F;
+  --teal-dark: #075E54;
+  --teal-50: #EEF9F6;
+
+  /* Risk Colors */
+  --risk-low: #10B981;
+  --risk-low-bg: #ECFDF5;
+  --risk-medium: #F59E0B;
+  --risk-medium-bg: #FFFBEB;
+  --risk-high: #F97316;
+  --risk-high-bg: #FFF7ED;
+  --risk-critical: #EF4444;
+  --risk-critical-bg: #FEF2F2;
+
+  /* Neutral Palette */
+  --white: #FFFFFF;
+  --gray-50: #F7FAFC;
+  --gray-100: #EEF3F6;
+  --gray-200: #DDE7EC;
+  --gray-300: #C6D3DA;
+  --gray-400: #94A3AD;
+  --gray-500: #64727C;
+  --gray-600: #47545D;
+  --gray-700: #2F3A42;
+  --gray-800: #1F2930;
+  --gray-900: #11181D;
+
+  /* Semantic */
+  --bg-primary: #F7FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-tertiary: #EEF3F6;
+  --text-primary: #111C18;
+  --text-secondary: #59645F;
+  --text-tertiary: #7D8A91;
+  --text-inverse: #FFFFFF;
+  --border-color: #E2E8EE;
+  --border-light: #EDF2F5;
+  --divider: #E6EDF1;
+
+  /* Shadows */
+  --shadow-xs: 0 2px 4px rgba(0, 0, 0, 0.02);
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 12px 24px -4px rgba(0, 0, 0, 0.06), 0 8px 16px -8px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 20px 40px -8px rgba(0, 0, 0, 0.08), 0 12px 24px -12px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 32px 64px -12px rgba(0, 0, 0, 0.10), 0 16px 32px -16px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 8px 24px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.02);
+  --shadow-card-hover: 0 16px 40px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.04);
+  --shadow-tab: 0 -8px 24px rgba(15, 23, 42, 0.05);
+  --shadow-primary: 0 14px 28px -8px rgba(0, 91, 76, 0.34);
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glass-bg-dark: rgba(255, 255, 255, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.4);
+  --glass-border-light: rgba(255, 255, 255, 0.65);
+  --glass-blur: blur(20px);
+
+  /* Typography */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-size-xs: 0.6875rem;   /* 11px */
+  --font-size-sm: 0.75rem;     /* 12px */
+  --font-size-base: 0.875rem;  /* 14px */
+  --font-size-md: 1rem;        /* 16px */
+  --font-size-lg: 1.125rem;    /* 18px */
+  --font-size-xl: 1.25rem;     /* 20px */
+  --font-size-2xl: 1.5rem;     /* 24px */
+  --font-size-3xl: 1.875rem;   /* 30px */
+  --font-size-4xl: 2.25rem;    /* 36px */
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+
+  /* Border Radius (Rounder for modern feel) */
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Z-Index */
+  --z-base: 1;
+  --z-header: 100;
+  --z-tab: 100;
+  --z-modal-backdrop: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+
+  /* Transition */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 350ms ease;
+  --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Layout */
+  --max-width: 430px;
+  --header-height: 56px;
+  --tab-height: 64px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-primary);
+  background-image: linear-gradient(180deg, #FFFFFF 0%, #F4FBF9 52%, #F7FAFC 100%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+#app {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+  background-color: #FFFFFF;
+  background-image: linear-gradient(180deg, #FFFFFF 0%, #F4FBF9 42%, #F7FAFC 100%);
+  background-attachment: fixed;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.06), -1px 0 0 var(--border-light), 1px 0 0 var(--border-light);
+}
+
+/* ---------- App Layout ---------- */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.app-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: calc(var(--tab-height) + var(--safe-bottom) + var(--space-4));
+  -webkit-overflow-scrolling: touch;
+}
+
+.app-content.no-tab {
+  padding-bottom: var(--safe-bottom);
+}
+
+.screen {
+  animation: screenFadeIn 0.3s ease;
+}
+
+.screen-padded {
+  padding: var(--space-4) var(--space-4) var(--space-6);
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar {
+  width: 0;
+  display: none;
+}
+
+/* ---------- Typography ---------- */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+
+h1 { font-size: var(--font-size-2xl); }
+h2 { font-size: var(--font-size-xl); }
+h3 { font-size: var(--font-size-lg); }
+h4 { font-size: var(--font-size-md); }
+
+p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+/* ---------- Utility ---------- */
+.text-center { text-align: center; }
+.text-sm { font-size: var(--font-size-sm); }
+.text-xs { font-size: var(--font-size-xs); }
+.text-secondary { color: var(--text-secondary); }
+.text-tertiary { color: var(--text-tertiary); }
+.text-primary-color { color: var(--primary); }
+.text-danger { color: var(--risk-critical); }
+.text-warning { color: var(--risk-medium); }
+.text-success { color: var(--risk-low); }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+.font-medium { font-weight: 500; }
+
+.mt-1 { margin-top: var(--space-1); }
+.mt-2 { margin-top: var(--space-2); }
+.mt-3 { margin-top: var(--space-3); }
+.mt-4 { margin-top: var(--space-4); }
+.mt-6 { margin-top: var(--space-6); }
+.mt-8 { margin-top: var(--space-8); }
+.mb-1 { margin-bottom: var(--space-1); }
+.mb-2 { margin-bottom: var(--space-2); }
+.mb-3 { margin-bottom: var(--space-3); }
+.mb-4 { margin-bottom: var(--space-4); }
+.mb-6 { margin-bottom: var(--space-6); }
+
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.gap-1 { gap: var(--space-1); }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }
+
+.w-full { width: 100%; }
+.hidden { display: none !important; }
+
+/* ---------- Gradient Backgrounds ---------- */
+.gradient-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+}
+
+.gradient-hero {
+  background: linear-gradient(160deg, #F0F9FF 0%, #E0F2FE 30%, #F0FDFA 70%, #FFF7ED 100%);
+}
+
+.gradient-warm {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--accent) 100%);
+}
+
+.gradient-health {
+  background: linear-gradient(135deg, var(--teal) 0%, var(--primary) 100%);
+}
+
+/* ---------- Animations ---------- */
+@keyframes screenFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+@keyframes dotPulse {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes checkmarkDraw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* Staggered animation delays */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+.stagger-5 { animation-delay: 0.25s; }
+.stagger-6 { animation-delay: 0.3s; }
+
+/* ---------- Version Badge ---------- */
+.version-badge {
+  position: fixed;
+  top: var(--space-2);
+  left: var(--space-2);
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  padding: 2px 6px;
+  border-radius: var(--radius-full);
+  z-index: var(--z-toast);
+  letter-spacing: 0.5px;
+  opacity: 0.7;
+}
+
+/* ---------- Form Elements ---------- */
+input, textarea, select {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="tel"],
+textarea,
+select {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  color: var(--text-primary);
+  font-size: var(--font-size-base);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  outline: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-100);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-tertiary);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+}
+
+label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-1);
+  letter-spacing: 0.01em;
+}
+
+.form-group {
+  margin-bottom: var(--space-4);
+}
+
+.form-hint {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  margin-top: var(--space-1);
+}
+
+/* Checkbox / Radio custom */
+.checkbox-group,
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.checkbox-item,
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--white);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+
+.checkbox-item:active,
+.radio-item:active {
+  transform: scale(0.98);
+}
+
+.checkbox-item.selected,
+.radio-item.selected {
+  border-color: var(--primary);
+  background: var(--primary-50);
+}
+
+.radio-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--gray-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.radio-item.selected .radio-dot {
+  border-color: var(--primary);
+}
+
+.radio-dot::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--primary);
+  transform: scale(0);
+  transition: transform var(--transition-spring);
+}
+
+.radio-item.selected .radio-dot::after {
+  transform: scale(1);
+}
+
+.check-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 2px solid var(--gray-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.checkbox-item.selected .check-box {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.check-box svg {
+  width: 12px;
+  height: 12px;
+  stroke: white;
+  stroke-width: 3;
+  fill: none;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.checkbox-item.selected .check-box svg {
+  opacity: 1;
+}
