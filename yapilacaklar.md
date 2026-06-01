@@ -45,7 +45,7 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
 - [x] Profil plan açıklaması ücretsiz ham kayıtlar ile kredi/Pro AI-OCR alanını net ayıracak şekilde güncellendi.
 - [x] Production icin ilk server/API katmani eklendi: Node API, Dockerfile, health endpoint ve B2 signed upload/download ilk fazı.
 - [x] Pet ekleme/secme ve listeleme ekranlari DB okuma-yazma + local fallback hattina baglandi.
-- [ ] Native plugin kurulumu/store build, odeme/abonelik ve production API servisleri kodlanmadi; AI/OCR frontend ilk fazı var, canlıda server/API katmanına taşınacak.
+- [ ] Native plugin kurulumu/store build ve odeme/abonelik kodlanmadı. Production API, B2 signed upload ve AI/OCR server ilk fazı canlıya alındı.
 
 - [x] 5. Toksik Madde / Yabancı Cisim Acil Kontrolü
   - Ekran tasarımı yapıldı: `/feature/toxic`
@@ -432,7 +432,7 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
   - [x] AI şikayet sınıflandırıcısı pet bağlamına göre risk uyarısı ve görev/soru önceliği üretiyor.
   - [x] Ambalaj risk kontrolü de tür/yaşam evresi/kilo bağlamını sonuç açıklamasına dahil ediyor.
   - [x] Build, pet bağlamı yardımcı testi ve `/profile`, `/profile/account`, `/auth/register`, `/auth/login`, `/check/package-risk` browser smoke testleri geçti.
-- [ ] Ürün yönü / eklenecek değer modülleri.
+- [x] Ürün yönü / eklenecek değer modülleri ilk faz kapsamı kapatıldı.
   - [x] Pet Sağlık Pasaportu ürün dili güçlendirildi: profil, sağlık arşivi, ölçümler, belgeler, aşı/parazit, masraf, QR ve geçmiş tek “pasaport” çatısı altında ilk faz olarak gösteriliyor.
   - [x] AI Ön Şikayet Dosyası “Veterinere Hazır Rapor” olarak ilk faz ürünleştirildi: anamnez, kırmızı bayrak, yanıtlar, görev/medya durumu, güvenli takip ve uyarılar paylaşılabilir link ekranında gösteriliyor; PDF/çıktı üretimi özellikle yapılmadı.
   - [x] Aciliyet seviyesi trafik ışığı diliyle netleştirildi: yeşil, sarı, turuncu, kırmızı. Dil teşhis değil “aciliyet riski / yönlendirme” olarak tutuldu.
@@ -440,7 +440,7 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
   - [x] Mama / İlaç / Ürün Güvenlik Radarı ayrı modül olarak eklendi. Bu modül toksik ambalaj kontrolüyle karıştırılmıyor; geri çağırma, lot/seri, ürün adı, barkod ve güvenlik uyarısı takibinin ilk fazını yapıyor.
   - [x] Ambalaj Risk Kontrolü ayrı kaldı: zehirlenme/yabancı cisim şüphesinde ambalaj/fotoğraf/içerik üzerinden hızlı risk tarama, acil kayıt akışı ve opsiyonel Gemini güvenli özeti çalışıyor.
   - [x] Çevresel Risk Asistanı ve Hafif Veteriner Inbox kullanıcı kararıyla şimdilik kapsam dışına alındı.
-  - [ ] API entegrasyonları sadece ücretsiz, makul limitli veya ticari olarak sürdürülebilir ise eklenecek; ücretli/karmaşık API’ler ürün çekirdeği hazır olana kadar ertelenecek.
-  - [ ] Değerlendirilecek API adayları: openFDA recall/adverse events, Open Pet Food Facts, Open-Meteo hava/air quality. Google Places/Foursquare ve wearable API’leri ücret/erişim durumuna göre daha sonraya bırakılacak.
-- [ ] AI işleme, native plugin kurulumu/store build testi ve arka plan push teslimi henüz yapılmadı.
+  - [x] API entegrasyonları kullanıcı kararıyla sonraya ertelendi; sadece sürdürülebilir/ücretsiz kaynaklar daha sonra değerlendirilecek.
+  - [x] Değerlendirilecek API adayları sonraki faza taşındı: openFDA recall/adverse events, Open Pet Food Facts, Open-Meteo hava/air quality. Google Places/Foursquare ve wearable API’leri daha sonraya bırakılacak.
+- [ ] Native plugin kurulumu/store build testi ve arka plan push teslimi henüz yapılmadı.
 - [x] Turso token frontend için sadece test amaçlı bırakıldı; canlı sistem için server/API katmanı ve B2 signed upload modeli başlatıldı.
