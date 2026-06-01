@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { mediaCategories, optionalEnv } from './config.js';
 import { insertMediaMetadata } from './db.js';
+import { handleAdminRequest } from './admin.js';
 import { presignGetObject, presignPutObject } from './s3Presign.js';
 import { documentOcrPrompt, generateGeminiJson, normalizeOcrResult } from './ai.js';
 
@@ -29,7 +30,7 @@ function sendJson(res, status, data) {
   res.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': optionalEnv('CORS_ORIGIN', '*'),
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Admin-Token',
     'Access-Control-Allow-Methods': 'GET,POST,OPTIONS'
   });
   res.end(JSON.stringify(data));
@@ -249,6 +250,7 @@ async function route(req, res) {
     if (req.method === 'GET' && url.pathname === '/api/health') {
       return sendJson(res, 200, { ok: true, service: 'pati-saglik-api', time: new Date().toISOString() });
     }
+    if (url.pathname.startsWith('/api/admin/')) return handleAdminRequest(req, res, url, sendJson);
     if (req.method === 'POST' && url.pathname === '/api/media/sign-upload') return handleSignUpload(req, res);
     if (req.method === 'POST' && url.pathname === '/api/media/complete') return handleCompleteUpload(req, res);
     if (req.method === 'GET' && url.pathname === '/api/media/sign-download') return handleSignDownload(req, res, url);

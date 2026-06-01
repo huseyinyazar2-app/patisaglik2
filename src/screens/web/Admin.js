@@ -1,10 +1,16 @@
 import { navigate } from '../../router.js';
-import { getState } from '../../store.js';
-import { getPets } from '../../services/pets.js';
-import { getFreeRecords, mergeRecentRecords } from '../../services/freeRecords.js';
-import { getClinicExportDocuments } from '../../services/documents.js';
 
 const API_FALLBACK = 'http://patisaglik2.46.225.9.243.sslip.io';
+const TOKEN_KEY = 'pati_admin_token';
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
 
 function fmtDate(value) {
   if (!value || Number.isNaN(Date.parse(value))) return '-';
@@ -12,20 +18,121 @@ function fmtDate(value) {
 }
 
 function metricCard(label, value, note) {
-  return `<article class="admin-metric"><span>${label}</span><strong>${value}</strong><small>${note}</small></article>`;
+  return `<article class="admin-metric"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong><small>${escapeHtml(note)}</small></article>`;
 }
 
-function renderRecent(items) {
-  if (!items.length) return '<div class="admin-empty">Henüz kayıt yok.</div>';
-  return items.slice(0, 6).map((item) => `
-    <div class="admin-row">
+function rowList(items, emptyText, renderItem) {
+  if (!items?.length) return `<div class="admin-empty">${escapeHtml(emptyText)}</div>`;
+  return items.slice(0, 12).map(renderItem).join('');
+}
+
+function adminToken() {
+  return localStorage.getItem(TOKEN_KEY) || '';
+}
+
+async function adminGet(path) {
+  const token = adminToken();
+  if (!token) throw new Error('missing_token');
+  const candidates = ['', API_FALLBACK];
+  let lastError = null;
+  for (const base of candidates) {
+    try {
+      const response = await fetch(`${base}${path}`, {
+        headers: {
+          Accept: 'application/json',
+          'X-Admin-Token': token
+        }
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || data.ok === false) throw new Error(data.error || `http_${response.status}`);
+      return { base: base || 'same-origin', data: data.data };
+    } catch (err) {
+      lastError = err;
+    }
+  }
+  throw lastError || new Error('admin_api_failed');
+}
+
+async function runAiTest() {
+  const prompt = `Evcil hayvan için ambalaj/toksik risk ön değerlendirmesi yap.
+Kesin teşhis, doz, ilaç, evde kusturma, aktif kömür veya tedavi talimatı verme.
+Kullanıcı girdisi: köpek 8 kg, ksilitol sakız, az miktar, 10 dakika önce, belirti yok.
+JSON döndür: {"level":"critical|high|foreign|watch|unknown","headline":"","reason":"","doNotDo":[""],"prepare":[""],"askVet":[""]}`;
+  const candidates = ['', API_FALLBACK];
+  for (const base of candidates) {
+    try {
+      const response = await fetch(`${base}/api/ai/package-risk`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      const data = await response.json();
+      if (data.ok) return { ok: true, base: base || 'same-origin', data: data.data };
+    } catch {
+      // try next candidate
+    }
+  }
+  return { ok: false };
+}
+
+function renderUsers(users = []) {
+  return rowList(users, 'Henüz kullanıcı yok veya token bekleniyor.', (user) => `
+    <div class="admin-row admin-row-wide">
       <div>
-        <strong>${item.title || item.category || item.record_type || 'Kayıt'}</strong>
-        <small>${item.kind || 'kayıt'} · ${fmtDate(item.date || item.created_at)}</small>
+        <strong>${escapeHtml(user.display_name || 'İsimsiz kullanıcı')}</strong>
+        <small>${escapeHtml(user.phone || user.email || 'iletişim yok')} · ${escapeHtml(user.pet_count || 0)} pet · ${escapeHtml(user.submission_count || 0)} işlem</small>
       </div>
-      <span>${item.status || item.currency || item.source || 'aktif'}</span>
+      <span>${escapeHtml(user.plan_code || user.subscription_status || user.status || 'active')}</span>
     </div>
-  `).join('');
+  `);
+}
+
+function renderPets(pets = []) {
+  return rowList(pets, 'Henüz pet yok veya token bekleniyor.', (pet) => `
+    <div class="admin-row admin-row-wide">
+      <div>
+        <strong>${escapeHtml(pet.name || 'İsimsiz pet')}</strong>
+        <small>${escapeHtml(pet.species_code || '-')} · ${escapeHtml(pet.owner_name || 'sahip yok')} · ${escapeHtml(pet.health_count || 0)} sağlık kaydı</small>
+      </div>
+      <span>${escapeHtml(pet.ownership_type || pet.status || 'owned')}</span>
+    </div>
+  `);
+}
+
+function renderRecords(records = []) {
+  return rowList(records, 'Henüz kayıt yok veya token bekleniyor.', (item) => `
+    <div class="admin-row admin-row-wide">
+      <div>
+        <strong>${escapeHtml(item.title || item.kind || 'Kayıt')}</strong>
+        <small>${escapeHtml(item.kind || 'kayıt')} · ${escapeHtml(item.type || '-')} · ${fmtDate(item.event_at || item.created_at)}</small>
+      </div>
+      <span>${escapeHtml(item.summary || item.kind || 'aktif')}</span>
+    </div>
+  `);
+}
+
+function renderUsage(items = []) {
+  return rowList(items, 'Henüz kullanım kaydı yok veya token bekleniyor.', (item) => `
+    <div class="admin-row admin-row-wide">
+      <div>
+        <strong>${escapeHtml(item.feature_code || 'feature')}</strong>
+        <small>${escapeHtml(item.user_name || item.user_email || 'kullanıcı')} · ${escapeHtml(item.pet_name || 'pet yok')} · ${fmtDate(item.created_at)}</small>
+      </div>
+      <span>${escapeHtml(item.credit_cost || 0)} kredi</span>
+    </div>
+  `);
+}
+
+function renderDocuments(docs = []) {
+  return rowList(docs, 'Henüz belge yok veya token bekleniyor.', (doc) => `
+    <div class="admin-row admin-row-wide">
+      <div>
+        <strong>${escapeHtml(doc.title || 'Belge')}</strong>
+        <small>${escapeHtml(doc.pet_name || 'pet')} · ${escapeHtml(doc.user_name || doc.user_email || 'kullanıcı')} · ${fmtDate(doc.created_at)}</small>
+      </div>
+      <span>${escapeHtml(doc.status || doc.document_type || 'draft')}</span>
+    </div>
+  `);
 }
 
 export function render() {
@@ -45,22 +152,31 @@ export function render() {
       <main class="admin-shell">
         <section class="admin-hero">
           <div>
-            <div class="premium-screen-kicker">Kontrol merkezi</div>
-            <h1>Ürün, AI, kayıt ve canlı servis durumunu tek ekrandan izle.</h1>
-            <p>Bu ilk admin sürümü okuma ve test paneli olarak çalışır. Canlı operasyon aksiyonları daha sonra yetkilendirme ile bağlanacak.</p>
+            <div class="premium-screen-kicker">Gerçek yönetim paneli</div>
+            <h1>Kullanıcı, pet, kayıt, belge ve AI kullanımını canlı veritabanından izle.</h1>
+            <p>Bu sürüm güvenli okuma panelidir. Silme, askıya alma ve ödeme müdahaleleri sonraki fazda audit log ile eklenecek.</p>
           </div>
           <div class="admin-status-card" id="apiStatusCard">
-            <span>API durumu</span>
-            <strong>Kontrol ediliyor...</strong>
-            <small>Same-origin ve canlı fallback denenir.</small>
+            <span>Admin API</span>
+            <strong>Token bekleniyor</strong>
+            <small>Admin token girildiğinde canlı Turso verisi okunur.</small>
           </div>
         </section>
 
+        <section class="admin-token-card">
+          <label>
+            <span>Admin token</span>
+            <input id="adminTokenInput" type="password" placeholder="ADMIN_TOKEN" value="${escapeHtml(adminToken())}" />
+          </label>
+          <button class="btn btn-primary" id="btnSaveToken">Bağlan</button>
+          <button class="btn btn-ghost" id="btnClearToken">Temizle</button>
+        </section>
+
         <section class="admin-grid admin-grid-4" id="adminMetrics">
-          ${metricCard('Pet', '-', 'profil sayısı')}
-          ${metricCard('Sağlık', '-', 'kayıt')}
-          ${metricCard('Masraf', '-', 'kayıt')}
-          ${metricCard('Takvim', '-', 'hatırlatıcı')}
+          ${metricCard('Kullanıcı', '-', 'toplam')}
+          ${metricCard('Pet', '-', 'toplam')}
+          ${metricCard('Kayıt', '-', 'sağlık + ölçüm')}
+          ${metricCard('AI/Kullanım', '-', 'feature usage')}
         </section>
 
         <section class="admin-grid admin-grid-2">
@@ -99,71 +215,62 @@ export function render() {
         </section>
 
         <section class="admin-grid admin-grid-2">
-          <article class="admin-panel">
-            <div class="admin-panel-head">
-              <div>
-                <span>Son kayıtlar</span>
-                <h2>Ücretsiz veri akışı</h2>
-              </div>
-            </div>
-            <div id="adminRecent">${renderRecent([])}</div>
-          </article>
-
-          <article class="admin-panel">
-            <div class="admin-panel-head">
-              <div>
-                <span>Belgeler</span>
-                <h2>Rapor ve OCR kuyruğu</h2>
-              </div>
-            </div>
-            <div id="adminDocs">${renderRecent([])}</div>
-          </article>
+          <article class="admin-panel"><div class="admin-panel-head"><div><span>Kullanıcılar</span><h2>Kim kaydolmuş?</h2></div></div><div id="adminUsers">${renderUsers()}</div></article>
+          <article class="admin-panel"><div class="admin-panel-head"><div><span>Petler</span><h2>Hangi petler var?</h2></div></div><div id="adminPets">${renderPets()}</div></article>
+          <article class="admin-panel"><div class="admin-panel-head"><div><span>Son hareketler</span><h2>Ne yapılmış?</h2></div></div><div id="adminRecords">${renderRecords()}</div></article>
+          <article class="admin-panel"><div class="admin-panel-head"><div><span>Belgeler</span><h2>OCR / rapor kuyruğu</h2></div></div><div id="adminDocs">${renderDocuments()}</div></article>
+          <article class="admin-panel admin-panel-wide"><div class="admin-panel-head"><div><span>Kullanım</span><h2>Kredi / özellik hareketleri</h2></div></div><div id="adminUsage">${renderUsage()}</div></article>
         </section>
       </main>
     </div>
   `;
 }
 
-async function fetchHealth() {
-  const candidates = ['', API_FALLBACK];
-  for (const base of candidates) {
-    try {
-      const response = await fetch(`${base}/api/health`, { headers: { Accept: 'application/json' } });
-      const data = await response.json();
-      if (data.ok) return { ok: true, base: base || 'same-origin', data };
-    } catch {
-      // try next candidate
-    }
+async function loadAdmin() {
+  const card = document.getElementById('apiStatusCard');
+  if (!adminToken()) {
+    if (card) card.innerHTML = '<span>Admin API</span><strong>Token bekleniyor</strong><small>Admin token girildiğinde canlı veritabanı okunur.</small>';
+    return;
   }
-  return { ok: false };
-}
 
-async function runAiTest() {
-  const prompt = `Evcil hayvan için ambalaj/toksik risk ön değerlendirmesi yap.
-Kesin teşhis, doz, ilaç, evde kusturma, aktif kömür veya tedavi talimatı verme.
-Kullanıcı girdisi: köpek 8 kg, ksilitol sakız, az miktar, 10 dakika önce, belirti yok.
-JSON döndür: {"level":"critical|high|foreign|watch|unknown","headline":"","reason":"","doNotDo":[""],"prepare":[""],"askVet":[""]}`;
-  const candidates = ['', API_FALLBACK];
-  for (const base of candidates) {
-    try {
-      const response = await fetch(`${base}/api/ai/package-risk`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt })
-      });
-      const data = await response.json();
-      if (data.ok) return { ok: true, base: base || 'same-origin', data: data.data };
-    } catch {
-      // try next candidate
+  if (card) card.innerHTML = '<span>Admin API</span><strong>Bağlanıyor...</strong><small>Canlı Turso verisi okunuyor.</small>';
+
+  try {
+    const [overview, users, pets, records, usage, docs] = await Promise.all([
+      adminGet('/api/admin/overview'),
+      adminGet('/api/admin/users?limit=30'),
+      adminGet('/api/admin/pets?limit=30'),
+      adminGet('/api/admin/records?limit=40'),
+      adminGet('/api/admin/usage?limit=40'),
+      adminGet('/api/admin/documents?limit=30')
+    ]);
+
+    if (card) {
+      card.classList.add('ok');
+      card.innerHTML = `<span>Admin API</span><strong>Bağlı</strong><small>${overview.base} · canlı veritabanı</small>`;
+    }
+
+    const metrics = overview.data.metrics || {};
+    document.getElementById('adminMetrics').innerHTML = [
+      metricCard('Kullanıcı', metrics.users || 0, 'toplam'),
+      metricCard('Pet', metrics.pets || 0, 'toplam'),
+      metricCard('Kayıt', (metrics.healthRecords || 0) + (metrics.measurements || 0), 'sağlık + ölçüm'),
+      metricCard('AI/Kullanım', metrics.featureUsage || 0, 'feature usage')
+    ].join('');
+    document.getElementById('adminUsers').innerHTML = renderUsers(users.data);
+    document.getElementById('adminPets').innerHTML = renderPets(pets.data);
+    document.getElementById('adminRecords').innerHTML = renderRecords(records.data);
+    document.getElementById('adminUsage').innerHTML = renderUsage(usage.data);
+    document.getElementById('adminDocs').innerHTML = renderDocuments(docs.data);
+  } catch (err) {
+    if (card) {
+      card.classList.remove('ok');
+      card.innerHTML = `<span>Admin API</span><strong>Bağlanamadı</strong><small>${escapeHtml(err.message || 'admin_api_failed')}</small>`;
     }
   }
-  return { ok: false };
 }
 
 export function afterRender() {
-  const state = getState();
-  const petId = state.activePetId;
-
   document.getElementById('btnLanding')?.addEventListener('click', () => navigate('/web'));
   document.getElementById('btnWeb')?.addEventListener('click', () => navigate('/web'));
   document.getElementById('btnMobile')?.addEventListener('click', () => navigate('/home'));
@@ -171,33 +278,16 @@ export function afterRender() {
     button.addEventListener('click', () => navigate(button.dataset.route));
   });
 
-  fetchHealth().then((health) => {
-    const card = document.getElementById('apiStatusCard');
-    if (!card) return;
-    card.classList.toggle('ok', health.ok);
-    card.innerHTML = health.ok
-      ? `<span>API durumu</span><strong>Çalışıyor</strong><small>${health.base} · ${health.data.service || 'pati-saglik-api'}</small>`
-      : '<span>API durumu</span><strong>Ulaşılamadı</strong><small>Local dev sunucusu API proxy olmadan çalışıyor olabilir.</small>';
+  document.getElementById('btnSaveToken')?.addEventListener('click', () => {
+    const value = document.getElementById('adminTokenInput')?.value?.trim() || '';
+    if (value) localStorage.setItem(TOKEN_KEY, value);
+    loadAdmin();
   });
-
-  Promise.all([
-    getPets({ userId: state.user?.id || 'user-1' }).catch(() => []),
-    getFreeRecords({ petId, limit: 30 }).catch(() => ({ expenses: [], reminders: [], healthRecords: [] })),
-    getClinicExportDocuments({ petId, limit: 12 }).catch(() => [])
-  ]).then(([pets, records, docs]) => {
-    const metrics = document.getElementById('adminMetrics');
-    if (metrics) {
-      metrics.innerHTML = [
-        metricCard('Pet', pets.length, 'profil sayısı'),
-        metricCard('Sağlık', records.healthRecords.length, records.storage || 'kayıt'),
-        metricCard('Masraf', records.expenses.length, 'harcama kaydı'),
-        metricCard('Takvim', records.reminders.length, 'hatırlatıcı')
-      ].join('');
-    }
-    const recent = document.getElementById('adminRecent');
-    if (recent) recent.innerHTML = renderRecent(mergeRecentRecords(records));
-    const docsBox = document.getElementById('adminDocs');
-    if (docsBox) docsBox.innerHTML = renderRecent(docs.map((doc) => ({ ...doc, kind: doc.document_type, date: doc.created_at })));
+  document.getElementById('btnClearToken')?.addEventListener('click', () => {
+    localStorage.removeItem(TOKEN_KEY);
+    const input = document.getElementById('adminTokenInput');
+    if (input) input.value = '';
+    loadAdmin();
   });
 
   document.getElementById('btnAiTest')?.addEventListener('click', async (event) => {
@@ -209,10 +299,12 @@ export function afterRender() {
     const result = await runAiTest();
     if (target) {
       target.innerHTML = result.ok
-        ? `<strong>${result.data.level || 'unknown'} · ${result.data.headline || 'Yanıt alındı'}</strong><small>${result.base} üzerinden çalıştı. Güvenli hazırlık: ${(result.data.prepare || []).join(' ')}</small>`
+        ? `<strong>${escapeHtml(result.data.level || 'unknown')} · ${escapeHtml(result.data.headline || 'Yanıt alındı')}</strong><small>${escapeHtml(result.base)} üzerinden çalıştı. Güvenli hazırlık: ${escapeHtml((result.data.prepare || []).join(' '))}</small>`
         : '<strong>Test başarısız</strong><small>API veya model erişimi kontrol edilmeli.</small>';
     }
     button.disabled = false;
     button.textContent = 'Kritik testi çalıştır';
   });
+
+  loadAdmin();
 }

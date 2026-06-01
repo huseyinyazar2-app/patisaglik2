@@ -4720,8 +4720,41 @@
 }
 
 .admin-metric,
-.admin-panel {
+.admin-panel,
+.admin-token-card {
   border-radius: 20px;
+}
+
+.admin-token-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 12px;
+  align-items: end;
+  padding: 18px;
+  border: 1px solid rgba(0, 91, 76, 0.1);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: var(--shadow-card);
+}
+
+.admin-token-card label span {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--text-tertiary);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.admin-token-card input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid rgba(0, 91, 76, 0.14);
+  border-radius: 14px;
+  background: rgba(247, 250, 252, 0.9);
+  color: var(--text-primary);
+  font: inherit;
 }
 
 .admin-metric {
@@ -4737,6 +4770,10 @@
 
 .admin-panel {
   padding: 22px;
+}
+
+.admin-panel-wide {
+  grid-column: 1 / -1;
 }
 
 .admin-panel-head {
@@ -4797,6 +4834,10 @@
   margin-top: 10px;
 }
 
+.admin-row-wide {
+  align-items: flex-start;
+}
+
 .admin-row strong {
   color: var(--text-primary);
 }
@@ -4838,5 +4879,9 @@
 
   .web-phone-frame {
     min-height: 520px;
+  }
+
+  .admin-token-card {
+    grid-template-columns: 1fr;
   }
 }
