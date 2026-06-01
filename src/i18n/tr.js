@@ -1,6 +1,33 @@
 // Pati Sağlık — i18n Turkish translations
 import en from './en.js';
 
+export const supportedLocales = [
+  { code: 'tr', nativeName: 'Türkçe', englishName: 'Turkish', rtl: false },
+  { code: 'en', nativeName: 'English', englishName: 'English', rtl: false },
+  { code: 'de', nativeName: 'Deutsch', englishName: 'German', rtl: false },
+  { code: 'fr', nativeName: 'Français', englishName: 'French', rtl: false },
+  { code: 'es', nativeName: 'Español', englishName: 'Spanish', rtl: false },
+  { code: 'it', nativeName: 'Italiano', englishName: 'Italian', rtl: false },
+  { code: 'pt', nativeName: 'Português', englishName: 'Portuguese', rtl: false },
+  { code: 'nl', nativeName: 'Nederlands', englishName: 'Dutch', rtl: false },
+  { code: 'pl', nativeName: 'Polski', englishName: 'Polish', rtl: false },
+  { code: 'ro', nativeName: 'Română', englishName: 'Romanian', rtl: false },
+  { code: 'el', nativeName: 'Ελληνικά', englishName: 'Greek', rtl: false },
+  { code: 'ru', nativeName: 'Русский', englishName: 'Russian', rtl: false },
+  { code: 'uk', nativeName: 'Українська', englishName: 'Ukrainian', rtl: false },
+  { code: 'ar', nativeName: 'العربية', englishName: 'Arabic', rtl: true },
+  { code: 'he', nativeName: 'עברית', englishName: 'Hebrew', rtl: true },
+  { code: 'fa', nativeName: 'فارسی', englishName: 'Persian', rtl: true },
+  { code: 'hi', nativeName: 'हिन्दी', englishName: 'Hindi', rtl: false },
+  { code: 'id', nativeName: 'Bahasa Indonesia', englishName: 'Indonesian', rtl: false },
+  { code: 'ms', nativeName: 'Bahasa Melayu', englishName: 'Malay', rtl: false },
+  { code: 'th', nativeName: 'ไทย', englishName: 'Thai', rtl: false },
+  { code: 'vi', nativeName: 'Tiếng Việt', englishName: 'Vietnamese', rtl: false },
+  { code: 'ja', nativeName: '日本語', englishName: 'Japanese', rtl: false },
+  { code: 'ko', nativeName: '한국어', englishName: 'Korean', rtl: false },
+  { code: 'zh', nativeName: '中文', englishName: 'Chinese', rtl: false }
+];
+
 const tr = {
   app: { name: 'Pati Sağlık', tagline: 'Evcil dostunuzun sağlık geçmişini takip edin, değişimleri erken fark edin.' },
   splash: { start: 'Başlayalım', login: 'Giriş Yap' },
@@ -19,7 +46,8 @@ const tr = {
     forgot: 'Şifremi Unuttum',
     no_account: 'Hesabın yok mu?', has_account: 'Zaten hesabın var mı?',
     register_link: 'Kayıt Ol', login_link: 'Giriş Yap',
-    terms: 'Kullanım koşullarını kabul ediyorum', privacy: 'Gizlilik politikasını okudum ve onaylıyorum'
+    terms: 'Kullanım koşullarını kabul ediyorum', privacy: 'Gizlilik politikasını okudum ve onaylıyorum',
+    phone: 'Telefon', optional: 'opsiyonel'
   },
   pets: {
     add_title: 'Pet Ekle', photo_add: 'Fotoğraf Ekle',
@@ -199,6 +227,107 @@ const tr = {
     saved: 'Hesap bilgileri kaydedildi.',
     save_failed: 'Hesap kaydedilemedi'
   },
+  knowledge: {
+    title: 'Acil Bilgi Bankası',
+    kicker: 'Veteriner öncesi güvenli rehber',
+    heading: 'Ne yapmamalı, ne hazırlamalı?',
+    desc: 'Bu alan tedavi önermez. Acil durumda güvenli sınırlar, risk sinyalleri ve veteriner görüşmesine hazırlık sağlar.',
+    rule: 'İlaç, kusturma, doz veya evde tedavi önerisi yok.',
+    safe_info: 'Güvenli bilgi',
+    disclaimer: 'Bu ekran tanı veya tedavi önermez. Amaç, riskli durumda neyi yapmamak ve veterinere hangi bilgiyi hazırlamak gerektiğini netleştirmektir.',
+    signals: 'Risk sinyalleri',
+    dont: 'Yapma',
+    prepare: 'Hazırla',
+    urgent: 'Acil veteriner',
+    toxic_record: 'Toksik Acil Kayıt Aç',
+    vet_prep: 'Kliniğe Hazırlık Notu',
+    not_found_title: 'Bilgi Bulunamadı',
+    not_found_empty: 'Bu konu bulunamadı',
+    not_found_desc: 'Acil bilgi bankasındaki güncel konulara geri dön.',
+    back_to_bank: 'Bilgi Bankasına Dön',
+    topics: [
+      {
+        id: 'toxic', icon: 'alert', tone: 'danger', title: 'Toksik Madde / Zehirlenme',
+        desc: 'Şüpheli gıda, ilaç, bitki, temizlik ürünü veya kimyasal teması.',
+        signals: ['Çikolata, ksilitol, üzüm/kuru üzüm, soğan/sarımsak', 'İnsan ilacı, haşere zehiri, temizlik ürünü', 'Kusma, salya, titreme, halsizlik, nöbet'],
+        dont: ['Veteriner söylemeden kusturmaya çalışma.', 'Aktif kömür, süt, yağ, tuzlu su veya insan ilacı verme.', 'Belirti yok diye bekleme; bazı toksinlerde belirtiler gecikebilir.'],
+        prepare: ['Ambalajı, etiketi veya kalan maddeyi sakla.', 'Ne kadar ve ne zaman yediğini not et.', 'Petin türünü, kilosunu ve mevcut belirtileri hazır tut.'],
+        urgent: ['Nefes sorunu, nöbet, bayılma, bilinç değişikliği', 'Şiddetli veya tekrarlayan kusma', 'Ksilitol, ilaç, zehir, pil, kimyasal veya bilinmeyen madde şüphesi']
+      },
+      {
+        id: 'foreign-body', icon: 'search', tone: 'slate', title: 'Yabancı Cisim / Boğulma',
+        desc: 'Oyuncak, ip, kemik, paket, pil veya keskin parça yutma/boğaza kaçma şüphesi.',
+        signals: ['Öğürme, salya, ağızla uğraşma', 'Kusmaya çalışma ama çıkaramama', 'Karın ağrısı, dışkı yapamama, halsizlik'],
+        dont: ['Boğaza parmak sokarak körlemesine müdahale etme.', 'İp, misina veya kumaş görünüyorsa çekme.', 'Kusmasını bekleyerek zamanı uzatma.'],
+        prepare: ['Yuttuğu nesnenin aynısını veya fotoğrafını hazırla.', 'Yaklaşık boyut, malzeme ve zamanı not et.', 'Kusma, dışkı, karın ağrısı ve iştah durumunu kaydet.'],
+        urgent: ['Nefes alamama veya morarma', 'Pil, mıknatıs, iğne, ip/misina, keskin cisim', 'Sürekli öğürme, şiş karın veya belirgin ağrı']
+      },
+      {
+        id: 'vomit-diarrhea', icon: 'activity', tone: 'teal', title: 'Kusma / İshal',
+        desc: 'Sindirim sistemi belirtilerinde takip ve acil risk ayrımı.',
+        signals: ['Tekrarlayan kusma veya sulu ishal', 'Kan, siyah dışkı veya belirgin karın ağrısı', 'Su tutamama, halsizlik, hızlı kötüleşme'],
+        dont: ['Veteriner önermeden ishal/kusma ilacı verme.', 'Zehir veya yabancı cisim ihtimalini göz ardı etme.', 'Yavru, yaşlı veya kronik hasta petlerde beklemeyi uzatma.'],
+        prepare: ['Başlangıç saatini ve kaç kez olduğunu not et.', 'Dışkı/kusmuk fotoğrafını sağlık kaydına ekle.', 'Mama değişimi, ilaç, çöp/bitki teması gibi tetikleyicileri yaz.'],
+        urgent: ['Kan görülmesi', 'Sürekli kusma veya suyu tutamama', 'Yavru/yaşlı pet, kronik hastalık veya toksin şüphesi']
+      },
+      {
+        id: 'breathing', icon: 'lungs', tone: 'danger', title: 'Solunum Zorluğu',
+        desc: 'Nefes alma güçlüğü, morarma, hızlı veya eforlu solunum.',
+        signals: ['Ağız açık nefes alma, hırıltı, mor/soluk diş eti', 'Göğüs/karınla belirgin efor', 'Dinlenirken hızlı solunum veya panik'],
+        dont: ['Ağız içine zorla su/ilaç verme.', 'Strese sokacak taşıma veya kovalamadan kaçın.', 'Belirti geçer diye uzun süre izleme.'],
+        prepare: ['Petin en sakin pozisyonda kalmasını sağla.', 'Solunum videosu çekebiliyorsan kısa kayıt al.', 'Yakın klinik ve ulaşım planını hazırla.'],
+        urgent: ['Morarma, bayılma, bilinç değişikliği', 'Dinlenirken belirgin nefes çabası', 'Boğulma, travma veya toksik temas şüphesi']
+      },
+      {
+        id: 'seizure-collapse', icon: 'heartPulse', tone: 'danger', title: 'Nöbet / Bayılma',
+        desc: 'Kasılma, yere yığılma, bilinç kaybı veya kontrolsüz titreme.',
+        signals: ['Kasılma, çene kilitlenmesi, idrar kaçırma', 'Aniden yere yığılma veya dalgınlık', 'Nöbet sonrası şaşkınlık veya kör gibi davranma'],
+        dont: ['Ağzına elini sokma.', 'Zorla su, mama veya ilaç verme.', 'Sarsarak ayıltmaya çalışma.'],
+        prepare: ['Çevresindeki sert/can yakıcı eşyaları uzaklaştır.', 'Süre tut ve mümkünse video al.', 'Öncesinde ilaç, toksin, travma veya ısı maruziyeti var mı not et.'],
+        urgent: ['Nöbet 2-3 dakikadan uzun sürerse', 'Tekrarlayan nöbet olursa', 'Nöbet sonrası toparlamazsa veya zehir şüphesi varsa']
+      },
+      {
+        id: 'heatstroke', icon: 'thermometer', tone: 'danger', title: 'Sıcak Çarpması',
+        desc: 'Aşırı sıcak, kapalı araç, yoğun egzersiz veya güneş sonrası hızlı kötüleşme.',
+        signals: ['Aşırı panting, salya, halsizlik', 'Kusma, ishal, koordinasyon bozukluğu', 'Çökme, bilinç değişikliği'],
+        dont: ['Buzlu suya sokma veya şok soğutma yapma.', 'Zorla su içirmeye çalışma.', 'Serinledi gibi görünüyor diye klinik kontrolünü atlama.'],
+        prepare: ['Gölge/serin alana al, ortamı sakinleştir.', 'Islak serin havlu ve hava akımıyla kontrollü serinlet.', 'Maruziyet süresini ve belirtileri not et.'],
+        urgent: ['Çökme, bilinç değişikliği, nöbet', 'Kusma/ishal veya yürüyememe', 'Kapalı araç veya uzun süre yüksek sıcaklık maruziyeti']
+      },
+      {
+        id: 'eye-injury', icon: 'search', tone: 'slate', title: 'Göz Yaralanması',
+        desc: 'Gözde darbe, çizik, yabancı cisim, kimyasal temas veya ani kapanma.',
+        signals: ['Gözü kapalı tutma, patileme, kızarıklık', 'Akıntı, bulanıklık, şişlik', 'Darbe, kedi tırmığı veya kimyasal temas'],
+        dont: ['Gözü ovalama veya bastırma.', 'İnsan göz damlası kullanma.', 'Gözde görünen cismi çekmeye çalışma.'],
+        prepare: ['Kimyasal/ürün ambalajını sakla.', 'Fotoğraf çekebiliyorsan flaşsız kısa kayıt al.', 'Ne zaman başladığını ve travma ihtimalini not et.'],
+        urgent: ['Göz kapalı kalıyorsa', 'Kimyasal temas veya travma varsa', 'Gözde bulanıklık, kan veya belirgin ağrı varsa']
+      },
+      {
+        id: 'wound-bleeding', icon: 'shield', tone: 'danger', title: 'Yara / Kanama',
+        desc: 'Kesik, ısırık, şişlik, akıntı veya durmayan kanama.',
+        signals: ['Kanama, açık yara, kötü koku veya irin', 'Isırık sonrası küçük delik yaralar', 'Şişlik, sıcaklık, ağrı'],
+        dont: ['Derin yarayı evde kapatmaya çalışma.', 'Veteriner önermeden merhem veya insan ilacı sürme.', 'Isırık yarasını küçük görüp bekleme.'],
+        prepare: ['Temiz gazlı bezle hafif bası uygula.', 'Yara fotoğrafı çek ve zamanı not et.', 'Isırık, travma veya yabancı cisim ihtimalini yaz.'],
+        urgent: ['Kanama durmuyorsa', 'Derin/ısırık/kirli yara varsa', 'Halsizlik, soluk diş eti veya şok belirtisi varsa']
+      },
+      {
+        id: 'urinary', icon: 'alert', tone: 'danger', title: 'İdrar Yapamama',
+        desc: 'Özellikle erkek kedilerde acil kabul edilen idrar tıkanıklığı riski.',
+        signals: ['Kuma sık gitme ama az/hiç idrar yok', 'Ağlama, zorlanma, karın ağrısı', 'Kanlı idrar, halsizlik, kusma'],
+        dont: ['Kabızlık sanıp bekleme.', 'Karına bastırma.', 'Evde ilaç veya ağrı kesici verme.'],
+        prepare: ['Son idrar zamanını not et.', 'Kum kabı davranışını ve idrar miktarını kaydet.', 'Kusma/halsizlik varsa acil bilgisini öne çıkar.'],
+        urgent: ['Hiç idrar yapamama şüphesi', 'Erkek kedi + zorlanma', 'Kusma, halsizlik veya ağrılı miyavlama']
+      },
+      {
+        id: 'birth', icon: 'calendar', tone: 'gold', title: 'Doğum Komplikasyonu',
+        desc: 'Gebelik/doğum sürecinde uzama, zorlanma veya anne/yavru riski.',
+        signals: ['Uzun süre ıkınma ama yavru gelmemesi', 'Kötü kokulu/kanlı akıntı', 'Anne çok halsiz veya ağrılı görünmesi'],
+        dont: ['Yavruyu zorla çekme.', 'Doğumu hızlandırmak için ilaç verme.', 'Uzun süren zorlanmayı normal sayma.'],
+        prepare: ['Başlangıç saatini ve doğan yavru sayısını not et.', 'Akıntı rengi/kokusu ve annenin durumunu kaydet.', 'Gebelik günü ve önceki doğum bilgilerini hazırla.'],
+        urgent: ['Şiddetli zorlanma ve yavru gelmemesi', 'Kötü kokulu akıntı veya yoğun kanama', 'Anne baygın, çok halsiz veya ağrılıysa']
+      }
+    ]
+  },
   notifications: {
     title: 'Bildirimler',
     reminder_title: 'Hatırlatıcı Bildirimleri',
@@ -260,20 +389,26 @@ const tr = {
 
 const dictionaries = { tr, en };
 
+function normalizeLocale(locale) {
+  return supportedLocales.some(item => item.code === locale) ? locale : 'tr';
+}
+
 export function getLocale() {
   try {
     const profile = JSON.parse(localStorage.getItem('pati_user_profile') || '{}');
-    return profile.locale || 'tr';
+    return normalizeLocale(profile.locale || 'tr');
   } catch {
     return 'tr';
   }
 }
 
 export function setLocale(locale) {
-  const nextLocale = dictionaries[locale] ? locale : 'tr';
+  const nextLocale = normalizeLocale(locale);
   try {
     const profile = JSON.parse(localStorage.getItem('pati_user_profile') || '{}');
     localStorage.setItem('pati_user_profile', JSON.stringify({ ...profile, locale: nextLocale }));
+    document.documentElement.lang = nextLocale;
+    document.documentElement.dir = supportedLocales.find(item => item.code === nextLocale)?.rtl ? 'rtl' : 'ltr';
   } catch {}
   return nextLocale;
 }
@@ -293,7 +428,7 @@ function readValue(dictionary, key) {
 
 export function t(key) {
   const locale = getLocale();
-  return readValue(dictionaries[locale] || tr, key) ?? readValue(tr, key) ?? key;
+  return readValue(dictionaries[locale], key) ?? readValue(en, key) ?? readValue(tr, key) ?? key;
 }
 
 export default tr;

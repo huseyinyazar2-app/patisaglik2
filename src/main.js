@@ -3,7 +3,7 @@ import { registerRoute, initRouter, navigate, setBeforeNavigate } from './router
 import { getState } from './store.js';
 import { startReminderScheduler } from './services/reminderScheduler.js';
 import { cleanupSmokeTestArtifacts } from './services/devHygiene.js';
-import { t } from './i18n/tr.js';
+import { getLocale, setLocale, t } from './i18n/tr.js';
 
 // SVG Icons for tab bar
 const icons = {
@@ -269,6 +269,7 @@ function setupRoutes() {
 
 // Initialize app
 async function init() {
+  setLocale(getLocale());
   await cleanupSmokeTestArtifacts();
   setupRoutes();
   

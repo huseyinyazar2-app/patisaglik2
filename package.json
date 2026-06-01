@@ -10,7 +10,8 @@
     "start": "node server/index.js",
     "server": "node server/index.js",
     "db:migrate": "node scripts/migrate-turso.mjs",
-    "db:smoke": "node scripts/db-smoke-test.mjs"
+    "db:smoke": "node scripts/db-smoke-test.mjs",
+    "audit:i18n": "node scripts/audit-i18n.mjs"
   },
   "devDependencies": {
     "vite": "^6.3.5"

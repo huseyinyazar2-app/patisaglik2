@@ -1,5 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
+import tr, { supportedLocales } from '../src/i18n/tr.js';
+import en from '../src/i18n/en.js';
 
 const root = path.resolve('src');
 const stringLiteralPattern = /'([^'\\]|\\.)*'|"([^"\\]|\\.)*"|`([^`\\]|\\.)*`/g;
@@ -28,4 +30,34 @@ for (const file of walk(root)) {
 
 rows.sort((a, b) => b.count - a.count);
 
-console.log(JSON.stringify({ total, files: rows.length, top: rows.slice(0, 30) }, null, 2));
+function flattenKeys(object, prefix = '') {
+  const keys = [];
+  for (const [key, value] of Object.entries(object || {})) {
+    const fullKey = prefix ? `${prefix}.${key}` : key;
+    if (Array.isArray(value)) keys.push(fullKey);
+    else if (value && typeof value === 'object') keys.push(...flattenKeys(value, fullKey));
+    else keys.push(fullKey);
+  }
+  return keys;
+}
+
+const trKeys = new Set(flattenKeys(tr));
+const enKeys = new Set(flattenKeys(en));
+const missingInEn = [...trKeys].filter((key) => !enKeys.has(key)).sort();
+const extraInEn = [...enKeys].filter((key) => !trKeys.has(key)).sort();
+
+console.log(JSON.stringify({
+  supportedLocales: supportedLocales.length,
+  translatedLocales: ['tr', 'en'],
+  dictionaryKeys: {
+    tr: trKeys.size,
+    en: enKeys.size,
+    missingInEn,
+    extraInEn
+  },
+  hardcodedTurkish: {
+    total,
+    files: rows.length,
+    top: rows.slice(0, 30)
+  }
+}, null, 2));

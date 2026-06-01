@@ -461,3 +461,17 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
   - [x] Değerlendirilecek API adayları sonraki faza taşındı: openFDA recall/adverse events, Open Pet Food Facts, Open-Meteo hava/air quality. Google Places/Foursquare ve wearable API’leri daha sonraya bırakılacak.
 - [ ] Native plugin kurulumu/store build testi ve arka plan push teslimi henüz yapılmadı.
 - [x] Turso token frontend için sadece test amaçlı bırakıldı; canlı sistem için server/API katmanı ve B2 signed upload modeli başlatıldı.
+## Dil Altyapisi / Store Hazirligi - 02.06.2026
+
+- [x] Uygulama 20+ dil hedefi icin 24 locale destekleyecek sekilde genisletildi.
+  - Desteklenen diller: `tr`, `en`, `de`, `fr`, `es`, `it`, `pt`, `nl`, `pl`, `ro`, `el`, `ru`, `uk`, `ar`, `he`, `fa`, `hi`, `id`, `ms`, `th`, `vi`, `ja`, `ko`, `zh`.
+  - `supportedLocales`, `normalizeLocale`, `setLocale` ve fallback sirasi guncellendi.
+  - RTL diller icin HTML `dir` destegi eklendi.
+  - DB `locales` seed kayitlari 24 dile genisletildi.
+- [x] Hesap ekranindaki dil secimi 24 locale listesini kullanacak sekilde guncellendi.
+- [x] Acil Bilgi Bankasi metinleri TR/EN i18n sozluklerine tasindi.
+- [x] TR/EN dictionary key parity temizlendi: `tr=400`, `en=400`, eksik/fazla key yok.
+- [x] I18N audit komutu eklendi: `npm run audit:i18n`.
+- [x] I18N raporu guncellendi: `docs/I18N_AUDIT.md`.
+- [ ] Kalan hardcoded Turkce metinler i18n'e tasinacak: son audit `1062` string literal / `73` dosya.
+- [ ] Diger 22 dil icin profesyonel ceviri sozlukleri eklenecek; su an TR/EN disindaki diller English -> Turkish fallback ile calisiyor.

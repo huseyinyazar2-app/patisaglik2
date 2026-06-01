@@ -2,7 +2,7 @@ import { goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { getLocalUserProfile, saveUserProfile } from '../../services/users.js';
 import { showToast } from '../../ui/toast.js';
-import { setLocale, t } from '../../i18n/tr.js';
+import { setLocale, supportedLocales, t } from '../../i18n/tr.js';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -15,6 +15,12 @@ function escapeHtml(value) {
 
 function value(id) {
   return document.getElementById(id)?.value?.trim() || '';
+}
+
+function localeOptions(currentLocale) {
+  return supportedLocales
+    .map(locale => `<option value="${locale.code}" ${currentLocale === locale.code ? 'selected' : ''}>${escapeHtml(locale.nativeName)} (${escapeHtml(locale.englishName)})</option>`)
+    .join('');
 }
 
 export function render() {
@@ -85,8 +91,7 @@ export function render() {
             <label class="feature-field">
               <span>${t('account.language')}</span>
               <select id="accountLocale">
-                <option value="tr" ${profile.locale === 'tr' ? 'selected' : ''}>Türkçe</option>
-                <option value="en" ${profile.locale === 'en' ? 'selected' : ''}>English</option>
+                ${localeOptions(profile.locale || 'tr')}
               </select>
             </label>
             <label class="feature-field">

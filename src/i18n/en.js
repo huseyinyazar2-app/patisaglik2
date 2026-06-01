@@ -198,6 +198,107 @@ const en = {
     saved: 'Account details saved.',
     save_failed: 'Account could not be saved'
   },
+  knowledge: {
+    title: 'Emergency Knowledge Base',
+    kicker: 'Safe guidance before the vet',
+    heading: 'What not to do, and what to prepare',
+    desc: 'This area does not give treatment advice. It helps you understand safe boundaries, risk signs and what to prepare before contacting a veterinarian.',
+    rule: 'No medication, induced vomiting, dosing or at-home treatment advice.',
+    safe_info: 'Safe information',
+    disclaimer: 'This screen does not diagnose or recommend treatment. Its purpose is to clarify what not to do and what information to prepare for your veterinarian.',
+    signals: 'Risk signs',
+    dont: 'Do not do',
+    prepare: 'Prepare',
+    urgent: 'Urgent vet care',
+    toxic_record: 'Create Toxic Emergency Record',
+    vet_prep: 'Clinic Prep Note',
+    not_found_title: 'Topic Not Found',
+    not_found_empty: 'This topic was not found',
+    not_found_desc: 'Go back to the current emergency knowledge topics.',
+    back_to_bank: 'Back to Knowledge Base',
+    topics: [
+      {
+        id: 'toxic', icon: 'alert', tone: 'danger', title: 'Toxic Substance / Poisoning',
+        desc: 'Suspected exposure to risky food, medication, plants, cleaning products or chemicals.',
+        signals: ['Chocolate, xylitol, grapes/raisins, onion/garlic', 'Human medication, pest poison, cleaning product', 'Vomiting, drooling, tremors, weakness, seizure'],
+        dont: ['Do not try to make your pet vomit unless a veterinarian tells you to.', 'Do not give activated charcoal, milk, oil, salt water or human medication.', 'Do not wait just because there are no signs yet; some toxins act later.'],
+        prepare: ['Keep the packaging, label or remaining substance.', 'Write down how much was eaten and when.', 'Have your pet’s species, weight and current signs ready.'],
+        urgent: ['Breathing trouble, seizure, collapse or altered awareness', 'Severe or repeated vomiting', 'Suspected xylitol, medication, poison, battery, chemical or unknown substance']
+      },
+      {
+        id: 'foreign-body', icon: 'search', tone: 'slate', title: 'Foreign Body / Choking',
+        desc: 'Suspected swallowing or choking on a toy, string, bone, packaging, battery or sharp object.',
+        signals: ['Gagging, drooling, pawing at the mouth', 'Trying to vomit but nothing comes up', 'Belly pain, no stool, weakness'],
+        dont: ['Do not blindly put your fingers into the throat.', 'Do not pull visible string, fishing line or fabric.', 'Do not wait for vomiting while time passes.'],
+        prepare: ['Prepare the same object or a photo of it.', 'Note approximate size, material and timing.', 'Record vomiting, stool, belly pain and appetite status.'],
+        urgent: ['Cannot breathe or gums/tongue turning blue', 'Battery, magnet, needle, string/fishing line or sharp object', 'Constant gagging, swollen belly or obvious pain']
+      },
+      {
+        id: 'vomit-diarrhea', icon: 'activity', tone: 'teal', title: 'Vomiting / Diarrhea',
+        desc: 'Follow-up and urgent-risk separation for digestive signs.',
+        signals: ['Repeated vomiting or watery diarrhea', 'Blood, black stool or clear belly pain', 'Cannot keep water down, weakness, rapid worsening'],
+        dont: ['Do not give anti-diarrhea or anti-vomiting medicine unless a vet recommends it.', 'Do not ignore possible toxin or foreign-body exposure.', 'Do not wait too long in puppies/kittens, senior pets or pets with chronic disease.'],
+        prepare: ['Note start time and how many times it happened.', 'Add a stool/vomit photo to the health record if useful.', 'Write down diet changes, medication, trash/plant exposure or other triggers.'],
+        urgent: ['Blood is present', 'Ongoing vomiting or cannot keep water down', 'Young/senior pet, chronic disease or suspected toxin']
+      },
+      {
+        id: 'breathing', icon: 'lungs', tone: 'danger', title: 'Breathing Difficulty',
+        desc: 'Trouble breathing, blue/pale gums, rapid or labored breathing.',
+        signals: ['Open-mouth breathing, wheezing, blue/pale gums', 'Visible chest/belly effort', 'Fast breathing or panic while resting'],
+        dont: ['Do not force water or medication into the mouth.', 'Avoid stressful carrying, chasing or handling.', 'Do not monitor for a long time hoping it passes.'],
+        prepare: ['Keep your pet in the calmest comfortable position.', 'Take a short breathing video if you can do so safely.', 'Prepare the nearest clinic and transport plan.'],
+        urgent: ['Blue gums, collapse or altered awareness', 'Clear breathing effort while resting', 'Choking, trauma or suspected toxic exposure']
+      },
+      {
+        id: 'seizure-collapse', icon: 'heartPulse', tone: 'danger', title: 'Seizure / Collapse',
+        desc: 'Convulsions, collapse, loss of awareness or uncontrolled shaking.',
+        signals: ['Convulsions, jaw clenching, loss of urine', 'Sudden collapse or staring/unresponsive episode', 'Confusion or acting blind after the event'],
+        dont: ['Do not put your hand in the mouth.', 'Do not force water, food or medication.', 'Do not shake your pet to wake them up.'],
+        prepare: ['Move hard or dangerous objects away.', 'Time the episode and record video if possible.', 'Note any medication, toxin, trauma or heat exposure beforehand.'],
+        urgent: ['Seizure lasts longer than 2-3 minutes', 'Repeated seizures occur', 'Poor recovery afterward or suspected poisoning']
+      },
+      {
+        id: 'heatstroke', icon: 'thermometer', tone: 'danger', title: 'Heatstroke',
+        desc: 'Rapid decline after heat, a closed vehicle, heavy exercise or sun exposure.',
+        signals: ['Heavy panting, drooling, weakness', 'Vomiting, diarrhea, poor coordination', 'Collapse or altered awareness'],
+        dont: ['Do not use ice water or shock cooling.', 'Do not force your pet to drink.', 'Do not skip veterinary care because your pet seems cooler.'],
+        prepare: ['Move to shade or a cooler area and reduce stress.', 'Use cool wet towels and airflow for controlled cooling.', 'Note exposure time and signs.'],
+        urgent: ['Collapse, altered awareness or seizure', 'Vomiting/diarrhea or unable to walk', 'Closed vehicle or prolonged high-heat exposure']
+      },
+      {
+        id: 'eye-injury', icon: 'search', tone: 'slate', title: 'Eye Injury',
+        desc: 'Eye trauma, scratch, foreign body, chemical exposure or sudden eye closure.',
+        signals: ['Keeping the eye closed, pawing, redness', 'Discharge, cloudiness, swelling', 'Impact, cat scratch or chemical exposure'],
+        dont: ['Do not rub or press on the eye.', 'Do not use human eye drops.', 'Do not try to pull out a visible object from the eye.'],
+        prepare: ['Keep the chemical/product packaging.', 'Take a short photo/video without flash if safe.', 'Note when it started and whether trauma is possible.'],
+        urgent: ['Eye stays closed', 'Chemical exposure or trauma occurred', 'Cloudiness, blood or obvious pain']
+      },
+      {
+        id: 'wound-bleeding', icon: 'shield', tone: 'danger', title: 'Wound / Bleeding',
+        desc: 'Cut, bite, swelling, discharge or bleeding that does not stop.',
+        signals: ['Bleeding, open wound, bad smell or pus', 'Small puncture wounds after a bite', 'Swelling, heat, pain'],
+        dont: ['Do not try to close a deep wound at home.', 'Do not apply ointment or human medicine unless a vet recommends it.', 'Do not dismiss bite wounds because they look small.'],
+        prepare: ['Apply gentle pressure with clean gauze.', 'Take a wound photo and note the time.', 'Write down bite, trauma or foreign-body possibility.'],
+        urgent: ['Bleeding does not stop', 'Deep, bite or dirty wound', 'Weakness, pale gums or signs of shock']
+      },
+      {
+        id: 'urinary', icon: 'alert', tone: 'danger', title: 'Unable to Urinate',
+        desc: 'Risk of urinary blockage, especially urgent in male cats.',
+        signals: ['Frequent litter box trips with little/no urine', 'Crying, straining, belly pain', 'Bloody urine, weakness, vomiting'],
+        dont: ['Do not assume it is constipation and wait.', 'Do not press on the belly.', 'Do not give medicine or pain relievers at home.'],
+        prepare: ['Note the last known urination time.', 'Record litter box behavior and urine amount.', 'Highlight vomiting/weakness if present.'],
+        urgent: ['Any suspicion of no urination', 'Male cat + straining', 'Vomiting, weakness or painful crying']
+      },
+      {
+        id: 'birth', icon: 'calendar', tone: 'gold', title: 'Birth Complication',
+        desc: 'Prolonged labor, straining or risk to the mother/newborns.',
+        signals: ['Long straining with no newborn delivered', 'Bad-smelling or bloody discharge', 'Mother seems very weak or painful'],
+        dont: ['Do not forcefully pull a newborn.', 'Do not give medication to speed labor.', 'Do not treat prolonged straining as normal.'],
+        prepare: ['Note start time and number of newborns delivered.', 'Record discharge color/smell and the mother’s condition.', 'Prepare gestation timing and prior birth history.'],
+        urgent: ['Severe straining with no newborn', 'Bad-smelling discharge or heavy bleeding', 'Mother is collapsed, very weak or painful']
+      }
+    ]
+  },
   notifications: {
     title: 'Notifications',
     reminder_title: 'Reminder Notifications',

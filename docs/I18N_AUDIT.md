@@ -1,42 +1,46 @@
 # I18N Audit
 
-Son kontrol: 2026-06-01
+Son kontrol: 2026-06-02
 
-## Mevcut Yapı
+## Mevcut Durum
 
-- Veritabanında dil altyapısı var:
-  - `locales`
-  - `translation_keys`
-  - `translations`
-  - `localized_content`
-- Frontend tarafında aktif çeviri altyapısı dosya bazlıdır:
+- Frontend aktif ceviri altyapisi dosya bazlidir:
   - `src/i18n/tr.js`
   - `src/i18n/en.js`
-- `t(key)` artık aktif kullanıcı profili `locale` değerine göre `tr` veya `en` sözlüğünü kullanır.
-- Eksik İngilizce anahtar varsa otomatik Türkçe fallback uygulanır.
+- Store yayini icin 24 locale altyapisi hazirdir:
+  - `tr`, `en`, `de`, `fr`, `es`, `it`, `pt`, `nl`, `pl`, `ro`, `el`, `ru`, `uk`, `ar`, `he`, `fa`, `hi`, `id`, `ms`, `th`, `vi`, `ja`, `ko`, `zh`
+- Tam ceviri sozlugu su an `tr` ve `en` icin vardir.
+- Diger 22 dil secilebilir durumdadir; ceviri eklenene kadar fallback sirasiyla English -> Turkish -> key olarak calisir.
+- `setLocale()` HTML `lang` ve RTL dilleri icin `dir` degerini ayarlar.
+- Veritabani `locales` seed kayitlari 24 dili kapsayacak sekilde guncellendi.
 
-## Eklenenler
+## Yapilanlar
 
-- İngilizce sözlük ilk faz olarak eklendi.
-- Splash, auth, pet, home, check, result, history, reports, profile, notifications, common ve tab bar anahtarlarının İngilizce karşılıkları yazıldı.
-- Profil > Hesap Bilgileri ekranında dil seçimi `Türkçe / English` select alanına çevrildi.
-- Ana tab bar etiketleri `t()` ile çevrilebilir hale getirildi.
-- `scripts/audit-i18n.mjs` eklendi.
+- Hesap ekranindaki dil secimi 24 locale listesine baglandi.
+- Ana uygulama acilisinda secili locale yeniden uygulanir.
+- Acil Bilgi Bankasi (`/check/knowledge`) TR/EN sozluklerine tasindi.
+- TR/EN dictionary key parity temizlendi.
+- `npm run audit:i18n` script'i eklendi.
 
-## Kalan Hardcoded Türkçe
+## Son Audit
 
-Audit komutu:
+Komut:
 
 ```bash
-node scripts/audit-i18n.mjs
+npm run audit:i18n
 ```
 
-Son çıktı:
+Ozet:
 
-- Toplam Türkçe string literal: `1076`
-- Etkilenen dosya: `74`
+- Desteklenen locale: `24`
+- Tam ceviri sozlugu: `tr`, `en`
+- Dictionary key sayisi: `tr=400`, `en=400`
+- `missingInEn`: `0`
+- `extraInEn`: `0`
+- Kalan hardcoded Turkce string literal: `1062`
+- Etkilenen dosya: `73`
 
-En yoğun dosyalar:
+En yogun dosyalar:
 
 | Dosya | Kalan |
 | --- | ---: |
@@ -53,16 +57,16 @@ En yoğun dosyalar:
 
 ## Production Notu
 
-Frontend UI metinleri için dosya bazlı sözlük daha hızlı ve güvenli. DB çeviri tabloları şu işler için kullanılmalı:
+UI metinleri icin dosya bazli sozluk hizli ve dusuk riskli kalmali. DB ceviri tablolari su alanlarda kullanilmali:
 
-- Bilgi bankası içerikleri
-- Dinamik sağlık içerikleri
-- Admin panelden düzenlenecek pazarlama/yardım metinleri
-- İleride 20-30 dil desteği için CMS benzeri içerik yönetimi
+- Admin panelden duzenlenecek bilgi bankasi ve yardim icerikleri
+- Dinamik saglik icerikleri
+- Pazarlama/tanitim metinleri
+- 20+ dil icin sonradan CMS benzeri ceviri yonetimi
 
-## Önerilen Sıra
+## Siradaki Sira
 
-1. `FreeRecordDetail`, `FreeRecordList`, `formSubmissions`, `questions` ve `Result` dosyalarını i18n’e taşı.
-2. Bilgi bankası içeriklerini `localized_content` veya ayrı içerik JSON yapısına taşı.
-3. Tarih/para formatlarını sabit `tr-TR` yerine aktif locale ile üret.
-4. Dil değişiminden sonra açık ekranın yeniden render edilmesini standartlaştır.
+1. `FreeRecordDetail`, `FreeRecordList`, `formSubmissions`, `questions`, `Result` dosyalarini i18n'e tasi.
+2. Tarih, para ve sayi formatlarini sabit `tr-TR` yerine aktif locale ile uret.
+3. Admin ve web tanitim ekranlarindaki kalan metinleri sozluge al.
+4. Diger 22 dil icin profesyonel ceviri dosyalari eklendiginde sadece dictionary import haritasini genislet.
