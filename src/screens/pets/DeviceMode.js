@@ -54,7 +54,7 @@ export function render(params = {}, query = {}) {
 
         <div style="display: flex; flex-direction: column; gap: var(--space-3); animation: slideUp 0.5s ease 0.15s both;">
           ${deviceOptions.map((option, i) => `
-            <div class="device-option-card" id="device-option-${option.id}" data-device="${option.id}" style="animation: slideInRight 0.4s ease ${0.1 + i * 0.1}s both;">
+            <button type="button" class="device-option-card" id="device-option-${option.id}" data-device="${option.id}" style="animation: slideInRight 0.4s ease ${0.1 + i * 0.1}s both;">
               <div class="device-option-icon" style="background: ${option.bgColor};">
                 ${window.__icons?.[option.iconKey]}
               </div>
@@ -62,7 +62,7 @@ export function render(params = {}, query = {}) {
                 <div class="device-option-title">${t(option.titleKey)}</div>
                 <div class="device-option-desc">${t(option.descKey)}</div>
               </div>
-            </div>
+            </button>
           `).join('')}
         </div>
       </div>

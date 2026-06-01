@@ -636,11 +636,15 @@
 .device-option-card {
   display: flex;
   gap: var(--space-4);
+  width: 100%;
   padding: var(--space-5);
   background: var(--white);
   border: 2px solid var(--border-color);
   border-radius: var(--radius-xl);
   cursor: pointer;
+  color: inherit;
+  font: inherit;
+  text-align: left;
   transition: all var(--transition-fast);
   margin-bottom: var(--space-3);
 }
