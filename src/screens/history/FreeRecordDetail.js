@@ -3,31 +3,33 @@ import { getState } from '../../store.js';
 import { getActivePet } from '../../mock/pets.js';
 import { getFreeRecords, updateReminderStatus } from '../../services/freeRecords.js';
 import { showToast } from '../../ui/toast.js';
+import { getLocale, t } from '../../i18n/tr.js';
 
-const configs = {
-  expenses: {
-    title: 'Masraf Detayı',
-    icon: 'briefcase',
-    listRoute: '/history/expenses',
-    addRoute: '/feature/expense'
-  },
-  reminders: {
-    title: 'Hatırlatıcı Detayı',
-    icon: 'calendar',
-    listRoute: '/history/reminders',
-    addRoute: '/feature/reminders'
-  },
-  health: {
-    title: 'Sağlık Kaydı Detayı',
-    icon: 'heartPulse',
-    listRoute: '/history/health-records',
-    addRoute: '/feature/photo-followup'
-  }
+const staticConfig = {
+  expenses: { icon: 'briefcase', listRoute: '/history/expenses', addRoute: '/feature/expense' },
+  reminders: { icon: 'calendar', listRoute: '/history/reminders', addRoute: '/feature/reminders' },
+  health: { icon: 'heartPulse', listRoute: '/history/health-records', addRoute: '/feature/photo-followup' }
 };
 
+function localeTag() {
+  const locale = getLocale();
+  if (locale === 'tr') return 'tr-TR';
+  if (locale === 'en') return 'en-US';
+  return locale;
+}
+
+function configFor(type) {
+  const localized = t(`freeRecords.detail.configs.${type}`);
+  const fallback = t('freeRecords.detail.configs.health');
+  return {
+    ...(staticConfig[type] || staticConfig.health),
+    ...(typeof localized === 'object' ? localized : fallback)
+  };
+}
+
 function formatDate(date) {
-  if (!date) return 'Tarih yok';
-  return new Intl.DateTimeFormat('tr-TR', {
+  if (!date) return t('freeRecords.common.no_date');
+  return new Intl.DateTimeFormat(localeTag(), {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -37,7 +39,7 @@ function formatDate(date) {
 }
 
 function formatMoney(amountCents, currency = 'TRY') {
-  return new Intl.NumberFormat('tr-TR', {
+  return new Intl.NumberFormat(localeTag(), {
     style: 'currency',
     currency,
     maximumFractionDigits: 0
@@ -56,9 +58,9 @@ function renderField(label, value) {
 }
 
 function statusLabel(status) {
-  if (status === 'scheduled') return 'Planlı';
-  if (status === 'completed') return 'Tamamlandı';
-  return status || 'Planlı';
+  if (status === 'scheduled') return t('freeRecords.common.scheduled');
+  if (status === 'completed') return t('freeRecords.common.completed');
+  return status || t('freeRecords.common.scheduled');
 }
 
 function icsDate(date) {
@@ -68,7 +70,7 @@ function icsDate(date) {
 
 function safeFileName(value) {
   return String(value || 'hatirlatici')
-    .toLocaleLowerCase('tr-TR')
+    .toLocaleLowerCase(localeTag())
     .replace(/[^a-z0-9ğüşöçıİĞÜŞÖÇ]+/gi, '-')
     .replace(/^-|-$/g, '')
     .slice(0, 44) || 'hatirlatici';
@@ -85,8 +87,8 @@ function escapeIcs(value) {
 function downloadReminderIcs(record) {
   const start = record.due_at && !Number.isNaN(Date.parse(record.due_at)) ? new Date(record.due_at) : new Date();
   const end = new Date(start.getTime() + 30 * 60 * 1000);
-  const title = record.title || record.reminder_type || 'Pati Sağlık Hatırlatıcı';
-  const description = [record.note, record.repeat_rule ? `Tekrar: ${record.repeat_rule}` : ''].filter(Boolean).join('\\n');
+  const title = record.title || record.reminder_type || t('freeRecords.detail.reminder_ics_title');
+  const description = [record.note, record.repeat_rule ? `${t('freeRecords.detail.repeat')}: ${record.repeat_rule}` : ''].filter(Boolean).join('\\n');
   const ics = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
@@ -98,7 +100,7 @@ function downloadReminderIcs(record) {
     `DTSTART:${icsDate(start)}`,
     `DTEND:${icsDate(end)}`,
     `SUMMARY:${escapeIcs(title)}`,
-    `DESCRIPTION:${escapeIcs(description || 'Pati Sağlık hatırlatıcısı')}`,
+    `DESCRIPTION:${escapeIcs(description || t('freeRecords.detail.reminder_ics_desc'))}`,
     'END:VEVENT',
     'END:VCALENDAR'
   ].join('\r\n');
@@ -123,7 +125,7 @@ function payloadFields(payload = {}) {
 
 function formatFileSize(bytes) {
   const size = Number(bytes || 0);
-  if (!size) return 'Boyut yok';
+  if (!size) return t('freeRecords.detail.no_size');
   if (size < 1024 * 1024) return `${Math.ceil(size / 1024)} KB`;
   return `${(size / 1024 / 1024).toFixed(1)} MB`;
 }
@@ -142,11 +144,11 @@ function payloadText(payload = {}, labels = []) {
     const value = payload[label];
     if (Array.isArray(value)) return value.map((item) => item?.label || item).filter(Boolean);
     return value ? [value] : [];
-  }).join(' ').toLocaleLowerCase('tr-TR');
+  }).join(' ').toLocaleLowerCase(localeTag());
 }
 
 function includesAny(text, words = []) {
-  return words.some((word) => text.includes(word.toLocaleLowerCase('tr-TR')));
+  return words.some((word) => text.includes(word.toLocaleLowerCase(localeTag())));
 }
 
 const VET_MAP_URL = 'https://www.google.com/maps/search/veteriner+kliniği';
@@ -159,25 +161,25 @@ function renderRuleAlert(record) {
     const score = Number(payloadFirst(payload, ['Skor'], 0));
     const finding = payloadText(payload, ['Ek bulgu', 'Not']);
     if (score <= 1 || score >= 5 || includesAny(finding, ['kan'])) {
-      alerts.push({ tone: 'danger', title: 'Dışkı kaydında dikkat', desc: 'Skor uç değerde veya kan bulgusu var. Devam ederse veteriner görüşmesi için notları hazır tut.' });
+      alerts.push({ tone: 'danger', title: t('freeRecords.detail.alerts.poop_danger.title'), desc: t('freeRecords.detail.alerts.poop_danger.desc') });
     } else if (score === 2 || score === 4 || includesAny(finding, ['mukus', 'çok sulu', 'çok sert'])) {
-      alerts.push({ tone: 'watch', title: 'Yakın takip önerilir', desc: 'Skor normalden sapmış görünüyor. Beslenme, su tüketimi ve tekrar eden kayıtları izlemek iyi olur.' });
+      alerts.push({ tone: 'watch', title: t('freeRecords.detail.alerts.poop_watch.title'), desc: t('freeRecords.detail.alerts.poop_watch.desc') });
     }
   }
 
   if (record.record_type === 'diet_log') {
     const reaction = payloadText(payload, ['Reaksiyon', 'Beslenme notu']);
     if (includesAny(reaction, ['kusma', 'ishal'])) {
-      alerts.push({ tone: 'danger', title: 'Beslenme reaksiyonu', desc: 'Kusma veya ishal işaretlenmiş. Mama geçişini ve tekrar eden belirtileri dikkatle takip et.' });
+      alerts.push({ tone: 'danger', title: t('freeRecords.detail.alerts.diet_danger.title'), desc: t('freeRecords.detail.alerts.diet_danger.desc') });
     } else if (includesAny(reaction, ['kaşıntı', 'gaz'])) {
-      alerts.push({ tone: 'watch', title: 'Hassasiyet olabilir', desc: 'Kaşıntı veya gaz gibi reaksiyonlar kaydedilmiş. Sonraki öğünlerde aynı belirtiyi kontrol et.' });
+      alerts.push({ tone: 'watch', title: t('freeRecords.detail.alerts.diet_watch.title'), desc: t('freeRecords.detail.alerts.diet_watch.desc') });
     }
   }
 
   if (record.record_type === 'chronic_followup') {
     const status = payloadText(payload, ['Bugünkü durum', 'Takip notu']);
     if (includesAny(status, ['daha kötü', 'ilaç atlandı'])) {
-      alerts.push({ tone: 'watch', title: 'Kronik takip uyarısı', desc: 'Durum kötüleşme veya ilaç atlama içeriyor. Ölçüm ve notları aynı gün içinde tamamlamak faydalı olur.' });
+      alerts.push({ tone: 'watch', title: t('freeRecords.detail.alerts.chronic_watch.title'), desc: t('freeRecords.detail.alerts.chronic_watch.desc') });
     }
   }
 
@@ -185,35 +187,35 @@ function renderRuleAlert(record) {
     const wound = payloadText(payload, ['Yara durumu', 'Genel durum']);
     const medication = payloadText(payload, ['İlaç kullanımı']);
     if (includesAny(wound, ['akıntı'])) {
-      alerts.push({ tone: 'danger', title: 'Yara yeri dikkat', desc: 'Akıntı işaretlenmiş. Fotoğraf kaydı ve veteriner kontrol planı önerilir.' });
+      alerts.push({ tone: 'danger', title: t('freeRecords.detail.alerts.postop_danger.title'), desc: t('freeRecords.detail.alerts.postop_danger.desc') });
     } else if (includesAny(wound, ['kızarık', 'şiş'])) {
-      alerts.push({ tone: 'watch', title: 'Yara yakın takip', desc: 'Kızarıklık veya şişlik kaydedilmiş. Aynı açıdan fotoğrafla değişimi takip et.' });
+      alerts.push({ tone: 'watch', title: t('freeRecords.detail.alerts.postop_watch.title'), desc: t('freeRecords.detail.alerts.postop_watch.desc') });
     }
     if (includesAny(medication, ['atlandı', 'yan etki'])) {
-      alerts.push({ tone: 'watch', title: 'İlaç takibi', desc: 'İlaç atlama veya yan etki kaydedilmiş. Bir sonraki doz/kontrol için hatırlatıcı planla.' });
+      alerts.push({ tone: 'watch', title: t('freeRecords.detail.alerts.medication_watch.title'), desc: t('freeRecords.detail.alerts.medication_watch.desc') });
     }
   }
 
   if (record.record_type === 'reproduction_followup') {
     const finding = payloadText(payload, ['Takip türü', 'Belirti', 'Not']);
     if (includesAny(finding, ['akıntı', 'iştah değişimi'])) {
-      alerts.push({ tone: 'watch', title: 'Üreme takibi dikkat', desc: 'Belirti değişimi kaydedilmiş. Takvim ve veteriner notlarını güncel tut.' });
+      alerts.push({ tone: 'watch', title: t('freeRecords.detail.alerts.reproduction_watch.title'), desc: t('freeRecords.detail.alerts.reproduction_watch.desc') });
     }
   }
 
   if (record.record_type === 'senior_followup') {
     const senior = payloadText(payload, ['Günlük durum', 'Odak', 'Gözlem', 'Not']);
     if (includesAny(senior, ['ağrılı', 'iştahsız', 'ağrı'])) {
-      alerts.push({ tone: 'watch', title: 'Senior hassasiyet', desc: 'Ağrı veya iştah hassasiyeti kaydedilmiş. Su, kilo ve hareket notlarını düzenli karşılaştır.' });
+      alerts.push({ tone: 'watch', title: t('freeRecords.detail.alerts.senior_watch.title'), desc: t('freeRecords.detail.alerts.senior_watch.desc') });
     }
   }
 
   if (record.record_type === 'toxin_foreign_body') {
     const finding = payloadText(payload, ['Ne yuttu / temas etti?', 'Ne zaman oldu?', 'Belirti var mı?', 'Detay']);
     if (includesAny(finding, ['nefes sorunu', 'titreme', 'ilaç', 'çikolata', '0-1 saat'])) {
-      alerts.push({ tone: 'danger', title: 'Acil veteriner yönlendirmesi', desc: 'Toksik madde/yabancı cisim şüphesi ve riskli belirti/zaman bilgisi var. Paket, miktar ve zamanı not edip beklemeden veterinerle görüş.', actionLabel: 'Veteriner Ara', actionUrl: VET_MAP_URL });
+      alerts.push({ tone: 'danger', title: t('freeRecords.detail.alerts.toxin_danger.title'), desc: t('freeRecords.detail.alerts.toxin_danger.desc'), actionLabel: t('freeRecords.detail.vet_search'), actionUrl: VET_MAP_URL });
     } else if (includesAny(finding, ['kusma', 'halsizlik', 'salya', '1-3 saat', 'emin değilim'])) {
-      alerts.push({ tone: 'watch', title: 'Yakın acil takip', desc: 'Belirti veya belirsiz zaman bilgisi kaydedilmiş. Miktarı, saatini ve mümkünse fotoğrafını hazır tut; kötüleşirse acil destek al.', actionLabel: 'Yakındaki Klinikleri Aç', actionUrl: VET_MAP_URL });
+      alerts.push({ tone: 'watch', title: t('freeRecords.detail.alerts.toxin_watch.title'), desc: t('freeRecords.detail.alerts.toxin_watch.desc'), actionLabel: t('freeRecords.detail.open_nearby_clinics'), actionUrl: VET_MAP_URL });
     }
   }
 
@@ -225,9 +227,9 @@ function renderRuleAlert(record) {
         ${alerts.map((alert) => `
           <strong>${alert.title}</strong>
           <small>${alert.desc}</small>
-          ${alert.actionUrl ? `<a class="record-alert-action" href="${alert.actionUrl}" target="_blank" rel="noopener noreferrer">${alert.actionLabel || 'Aç'}</a>` : ''}
+          ${alert.actionUrl ? `<a class="record-alert-action" href="${alert.actionUrl}" target="_blank" rel="noopener noreferrer">${alert.actionLabel || t('freeRecords.detail.open')}</a>` : ''}
         `).join('')}
-        <em>Bu uyarı teşhis değildir; veteriner görüşmesine hazırlık için kayıtları düzenler.</em>
+        <em>${t('freeRecords.detail.alert_disclaimer')}</em>
       </div>
     </div>
   `;
@@ -246,10 +248,10 @@ function addDaysIso(days = 1) {
 
 function reminderPresetUrl(reminder = {}) {
   const params = new URLSearchParams({
-    type: reminder.type || 'Randevu',
-    title: reminder.title || 'Takip hatırlatıcısı',
+    type: reminder.type || t('freeRecords.detail.appointment'),
+    title: reminder.title || t('freeRecords.detail.followup_reminder'),
     date: reminder.date || addDaysIso(reminder.days || 1),
-    repeat: reminder.repeat || 'Tek sefer',
+    repeat: reminder.repeat || t('freeRecords.common.once'),
     note: reminder.note || ''
   });
   return `#/feature/reminders?${params.toString()}`;
@@ -262,7 +264,7 @@ function renderPlanRows(rows = []) {
       <div>
         <strong>${row.title}</strong>
         <small>${row.desc}</small>
-        ${row.reminder ? `<a class="record-plan-action" href="${reminderPresetUrl(row.reminder)}">${window.__icons?.bell || ''} Hatırlatıcı Kur</a>` : ''}
+        ${row.reminder ? `<a class="record-plan-action" href="${reminderPresetUrl(row.reminder)}">${window.__icons?.bell || ''} ${t('freeRecords.detail.set_reminder')}</a>` : ''}
       </div>
     </div>
   `).join('');
@@ -271,69 +273,69 @@ function renderPlanRows(rows = []) {
 function renderFollowupPlan(record) {
   const payload = record.payload || {};
   const elapsed = daysSince(payload['Başlangıç tarihi'] || record.occurred_at || record.created_at);
-  const elapsedText = elapsed === null ? 'Süre kaydı yok' : `${elapsed}. gün`;
+  const elapsedText = elapsed === null ? t('freeRecords.detail.no_duration') : t('freeRecords.detail.day_count').replace('{count}', elapsed);
   const plans = {
     chronic_followup: {
-      title: 'Kronik takip planı',
-      desc: 'Düzenli durum, ölçüm ve ilaç notlarını aynı şablonda biriktir.',
+      title: t('freeRecords.detail.plans.chronic.title'),
+      desc: t('freeRecords.detail.plans.chronic.desc'),
       rows: [
-        { icon: 'clipboard', title: payloadFirst(payload, ['Şablon'], 'Takip şablonu'), desc: payloadFirst(payload, ['Bugünkü durum'], 'Son durum kaydı bekleniyor') },
-        { icon: 'measurement', title: 'Ölçüm/gözlem', desc: payloadFirst(payload, ['Ölçüm / gözlem'], 'Bir sonraki kayıtta ölçüm veya gözlem ekle') },
-        { icon: 'calendar', title: 'Rutin kontrol', desc: 'Haftalık kayıt düzeni trendi daha okunabilir yapar.', reminder: { type: 'Randevu', title: 'Kronik takip kontrolü', days: 7, repeat: 'Haftalık', note: 'Kronik takip kaydını güncelle ve ölçüm/gözlem ekle.' } }
+        { icon: 'clipboard', title: payloadFirst(payload, ['Şablon'], t('freeRecords.detail.plans.chronic.template')), desc: payloadFirst(payload, ['Bugünkü durum'], t('freeRecords.detail.plans.chronic.no_status')) },
+        { icon: 'measurement', title: t('freeRecords.detail.plans.common.measurement_observation'), desc: payloadFirst(payload, ['Ölçüm / gözlem'], t('freeRecords.detail.plans.chronic.measurement_desc')) },
+        { icon: 'calendar', title: t('freeRecords.detail.plans.common.routine_check'), desc: t('freeRecords.detail.plans.chronic.routine_desc'), reminder: { type: t('freeRecords.detail.appointment'), title: t('freeRecords.detail.plans.chronic.reminder_title'), days: 7, repeat: t('freeRecords.detail.weekly'), note: t('freeRecords.detail.plans.chronic.reminder_note') } }
       ]
     },
     postop_followup: {
-      title: 'Operasyon sonrası plan',
-      desc: 'Yara, ilaç ve genel durum kayıtlarını gün gün takip et.',
+      title: t('freeRecords.detail.plans.postop.title'),
+      desc: t('freeRecords.detail.plans.postop.desc'),
       rows: [
-        { icon: 'calendar', title: payloadFirst(payload, ['Operasyon günü'], elapsedText), desc: 'Operasyon günü bilgisini sonraki kontrollerle karşılaştır.' },
-        { icon: 'shield', title: 'Yara durumu', desc: payloadFirst(payload, ['Yara durumu'], 'Fotoğraf ve kısa notla takip et') },
-        { icon: 'bell', title: payloadFirst(payload, ['İlaç kullanımı'], 'İlaç/randevu'), desc: payloadFirst(payload, ['Sonraki doz / kontrol'], 'İlaç veya kontrol tarihi varsa takvim hatırlatıcısı ekle.'), reminder: { type: 'İlaç', title: 'Operasyon sonrası ilaç/kontrol', date: payloadFirst(payload, ['Sonraki doz / kontrol'], ''), days: 1, repeat: 'Günlük', note: 'Operasyon sonrası ilaç, yara ve genel durum kontrolünü kaydet.' } }
+        { icon: 'calendar', title: payloadFirst(payload, ['Operasyon günü'], elapsedText), desc: t('freeRecords.detail.plans.postop.day_desc') },
+        { icon: 'shield', title: t('freeRecords.detail.plans.common.wound_status'), desc: payloadFirst(payload, ['Yara durumu'], t('freeRecords.detail.plans.postop.wound_desc')) },
+        { icon: 'bell', title: payloadFirst(payload, ['İlaç kullanımı'], t('freeRecords.detail.plans.postop.medication_title')), desc: payloadFirst(payload, ['Sonraki doz / kontrol'], t('freeRecords.detail.plans.postop.medication_desc')), reminder: { type: t('freeRecords.detail.medication'), title: t('freeRecords.detail.plans.postop.reminder_title'), date: payloadFirst(payload, ['Sonraki doz / kontrol'], ''), days: 1, repeat: t('freeRecords.detail.daily'), note: t('freeRecords.detail.plans.postop.reminder_note') } }
       ]
     },
     diet_log: {
-      title: 'Beslenme geçiş planı',
-      desc: 'Yeni mamaya geçişte reaksiyonları aynı kayıt hattında tut.',
+      title: t('freeRecords.detail.plans.diet.title'),
+      desc: t('freeRecords.detail.plans.diet.desc'),
       rows: [
-        { icon: 'heartPulse', title: payloadFirst(payload, ['Yeni mama / öğün'], 'Yeni mama'), desc: payloadFirst(payload, ['Geçiş günü'], 'Geçiş günü belirtilmedi') },
-        { icon: 'activity', title: 'Reaksiyon', desc: payloadFirst(payload, ['Reaksiyon'], 'Reaksiyon kaydı yok') },
-        { icon: 'calendar', title: 'Sonraki kontrol', desc: 'Dışkı, iştah ve kaşıntı notunu bir sonraki kayda ekle.', reminder: { type: 'Randevu', title: 'Beslenme geçiş kontrolü', days: 3, repeat: 'Tek sefer', note: 'Yeni mama sonrası iştah, dışkı ve kaşıntı notlarını kontrol et.' } }
+        { icon: 'heartPulse', title: payloadFirst(payload, ['Yeni mama / öğün'], t('freeRecords.detail.plans.diet.new_food')), desc: payloadFirst(payload, ['Geçiş günü'], t('freeRecords.detail.plans.diet.no_transition_day')) },
+        { icon: 'activity', title: t('freeRecords.detail.plans.common.reaction'), desc: payloadFirst(payload, ['Reaksiyon'], t('freeRecords.detail.plans.diet.no_reaction')) },
+        { icon: 'calendar', title: t('freeRecords.detail.plans.common.next_check'), desc: t('freeRecords.detail.plans.diet.next_desc'), reminder: { type: t('freeRecords.detail.appointment'), title: t('freeRecords.detail.plans.diet.reminder_title'), days: 3, repeat: t('freeRecords.common.once'), note: t('freeRecords.detail.plans.diet.reminder_note') } }
       ]
     },
     poop_score: {
-      title: 'Dışkı takip planı',
-      desc: 'Skor değişimini düzenli kaydederek beslenme ve stres etkisini izleyebilirsin.',
+      title: t('freeRecords.detail.plans.poop.title'),
+      desc: t('freeRecords.detail.plans.poop.desc'),
       rows: [
-        { icon: 'activity', title: 'Son skor', desc: payloadFirst(payload, ['Skor'], 'Skor girilmedi') },
-        { icon: 'search', title: 'Ek bulgu', desc: payloadFirst(payload, ['Ek bulgu'], 'Ek bulgu yok') },
-        { icon: 'camera', title: 'Görsel kayıt', desc: 'Gerekirse aynı ışıkta fotoğraf ekleyerek karşılaştırmayı güçlendir.' }
+        { icon: 'activity', title: t('freeRecords.detail.plans.poop.last_score'), desc: payloadFirst(payload, ['Skor'], t('freeRecords.detail.plans.poop.no_score')) },
+        { icon: 'search', title: t('freeRecords.detail.plans.poop.extra_finding'), desc: payloadFirst(payload, ['Ek bulgu'], t('freeRecords.detail.plans.poop.no_finding')) },
+        { icon: 'camera', title: t('freeRecords.detail.plans.common.visual_record'), desc: t('freeRecords.detail.plans.poop.visual_desc') }
       ]
     },
     reproduction_followup: {
-      title: 'Üreme takip planı',
-      desc: 'Kızgınlık, gebelik veya doğum sonrası belirtileri takvim halinde izle.',
+      title: t('freeRecords.detail.plans.reproduction.title'),
+      desc: t('freeRecords.detail.plans.reproduction.desc'),
       rows: [
-        { icon: 'calendar', title: payloadFirst(payload, ['Takip türü'], 'Takip türü'), desc: payloadFirst(payload, ['Başlangıç tarihi'], elapsedText) },
-        { icon: 'note', title: 'Belirti', desc: payloadFirst(payload, ['Belirti'], 'Belirti kaydı yok') },
-        { icon: 'bell', title: 'Hatırlatma', desc: 'Kontrol günü veya veteriner ziyareti için ayrı hatırlatıcı ekle.', reminder: { type: 'Randevu', title: 'Üreme takip kontrolü', days: 7, repeat: 'Tek sefer', note: 'Belirti değişimi, iştah ve veteriner notunu kontrol et.' } }
+        { icon: 'calendar', title: payloadFirst(payload, ['Takip türü'], t('freeRecords.detail.plans.reproduction.followup_type')), desc: payloadFirst(payload, ['Başlangıç tarihi'], elapsedText) },
+        { icon: 'note', title: t('freeRecords.detail.plans.common.sign'), desc: payloadFirst(payload, ['Belirti'], t('freeRecords.detail.plans.reproduction.no_sign')) },
+        { icon: 'bell', title: t('freeRecords.detail.plans.common.reminder'), desc: t('freeRecords.detail.plans.reproduction.reminder_desc'), reminder: { type: t('freeRecords.detail.appointment'), title: t('freeRecords.detail.plans.reproduction.reminder_title'), days: 7, repeat: t('freeRecords.common.once'), note: t('freeRecords.detail.plans.reproduction.reminder_note') } }
       ]
     },
     senior_followup: {
-      title: 'Senior hassasiyet planı',
-      desc: 'Yaşlı petlerde küçük değişimleri düzenli ve sakin bir akışta kaydet.',
+      title: t('freeRecords.detail.plans.senior.title'),
+      desc: t('freeRecords.detail.plans.senior.desc'),
       rows: [
-        { icon: 'heartPulse', title: payloadFirst(payload, ['Günlük durum'], 'Günlük durum'), desc: payloadFirst(payload, ['Odak'], 'Odak alanı yok') },
-        { icon: 'measurement', title: 'Gözlem', desc: payloadFirst(payload, ['Gözlem'], 'Gözlem eklenmedi') },
-        { icon: 'calendar', title: 'Rutin', desc: 'Su, kilo, ağrı ve hareket kayıtlarını haftalık karşılaştır.', reminder: { type: 'Randevu', title: 'Senior rutin kontrol', days: 7, repeat: 'Haftalık', note: 'Su, kilo, ağrı ve hareket gözlemlerini güncelle.' } }
+        { icon: 'heartPulse', title: payloadFirst(payload, ['Günlük durum'], t('freeRecords.detail.plans.senior.daily_status')), desc: payloadFirst(payload, ['Odak'], t('freeRecords.detail.plans.senior.no_focus')) },
+        { icon: 'measurement', title: t('freeRecords.detail.plans.common.observation'), desc: payloadFirst(payload, ['Gözlem'], t('freeRecords.detail.plans.senior.no_observation')) },
+        { icon: 'calendar', title: t('freeRecords.detail.plans.common.routine'), desc: t('freeRecords.detail.plans.senior.routine_desc'), reminder: { type: t('freeRecords.detail.appointment'), title: t('freeRecords.detail.plans.senior.reminder_title'), days: 7, repeat: t('freeRecords.detail.weekly'), note: t('freeRecords.detail.plans.senior.reminder_note') } }
       ]
     },
     toxin_foreign_body: {
-      title: 'Acil kontrol planı',
-      desc: 'Toksik madde veya yabancı cisim şüphesinde veteriner görüşmesi için bilgileri hazır tut.',
+      title: t('freeRecords.detail.plans.toxin.title'),
+      desc: t('freeRecords.detail.plans.toxin.desc'),
       rows: [
-        { icon: 'alert', title: payloadFirst(payload, ['Ne yuttu / temas etti?'], 'Madde/cisim'), desc: payloadFirst(payload, ['Ne zaman oldu?'], 'Zaman bilgisi yok') },
-        { icon: 'activity', title: 'Belirti', desc: payloadFirst(payload, ['Belirti var mı?'], 'Belirti işaretlenmedi') },
-        { icon: 'stethoscope', title: 'Veteriner hazırlığı', desc: 'Paket/fotoğraf, yaklaşık miktar, saat ve belirtileri tek yerde hazır tut.' }
+        { icon: 'alert', title: payloadFirst(payload, ['Ne yuttu / temas etti?'], t('freeRecords.detail.plans.toxin.substance')), desc: payloadFirst(payload, ['Ne zaman oldu?'], t('freeRecords.detail.plans.toxin.no_time')) },
+        { icon: 'activity', title: t('freeRecords.detail.plans.common.sign'), desc: payloadFirst(payload, ['Belirti var mı?'], t('freeRecords.detail.plans.toxin.no_sign')) },
+        { icon: 'stethoscope', title: t('freeRecords.detail.plans.toxin.vet_prep'), desc: t('freeRecords.detail.plans.toxin.vet_prep_desc') }
       ]
     }
   };
@@ -365,34 +367,34 @@ function compareInsight(files = [], payload = {}, recordType = '') {
   const hasPair = Boolean(beforeFile && afterFile);
   const sizeDelta = hasPair ? Number(afterFile.file_size_bytes || 0) - Number(beforeFile.file_size_bytes || 0) : 0;
   const sizeText = hasPair && sizeDelta
-    ? `${sizeDelta > 0 ? '+' : ''}${Math.round(sizeDelta / 1024)} KB dosya farkı`
-    : hasPair ? 'Dosya boyutları yakın' : 'Karşılaştırma için iki fotoğraf bekleniyor';
+    ? t('freeRecords.detail.compare.size_delta').replace('{delta}', `${sizeDelta > 0 ? '+' : ''}${Math.round(sizeDelta / 1024)}`)
+    : hasPair ? t('freeRecords.detail.compare.size_close') : t('freeRecords.detail.compare.waiting_pair');
 
   if (recordType === 'photo_followup' && (hasPair || change)) {
-    const tone = includesAny(String(change).toLocaleLowerCase('tr-TR'), ['arttı', 'yeni']) ? 'danger'
-      : includesAny(String(change).toLocaleLowerCase('tr-TR'), ['azaldı']) ? 'good'
+    const tone = includesAny(String(change).toLocaleLowerCase(localeTag()), ['arttı', 'yeni']) ? 'danger'
+      : includesAny(String(change).toLocaleLowerCase(localeTag()), ['azaldı']) ? 'good'
         : 'watch';
-    const title = tone === 'danger' ? 'Değişim yakından izlenmeli' : tone === 'good' ? 'İyileşme eğilimi' : 'Değişim stabil';
+    const title = tone === 'danger' ? t('freeRecords.detail.compare.photo_danger_title') : tone === 'good' ? t('freeRecords.detail.compare.photo_good_title') : t('freeRecords.detail.compare.photo_watch_title');
     const desc = tone === 'danger'
-      ? 'Kayıtta artış veya yeni belirti seçilmiş. Aynı açıdan yeni fotoğraf ve veteriner notu eklemek iyi olur.'
+      ? t('freeRecords.detail.compare.photo_danger_desc')
       : tone === 'good'
-        ? 'Azalma seçilmiş. Aynı ışık/açı ile bir sonraki kontrol fotoğrafı trendi daha net gösterir.'
-        : 'Belirti aynı görünüyor. Düzenli aralıkla tekrar fotoğraf eklemek karşılaştırmayı güçlendirir.';
-    return { tone, title, desc, meta: `${change || 'Görsel değişim seçilmedi'} · ${sizeText}` };
+        ? t('freeRecords.detail.compare.photo_good_desc')
+        : t('freeRecords.detail.compare.photo_watch_desc');
+    return { tone, title, desc, meta: `${change || t('freeRecords.detail.compare.no_visual_change')} · ${sizeText}` };
   }
 
   if (recordType === 'postop_followup' && (files.length || wound)) {
-    const woundText = String(wound).toLocaleLowerCase('tr-TR');
+    const woundText = String(wound).toLocaleLowerCase(localeTag());
     const tone = includesAny(woundText, ['akıntı']) ? 'danger'
       : includesAny(woundText, ['kızarık', 'şiş']) ? 'watch'
         : 'good';
-    const title = tone === 'danger' ? 'Yara fotoğrafı acil takipte' : tone === 'watch' ? 'Yara değişimi izlenmeli' : 'Yara kaydı sakin';
+    const title = tone === 'danger' ? t('freeRecords.detail.compare.wound_danger_title') : tone === 'watch' ? t('freeRecords.detail.compare.wound_watch_title') : t('freeRecords.detail.compare.wound_good_title');
     const desc = tone === 'danger'
-      ? 'Akıntı işaretlenmiş. Fotoğrafı sakla, doz/kontrol hatırlatıcısını kullan ve veterinerle paylaş.'
+      ? t('freeRecords.detail.compare.wound_danger_desc')
       : tone === 'watch'
-        ? 'Kızarıklık veya şişlik var. Sonraki kayıtta aynı açıdan fotoğraf ekleyerek farkı karşılaştır.'
-        : 'Yara durumu temiz görünüyor. Aynı açıdan aralıklı fotoğraf eklemek iyileşme kaydını güçlendirir.';
-    return { tone, title, desc, meta: `${wound || 'Yara durumu yok'} · ${files.length} medya` };
+        ? t('freeRecords.detail.compare.wound_watch_desc')
+        : t('freeRecords.detail.compare.wound_good_desc');
+    return { tone, title, desc, meta: `${wound || t('freeRecords.detail.compare.no_wound_status')} · ${t('freeRecords.detail.compare.media_count').replace('{count}', files.length)}` };
   }
 
   return null;
@@ -413,13 +415,13 @@ function renderCompareInsight(files = [], payload = {}, recordType = '') {
   `;
 }
 
-function renderMediaGallery(files = [], subject = 'sağlık kaydına', record = null) {
+function renderMediaGallery(files = [], subject = t('freeRecords.detail.subject_health'), record = null) {
   if (!files.length) return '';
   const payload = record?.payload || {};
   const recordType = record?.record_type || '';
-  const beforeFile = files.find((file) => String(file.metadata?.label || '').toLocaleLowerCase('tr-TR').includes('önce'));
+  const beforeFile = files.find((file) => String(file.metadata?.label || '').toLocaleLowerCase(localeTag()).includes('önce'));
   const afterFile = files.find((file) => {
-    const label = String(file.metadata?.label || '').toLocaleLowerCase('tr-TR');
+    const label = String(file.metadata?.label || '').toLocaleLowerCase(localeTag());
     return label.includes('bugün') || label.includes('sonra') || label.includes('yeni');
   });
   const comparePanel = beforeFile || afterFile ? `
@@ -427,8 +429,8 @@ function renderMediaGallery(files = [], subject = 'sağlık kaydına', record = 
       ${[beforeFile, afterFile].map((file, index) => `
         <div class="record-compare-slot ${file ? '' : 'empty'}">
           <span>${window.__icons?.camera}</span>
-          <small>${index === 0 ? 'Önceki kayıt' : 'Bugünkü kayıt'}</small>
-          <strong>${file?.metadata?.name || file?.local_uri?.replace('local://', '') || 'Dosya bekleniyor'}</strong>
+          <small>${index === 0 ? t('freeRecords.detail.previous_record') : t('freeRecords.detail.today_record')}</small>
+          <strong>${file?.metadata?.name || file?.local_uri?.replace('local://', '') || t('freeRecords.detail.file_pending')}</strong>
         </div>
       `).join('')}
     </div>
@@ -439,21 +441,21 @@ function renderMediaGallery(files = [], subject = 'sağlık kaydına', record = 
       <div class="record-media-head">
         <span>${window.__icons?.camera}</span>
         <div>
-          <strong>Medya kayıtları</strong>
-          <small>${files.length} dosya bu ${subject} bağlı</small>
+          <strong>${t('freeRecords.detail.media_records')}</strong>
+          <small>${t('freeRecords.detail.media_count').replace('{count}', files.length).replace('{subject}', subject)}</small>
         </div>
       </div>
       ${comparePanel}
       ${renderCompareInsight(files, payload, recordType)}
       <div class="record-media-grid">
         ${files.map((file) => {
-          const name = file.metadata?.name || file.local_uri?.replace('local://', '') || 'Dosya';
-          const label = file.metadata?.label || (file.media_type === 'image' ? 'Fotoğraf' : 'Belge');
+          const name = file.metadata?.name || file.local_uri?.replace('local://', '') || t('freeRecords.detail.file');
+          const label = file.metadata?.label || (file.media_type === 'image' ? t('common.photos') : t('freeRecords.detail.document'));
           return `
             <div class="record-media-card">
               <span>${window.__icons?.[file.media_type === 'image' ? 'camera' : 'upload'] || window.__icons?.clipboard}</span>
               <strong>${name}</strong>
-              <small>${label} · ${file.mime_type || file.media_type || 'dosya'} · ${formatFileSize(file.file_size_bytes)}</small>
+              <small>${label} · ${file.mime_type || file.media_type || t('freeRecords.detail.file_lower')} · ${formatFileSize(file.file_size_bytes)}</small>
             </div>
           `;
         }).join('')}
@@ -468,11 +470,11 @@ function findRecord(type, records, recordId) {
 }
 
 function renderDetail(type, record = null) {
-  const config = configs[type] || configs.health;
+  const config = configFor(type);
   if (!record) {
     return `
       <div class="free-record-panel">
-        <p>Kayıt detayı getiriliyor...</p>
+        <p>${t('freeRecords.detail.loading')}</p>
       </div>
     `;
   }
@@ -483,18 +485,18 @@ function renderDetail(type, record = null) {
         <div class="record-detail-main">
           <div class="premium-icon-box">${window.__icons?.briefcase}</div>
           <div>
-            <span>Masraf</span>
-            <h2>${record.title || record.category || 'Masraf'}</h2>
+            <span>${t('freeRecords.common.expense')}</span>
+            <h2>${record.title || record.category || t('freeRecords.common.expense')}</h2>
             <p>${formatDate(record.spent_at || record.created_at)}</p>
           </div>
         </div>
         <div class="record-detail-amount">${formatMoney(record.amount_cents, record.currency)}</div>
         <div class="record-detail-grid">
-          ${renderField('Kategori', record.category)}
-          ${renderField('Not', record.note)}
-          ${renderField('Kayıt tarihi', formatDate(record.created_at))}
+          ${renderField(t('freeRecords.detail.fields.category'), record.category)}
+          ${renderField(t('freeRecords.detail.fields.note'), record.note)}
+          ${renderField(t('freeRecords.detail.fields.created_at'), formatDate(record.created_at))}
         </div>
-        ${renderMediaGallery(record.mediaFiles, 'masraf kaydına', record)}
+        ${renderMediaGallery(record.mediaFiles, t('freeRecords.detail.subject_expense'), record)}
       </div>
     `;
   }
@@ -505,31 +507,31 @@ function renderDetail(type, record = null) {
         <div class="record-detail-main">
           <div class="premium-icon-box">${window.__icons?.calendar}</div>
           <div>
-            <span>Takvim</span>
-            <h2>${record.title || record.reminder_type || 'Hatırlatıcı'}</h2>
+            <span>${t('freeRecords.list.tabs.reminders')}</span>
+            <h2>${record.title || record.reminder_type || t('freeRecords.common.reminder')}</h2>
             <p>${formatDate(record.due_at)}</p>
           </div>
         </div>
         <div class="record-detail-grid">
-          ${renderField('Tür', record.reminder_type)}
-          ${renderField('Tekrar', record.repeat_rule || 'Tek sefer')}
-          ${renderField('Durum', statusLabel(record.status))}
-          ${renderField('Not', record.note)}
-          ${renderField('Kayıt tarihi', formatDate(record.created_at))}
+          ${renderField(t('freeRecords.detail.fields.type'), record.reminder_type)}
+          ${renderField(t('freeRecords.detail.fields.repeat'), record.repeat_rule || t('freeRecords.common.once'))}
+          ${renderField(t('freeRecords.detail.fields.status'), statusLabel(record.status))}
+          ${renderField(t('freeRecords.detail.fields.note'), record.note)}
+          ${renderField(t('freeRecords.detail.fields.created_at'), formatDate(record.created_at))}
         </div>
         <div class="reminder-action-panel">
           <div>
-            <span>Bildirim hazırlığı</span>
-            <strong>Takvim durumu güncellenebilir</strong>
-            <p>PWA/Capacitor bildirim izni geldiğinde bu kayıt durumları kullanılacak.</p>
+            <span>${t('freeRecords.detail.notification_prep')}</span>
+            <strong>${t('freeRecords.detail.calendar_status_title')}</strong>
+            <p>${t('freeRecords.detail.calendar_status_desc')}</p>
           </div>
           <div class="reminder-action-row">
-            <button type="button" data-reminder-action="complete" ${record.status === 'completed' ? 'disabled' : ''}>Tamamlandı</button>
-            <button type="button" data-reminder-action="snooze">Yarın Hatırlat</button>
-            <button type="button" data-reminder-action="calendar">Takvime Aktar</button>
+            <button type="button" data-reminder-action="complete" ${record.status === 'completed' ? 'disabled' : ''}>${t('freeRecords.common.completed')}</button>
+            <button type="button" data-reminder-action="snooze">${t('freeRecords.detail.remind_tomorrow')}</button>
+            <button type="button" data-reminder-action="calendar">${t('freeRecords.detail.export_calendar')}</button>
           </div>
         </div>
-        ${renderMediaGallery(record.mediaFiles, 'hatırlatıcıya', record)}
+        ${renderMediaGallery(record.mediaFiles, t('freeRecords.detail.subject_reminder'), record)}
       </div>
     `;
   }
@@ -539,28 +541,28 @@ function renderDetail(type, record = null) {
       <div class="record-detail-main">
         <div class="premium-icon-box">${window.__icons?.heartPulse}</div>
         <div>
-          <span>Sağlık kaydı</span>
-          <h2>${record.title || 'Sağlık kaydı'}</h2>
+          <span>${t('freeRecords.common.health_record')}</span>
+          <h2>${record.title || t('freeRecords.common.health_record')}</h2>
           <p>${formatDate(record.occurred_at || record.created_at)}</p>
         </div>
       </div>
       <div class="record-detail-grid">
-        ${renderField('Kayıt türü', record.record_type)}
-        ${renderField('Özet', record.summary)}
+        ${renderField(t('freeRecords.detail.fields.record_type'), record.record_type)}
+        ${renderField(t('freeRecords.detail.fields.summary'), record.summary)}
         ${payloadFields(record.payload)}
-        ${renderField('Kaynak', record.source)}
-        ${renderField('Kayıt tarihi', formatDate(record.created_at))}
+        ${renderField(t('freeRecords.detail.fields.source'), record.source)}
+        ${renderField(t('freeRecords.detail.fields.created_at'), formatDate(record.created_at))}
       </div>
       ${renderRuleAlert(record)}
       ${renderFollowupPlan(record)}
-      ${renderMediaGallery(record.mediaFiles, 'sağlık kaydına', record)}
+      ${renderMediaGallery(record.mediaFiles, t('freeRecords.detail.subject_health'), record)}
     </div>
   `;
 }
 
 export function render(params = {}) {
   const type = params.type || 'health';
-  const config = configs[type] || configs.health;
+  const config = configFor(type);
   const state = getState();
   const pet = getActivePet(state.activePetId);
 
@@ -580,9 +582,9 @@ export function render(params = {}) {
         <div class="feature-form-hero teal">
           <div class="premium-icon-box">${window.__icons?.[config.icon]}</div>
           <div>
-            <div class="premium-screen-kicker">Ücretsiz kayıt detayı</div>
+            <div class="premium-screen-kicker">${t('freeRecords.detail.kicker')}</div>
             <h1>${config.title}</h1>
-            <p>${pet.name} için kaydedilen bilginin okunabilir özeti.</p>
+            <p>${t('freeRecords.detail.hero_desc').replace('{name}', pet.name)}</p>
           </div>
         </div>
 
@@ -591,8 +593,8 @@ export function render(params = {}) {
         </div>
 
         <div class="record-detail-actions">
-          <button class="btn btn-primary btn-full" id="btnNewRecord">Yeni Kayıt Ekle</button>
-          <button class="btn btn-secondary btn-full" id="btnList">Listeye Dön</button>
+          <button class="btn btn-primary btn-full" id="btnNewRecord">${t('freeRecords.detail.new_record')}</button>
+          <button class="btn btn-secondary btn-full" id="btnList">${t('freeRecords.detail.back_to_list')}</button>
         </div>
       </div>
     </div>
@@ -601,7 +603,7 @@ export function render(params = {}) {
 
 export function afterRender(params = {}) {
   const type = params.type || 'health';
-  const config = configs[type] || configs.health;
+  const config = configFor(type);
   const state = getState();
 
   document.getElementById('btnBack')?.addEventListener('click', () => goBack());
@@ -618,7 +620,7 @@ export function afterRender(params = {}) {
           return;
         }
         btn.disabled = true;
-        btn.textContent = 'İşleniyor...';
+        btn.textContent = t('freeRecords.detail.processing');
         try {
           if (btn.dataset.reminderAction === 'complete') {
             await updateReminderStatus({ reminderId: params.recordId, status: 'completed' });
@@ -629,7 +631,7 @@ export function afterRender(params = {}) {
         } catch (err) {
           btn.disabled = false;
           btn.textContent = originalText;
-          showToast(`Hatırlatıcı güncellenemedi: ${err.message}`);
+          showToast(`${t('freeRecords.detail.reminder_update_failed')}: ${err.message}`);
         }
       });
     });
@@ -642,8 +644,8 @@ export function afterRender(params = {}) {
       target.innerHTML = record ? renderDetail(type, record) : `
         <div class="empty-state">
           <div class="empty-state-icon">${window.__icons?.[config.icon] || ''}</div>
-          <div class="empty-state-title">Kayıt bulunamadı</div>
-          <div class="empty-state-desc">Kayıt silinmiş veya farklı bir pete ait olabilir.</div>
+          <div class="empty-state-title">${t('freeRecords.detail.not_found_title')}</div>
+          <div class="empty-state-desc">${t('freeRecords.detail.not_found_desc')}</div>
         </div>
       `;
       if (record && type === 'reminders') bindReminderActions();

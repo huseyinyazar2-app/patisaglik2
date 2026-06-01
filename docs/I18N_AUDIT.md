@@ -34,20 +34,20 @@ Ozet:
 
 - Desteklenen locale: `24`
 - Tam ceviri sozlugu: `tr`, `en`
-- Dictionary key sayisi: `tr=492`, `en=492`
+- Dictionary key sayisi: `tr=650`, `en=650`
 - `missingInEn`: `0`
 - `extraInEn`: `0`
-- Kalan hardcoded Turkce string literal: `998`
+- Kalan hardcoded Turkce string literal: `883`
 - Etkilenen dosya: `73`
 
 En yogun dosyalar:
 
 | Dosya | Kalan |
 | --- | ---: |
-| `src/screens/history/FreeRecordDetail.js` | 162 |
 | `src/services/formSubmissions.js` | 64 |
 | `src/mock/questions.js` | 61 |
 | `src/screens/result/Result.js` | 56 |
+| `src/screens/history/FreeRecordDetail.js` | 47 |
 | `src/screens/home/Home.js` | 45 |
 | `src/screens/web/Admin.js` | 41 |
 | `src/screens/reports/ReportDetail.js` | 32 |
@@ -65,7 +65,7 @@ UI metinleri icin dosya bazli sozluk hizli ve dusuk riskli kalmali. DB ceviri ta
 
 ## Siradaki Sira
 
-1. `FreeRecordDetail`, `formSubmissions`, `questions`, `Result` dosyalarini i18n'e tasi.
+1. `formSubmissions`, `questions`, `Result`, `Home` dosyalarini i18n'e tasi.
 2. Tarih, para ve sayi formatlarini sabit `tr-TR` yerine aktif locale ile uret.
 3. Admin ve web tanitim ekranlarindaki kalan metinleri sozluge al.
 4. Diger 22 dil icin profesyonel ceviri dosyalari eklendiginde sadece dictionary import haritasini genislet.
