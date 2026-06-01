@@ -427,6 +427,8 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
 - [x] Gerçek kullanıcı akışıyla kayıt olma, pet ekleme, cihaz modu, ölçüm kaydetme ve sağlık sorunu kaydetme test edildi.
 - [x] Ölçüm kaydetme hatası düzeltildi: `selectedType/typeInfo` save handler içinde yeniden hesaplanıyor; kayıt sonrası ölçüm listesinde değer görünüyor.
 - [x] Cihaz modu seçenekleri erişilebilir gerçek butonlara çevrildi; seçenek tıklayınca `/home` geçişi doğrulandı.
+- [x] Web tanıtım sayfası eklendi: `/web` tek sayfa ürün anlatımı, AI hibrit model mesajı ve mobil/admin geçişleri.
+- [x] Web admin ilk fazı eklendi: `/admin` API sağlık durumu, kayıt metrikleri, son kayıtlar, belge/OCR listesi, Gemini model katmanları ve kritik AI test aksiyonu gösteriliyor.
 - [x] Kullanıcı hesabı telefon öncelikli giriş/profil yapısına genişletildi.
   - [x] Kayıt ekranında telefon ana alan oldu; e-posta opsiyonel destek alanı olarak kaldı.
   - [x] Kullanıcı profilinde telefon, ülke, il, ilçe, mahalle, dil ve saat dilimi gösterilip düzenlenebiliyor.

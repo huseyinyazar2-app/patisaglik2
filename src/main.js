@@ -92,6 +92,8 @@ function renderVersionBadge() {
 // Main render function
 function renderApp(screenHtml, showTab = true, activeTab = '/home') {
   const app = document.getElementById('app');
+  const path = (window.location.hash || '').replace('#', '').split('?')[0];
+  app.className = path.startsWith('/web') || path.startsWith('/admin') ? 'web-shell-root' : '';
   app.innerHTML = `
     ${renderVersionBadge()}
     <div class="app-layout">
@@ -182,6 +184,8 @@ function setupRoutes() {
   registerRoute('/pets/device-mode', (p, q) => loadScreen('./screens/pets/DeviceMode.js', p, q));
 
   // Home
+  registerRoute('/web', (p, q) => loadScreen('./screens/web/Landing.js', p, q));
+  registerRoute('/admin', (p, q) => loadScreen('./screens/web/Admin.js', p, q));
   registerRoute('/home', (p, q) => loadScreen('./screens/home/Home.js', p, q));
   registerRoute('/feature/:featureId', (p, q) => loadScreen('./screens/features/FeatureForm.js', p, q));
   registerRoute('/public/pet/:token', (p, q) => loadScreen('./screens/public/PublicPetCard.js', p, q));
@@ -267,7 +271,7 @@ async function init() {
   setBeforeNavigate((path) => {
     const state = getState();
     // Allow auth routes and pet creation/selection
-    if (path.startsWith('/auth') || path.startsWith('/public') || path.startsWith('/invite') || path.startsWith('/pets/select') || path.startsWith('/pets/new')) {
+    if (path.startsWith('/auth') || path.startsWith('/public') || path.startsWith('/invite') || path.startsWith('/web') || path.startsWith('/admin') || path.startsWith('/pets/select') || path.startsWith('/pets/new')) {
       return true;
     }
     // If user is logged in but hasn't selected a pet
