@@ -120,6 +120,9 @@ export function render(params = {}, query = {}) {
 }
 
 export function afterRender(params = {}, query = {}) {
+  const selectedType = query.type || 'weight';
+  const typeInfo = MEASUREMENT_TYPES.find(t => t.id === selectedType) || MEASUREMENT_TYPES[0];
+
   function showMeasurementToast(message) {
     const toast = document.createElement('div');
     toast.className = 'toast';

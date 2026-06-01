@@ -420,6 +420,12 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
 - [x] Genel audit sonucu tedavi takip dosyalarının sadece RAM'de kalması mantık açığı olarak düzeltildi; `pati_followups` local yedeği eklendi.
 - [x] Pet Sağlık Pasaportu ilk fazı eklendi: aktif pet profili, risk bağlamı, sağlık kayıtları, ölçümler, belgeler, hatırlatıcılar, masraf özeti ve QR/klinik dosya aksiyonları tek ekranda toplandı.
 - [x] Mama / İlaç / Ürün Güvenlik Radarı ilk fazı eklendi: ürün türü, marka, barkod, lot/SKT girişi; toksik ambalaj kontrolünden ayrı çalışıyor ve ücretsiz openFDA Food Enforcement recall araması yapıyor.
+- [x] Gemini modeli server ve local fallback için `gemini-3.1-flash-lite` yapıldı; Coolify `GEMINI_MODEL` env değeri güncellendi ve canlı `/api/ai/package-risk` şema yanıtı test edildi.
+- [x] Ambalaj risk AI endpointine `responseSchema` ve şema doğrulaması eklendi; Gemini beklenen `level/headline/reason/doNotDo/prepare/askVet` alanları dışında cevap verirse güvenli fallback korunuyor.
+- [x] Genel ekran audit'i yapıldı: auth, pet, ana tablar, Pati AI, bilgi bankası, paket risk, ürün radarı, ücretsiz formlar, takip, geçmiş, rapor, profil, public QR/report ve davet rotaları smoke test edildi.
+- [x] Gerçek kullanıcı akışıyla kayıt olma, pet ekleme, cihaz modu, ölçüm kaydetme ve sağlık sorunu kaydetme test edildi.
+- [x] Ölçüm kaydetme hatası düzeltildi: `selectedType/typeInfo` save handler içinde yeniden hesaplanıyor; kayıt sonrası ölçüm listesinde değer görünüyor.
+- [x] Cihaz modu seçenekleri erişilebilir gerçek butonlara çevrildi; seçenek tıklayınca `/home` geçişi doğrulandı.
 - [x] Kullanıcı hesabı telefon öncelikli giriş/profil yapısına genişletildi.
   - [x] Kayıt ekranında telefon ana alan oldu; e-posta opsiyonel destek alanı olarak kaldı.
   - [x] Kullanıcı profilinde telefon, ülke, il, ilçe, mahalle, dil ve saat dilimi gösterilip düzenlenebiliyor.
