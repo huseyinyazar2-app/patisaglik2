@@ -420,7 +420,7 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
 - [x] Genel audit sonucu tedavi takip dosyalarının sadece RAM'de kalması mantık açığı olarak düzeltildi; `pati_followups` local yedeği eklendi.
 - [x] Pet Sağlık Pasaportu ilk fazı eklendi: aktif pet profili, risk bağlamı, sağlık kayıtları, ölçümler, belgeler, hatırlatıcılar, masraf özeti ve QR/klinik dosya aksiyonları tek ekranda toplandı.
 - [x] Mama / İlaç / Ürün Güvenlik Radarı ilk fazı eklendi: ürün türü, marka, barkod, lot/SKT girişi; toksik ambalaj kontrolünden ayrı çalışıyor ve ücretsiz openFDA Food Enforcement recall araması yapıyor.
-- [x] Gemini modeli hibrit yapıya alındı: server/local standart model `gemini-3-flash-preview`, kritik model `gemini-3.5-flash`; canlı `/api/ai/package-risk` şema yanıtı test edilecek.
+- [x] Gemini modeli hibrit yapıya alındı: server/local standart model `gemini-3-flash-preview`, kritik model `gemini-3.5-flash`; canlı `/api/ai/package-risk` şema yanıtı test edildi.
 - [x] Kritik 3.5 Flash ambalaj risk yanıtına sunucu tarafı güvenlik filtresi eklendi; evde bal/şeker, kusturma, aktif kömür, ilaç, süt/tuzlu su gibi müdahale çağrıştıran öneriler `askVet/prepare` alanlarından temizleniyor.
 - [x] Ambalaj risk AI endpointine `responseSchema` ve şema doğrulaması eklendi; Gemini beklenen `level/headline/reason/doNotDo/prepare/askVet` alanları dışında cevap verirse güvenli fallback korunuyor.
 - [x] Genel ekran audit'i yapıldı: auth, pet, ana tablar, Pati AI, bilgi bankası, paket risk, ürün radarı, ücretsiz formlar, takip, geçmiş, rapor, profil, public QR/report ve davet rotaları smoke test edildi.
