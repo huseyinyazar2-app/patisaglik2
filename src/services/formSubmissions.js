@@ -56,6 +56,10 @@ function text(record, key, vars = {}) {
   return String(value).replace(/\{(\w+)\}/g, (_, name) => vars[name] ?? '');
 }
 
+function label(key) {
+  return translateForLocale('tr', `formLabels.${key}`);
+}
+
 function checkedLabels(value) {
   if (!Array.isArray(value)) return [];
   return value
@@ -73,9 +77,9 @@ function slug(value) {
 }
 
 function sitterInviteDraft({ record, payload, memberId = '' }) {
-  const displayName = titleFromPayload(payload, ['Davet edilecek kişi'], text(record, 'freeRecords.submissions.sitter_default_name'));
-  const duration = first(pick(payload, ['Erişim süresi'], ['1 hafta'])) || '1 hafta';
-  const selected = checkedLabels(pick(payload, ['İzinler'], []));
+  const displayName = titleFromPayload(payload, [label('invited_person')], text(record, 'freeRecords.submissions.sitter_default_name'));
+  const duration = first(pick(payload, [label('access_duration')], [label('one_week')])) || label('one_week');
+  const selected = checkedLabels(pick(payload, [label('permissions')], []));
   const inviteId = memberId || `invite-${record.pet_id || 'pet'}-${slug(displayName)}-${Math.random().toString(36).slice(2, 8)}`;
   const permissions = selected.join(', ') || text(record, 'freeRecords.submissions.invite_no_permissions');
   return {
@@ -107,8 +111,8 @@ function saveLocalQrCard(record, payload) {
         form_submission_id: record.id,
         public_token: token,
         public_path: `/public/pet/${token}`,
-        shared_fields: checkedLabels(pick(payload, ['PaylaÅŸÄ±lacak bilgiler'], [])),
-        access_duration: first(pick(payload, ['EriÅŸim sÃ¼resi'], ['24 saat'])) || '24 saat',
+        shared_fields: checkedLabels(pick(payload, [label('shared_fields')], [])),
+        access_duration: first(pick(payload, [label('access_duration')], [label('one_day')])) || label('one_day'),
         updated_at: new Date().toISOString()
       }
     })
@@ -119,7 +123,7 @@ function saveLocalQrCard(record, payload) {
 
 async function insertExpense(db, record, payload) {
   const amountCents = centsFromMoney(pick(payload, ['Tutar']));
-  const category = first(pick(payload, ['Kategori'], [text(record, 'freeRecords.submissions.expense_other')])) || text(record, 'freeRecords.submissions.expense_other');
+  const category = first(pick(payload, [label('category')], [text(record, 'freeRecords.submissions.expense_other')])) || text(record, 'freeRecords.submissions.expense_other');
   const spentAt = isoDateOrToday(pick(payload, ['Tarih']));
   const note = pick(payload, ['Not'], '');
 
@@ -145,8 +149,8 @@ async function insertExpense(db, record, payload) {
 }
 
 async function insertReminder(db, record, payload) {
-  const reminderType = first(pick(payload, ['Hatırlatıcı türü'], [text(record, 'freeRecords.submissions.reminder_general')])) || text(record, 'freeRecords.submissions.reminder_general');
-  const title = titleFromPayload(payload, ['Başlık'], reminderType);
+  const reminderType = first(pick(payload, [label('reminder_type')], [text(record, 'freeRecords.submissions.reminder_general')])) || text(record, 'freeRecords.submissions.reminder_general');
+  const title = titleFromPayload(payload, [label('title')], reminderType);
   const dueAt = isoDateOrToday(pick(payload, ['Tarih']));
   const repeatRule = first(pick(payload, ['Tekrar'], [text(record, 'freeRecords.submissions.reminder_once')])) || text(record, 'freeRecords.submissions.reminder_once');
   const note = pick(payload, ['Not'], '');
@@ -174,28 +178,28 @@ async function insertReminder(db, record, payload) {
 
 function automaticReminderPayload(record, payload) {
   if (record.feature_code === 'postop') {
-    const nextDate = first(pick(payload, ['Sonraki doz / kontrol'], ''));
+    const nextDate = first(pick(payload, [label('next_dose_check')], ''));
     if (!nextDate || Number.isNaN(Date.parse(nextDate))) return null;
-    const medStatus = first(pick(payload, ['İlaç kullanımı'], ['Verildi'])) || 'Verildi';
+    const medStatus = first(pick(payload, [label('medication_use')], [label('given')])) || label('given');
     return {
-      'Hatırlatıcı türü': ['İlaç'],
-      'Başlık': text(record, 'freeRecords.submissions.postop_reminder_title'),
+      [label('reminder_type')]: [label('medication')],
+      [label('title')]: text(record, 'freeRecords.submissions.postop_reminder_title'),
       'Tarih': nextDate,
-      'Tekrar': [medStatus === 'Bitti' ? 'Tek sefer' : 'Günlük'],
+      'Tekrar': [medStatus === label('done') ? label('once') : label('daily')],
       'Not': text(record, 'freeRecords.submissions.postop_reminder_note', { status: medStatus })
     };
   }
 
   if (record.feature_code === 'reproduction') {
-    const startDate = first(pick(payload, ['Başlangıç tarihi'], ''));
+    const startDate = first(pick(payload, [label('start_date')], ''));
     const controlDate = isoDatePlusDays(startDate, 7);
     if (!controlDate) return null;
-    const followType = first(pick(payload, ['Takip türü'], [text(record, 'freeRecords.submissions.reproduction_default_followup')])) || text(record, 'freeRecords.submissions.reproduction_default_followup');
+    const followType = first(pick(payload, [label('followup_type')], [text(record, 'freeRecords.submissions.reproduction_default_followup')])) || text(record, 'freeRecords.submissions.reproduction_default_followup');
     return {
-      'Hatırlatıcı türü': ['Randevu'],
-      'Başlık': text(record, 'freeRecords.submissions.reproduction_reminder_title', { type: followType }),
+      [label('reminder_type')]: [label('appointment')],
+      [label('title')]: text(record, 'freeRecords.submissions.reproduction_reminder_title', { type: followType }),
       'Tarih': controlDate,
-      'Tekrar': ['Tek sefer'],
+      'Tekrar': [label('once')],
       'Not': text(record, 'freeRecords.submissions.reproduction_reminder_note')
     };
   }
@@ -229,9 +233,9 @@ function saveLocalAutomaticReminder(record, payload) {
 const healthRecordConfig = {
   'photo-followup': {
     type: 'photo_followup',
-    titleLabels: ['Takip konusu'],
+    titleLabels: [label('followup_subject')],
     fallbackKey: 'freeRecords.submissions.fallbacks.photo_followup',
-    summaryLabels: ['Kısa not']
+    summaryLabels: [label('short_note')]
   },
   'poop-score': {
     type: 'poop_score',
@@ -241,31 +245,31 @@ const healthRecordConfig = {
   },
   'diet-log': {
     type: 'diet_log',
-    titleLabels: ['Yeni mama / öğün'],
+    titleLabels: [label('new_food_meal')],
     fallbackKey: 'freeRecords.submissions.fallbacks.diet_log',
     summaryLabels: ['Beslenme notu']
   },
   chronic: {
     type: 'chronic_followup',
-    titleLabels: ['Şablon'],
+    titleLabels: [label('template')],
     fallbackKey: 'freeRecords.submissions.fallbacks.chronic',
     summaryLabels: ['Takip notu']
   },
   postop: {
     type: 'postop_followup',
-    titleLabels: ['Operasyon günü'],
+    titleLabels: [label('surgery_day')],
     fallbackKey: 'freeRecords.submissions.fallbacks.postop',
     summaryLabels: ['Genel durum']
   },
   reproduction: {
     type: 'reproduction_followup',
-    titleLabels: ['Takip türü'],
+    titleLabels: [label('followup_type')],
     fallbackKey: 'freeRecords.submissions.fallbacks.reproduction',
     summaryLabels: ['Not']
   },
   senior: {
     type: 'senior_followup',
-    titleLabels: ['Günlük durum'],
+    titleLabels: [label('daily_status')],
     fallbackKey: 'freeRecords.submissions.fallbacks.senior',
     summaryLabels: ['Not']
   },
@@ -277,9 +281,9 @@ const healthRecordConfig = {
   },
   issue: {
     type: 'issue',
-    titleLabels: ['Sorun adı'],
+    titleLabels: [label('issue_name')],
     fallbackKey: 'freeRecords.submissions.fallbacks.issue',
-    summaryLabels: ['Açıklama']
+    summaryLabels: [label('description')]
   }
 };
 
@@ -308,7 +312,7 @@ async function insertHealthRecord(db, record, payload, config) {
 }
 
 async function insertClinicExportDocument(db, record, payload) {
-  const purpose = first(pick(payload, ['Dosya amacı'], [text(record, 'freeRecords.submissions.clinic_visit')])) || text(record, 'freeRecords.submissions.clinic_visit');
+  const purpose = first(pick(payload, [label('file_purpose')], [text(record, 'freeRecords.submissions.clinic_visit')])) || text(record, 'freeRecords.submissions.clinic_visit');
   const note = pick(payload, ['Veterinere not'], '');
   const included = checkedLabels(pick(payload, ['Dahil edilecekler'], []));
 
@@ -332,11 +336,11 @@ async function insertClinicExportDocument(db, record, payload) {
 }
 
 async function insertUploadedDocument(db, record, payload) {
-  const documentKind = first(pick(payload, ['Belge türü'], [text(record, 'freeRecords.submissions.document_default_kind')])) || text(record, 'freeRecords.submissions.document_default_kind');
+  const documentKind = first(pick(payload, [label('document_type')], [text(record, 'freeRecords.submissions.document_default_kind')])) || text(record, 'freeRecords.submissions.document_default_kind');
   const note = pick(payload, ['Ek not'], '');
-  const readGoal = first(pick(payload, ['Okuma hedefi'], [text(record, 'freeRecords.submissions.document_default_goal')])) || text(record, 'freeRecords.submissions.document_default_goal');
-  const visibleValues = pick(payload, ['Görünen önemli değerler'], '');
-  const extractionOptions = checkedLabels(pick(payload, ['İşaretlenecek bilgiler', 'AI çıkarımı'], []));
+  const readGoal = first(pick(payload, [label('read_goal')], [text(record, 'freeRecords.submissions.document_default_goal')])) || text(record, 'freeRecords.submissions.document_default_goal');
+  const visibleValues = pick(payload, [label('visible_important_values')], '');
+  const extractionOptions = checkedLabels(pick(payload, [label('extraction_options'), label('ai_extraction')], []));
   const files = Array.isArray(payload.__media_files) ? payload.__media_files : [];
   const aiOcr = payload.__ai_ocr_result || null;
   const extractedText = [
@@ -381,8 +385,8 @@ async function insertUploadedDocument(db, record, payload) {
 async function insertVetPrepDocument(db, record, payload) {
   const reason = pick(payload, ['Ziyaret nedeni'], '');
   const urgency = first(pick(payload, ['Aciliyet'], [text(record, 'freeRecords.submissions.vet_prep_default_urgency')])) || text(record, 'freeRecords.submissions.vet_prep_default_urgency');
-  const checklist = checkedLabels(pick(payload, ['Yanıma alacağım'], []));
-  const questions = pick(payload, ['Sorularım'], '');
+  const checklist = checkedLabels(pick(payload, [label('bring_checklist')], []));
+  const questions = pick(payload, [label('my_questions')], '');
 
   await db.execute({
     sql: `INSERT INTO documents
@@ -435,8 +439,8 @@ async function updateQrHealthCard(db, record, payload) {
           form_submission_id: record.id,
           public_token: publicToken,
           public_path: `/public/pet/${publicToken}`,
-          shared_fields: checkedLabels(pick(payload, ['Paylaşılacak bilgiler'], [])),
-          access_duration: first(pick(payload, ['Erişim süresi'], ['24 saat'])) || '24 saat',
+          shared_fields: checkedLabels(pick(payload, [label('shared_fields')], [])),
+          access_duration: first(pick(payload, [label('access_duration')], [label('one_day')])) || label('one_day'),
           updated_at: new Date().toISOString()
         }
       }),
@@ -474,13 +478,13 @@ async function insertMediaFiles(db, record, payload) {
 }
 
 async function insertSitterInvite(db, record, payload) {
-  const displayName = titleFromPayload(payload, ['Davet edilecek kişi'], text(record, 'freeRecords.submissions.sitter_default_name'));
-  const contact = titleFromPayload(payload, ['Telefon / e-posta'], `${slug(displayName)}@invite.local`);
+  const displayName = titleFromPayload(payload, [label('invited_person')], text(record, 'freeRecords.submissions.sitter_default_name'));
+  const contact = titleFromPayload(payload, [label('phone_email')], `${slug(displayName)}@invite.local`);
   const email = contact.includes('@') ? contact : `${slug(contact)}@phone.local`;
-  const duration = first(pick(payload, ['Erişim süresi'], ['1 hafta'])) || '1 hafta';
+  const duration = first(pick(payload, [label('access_duration')], [label('one_week')])) || label('one_week');
   const ends = new Date();
-  if (duration.includes('gün')) ends.setDate(ends.getDate() + Number.parseInt(duration, 10));
-  else if (duration.includes('ay')) ends.setMonth(ends.getMonth() + Number.parseInt(duration, 10));
+  if (duration.includes(label('day_suffix'))) ends.setDate(ends.getDate() + Number.parseInt(duration, 10));
+  else if (duration.includes(label('month_suffix'))) ends.setMonth(ends.getMonth() + Number.parseInt(duration, 10));
   else ends.setDate(ends.getDate() + 7);
 
   await db.execute({
@@ -519,12 +523,12 @@ async function insertSitterInvite(db, record, payload) {
       ]
   });
 
-  const selected = checkedLabels(pick(payload, ['İzinler'], []));
+  const selected = checkedLabels(pick(payload, [label('permissions')], []));
   const permissionMap = {
-    'Günlük not ekle': 'perm-add-health',
-    'Hatırlatıcı gör': 'perm-view-health',
-    'Acil kartı gör': 'perm-view-pet',
-    'Raporları gör': 'perm-view-reports'
+    [label('add_daily_note')]: 'perm-add-health',
+    [label('view_reminder')]: 'perm-view-health',
+    [label('view_emergency_card')]: 'perm-view-pet',
+    [label('view_reports')]: 'perm-view-reports'
   };
 
   await Promise.all(Object.entries(permissionMap).map(([label, permissionId]) => db.execute({

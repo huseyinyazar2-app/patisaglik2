@@ -1,4 +1,4 @@
-// Pati Sağlık — dynamic triage library adapter
+// Dynamic triage library adapter
 import complaintTypes from '../health-library/complaint_types.json';
 import questionSetsArray from '../health-library/question_sets.json';
 import taskDefinitions from '../health-library/task_definitions.json';
@@ -124,26 +124,6 @@ Object.values(questionSets).forEach(set => {
   }
 });
 
-const keywordRules = [
-  { id: 'breathing_issue', weight: 9, words: ['nefes darligi', 'nefes alam', 'zor nefes', 'hirilti', 'hırıltı', 'morardi', 'morardı', 'agzi acik nefes', 'ağzı açık nefes'] },
-  { id: 'urination_problem', weight: 9, words: ['idrar yapam', 'cis yapam', 'çiş yapam', 'kum kabina gidiyor', 'kum kabına gidiyor', 'idrar yok', 'kanli idrar', 'kanlı idrar'] },
-  { id: 'toxin_foreign_body', weight: 8, words: ['zehir', 'yabanci cisim', 'yabancı cisim', 'ip yuttu', 'kemik yuttu', 'oyuncak yuttu', 'cop yedi', 'çöp yedi', 'ilac yedi', 'ilaç yedi'] },
-  { id: 'neurologic', weight: 8, words: ['nobet', 'nöbet', 'titreme', 'denge kaybi', 'denge kaybı', 'sendeledi', 'felc', 'felç'] },
-  { id: 'vomiting', weight: 7, words: ['kus', 'ogur', 'öğür', 'mide', 'safra'] },
-  { id: 'diarrhea', weight: 7, words: ['ishal', 'sulu diski', 'sulu dışkı', 'kanli diski', 'kanlı dışkı', 'mukus'] },
-  { id: 'cough', weight: 7, words: ['oksur', 'öksür', 'kuru kuru', 'gag gag'] },
-  { id: 'limping', weight: 7, words: ['topall', 'basam', 'sekerek'] },
-  { id: 'pain', weight: 6, words: ['agri', 'ağrı', 'inliyor', 'dokununca', 'aci', 'acı', 'hassas'] },
-  { id: 'eye_problem', weight: 6, words: ['goz', 'göz', 'akinti', 'akıntı', 'kizarik', 'kızarık', 'gözünü kapat'] },
-  { id: 'ear_problem', weight: 6, words: ['kulak', 'bas sall', 'baş sall', 'kulagini', 'kulağını', 'koku'] },
-  { id: 'skin_itching', weight: 6, words: ['kasinti', 'kaşıntı', 'yaliyor', 'yalıyor', 'tuy', 'tüy', 'deri', 'kizariklik', 'kızarıklık'] },
-  { id: 'wound_swelling', weight: 6, words: ['yara', 'sislik', 'şişlik', 'kanama', 'irin', 'kesik'] },
-  { id: 'loss_of_appetite', weight: 5, words: ['istah', 'iştah', 'yemiyor', 'mama yem', 'su icmiyor', 'su içmiyor'] },
-  { id: 'lethargy', weight: 4, words: ['halsiz', 'uyuyor', 'keyifsiz', 'tepki vermiyor', 'cok durgun', 'çok durgun', 'çöktü'] },
-  { id: 'mouth_dental', weight: 4, words: ['agiz', 'ağız', 'dis', 'diş', 'salya', 'cigne', 'çiğne'] },
-  { id: 'weight_change', weight: 3, words: ['kilo', 'zayif', 'zayıf', 'kilo kaybi', 'kilo kaybı'] }
-];
-
 function normalizeText(value = '') {
   return value
     .toLocaleLowerCase('tr-TR')
@@ -186,6 +166,7 @@ export function classifyComplaint(chips = [], text = '', deviceMode = 'phone_onl
   });
 
   const cleanText = normalizeText(text);
+  const keywordRules = translateForLocale(getLocale(), 'triage.keyword_rules');
   keywordRules.forEach(rule => {
     rule.words.forEach(word => {
       if (cleanText.includes(normalizeText(word))) {
