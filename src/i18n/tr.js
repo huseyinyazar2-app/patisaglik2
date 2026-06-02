@@ -686,6 +686,38 @@ const tr = {
     native_last_result: 'Planlanan bildirim',
     native_unsupported: 'Bu ortamda native bildirim plugini yok; PWA bildirimleri kullanılmaya devam eder.'
   },
+  triage: {
+    complaints: {
+      vomiting: 'Kusma',
+      diarrhea: 'İshal / Dışkı Değişimi',
+      loss_of_appetite: 'İştahsızlık',
+      lethargy: 'Halsizlik / Genel Durum',
+      cough: 'Öksürük',
+      breathing_issue: 'Solunum Sorunu / Hırıltı',
+      eye_problem: 'Göz Akıntısı / Kızarıklık',
+      ear_problem: 'Kulak Kaşıma / Koku / Akıntı',
+      skin_itching: 'Kaşıntı / Deri / Tüy',
+      wound_swelling: 'Yara / Şişlik',
+      urination_problem: 'İdrar Sorunu',
+      limping: 'Topallama / Hareket',
+      pain: 'Ağrı / Dokununca Tepki',
+      neurologic: 'Nörolojik / Denge / Nöbet',
+      toxin_foreign_body: 'Zehirlenme / Yabancı Cisim',
+      mouth_dental: 'Ağız / Diş / Salya',
+      weight_change: 'Kilo Değişimi',
+      post_vaccine_medication: 'Aşı / İlaç Sonrası Takip',
+      post_operation: 'Operasyon / Tedavi Sonrası Takip',
+      routine_check: 'Rutin Kontrol / Sağlık Dosyası'
+    },
+    duration_options: ['Bugün', '1-2 gündür', '3-7 gündür', '1 haftadan uzun', 'Emin değilim'],
+    severity_options: {
+      mild: 'Hafif',
+      moderate: 'Orta',
+      severe: 'Ciddi',
+      critical: 'Çok ciddi / acil gibi'
+    },
+    separate_check_warning: '{complaint} ayrı bir kontrol olarak değerlendirilmelidir.'
+  },
   common: {
     save: 'Kaydet', cancel: 'İptal', back: 'Geri', next: 'Devam', done: 'Tamam',
     delete: 'Sil', edit: 'Düzenle', share: 'Paylaş', close: 'Kapat',

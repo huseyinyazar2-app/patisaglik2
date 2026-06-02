@@ -2,6 +2,7 @@
 import complaintTypes from '../health-library/complaint_types.json';
 import questionSetsArray from '../health-library/question_sets.json';
 import taskDefinitions from '../health-library/task_definitions.json';
+import { getLocale, translateForLocale } from '../i18n/tr.js';
 import { buildPetRiskContext } from '../services/petContext.js';
 
 export { taskDefinitions };
@@ -16,7 +17,21 @@ complaintTypes.forEach(ct => {
   categoryLabels[ct.category] = ct.name_tr;
 });
 
-export const symptomChips = complaintTypes.map(ct => ct.name_tr);
+function localText(locale, key, fallback) {
+  const value = translateForLocale(locale || getLocale(), key);
+  return value === key ? fallback : value;
+}
+
+function complaintLabel(id, locale = getLocale()) {
+  const complaint = complaintTypes.find(ct => ct.id === id);
+  return localText(locale, `triage.complaints.${id}`, complaint?.name_tr || id);
+}
+
+export function getSymptomChips(locale = getLocale()) {
+  return complaintTypes.map(ct => complaintLabel(ct.id, locale));
+}
+
+export const symptomChips = getSymptomChips('tr');
 
 const complaintMeta = {
   vomiting: { domain: 'digestive', compatible: ['loss_of_appetite', 'lethargy', 'diarrhea', 'toxin_foreign_body', 'mouth_dental', 'pain'], systemic: true },
@@ -44,12 +59,21 @@ const complaintMeta = {
 const complaintById = Object.fromEntries(complaintTypes.map(ct => [ct.id, ct]));
 const complaintIdByLabel = Object.fromEntries(complaintTypes.map(ct => [ct.name_tr, ct.id]));
 
-function labelForComplaint(id) {
-  return complaintById[id]?.name_tr || id;
+function labelForComplaint(id, locale = getLocale()) {
+  return complaintLabel(id, locale);
+}
+
+function complaintIdFromLabel(label) {
+  if (complaintById[label]) return label;
+  if (complaintIdByLabel[label]) return complaintIdByLabel[label];
+  const normalized = String(label || '').trim();
+  return complaintTypes.find(ct =>
+    labelForComplaint(ct.id, 'tr') === normalized || labelForComplaint(ct.id, 'en') === normalized
+  )?.id;
 }
 
 export function getComplaintTypeByLabel(label) {
-  return complaintById[complaintIdByLabel[label] || chipToComplaintId[label]];
+  return complaintById[complaintIdFromLabel(label)];
 }
 
 export function getComplaintTypeById(id) {
@@ -57,30 +81,39 @@ export function getComplaintTypeById(id) {
 }
 
 export function getCompatibleComplaintLabels(primaryIdOrLabel) {
-  const primaryId = complaintById[primaryIdOrLabel] ? primaryIdOrLabel : complaintIdByLabel[primaryIdOrLabel] || chipToComplaintId[primaryIdOrLabel];
-  if (!primaryId) return symptomChips;
+  const locale = getLocale();
+  const primaryId = complaintIdFromLabel(primaryIdOrLabel);
+  if (!primaryId) return getSymptomChips(locale);
   const compatibleIds = new Set([primaryId, ...(complaintMeta[primaryId]?.compatible || [])]);
   return complaintTypes
     .filter(ct => compatibleIds.has(ct.id))
     .sort((a, b) => (a.id === primaryId ? -1 : b.id === primaryId ? 1 : (a.priority_order || 999) - (b.priority_order || 999)))
-    .map(ct => ct.name_tr);
+    .map(ct => labelForComplaint(ct.id, locale));
 }
 
 export function getIncompatibleComplaintLabels(primaryIdOrLabel) {
   const compatible = new Set(getCompatibleComplaintLabels(primaryIdOrLabel));
-  return symptomChips.filter(label => !compatible.has(label));
+  return getSymptomChips().filter(label => !compatible.has(label));
 }
 
-export const durationOptions = [
-  'Bugün', '1-2 gündür', '3-7 gündür', '1 haftadan uzun', 'Emin değilim'
-];
+export function getDurationOptions(locale = getLocale()) {
+  const values = translateForLocale(locale, 'triage.duration_options');
+  return Array.isArray(values) ? values : ['Today', 'For 1-2 days', 'For 3-7 days', 'Longer than 1 week', 'Not sure'];
+}
 
-export const severityOptions = [
-  { value: 'mild', label: 'Hafif', color: '#10B981' },
-  { value: 'moderate', label: 'Orta', color: '#F59E0B' },
-  { value: 'severe', label: 'Ciddi', color: '#F97316' },
-  { value: 'critical', label: 'Çok ciddi / acil gibi', color: '#EF4444' }
-];
+export function getSeverityOptions(locale = getLocale()) {
+  const labels = translateForLocale(locale, 'triage.severity_options');
+  const byValue = typeof labels === 'object' && labels ? labels : {};
+  return [
+    { value: 'mild', label: byValue.mild || 'Mild', color: '#10B981' },
+    { value: 'moderate', label: byValue.moderate || 'Moderate', color: '#F59E0B' },
+    { value: 'severe', label: byValue.severe || 'Serious', color: '#F97316' },
+    { value: 'critical', label: byValue.critical || 'Very serious / seems urgent', color: '#EF4444' }
+  ];
+}
+
+export const durationOptions = getDurationOptions('tr');
+export const severityOptions = getSeverityOptions('tr');
 
 export const redFlagQuestions = {};
 Object.values(questionSets).forEach(set => {
@@ -90,29 +123,6 @@ Object.values(questionSets).forEach(set => {
     redFlagQuestions[set.id.replace('_red_flags', '')] = set.questions.map(q => ({ id: q.id, text: q.text_tr, critical: true }));
   }
 });
-
-const chipToComplaintId = {
-  'İştahsızlık': 'loss_of_appetite',
-  'Kusma': 'vomiting',
-  'İshal / Dışkı Değişimi': 'diarrhea',
-  'Halsizlik / Genel Durum': 'lethargy',
-  'Öksürük': 'cough',
-  'Solunum Sorunu / Hırıltı': 'breathing_issue',
-  'Göz Akıntısı / Kızarıklık': 'eye_problem',
-  'Kulak Kaşıma / Koku / Akıntı': 'ear_problem',
-  'Kaşıntı / Deri / Tüy': 'skin_itching',
-  'Yara / Şişlik': 'wound_swelling',
-  'İdrar Sorunu': 'urination_problem',
-  'Topallama / Hareket': 'limping',
-  'Ağrı / Dokununca Tepki': 'pain',
-  'Nörolojik / Denge / Nöbet': 'neurologic',
-  'Zehirlenme / Yabancı Cisim': 'toxin_foreign_body',
-  'Ağız / Diş / Salya': 'mouth_dental',
-  'Kilo Değişimi': 'weight_change',
-  'Aşı / İlaç Sonrası Takip': 'post_vaccine_medication',
-  'Operasyon / Tedavi Sonrası Takip': 'post_operation',
-  'Rutin Kontrol / Sağlık Dosyası': 'routine_check'
-};
 
 const keywordRules = [
   { id: 'breathing_issue', weight: 9, words: ['nefes darligi', 'nefes alam', 'zor nefes', 'hirilti', 'hırıltı', 'morardi', 'morardı', 'agzi acik nefes', 'ağzı açık nefes'] },
@@ -149,8 +159,7 @@ function addMatch(scores, id, weight, reason) {
 }
 
 function complaintIdFromChip(chip) {
-  const direct = complaintTypes.find(ct => ct.name_tr === chip);
-  return direct?.id || chipToComplaintId[chip];
+  return complaintIdFromLabel(chip);
 }
 
 function isCompatibleComplaint(primaryId, candidateId) {
@@ -281,7 +290,8 @@ export function classifyComplaint(chips = [], text = '', deviceMode = 'phone_onl
     questionSetIds: [...questionSetIds],
     suggestedTasks,
     triageWarnings: [
-      ...incompatibleMatches.map(match => `${labelForComplaint(match.id)} ayrı bir kontrol olarak değerlendirilmelidir.`),
+      ...incompatibleMatches.map(match => localText(getLocale(), 'triage.separate_check_warning', '{complaint} should be handled as a separate check.')
+        .replace('{complaint}', labelForComplaint(match.id))),
       ...(petContext?.warnings || [])
     ],
     petRiskContext: petContext,

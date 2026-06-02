@@ -3,7 +3,7 @@ import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
 import { getActivePet } from '../../mock/pets.js';
 import {
-  symptomChips,
+  getSymptomChips,
   classifyComplaint,
   getCompatibleComplaintLabels,
   getComplaintTypeByLabel,
@@ -15,6 +15,7 @@ export function render() {
   const state = getState();
   const pet = getActivePet(state.activePetId) || { name: 'pet' };
   const session = state.session || {};
+  const symptomChips = getSymptomChips();
   const primaryComplaintLabel = session.primaryComplaintLabel || session.selectedChips?.[0] || '';
   const compatibleLabels = primaryComplaintLabel ? getCompatibleComplaintLabels(primaryComplaintLabel) : [];
   const secondaryLabels = compatibleLabels.filter(label => label !== primaryComplaintLabel);

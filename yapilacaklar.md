@@ -470,11 +470,12 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
   - DB `locales` seed kayitlari 24 dile genisletildi.
 - [x] Hesap ekranindaki dil secimi 24 locale listesini kullanacak sekilde guncellendi.
 - [x] Acil Bilgi Bankasi metinleri TR/EN i18n sozluklerine tasindi.
-- [x] TR/EN dictionary key parity temizlendi: `tr=679`, `en=679`, eksik/fazla key yok.
+- [x] TR/EN dictionary key parity temizlendi: `tr=705`, `en=705`, eksik/fazla key yok.
 - [x] I18N audit komutu eklendi: `npm run audit:i18n`.
 - [x] I18N raporu guncellendi: `docs/I18N_AUDIT.md`.
 - [x] Ücretsiz kayıt liste ekranı (`FreeRecordList`) görünür metinleri TR/EN i18n sözlüğüne taşındı.
 - [x] Ücretsiz kayıt detay ekranı (`FreeRecordDetail`) görünür metinleri TR/EN i18n sözlüğüne taşındı; kalan payload anahtarları veri uyumluluğu için bırakıldı.
 - [x] `formSubmissions` otomatik uretilen davet, belge, hatirlatici ve fallback baslik/not metinleri TR/EN i18n sozluklerine tasindi; kalan form/payload label anahtarlari veri uyumlulugu icin bilincli birakildi.
-- [ ] Kalan hardcoded Turkce metinler i18n'e tasinacak: son audit `858` string literal / `73` dosya.
+- [x] Triage/şikayet chip başlıkları, süre/ciddiyet seçenekleri ve ayrı kontrol uyarısı TR/EN i18n sözlüklerine taşındı; Türkçe keyword eşleşmeleri sınıflandırma mantığı olduğu için ayrı çok dilli NLP fazına bırakıldı.
+- [ ] Kalan hardcoded Turkce metinler i18n'e tasinacak: son audit `835` string literal / `73` dosya.
 - [ ] Diger 22 dil icin profesyonel ceviri sozlukleri eklenecek; su an TR/EN disindaki diller English -> Turkish fallback ile calisiyor.

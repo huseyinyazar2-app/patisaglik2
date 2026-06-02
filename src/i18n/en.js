@@ -657,6 +657,38 @@ const en = {
     native_last_result: 'Scheduled notification',
     native_unsupported: 'Native notifications are not available here; PWA notifications will continue to be used.'
   },
+  triage: {
+    complaints: {
+      vomiting: 'Vomiting',
+      diarrhea: 'Diarrhea / Stool Change',
+      loss_of_appetite: 'Loss of Appetite',
+      lethargy: 'Low Energy / General Condition',
+      cough: 'Cough',
+      breathing_issue: 'Breathing Issue / Wheezing',
+      eye_problem: 'Eye Discharge / Redness',
+      ear_problem: 'Ear Scratching / Odor / Discharge',
+      skin_itching: 'Itching / Skin / Coat',
+      wound_swelling: 'Wound / Swelling',
+      urination_problem: 'Urination Problem',
+      limping: 'Limping / Movement',
+      pain: 'Pain / Touch Sensitivity',
+      neurologic: 'Neurologic / Balance / Seizure',
+      toxin_foreign_body: 'Poisoning / Foreign Body',
+      mouth_dental: 'Mouth / Teeth / Drooling',
+      weight_change: 'Weight Change',
+      post_vaccine_medication: 'After Vaccine / Medication',
+      post_operation: 'After Surgery / Treatment',
+      routine_check: 'Routine Check / Health File'
+    },
+    duration_options: ['Today', 'For 1-2 days', 'For 3-7 days', 'Longer than 1 week', 'Not sure'],
+    severity_options: {
+      mild: 'Mild',
+      moderate: 'Moderate',
+      severe: 'Serious',
+      critical: 'Very serious / seems urgent'
+    },
+    separate_check_warning: '{complaint} should be handled as a separate check.'
+  },
   common: {
     save: 'Save', cancel: 'Cancel', back: 'Back', next: 'Continue', done: 'Done',
     delete: 'Delete', edit: 'Edit', share: 'Share', close: 'Close',
