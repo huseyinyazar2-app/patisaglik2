@@ -1,50 +1,31 @@
 import { navigate } from '../../router.js';
 import { getState, setState, resetSession } from '../../store.js';
 import { showToast } from '../../ui/toast.js';
+import { t, translateForLocale } from '../../i18n/tr.js';
+
+function trValue(key) {
+  return translateForLocale('tr', key);
+}
+
+function trList(key) {
+  const value = trValue(key);
+  return Array.isArray(value) ? value : [];
+}
 
 function riskForCheck(check = {}) {
   const sideEffects = check.sideEffects || [];
   const findings = check.findings || [];
   if (check.status === 'worse') return 'critical';
-  if (sideEffects.some(item => ['Nefes sorunu', 'Yüz/boğaz şişliği', 'Kanlı kusma/dışkı'].includes(item))) return 'critical';
-  if (findings.some(item => ['Şişlik/akıntı', 'Ağrı belirtisi'].includes(item))) return 'high';
-  if (check.medStatus === 'Atlandı' || check.medStatus === 'Kustu / çıkarıldı') return 'medium';
+  if (sideEffects.some(item => trList('followupResult.critical_side_effects').includes(item))) return 'critical';
+  if (findings.some(item => trList('followupResult.high_findings').includes(item))) return 'high';
+  if (trList('followupResult.medium_med_statuses').includes(check.medStatus)) return 'medium';
   if (check.status === 'improved') return 'low';
   return 'medium';
 }
 
 function resultMeta(level) {
-  const map = {
-    low: {
-      title: 'İyileşme takibi olumlu',
-      desc: 'Belirgin kötüleşme veya ciddi yan etki bildirilmedi. Planlanan kontrolleri sürdür.',
-      icon: 'checkCircle',
-      cls: 'low',
-      nextHours: 24
-    },
-    medium: {
-      title: 'Yakın takip gerekli',
-      desc: 'İlaç uyumu veya belirtiler için bir sonraki kontrolü kısa tutmak güvenli olur.',
-      icon: 'clock',
-      cls: 'medium',
-      nextHours: 12
-    },
-    high: {
-      title: 'Bugün veterinerle görüş',
-      desc: 'Ağrı, akıntı, şişlik veya tedaviye rağmen devam eden bulgular klinik görüş gerektirebilir.',
-      icon: 'alert',
-      cls: 'high',
-      nextHours: 6
-    },
-    critical: {
-      title: 'Acil değerlendirme gerekebilir',
-      desc: 'Kötüleşme veya ciddi yan etki şüphesinde beklemeden veteriner/acil klinik ile görüş.',
-      icon: 'alert',
-      cls: 'critical',
-      nextHours: 3
-    }
-  };
-  return map[level] || map.medium;
+  const value = t(`followupResult.levels.${level}`);
+  return typeof value === 'object' ? value : t('followupResult.levels.medium');
 }
 
 export function render(params = {}) {
@@ -56,17 +37,17 @@ export function render(params = {}) {
     <div class="screen premium-result">
       <div class="header premium-soft-header">
         <div class="header-left"></div>
-        <div class="header-title">Takip Sonucu</div>
+        <div class="header-title">${t('followupResult.title')}</div>
         <div class="header-right"></div>
       </div>
 
       <div class="section pt-4 pb-24">
         <div class="premium-risk-card ${meta.cls}">
           <div>
-            <div class="premium-screen-kicker">Tedavi sonrası kontrol</div>
+            <div class="premium-screen-kicker">${t('followupResult.kicker')}</div>
             <h1>${meta.title}</h1>
             <p>${meta.desc}</p>
-            <small>Bu takip yeni ilaç/doz önermez; veteriner planına uyumu izler.</small>
+            <small>${t('followupResult.disclaimer')}</small>
           </div>
           <div class="premium-risk-icon">${window.__icons?.[meta.icon] || ''}</div>
         </div>
@@ -74,30 +55,28 @@ export function render(params = {}) {
         <div class="premium-result-section">
           <div class="premium-icon-box">${window.__icons?.clipboard || ''}</div>
           <div>
-            <h3>Bugünkü kayıt</h3>
-            <p><strong>İlaç / uygulama:</strong> ${check.medStatus || 'Belirtilmedi'}</p>
-            <p><strong>Bulgular:</strong> ${(check.findings || []).join(', ') || 'Ek bulgu yok'}</p>
-            <p><strong>Yan etki:</strong> ${(check.sideEffects || []).join(', ') || 'Bildirilmedi'}</p>
-            ${check.notes ? `<p><strong>Not:</strong> ${check.notes}</p>` : ''}
-            ${check.photo ? `<p><strong>Foto:</strong> ${check.photo.name}</p>` : ''}
+            <h3>${t('followupResult.today_record')}</h3>
+            <p><strong>${t('followupResult.medication_application')}:</strong> ${check.medStatus || t('followupResult.not_specified')}</p>
+            <p><strong>${t('followupResult.findings')}:</strong> ${(check.findings || []).join(', ') || t('followupResult.no_extra_finding')}</p>
+            <p><strong>${t('followupResult.side_effect')}:</strong> ${(check.sideEffects || []).join(', ') || t('followupResult.not_reported')}</p>
+            ${check.notes ? `<p><strong>${t('followupResult.note')}:</strong> ${check.notes}</p>` : ''}
+            ${check.photo ? `<p><strong>${t('followupResult.photo')}:</strong> ${check.photo.name}</p>` : ''}
           </div>
         </div>
 
         <div class="premium-result-section danger">
           <div class="premium-icon-box">${window.__icons?.xCircle || ''}</div>
           <div>
-            <h3>Güvenli sınırlar</h3>
+            <h3>${t('followupResult.safe_limits')}</h3>
             <ul>
-              <li>Veterinerin önermediği ilaç, doz değişikliği veya ev müdahalesi yapma.</li>
-              <li>Nefes sorunu, yüz/boğaz şişliği, kanlı kusma/dışkı veya hızlı kötüleşmede bekleme.</li>
-              <li>İlaç kustuysa veya doz atlandıysa kendi başına tekrar doz verme; veterinerine danış.</li>
+              ${t('followupResult.safe_steps').map(step => `<li>${step}</li>`).join('')}
             </ul>
           </div>
         </div>
 
         <div class="feature-bottom-actions">
-          <button class="btn btn-primary btn-full" id="btnBackToDetail" data-case="${params.caseId}">Takip Dosyasına Dön</button>
-          ${level === 'high' || level === 'critical' ? '<button class="btn btn-secondary btn-full" id="btnFindVet">Klinik Bul</button>' : ''}
+          <button class="btn btn-primary btn-full" id="btnBackToDetail" data-case="${params.caseId}">${t('followupResult.back_to_detail')}</button>
+          ${level === 'high' || level === 'critical' ? `<button class="btn btn-secondary btn-full" id="btnFindVet">${t('followupResult.find_clinic')}</button>` : ''}
         </div>
       </div>
     </div>
@@ -126,7 +105,7 @@ export function afterRender(params = {}) {
   });
 
   document.getElementById('btnFindVet')?.addEventListener('click', () => {
-    showToast('Yakındaki klinikler için harita araması açılıyor.');
-    window.open('https://www.google.com/maps/search/veteriner+kliniği', '_blank', 'noopener,noreferrer');
+    showToast(t('followupResult.map_opening'));
+    window.open('https://www.google.com/maps/search/?api=1&query=veterinary+clinic', '_blank', 'noopener,noreferrer');
   });
 }

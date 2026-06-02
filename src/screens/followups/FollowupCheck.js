@@ -1,5 +1,6 @@
 import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
+import { t } from '../../i18n/tr.js';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -19,7 +20,7 @@ function selected(selector) {
 
 export function render(params = {}) {
   const caseId = params.caseId;
-  const followup = getState().followups?.find(item => item.id === caseId) || { title: 'Tedavi sonrası takip' };
+  const followup = getState().followups?.find(item => item.id === caseId) || { title: t('followupDetail.default_title') };
 
   return `
     <div class="screen premium-check">
@@ -27,7 +28,7 @@ export function render(params = {}) {
         <div class="header-left">
           <button class="header-icon" id="btnBack">${window.__icons?.back || ''}</button>
         </div>
-        <div class="header-title">Günlük Kontrol</div>
+        <div class="header-title">${t('followupCheck.title')}</div>
         <div class="header-right"></div>
       </div>
 
@@ -35,68 +36,65 @@ export function render(params = {}) {
         <div class="feature-form-hero slate">
           <div class="premium-icon-box">${window.__icons?.checkCircle || ''}</div>
           <div>
-            <div class="premium-screen-kicker">Tedavi check-in</div>
+            <div class="premium-screen-kicker">${t('followupCheck.kicker')}</div>
             <h1>${escapeHtml(followup.title)}</h1>
-            <p>İlaç uyumu, yan etki, iştah, kusma/ishal ve yara durumunu kısa kontrol et.</p>
+            <p>${t('followupCheck.hero_desc')}</p>
           </div>
         </div>
 
         <div class="feature-form-card">
           <div class="feature-field">
-            <span>Genel durum</span>
+            <span>${t('followupCheck.general_status')}</span>
             <div class="feature-chip-row" id="statusChips">
-              <button type="button" data-status="improved">İyileşti</button>
-              <button type="button" class="selected" data-status="same">Aynı</button>
-              <button type="button" data-status="worse">Kötüleşti</button>
+              <button type="button" data-status="improved">${t('followupDetail.status_improved')}</button>
+              <button type="button" class="selected" data-status="same">${t('followupDetail.status_same')}</button>
+              <button type="button" data-status="worse">${t('followupDetail.status_worse')}</button>
             </div>
           </div>
 
           <div class="feature-field">
-            <span>İlaç / uygulama uyumu</span>
+            <span>${t('followupCheck.medication_adherence')}</span>
             <div class="feature-chip-row" id="medChips">
-              <button type="button" class="selected">Verildi</button>
-              <button type="button">Atlandı</button>
-              <button type="button">Kustu / çıkarıldı</button>
-              <button type="button">Bitti</button>
+              ${t('followupCheck.med_options').map((item, index) => `<button type="button" class="${index === 0 ? 'selected' : ''}">${item}</button>`).join('')}
             </div>
           </div>
 
           <div class="feature-field">
-            <span>Bugünkü bulgular</span>
+            <span>${t('followupCheck.today_findings')}</span>
             <div class="feature-check-grid" id="dailyFindings">
-              ${['İştah iyi', 'İştah az', 'Kusma', 'İshal', 'Halsizlik', 'Ağrı belirtisi', 'Yara kızarık', 'Şişlik/akıntı'].map(item => `
+              ${t('followupCheck.finding_options').map(item => `
                 <label><input type="checkbox" value="${item}" /><b>${item}</b></label>
               `).join('')}
             </div>
           </div>
 
           <div class="feature-field">
-            <span>Yan etki şüphesi</span>
+            <span>${t('followupCheck.side_effect_suspect')}</span>
             <div class="feature-check-grid" id="sideEffects">
-              ${['Yok', 'Aşırı salya', 'Titreme', 'Nefes sorunu', 'Yüz/boğaz şişliği', 'Şiddetli halsizlik', 'Kanlı kusma/dışkı'].map((item, index) => `
+              ${t('followupCheck.side_effect_options').map((item, index) => `
                 <label><input type="checkbox" value="${item}" ${index === 0 ? 'checked' : ''} /><b>${item}</b></label>
               `).join('')}
             </div>
           </div>
 
           <div class="feature-field">
-            <span>Foto / yara kontrolü</span>
+            <span>${t('followupCheck.photo_wound_check')}</span>
             <input id="followupPhoto" type="file" class="feature-upload-input hidden" accept="image/*" />
             <button class="feature-upload" type="button" id="btnPhoto">
               ${window.__icons?.camera || ''}
-              <strong>Fotoğraf ekle</strong>
-              <small>Yara, deri, dışkı veya genel durum</small>
+              <strong>${t('followupCheck.add_photo')}</strong>
+              <small>${t('followupCheck.photo_hint')}</small>
             </button>
           </div>
 
           <label class="feature-field">
-            <span>Not</span>
-            <textarea id="checkNotes" placeholder="Örn. ilaçtan 1 saat sonra kustu, iştahı biraz daha iyi, yara aynı..."></textarea>
+            <span>${t('followupResult.note')}</span>
+            <textarea id="checkNotes" placeholder="${t('followupCheck.note_placeholder')}"></textarea>
           </label>
         </div>
 
         <div class="feature-bottom-actions">
-          <button class="btn btn-primary btn-full" id="btnNext" data-case="${caseId}">Değerlendir</button>
+          <button class="btn btn-primary btn-full" id="btnNext" data-case="${caseId}">${t('followupCheck.evaluate')}</button>
         </div>
       </div>
     </div>
@@ -119,7 +117,7 @@ export function afterRender() {
     const button = document.getElementById('btnPhoto');
     if (!file || !button) return;
     button.querySelector('strong').textContent = file.name;
-    button.querySelector('small').textContent = `${file.type || 'Görsel'} · ${Math.ceil(file.size / 1024)} KB`;
+    button.querySelector('small').textContent = `${file.type || t('packageRisk.visual')} ${t('featureForm.separator')} ${Math.ceil(file.size / 1024)} KB`;
   });
 
   document.getElementById('btnNext')?.addEventListener('click', (event) => {
@@ -133,7 +131,7 @@ export function afterRender() {
         status,
         medStatus: selected('#medChips button')[0] || '',
         findings: selected('#dailyFindings input'),
-        sideEffects: selected('#sideEffects input').filter(item => item !== 'Yok'),
+        sideEffects: selected('#sideEffects input').filter(item => item !== t('followupCheck.none')),
         notes: document.getElementById('checkNotes')?.value || '',
         photo: file ? { name: file.name, mime_type: file.type, file_size_bytes: file.size } : null,
         timestamp: new Date().toISOString()

@@ -306,7 +306,8 @@ const en = {
     timeline_empty_desc: 'New free records will appear here chronologically.',
     timeline_new_record: 'Add New Record',
     timeline_failed_title: 'Timeline could not be loaded',
-    timeline_failed_desc: 'Check the connection and try again.'
+    timeline_failed_desc: 'Check the connection and try again.',
+    total: 'Total'
   },
   reports: {
     title: 'Reports', new_report: 'Create New Report',
@@ -410,6 +411,68 @@ const en = {
     export_data: 'Export my data', delete_data: 'Delete my data', delete_account: 'Delete my account',
     save_settings: 'Save Settings', download_data: 'Download My Data',
     delete_all: 'Delete My Account and Data'
+  },
+  profilePage: {
+    account_kicker: 'Account',
+    phone_waiting: 'Waiting for phone details',
+    missing_profile_warning: 'Complete phone and city/district details so urgent guidance and notifications work more accurately.',
+    plan_card_title: 'Free and premium areas are separated',
+    plan_card_desc: 'Daily records and raw document archive are free; AI analysis, OCR reading and sharing permissions are in the credit/Pro area.',
+    health_sharing: 'Health Sharing',
+    settings: 'Settings',
+    language_value: 'English',
+    account_items: {
+      passport: { title: 'Pet Health Passport', desc: 'Profile, records, measurements, documents, QR and expenses in one place', tier: 'Free' },
+      pets: { title: 'Pet Profiles', desc: 'Multi-pet panel and volunteer/street profiles', tier: 'Free / Pro' },
+      volunteer: { title: 'Volunteer Network', desc: 'Location panel for street and temporary foster profiles', tier: 'Free' },
+      qr: { title: 'QR Health Card', desc: 'A short shareable health card for emergencies', tier: 'Free' },
+      sitter: { title: 'Sitter Mode / Sharing', desc: 'Limited access for family or pet sitters', tier: 'Pro' },
+      senior: { title: 'Senior Pet Mode', desc: 'Water, weight, pain and movement sensitivities', tier: 'Free' }
+    },
+    settings_items: {
+      account: 'Account Details',
+      devices: 'My Devices',
+      privacy: 'Privacy and Data',
+      notifications: 'Notifications',
+      language: 'Language'
+    }
+  },
+  healthPassport: {
+    title: 'Health Passport',
+    kicker: 'Pet Health Passport',
+    profile_info: 'Profile details',
+    archive: 'Archive',
+    lab_report: 'Lab / report',
+    vaccine_medication: 'Vaccine / medication',
+    risk_context_title: 'Profile and Risk Context',
+    risk_context_desc: 'Chronic disease, allergy and regular medication details are kept in the profile.',
+    latest_timeline: 'Latest Timeline',
+    records_preparing: 'Preparing records',
+    latest_measurements_docs: 'Latest Measurements and Documents',
+    prepare_vet_file: 'Prepare Vet Link/File',
+    no_passport_records: 'No passport records yet.',
+    no_measurement_or_document: 'No measurement or document yet.',
+    load_failed: 'Passport records could not be loaded.',
+    measurements: {
+      weight: 'Weight',
+      temperature: 'Temperature',
+      respiratory: 'Respiration',
+      respiratory_rate: 'Respiration',
+      heart_rate: 'Pulse'
+    }
+  },
+  documents: {
+    clinic_visit: 'Clinic visit',
+    document: 'Document',
+    clinic_summary: 'Clinic summary',
+    document_title: '{kind} document',
+    extra_note: 'Extra note',
+    urgency: 'Urgency',
+    routine: 'Routine',
+    vet_prep_title: '{urgency} veterinarian prep file',
+    vet_visit: 'Veterinarian visit',
+    prep_file_title: '{purpose} prep file',
+    vet_note: 'Veterinarian note'
   },
   account: {
     title: 'Account Details',
@@ -672,6 +735,90 @@ const en = {
       extra_note: 'Extra note',
       visible_values: 'Visible important values'
     }
+  },
+  followupResult: {
+    title: 'Follow-up Result',
+    kicker: 'Post-treatment check',
+    disclaimer: 'This follow-up does not suggest new medication or dosing; it tracks adherence to the veterinarian plan.',
+    today_record: 'Today\'s record',
+    medication_application: 'Medication / application',
+    findings: 'Findings',
+    side_effect: 'Side effect',
+    note: 'Note',
+    photo: 'Photo',
+    not_specified: 'Not specified',
+    no_extra_finding: 'No extra finding',
+    not_reported: 'Not reported',
+    safe_limits: 'Safe boundaries',
+    back_to_detail: 'Back to Follow-up File',
+    find_clinic: 'Find Clinic',
+    map_opening: 'Opening map search for nearby clinics.',
+    critical_side_effects: ['Breathing issue', 'Face/throat swelling', 'Bloody vomit/stool'],
+    high_findings: ['Swelling/discharge', 'Pain sign'],
+    medium_med_statuses: ['Missed', 'Vomited / brought up'],
+    safe_steps: [
+      'Do not use medication, dose changes or home interventions that your veterinarian did not recommend.',
+      'Do not wait with breathing issues, face/throat swelling, bloody vomit/stool or rapid worsening.',
+      'If medication was vomited or a dose was missed, do not repeat the dose on your own; contact your veterinarian.'
+    ],
+    levels: {
+      low: { title: 'Recovery follow-up looks positive', desc: 'No clear worsening or serious side effect was reported. Continue the planned checks.', icon: 'checkCircle', cls: 'low', nextHours: 24 },
+      medium: { title: 'Close follow-up needed', desc: 'Keeping the next check soon is safer for medication adherence or signs.', icon: 'clock', cls: 'medium', nextHours: 12 },
+      high: { title: 'Contact a veterinarian today', desc: 'Pain, discharge, swelling or signs continuing despite treatment may need a clinic conversation.', icon: 'alert', cls: 'high', nextHours: 6 },
+      critical: { title: 'Urgent evaluation may be needed', desc: 'If there is worsening or suspected serious side effect, contact a veterinarian or emergency clinic without waiting.', icon: 'alert', cls: 'critical', nextHours: 3 }
+    }
+  },
+  followupDetail: {
+    no_plan: 'No plan',
+    status_improved: 'Improved',
+    status_worse: 'Worsened',
+    status_same: 'Same',
+    no_daily_check: 'No daily check has been completed yet.',
+    no_note: 'No note added.',
+    default_title: 'Post-treatment follow-up',
+    file_title: 'Follow-up File',
+    hero_desc: 'Track medication, side effects, photo/wound changes and control appointments for {name}.',
+    plan: 'Plan',
+    next_check: 'Next check',
+    control_appointment: 'Control appointment',
+    not_added: 'Not added',
+    status: 'Status',
+    active: 'Active',
+    closed: 'Closed',
+    vet_plan: 'Veterinarian Plan',
+    no_vet_plan: 'No veterinarian plan added.',
+    med_schedule: 'Medication / application times',
+    attachment: 'Attachment',
+    daily_checklist: 'Daily Checklist',
+    default_checklist: ['Appetite', 'Medication given?', 'Any side effect?'],
+    history: 'Follow-up History',
+    started: 'Follow-up started',
+    do_today_check: 'Do Today\'s Check',
+    prepare_vet_summary: 'Prepare Vet Summary',
+    end_followup: 'End Follow-up',
+    summary_ready: 'Follow-up summary is ready to be added to the veterinarian link report.',
+    end_title: 'End follow-up',
+    end_message: 'Do you want to close this follow-up file?',
+    end_confirm: 'End',
+    ended: 'Follow-up ended.'
+  },
+  followupCheck: {
+    title: 'Daily Check',
+    kicker: 'Treatment check-in',
+    hero_desc: 'Quickly check medication adherence, side effects, appetite, vomiting/diarrhea and wound status.',
+    general_status: 'General status',
+    medication_adherence: 'Medication / application adherence',
+    med_options: ['Given', 'Missed', 'Vomited / brought up', 'Finished'],
+    today_findings: 'Today\'s findings',
+    finding_options: ['Appetite good', 'Appetite low', 'Vomiting', 'Diarrhea', 'Lethargy', 'Pain sign', 'Wound red', 'Swelling/discharge'],
+    side_effect_suspect: 'Possible side effect',
+    none: 'None',
+    side_effect_options: ['None', 'Excessive drooling', 'Tremor', 'Breathing issue', 'Face/throat swelling', 'Severe lethargy', 'Bloody vomit/stool'],
+    photo_wound_check: 'Photo / wound check',
+    add_photo: 'Add photo',
+    photo_hint: 'Wound, skin, stool or general status',
+    note_placeholder: 'Example: vomited 1 hour after medicine, appetite is a little better, wound looks the same...',
+    evaluate: 'Evaluate'
   },
   featureForms: {
     configs: {
@@ -1260,6 +1407,7 @@ const en = {
     issue_name: 'Issue name',
     description: 'Description',
     file_purpose: 'File purpose',
+    included_sections: 'Included sections',
     document_type: 'Document type',
     read_goal: 'Reading goal',
     visible_important_values: 'Visible important values',

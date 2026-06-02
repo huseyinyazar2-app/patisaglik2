@@ -1,4 +1,13 @@
 import { getDbClient } from './dbClient.js';
+import { translateForLocale } from '../i18n/tr.js';
+
+function label(key) {
+  return translateForLocale('tr', `formLabels.${key}`);
+}
+
+function docText(key) {
+  return translateForLocale('tr', `documents.${key}`);
+}
 
 function parseJson(value, fallback = {}) {
   try {
@@ -23,22 +32,22 @@ function checkedLabels(value) {
 
 function rowToDocument(row) {
   const data = parseJson(row.extracted_data);
-  const included = checkedLabels(data.included || data.payload?.['Dahil edilecekler'] || []);
-  const extractionOptions = data.extraction_options || checkedLabels(data.payload?.['İşaretlenecek bilgiler'] || data.payload?.['AI çıkarımı'] || []);
-  const documentKind = data.document_kind || first(data.payload?.['Belge türü']) || '';
+  const included = checkedLabels(data.included || data.payload?.[label('included_sections')] || []);
+  const extractionOptions = data.extraction_options || checkedLabels(data.payload?.[label('extraction_options')] || data.payload?.[label('ai_extraction')] || []);
+  const documentKind = data.document_kind || first(data.payload?.[label('document_type')]) || '';
   return {
     id: row.id,
     pet_id: row.pet_id,
     document_type: row.document_type,
     title: row.title,
     note: row.extracted_text || data.note || '',
-    purpose: data.purpose || documentKind || first(data.payload?.['Dosya amacı']) || 'Klinik ziyareti',
+    purpose: data.purpose || documentKind || first(data.payload?.[label('file_purpose')]) || docText('clinic_visit'),
     included: included.length ? included : extractionOptions,
     status: row.status,
     created_at: row.created_at,
     updated_at: row.updated_at,
-    read_goal: data.read_goal || first(data.payload?.['Okuma hedefi']) || '',
-    visible_values: data.visible_values || data.payload?.['Görünen önemli değerler'] || '',
+    read_goal: data.read_goal || first(data.payload?.[label('read_goal')]) || '',
+    visible_values: data.visible_values || data.payload?.[label('visible_important_values')] || '',
     ai_ocr: data.ai_ocr || null,
     data
   };
@@ -52,40 +61,40 @@ function fromLocalStorage(petId) {
   return records.map((item) => {
     const payload = parseJson(item.payload);
     if (item.feature_code === 'document-ai') {
-      const documentKind = first(payload['Belge türü']) || 'Belge';
-      const extractionOptions = checkedLabels(payload['İşaretlenecek bilgiler'] || payload['AI çıkarımı'] || []);
-      const readGoal = first(payload['Okuma hedefi']) || 'Klinik özeti';
+      const documentKind = first(payload[label('document_type')]) || docText('document');
+      const extractionOptions = checkedLabels(payload[label('extraction_options')] || payload[label('ai_extraction')] || []);
+      const readGoal = first(payload[label('read_goal')]) || docText('clinic_summary');
       const aiOcr = payload.__ai_ocr_result || null;
       return {
         id: item.id,
         pet_id: item.pet_id,
         document_type: 'health_document',
-        title: `${documentKind} belgesi`,
-        note: [aiOcr?.summary, aiOcr?.rawText, payload['Görünen önemli değerler'], payload['Ek not']].filter(Boolean).join('\n\n'),
+        title: docText('document_title').replace('{kind}', documentKind),
+        note: [aiOcr?.summary, aiOcr?.rawText, payload[label('visible_important_values')], payload[docText('extra_note')]].filter(Boolean).join('\n\n'),
         purpose: documentKind,
         included: extractionOptions,
         status: aiOcr ? 'processed' : 'ai_pending',
         created_at: item.created_at,
         updated_at: item.updated_at,
         read_goal: readGoal,
-        visible_values: payload['Görünen önemli değerler'] || '',
+        visible_values: payload[label('visible_important_values')] || '',
         ai_ocr: aiOcr || { status: 'queued_for_server' },
         data: { payload, document_kind: documentKind, extraction_options: extractionOptions, read_goal: readGoal }
       };
     }
 
     if (item.feature_code === 'vet-prep') {
-      const urgency = first(payload['Aciliyet']) || 'Rutin';
-      const included = checkedLabels(payload['Yanıma alacağım'] || []);
-      const reason = payload['Ziyaret nedeni'] || '';
-      const questions = payload['Sorularım'] || '';
+      const urgency = first(payload[docText('urgency')]) || docText('routine');
+      const included = checkedLabels(payload[label('bring_checklist')] || []);
+      const reason = payload[label('visit_reason')] || '';
+      const questions = payload[label('my_questions')] || '';
       return {
         id: item.id,
         pet_id: item.pet_id,
         document_type: 'vet_prep',
-        title: `${urgency} veteriner hazırlık dosyası`,
+        title: docText('vet_prep_title').replace('{urgency}', urgency),
         note: [reason, questions].filter(Boolean).join('\n\n'),
-        purpose: 'Veteriner ziyareti',
+        purpose: docText('vet_visit'),
         included,
         status: item.status || 'draft',
         created_at: item.created_at,
@@ -94,14 +103,14 @@ function fromLocalStorage(petId) {
       };
     }
 
-    const purpose = first(payload['Dosya amacı']) || 'Klinik ziyareti';
-    const included = checkedLabels(payload['Dahil edilecekler'] || []);
+    const purpose = first(payload[label('file_purpose')]) || docText('clinic_visit');
+    const included = checkedLabels(payload[label('included_sections')] || []);
     return {
       id: item.id,
       pet_id: item.pet_id,
       document_type: 'clinic_export',
-      title: `${purpose} hazırlık dosyası`,
-      note: payload['Veterinere not'] || '',
+      title: docText('prep_file_title').replace('{purpose}', purpose),
+      note: payload[docText('vet_note')] || '',
       purpose,
       included,
       status: item.status || 'draft',

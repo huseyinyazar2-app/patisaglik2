@@ -335,7 +335,8 @@ const tr = {
     timeline_empty_desc: 'Yeni ücretsiz kayıt ekledikçe burada tarih sırasıyla görünecek.',
     timeline_new_record: 'Yeni Kayıt Ekle',
     timeline_failed_title: 'Zaman akışı getirilemedi',
-    timeline_failed_desc: 'Bağlantıyı kontrol edip tekrar deneyin.'
+    timeline_failed_desc: 'Bağlantıyı kontrol edip tekrar deneyin.',
+    total: 'Toplam'
   },
   reports: {
     title: 'Raporlar', new_report: 'Yeni Rapor Oluştur',
@@ -439,6 +440,68 @@ const tr = {
     export_data: 'Verilerimi dışa aktar', delete_data: 'Verilerimi sil', delete_account: 'Hesabımı sil',
     save_settings: 'Ayarları Kaydet', download_data: 'Verilerimi İndir',
     delete_all: 'Hesabımı ve Verilerimi Sil'
+  },
+  profilePage: {
+    account_kicker: 'Hesap',
+    phone_waiting: 'Telefon bilgisi bekleniyor',
+    missing_profile_warning: 'Telefon ve il/ilçe bilgilerini tamamlayın; acil yönlendirme ve bildirimler daha doğru çalışır.',
+    plan_card_title: 'Ücretsiz ve premium alanlar ayrıldı',
+    plan_card_desc: 'Günlük kayıtlar ve ham belge arşivi ücretsiz; AI analiz, OCR okuma ve paylaşım yetkileri kredi/Pro alanında.',
+    health_sharing: 'Sağlık Paylaşımı',
+    settings: 'Ayarlar',
+    language_value: 'Türkçe',
+    account_items: {
+      passport: { title: 'Pet Sağlık Pasaportu', desc: 'Profil, kayıtlar, ölçümler, belgeler, QR ve masraflar tek yerde', tier: 'Ücretsiz' },
+      pets: { title: 'Pet Profilleri', desc: 'Çoklu pet paneli ve gönüllü/sokak profilleri', tier: 'Free / Pro' },
+      volunteer: { title: 'Gönüllü Ağı', desc: 'Sokak ve geçici yuva profilleri için konum paneli', tier: 'Ücretsiz' },
+      qr: { title: 'QR Sağlık Kartı', desc: 'Acil durumda paylaşılabilir kısa sağlık kartı', tier: 'Ücretsiz' },
+      sitter: { title: 'Bakıcı Modu / Paylaşım', desc: 'Aile veya pet sitter için sınırlı erişim', tier: 'Pro' },
+      senior: { title: 'Yaşlı Pet Modu', desc: 'Su, kilo, ağrı ve hareket hassasiyetleri', tier: 'Ücretsiz' }
+    },
+    settings_items: {
+      account: 'Hesap Bilgileri',
+      devices: 'Cihazlarım',
+      privacy: 'Gizlilik ve Veri',
+      notifications: 'Bildirimler',
+      language: 'Dil'
+    }
+  },
+  healthPassport: {
+    title: 'Sağlık Pasaportu',
+    kicker: 'Pet Sağlık Pasaportu',
+    profile_info: 'Profil bilgisi',
+    archive: 'Arşiv',
+    lab_report: 'Tahlil / rapor',
+    vaccine_medication: 'Aşı / ilaç',
+    risk_context_title: 'Profil ve Risk Bağlamı',
+    risk_context_desc: 'Kronik hastalık, alerji ve düzenli ilaç bilgileri profil içinde tutulur.',
+    latest_timeline: 'Son Zaman Akışı',
+    records_preparing: 'Kayıtlar hazırlanıyor',
+    latest_measurements_docs: 'Son Ölçümler ve Belgeler',
+    prepare_vet_file: 'Veteriner Link/Dosya Hazırla',
+    no_passport_records: 'Henüz pasaport kaydı yok.',
+    no_measurement_or_document: 'Ölçüm veya belge yok.',
+    load_failed: 'Pasaport kayıtları alınamadı.',
+    measurements: {
+      weight: 'Kilo',
+      temperature: 'Ateş',
+      respiratory: 'Solunum',
+      respiratory_rate: 'Solunum',
+      heart_rate: 'Nabız'
+    }
+  },
+  documents: {
+    clinic_visit: 'Klinik ziyareti',
+    document: 'Belge',
+    clinic_summary: 'Klinik özeti',
+    document_title: '{kind} belgesi',
+    extra_note: 'Ek not',
+    urgency: 'Aciliyet',
+    routine: 'Rutin',
+    vet_prep_title: '{urgency} veteriner hazırlık dosyası',
+    vet_visit: 'Veteriner ziyareti',
+    prep_file_title: '{purpose} hazırlık dosyası',
+    vet_note: 'Veterinere not'
   },
   account: {
     title: 'Hesap Bilgileri',
@@ -701,6 +764,90 @@ const tr = {
       extra_note: 'Ek not',
       visible_values: 'Görünen önemli değerler'
     }
+  },
+  followupResult: {
+    title: 'Takip Sonucu',
+    kicker: 'Tedavi sonrası kontrol',
+    disclaimer: 'Bu takip yeni ilaç/doz önermez; veteriner planına uyumu izler.',
+    today_record: 'Bugünkü kayıt',
+    medication_application: 'İlaç / uygulama',
+    findings: 'Bulgular',
+    side_effect: 'Yan etki',
+    note: 'Not',
+    photo: 'Foto',
+    not_specified: 'Belirtilmedi',
+    no_extra_finding: 'Ek bulgu yok',
+    not_reported: 'Bildirilmedi',
+    safe_limits: 'Güvenli sınırlar',
+    back_to_detail: 'Takip Dosyasına Dön',
+    find_clinic: 'Klinik Bul',
+    map_opening: 'Yakındaki klinikler için harita araması açılıyor.',
+    critical_side_effects: ['Nefes sorunu', 'Yüz/boğaz şişliği', 'Kanlı kusma/dışkı'],
+    high_findings: ['Şişlik/akıntı', 'Ağrı belirtisi'],
+    medium_med_statuses: ['Atlandı', 'Kustu / çıkarıldı'],
+    safe_steps: [
+      'Veterinerin önermediği ilaç, doz değişikliği veya ev müdahalesi yapma.',
+      'Nefes sorunu, yüz/boğaz şişliği, kanlı kusma/dışkı veya hızlı kötüleşmede bekleme.',
+      'İlaç kustuysa veya doz atlandıysa kendi başına tekrar doz verme; veterinerine danış.'
+    ],
+    levels: {
+      low: { title: 'İyileşme takibi olumlu', desc: 'Belirgin kötüleşme veya ciddi yan etki bildirilmedi. Planlanan kontrolleri sürdür.', icon: 'checkCircle', cls: 'low', nextHours: 24 },
+      medium: { title: 'Yakın takip gerekli', desc: 'İlaç uyumu veya belirtiler için bir sonraki kontrolü kısa tutmak güvenli olur.', icon: 'clock', cls: 'medium', nextHours: 12 },
+      high: { title: 'Bugün veterinerle görüş', desc: 'Ağrı, akıntı, şişlik veya tedaviye rağmen devam eden bulgular klinik görüş gerektirebilir.', icon: 'alert', cls: 'high', nextHours: 6 },
+      critical: { title: 'Acil değerlendirme gerekebilir', desc: 'Kötüleşme veya ciddi yan etki şüphesinde beklemeden veteriner/acil klinik ile görüş.', icon: 'alert', cls: 'critical', nextHours: 3 }
+    }
+  },
+  followupDetail: {
+    no_plan: 'Plan yok',
+    status_improved: 'İyileşti',
+    status_worse: 'Kötüleşti',
+    status_same: 'Aynı',
+    no_daily_check: 'Henüz günlük kontrol yapılmadı.',
+    no_note: 'Not eklenmedi.',
+    default_title: 'Tedavi sonrası takip',
+    file_title: 'Takip Dosyası',
+    hero_desc: '{name} için ilaç, yan etki, foto/yara ve kontrol randevusu takibi.',
+    plan: 'Plan',
+    next_check: 'Sonraki kontrol',
+    control_appointment: 'Kontrol randevusu',
+    not_added: 'Eklenmedi',
+    status: 'Durum',
+    active: 'Aktif',
+    closed: 'Kapalı',
+    vet_plan: 'Veteriner Planı',
+    no_vet_plan: 'Veteriner planı eklenmedi.',
+    med_schedule: 'İlaç / uygulama saatleri',
+    attachment: 'Ek',
+    daily_checklist: 'Günlük Kontrol Listesi',
+    default_checklist: ['İştah', 'İlaç verildi mi?', 'Yan etki var mı?'],
+    history: 'Takip Geçmişi',
+    started: 'Takip başlatıldı',
+    do_today_check: 'Bugünkü Kontrolü Yap',
+    prepare_vet_summary: 'Veteriner Özeti Hazırla',
+    end_followup: 'Takibi Sonlandır',
+    summary_ready: 'Takip özeti veteriner link raporuna eklenecek şekilde hazırlandı.',
+    end_title: 'Takibi sonlandır',
+    end_message: 'Bu takip dosyasını kapatmak istiyor musunuz?',
+    end_confirm: 'Sonlandır',
+    ended: 'Takip sonlandırıldı.'
+  },
+  followupCheck: {
+    title: 'Günlük Kontrol',
+    kicker: 'Tedavi check-in',
+    hero_desc: 'İlaç uyumu, yan etki, iştah, kusma/ishal ve yara durumunu kısa kontrol et.',
+    general_status: 'Genel durum',
+    medication_adherence: 'İlaç / uygulama uyumu',
+    med_options: ['Verildi', 'Atlandı', 'Kustu / çıkarıldı', 'Bitti'],
+    today_findings: 'Bugünkü bulgular',
+    finding_options: ['İştah iyi', 'İştah az', 'Kusma', 'İshal', 'Halsizlik', 'Ağrı belirtisi', 'Yara kızarık', 'Şişlik/akıntı'],
+    side_effect_suspect: 'Yan etki şüphesi',
+    none: 'Yok',
+    side_effect_options: ['Yok', 'Aşırı salya', 'Titreme', 'Nefes sorunu', 'Yüz/boğaz şişliği', 'Şiddetli halsizlik', 'Kanlı kusma/dışkı'],
+    photo_wound_check: 'Foto / yara kontrolü',
+    add_photo: 'Fotoğraf ekle',
+    photo_hint: 'Yara, deri, dışkı veya genel durum',
+    note_placeholder: 'Örn. ilaçtan 1 saat sonra kustu, iştahı biraz daha iyi, yara aynı...',
+    evaluate: 'Değerlendir'
   },
   featureForms: {
   configs: {
@@ -1289,6 +1436,7 @@ const tr = {
     issue_name: 'Sorun adı',
     description: 'Açıklama',
     file_purpose: 'Dosya amacı',
+    included_sections: 'Dahil edilecekler',
     document_type: 'Belge türü',
     read_goal: 'Okuma hedefi',
     visible_important_values: 'Görünen önemli değerler',
