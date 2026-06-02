@@ -5,6 +5,7 @@ import { submitFeatureForm } from '../../services/formSubmissions.js';
 import { isDocumentOcrConfigured, runDocumentOcr } from '../../services/documentOcr.js';
 import { uploadMediaFile } from '../../services/apiClient.js';
 import QRCode from 'qrcode';
+import { t } from '../../i18n/tr.js';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -15,216 +16,17 @@ function escapeHtml(value) {
     .replace(/'/g, '&#039;');
 }
 
-const featureForms = {
-  'photo-followup': {
-    icon: 'camera',
-    eyebrow: 'Ücretsiz takip',
-    title: 'Fotoğraf Karşılaştırmalı Takip',
-    desc: 'Deri, yara veya fiziksel değişimi fotoğraflarla karşılaştırmak için görsel kayıt formu.',
-    tone: 'teal',
-    fields: [
-      { type: 'upload-pair', before: 'Önceki fotoğraf', after: 'Bugünkü fotoğraf' },
-      { type: 'text', label: 'Takip konusu', placeholder: 'Örn. sağ patide kızarıklık' },
-      { type: 'chips', label: 'Görsel değişim', options: ['Azaldı', 'Aynı', 'Arttı', 'Yeni belirti'] },
-      { type: 'textarea', label: 'Kısa not', placeholder: 'Renk, şişlik, akıntı veya kaşıma değişimi...' }
-    ]
-  },
-  'poop-score': {
-    icon: 'activity',
-    eyebrow: 'Günlük kayıt',
-    title: 'Dışkı Skoru',
-    desc: 'Dışkı kalitesini görsel skala ile not almak için hızlı kayıt formu.',
-    tone: 'slate',
-    fields: [
-      { type: 'score', label: 'Skor', options: ['1', '2', '3', '4', '5'] },
-      { type: 'chips', label: 'Ek bulgu', options: ['Normal', 'Mukus', 'Kan', 'Çok sulu', 'Çok sert'] },
-      { type: 'upload', label: 'Fotoğraf ekle' },
-      { type: 'textarea', label: 'Not', placeholder: 'Mama değişimi, ilaç, stres veya diğer gözlemler...' }
-    ]
-  },
-  'diet-log': {
-    icon: 'heartPulse',
-    eyebrow: 'Beslenme takibi',
-    title: 'Mama / Beslenme Değişimi',
-    desc: 'Yeni mamaya geçişte iştah, dışkı ve reaksiyonları izlemek için form.',
-    tone: 'gold',
-    fields: [
-      { type: 'text', label: 'Yeni mama / öğün', placeholder: 'Örn. somonlu hassas mama' },
-      { type: 'chips', label: 'Geçiş günü', options: ['1. gün', '3. gün', '7. gün', '14. gün'] },
-      { type: 'chips', label: 'Reaksiyon', options: ['İştah iyi', 'Kusma', 'İshal', 'Kaşıntı', 'Gaz'] },
-      { type: 'textarea', label: 'Beslenme notu', placeholder: 'Miktar, öğün saati ve fark edilen değişimler...' }
-    ]
-  },
-  expense: {
-    icon: 'briefcase',
-    eyebrow: 'Ücretsiz kayıt',
-    title: 'Masraf Takibi',
-    desc: 'Mama, veteriner, aşı, ilaç ve bakım harcamalarını kategorize etmek için form.',
-    tone: 'teal',
-    fields: [
-      { type: 'chips', label: 'Kategori', options: ['Veteriner', 'Mama', 'Aşı', 'İlaç', 'Bakım'] },
-      { type: 'money', label: 'Tutar', placeholder: '0,00 TL' },
-      { type: 'date', label: 'Tarih' },
-      { type: 'upload', label: 'Fatura / belge ekle' },
-      { type: 'textarea', label: 'Not', placeholder: 'Klinik adı, işlem veya ürün detayı...' }
-    ]
-  },
-  reminders: {
-    icon: 'calendar',
-    eyebrow: 'Takvim',
-    title: 'Aşı / İlaç / Randevu Hatırlatıcı',
-    desc: 'Gelecek sağlık işlerini planlamak için görsel hatırlatıcı formu.',
-    tone: 'teal',
-    fields: [
-      { type: 'chips', label: 'Hatırlatıcı türü', options: ['Aşı', 'İlaç', 'Randevu', 'Pire/Parazit'] },
-      { type: 'text', label: 'Başlık', placeholder: 'Örn. karma aşı kontrolü' },
-      { type: 'date', label: 'Tarih' },
-      { type: 'chips', label: 'Tekrar', options: ['Tek sefer', 'Günlük', 'Haftalık', 'Aylık', 'Yıllık'] },
-      { type: 'textarea', label: 'Not', placeholder: 'Doz, klinik, veteriner veya hazırlık notu...' }
-    ]
-  },
-  'clinic-export': {
-    icon: 'clipboard',
-    eyebrow: 'Rapor',
-    title: 'Sigorta / Klinik Hazırlık Dosyası',
-    desc: 'Petin geçmişini veteriner veya sigorta için tek dosyada toparlama önizlemesi.',
-    tone: 'gold',
-    fields: [
-      { type: 'checks', label: 'Dahil edilecekler', options: ['Pet profili', 'Aşı ve ilaçlar', 'Şikayet geçmişi', 'Fotoğraflar', 'Masraflar', 'Kural tabanlı notlar'] },
-      { type: 'chips', label: 'Dosya amacı', options: ['Klinik ziyareti', 'Sigorta', 'İkinci görüş', 'Arşiv'] },
-      { type: 'textarea', label: 'Veterinere not', placeholder: 'Özellikle bakılmasını istediğiniz konular...' }
-    ]
-  },
-  chronic: {
-    icon: 'clipboard',
-    eyebrow: 'Takip şablonu',
-    title: 'Kronik Hastalık Takibi',
-    desc: 'Diyabet, böbrek, kalp gibi uzun dönemli durumlar için günlük izlem formu.',
-    tone: 'teal',
-    fields: [
-      { type: 'chips', label: 'Şablon', options: ['Diyabet', 'Böbrek', 'Kalp', 'Alerji', 'Özel'] },
-      { type: 'chips', label: 'Bugünkü durum', options: ['Stabil', 'İyi', 'Daha kötü', 'İlaç atlandı'] },
-      { type: 'text', label: 'Ölçüm / gözlem', placeholder: 'Örn. su tüketimi arttı' },
-      { type: 'textarea', label: 'Takip notu', placeholder: 'İştah, su, idrar, halsizlik veya ağrı gözlemi...' }
-    ]
-  },
-  postop: {
-    icon: 'shield',
-    eyebrow: 'Takip şablonu',
-    title: 'Operasyon Sonrası Takip',
-    desc: 'Yara yeri, iştah, ilaç ve genel durum kontrolü için form.',
-    tone: 'slate',
-    fields: [
-      { type: 'chips', label: 'Operasyon günü', options: ['1. gün', '3. gün', '7. gün', '14. gün'] },
-      { type: 'chips', label: 'Yara durumu', options: ['Temiz', 'Kızarık', 'Şiş', 'Akıntı var'] },
-      { type: 'chips', label: 'İlaç kullanımı', options: ['Verildi', 'Atlandı', 'Yan etki var', 'Bitti'] },
-      { type: 'date', label: 'Sonraki doz / kontrol' },
-      { type: 'upload', label: 'Yara fotoğrafı' },
-      { type: 'textarea', label: 'Genel durum', placeholder: 'İştah, tuvalet, hareket, ilaç kullanımı...' }
-    ]
-  },
-  reproduction: {
-    icon: 'calendar',
-    eyebrow: 'Takvim',
-    title: 'Kızgınlık / Gebelik / Doğum Takibi',
-    desc: 'Üreme döngüsü ve doğum sürecini takvimle izlemek için form.',
-    tone: 'gold',
-    fields: [
-      { type: 'chips', label: 'Takip türü', options: ['Kızgınlık', 'Gebelik', 'Doğum sonrası'] },
-      { type: 'date', label: 'Başlangıç tarihi' },
-      { type: 'chips', label: 'Belirti', options: ['Davranış değişimi', 'Akıntı', 'İştah değişimi', 'Yuva arama'] },
-      { type: 'textarea', label: 'Not', placeholder: 'Takvim, belirti veya veteriner görüşü...' }
-    ]
-  },
-  senior: {
-    icon: 'heartPulse',
-    eyebrow: 'Özel mod',
-    title: 'Yaşlı Pet İzlemi',
-    desc: 'Senior petler için su, kilo, ağrı ve hareket hassasiyetlerini takip etme formu.',
-    tone: 'slate',
-    fields: [
-      { type: 'chips', label: 'Günlük durum', options: ['İyi', 'Daha az hareketli', 'Ağrılı', 'İştahsız'] },
-      { type: 'chips', label: 'Odak', options: ['Su', 'Kilo', 'Ağrı', 'Merdiven', 'Uyku'] },
-      { type: 'text', label: 'Gözlem', placeholder: 'Örn. bugün daha çok su içti' },
-      { type: 'textarea', label: 'Not', placeholder: 'Günlük değişim, ağrı belirtisi veya veteriner planı...' }
-    ]
-  },
-  qr: {
-    icon: 'shield',
-    eyebrow: 'Paylaşım',
-    title: 'QR Sağlık Kartı',
-    desc: 'Acil durumda gösterilecek kısa sağlık kartı için görsel önizleme.',
-    tone: 'teal',
-    fields: [
-      { type: 'preview-card' },
-      { type: 'checks', label: 'Paylaşılacak bilgiler', options: ['İsim ve tür', 'Alerjiler', 'Kronik hastalıklar', 'İlaçlar', 'Sahip iletişimi'] },
-      { type: 'chips', label: 'Erişim süresi', options: ['24 saat', '7 gün', 'Süresiz'] }
-    ]
-  },
-  sitter: {
-    icon: 'profile',
-    eyebrow: 'Pro paylaşım',
-    title: 'Bakıcı Modu',
-    desc: 'Pet sitter veya aile üyeleri için sınırlı erişim davet formu.',
-    tone: 'gold',
-    requiresPaid: true,
-    fields: [
-      { type: 'text', label: 'Davet edilecek kişi', placeholder: 'Ad Soyad' },
-      { type: 'text', label: 'Telefon / e-posta', placeholder: 'ornek@email.com' },
-      { type: 'checks', label: 'İzinler', options: ['Günlük not ekle', 'Hatırlatıcı gör', 'Acil kartı gör', 'Raporları gör'] },
-      { type: 'chips', label: 'Erişim süresi', options: ['1 gün', '1 hafta', '1 ay'] }
-    ]
-  },
-  'document-ai': {
-    icon: 'upload',
-    eyebrow: 'AI okuma hazırlığı',
-    title: 'Belge / Tahlil / Fatura AI Okuma',
-    desc: 'Veteriner belgesini kaydedip OCR/AI ayrıştırma kuyruğuna hazırlama formu.',
-    tone: 'slate',
-    fields: [
-      { type: 'upload', label: 'Belge yükle' },
-      { type: 'chips', label: 'Belge türü', options: ['Kan tahlili', 'Görüntüleme', 'Fatura', 'Reçete', 'Aşı kartı', 'Epikriz / rapor'] },
-      { type: 'chips', label: 'Okuma hedefi', options: ['Klinik özeti', 'Tahlil değerleri', 'İlaç / reçete', 'Masraf', 'Takip görevi'] },
-      { type: 'checks', label: 'İşaretlenecek bilgiler', options: ['Tarih', 'Klinik', 'İşlem', 'İlaçlar', 'Masraf', 'Anormal değer', 'Kontrol tarihi'] },
-      { type: 'textarea', label: 'Görünen önemli değerler', placeholder: 'AI/OCR çalışana kadar elle görünen kritik değer, ilaç veya tutarı yazabilirsiniz...' },
-      { type: 'textarea', label: 'Ek not', placeholder: 'Belgeyle ilgili hatırlamak istediğiniz şey...' }
-    ]
-  },
-  'vet-prep': {
-    icon: 'stethoscope',
-    eyebrow: 'Klinik hazırlık',
-    title: 'Kliniğe Hazırlık Modu',
-    desc: 'Veteriner ziyareti öncesi cevapları toplayıp net bir görüşme özeti hazırlama formu.',
-    tone: 'teal',
-    fields: [
-      { type: 'textarea', label: 'Ziyaret nedeni', placeholder: 'Veterinere neden gidiyorsunuz?' },
-      { type: 'chips', label: 'Aciliyet', options: ['Rutin', 'Yakın takip', 'Bugün görülmeli'] },
-      { type: 'checks', label: 'Yanıma alacağım', options: ['Fotoğraflar', 'Tahliller', 'Aşı kartı', 'Mama bilgisi', 'İlaç listesi'] },
-      { type: 'textarea', label: 'Sorularım', placeholder: 'Veterinere sormak istediğiniz maddeler...' }
-    ]
-  },
-  toxic: {
-    icon: 'alert',
-    eyebrow: 'Ücretsiz acil kayıt',
-    title: 'Toksik Madde / Yabancı Cisim Kontrolü',
-    desc: 'Zehirlenme veya yutma şüphesinde hızlı bilgi toplama ekranı.',
-    tone: 'danger',
-    fields: [
-      { type: 'text', label: 'Ne yuttu / temas etti?', placeholder: 'Örn. çikolata, ilaç, oyuncak parçası' },
-      { type: 'chips', label: 'Ne zaman oldu?', options: ['0-1 saat', '1-3 saat', 'Bugün', 'Emin değilim'] },
-      { type: 'checks', label: 'Belirti var mı?', options: ['Kusma', 'Halsizlik', 'Titreme', 'Salya', 'Nefes sorunu'] },
-      { type: 'textarea', label: 'Detay', placeholder: 'Miktar, paket fotoğrafı, davranış değişimi...' }
-    ]
-  }
-};
+function featureForms() {
+  return t('featureForms.configs');
+}
 
 function presetForField(field, preset = {}) {
   const label = field.label || '';
-  if (label === 'Hatırlatıcı türü') return preset.type || '';
-  if (label === 'Başlık') return preset.title || '';
-  if (label === 'Tarih') return preset.date || '';
-  if (label === 'Tekrar') return preset.repeat || '';
-  if (label === 'Not') return preset.note || '';
+  if (label === t('featureForm.labels.reminder_type')) return preset.type || '';
+  if (label === t('featureForm.labels.title')) return preset.title || '';
+  if (label === t('featureForm.labels.date')) return preset.date || '';
+  if (label === t('featureForm.labels.repeat')) return preset.repeat || '';
+  if (label === t('featureForm.labels.note')) return preset.note || '';
   return '';
 }
 
@@ -286,8 +88,8 @@ function renderField(field, preset = {}) {
         <input type="file" class="feature-upload-input hidden" data-upload-label="${field.label}" />
         <button class="feature-upload" type="button" data-upload-trigger>
           ${window.__icons?.upload}
-          <strong>Dosya seç</strong>
-          <small>Fotoğraf, PDF veya belge önizlemesi</small>
+          <strong>${t('featureForm.choose_file')}</strong>
+          <small>${t('featureForm.file_hint')}</small>
         </button>
       </div>
     `;
@@ -302,7 +104,7 @@ function renderField(field, preset = {}) {
           <button class="feature-upload" type="button" data-upload-trigger>
             ${window.__icons?.camera}
             <strong>${field.before}</strong>
-            <small>Eski kayıt</small>
+            <small>${t('featureForm.old_record')}</small>
           </button>
         </div>
         <div class="feature-field">
@@ -311,7 +113,7 @@ function renderField(field, preset = {}) {
           <button class="feature-upload" type="button" data-upload-trigger>
             ${window.__icons?.camera}
             <strong>${field.after}</strong>
-            <small>Yeni kayıt</small>
+            <small>${t('featureForm.new_record')}</small>
           </button>
         </div>
       </div>
@@ -326,9 +128,9 @@ function renderField(field, preset = {}) {
     return `
       <div class="feature-qr-preview" data-qr-url="${previewUrl}">
         <div>
-          <small>Acil Sağlık Kartı</small>
+          <small>${t('featureForm.emergency_card')}</small>
           <strong>${pet.name}</strong>
-          <span>${pet.breed || 'Profil'} · ${pet.weight || '0'} kg · ${pet.statusText || 'Sağlık profili'}</span>
+          <span>${pet.breed || t('featureForm.profile')} ${t('featureForm.separator')} ${pet.weight || '0'} kg ${t('featureForm.separator')} ${pet.statusText || t('featureForm.health_profile')}</span>
         </div>
         <div class="feature-qr-box">
           <span>QR</span>
@@ -345,11 +147,11 @@ function renderDocumentOcrPanel() {
     <div class="feature-form-card document-ocr-panel" id="documentOcrPanel">
       <div class="info-box info">
         <span class="info-box-icon">${window.__icons?.spark || window.__icons?.upload || ''}</span>
-        <span>Belgeyi kaydetmeden önce Gemini ile gerçek OCR okutabilirsin. Sonuç kayda işlenir; teşhis veya tedavi önerisi üretmez.</span>
+        <span>${t('featureForm.ocr_info')}</span>
       </div>
       <div class="feature-bottom-actions" style="padding: 0; margin-top: 14px;">
         <button class="btn btn-outline btn-full" id="btnRunDocumentOcr" type="button">
-          <span class="modern-button-icon">${window.__icons?.search || window.__icons?.spark || ''}</span> Belgeyi AI ile Oku
+          <span class="modern-button-icon">${window.__icons?.search || window.__icons?.spark || ''}</span> ${t('featureForm.read_with_ai')}
         </button>
       </div>
       <div class="feature-form-notice hidden" id="documentOcrResult" role="status"></div>
@@ -360,7 +162,7 @@ function renderDocumentOcrPanel() {
 export function render(params = {}, query = {}) {
   const state = getState();
   const pet = getActivePet(state.activePetId);
-  const config = featureForms[params.featureId];
+  const config = featureForms()[params.featureId];
 
   if (!config) {
     return `
@@ -369,7 +171,7 @@ export function render(params = {}, query = {}) {
           <div class="header-left">
             <button class="header-back" id="btnBack">${window.__icons?.back}</button>
           </div>
-          <div class="header-title">Özellik Bulunamadı</div>
+          <div class="header-title">${t('featureForm.not_found_title')}</div>
           <div class="header-right">
             <span class="premium-header-shield">${window.__icons?.search || window.__icons?.clipboard}</span>
           </div>
@@ -378,9 +180,9 @@ export function render(params = {}, query = {}) {
         <div class="section pt-4 pb-24">
           <div class="empty-state">
             <div class="empty-state-icon">${window.__icons?.search || ''}</div>
-            <div class="empty-state-title">Bu form artık kullanılmıyor</div>
-            <div class="empty-state-desc">Geçerli ücretsiz takip araçlarına ana sayfadan ulaşabilirsin.</div>
-            <button class="btn btn-primary btn-full mt-4" id="btnGoHome">Ana Sayfaya Dön</button>
+            <div class="empty-state-title">${t('featureForm.form_removed')}</div>
+            <div class="empty-state-desc">${t('featureForm.form_removed_desc')}</div>
+            <button class="btn btn-primary btn-full mt-4" id="btnGoHome">${t('featureForm.go_home')}</button>
           </div>
         </div>
       </div>
@@ -405,22 +207,22 @@ export function render(params = {}, query = {}) {
           <div class="feature-form-hero ${config.tone}">
             <div class="premium-icon-box">${window.__icons?.lock || window.__icons?.spark}</div>
             <div>
-              <div class="premium-screen-kicker">Kredi / Pro Alanı</div>
+              <div class="premium-screen-kicker">${t('featureForm.paid_kicker')}</div>
               <h1>${config.title}</h1>
-              <p>${config.desc} Bu özellik ücretsiz sağlık kayıtlarından ayrı tutulur.</p>
+              <p>${config.desc} ${t('featureForm.paid_desc_suffix')}</p>
             </div>
           </div>
 
           <div class="feature-form-card">
             <div class="info-box">
               <span class="info-box-icon">${window.__icons?.shield || ''}</span>
-              <span>Ücretsiz planda kayıt arşivi, masraf, hatırlatıcı, QR kart ve takip formları açıktır. Bakıcı paylaşımı için kredi veya Pro plan gerekir.</span>
+              <span>${t('featureForm.paid_info')}</span>
             </div>
           </div>
 
           <div class="feature-bottom-actions">
-            <button class="btn btn-primary btn-full" id="btnPlan">Planları Gör</button>
-            <button class="btn btn-ghost btn-full" id="btnCancel">Vazgeç</button>
+            <button class="btn btn-primary btn-full" id="btnPlan">${t('featureForm.view_plans')}</button>
+            <button class="btn btn-ghost btn-full" id="btnCancel">${t('common.cancel')}</button>
           </div>
         </div>
       </div>
@@ -445,7 +247,7 @@ export function render(params = {}, query = {}) {
           <div>
             <div class="premium-screen-kicker">${config.eyebrow}</div>
             <h1>${config.title}</h1>
-            <p>${pet.name} için ${config.desc}</p>
+            <p>${t('featureForm.hero_desc').replace('{name}', pet.name).replace('{desc}', config.desc)}</p>
           </div>
         </div>
 
@@ -458,8 +260,8 @@ export function render(params = {}, query = {}) {
         <div class="feature-form-notice hidden" id="featureFormNotice" role="status"></div>
 
         <div class="feature-bottom-actions">
-          <button class="btn btn-primary btn-full" id="btnSaveFeature">Kaydet</button>
-          <button class="btn btn-ghost btn-full" id="btnCancel">Vazgeç</button>
+          <button class="btn btn-primary btn-full" id="btnSaveFeature">${t('common.save')}</button>
+          <button class="btn btn-ghost btn-full" id="btnCancel">${t('common.cancel')}</button>
         </div>
       </div>
     </div>
@@ -504,12 +306,12 @@ export function afterRender() {
     const tasks = (result.followupTasks || []).slice(0, 3).map((item) => [item.title, item.dueDate].filter(Boolean).join(' · '));
     return [
       result.summary,
-      result.documentDate ? `Tarih: ${result.documentDate}` : '',
-      result.clinic ? `Klinik: ${result.clinic}` : '',
-      result.invoice?.total ? `Tutar: ${result.invoice.total} ${result.invoice.currency || ''}` : '',
-      labs.length ? `Tahlil: ${labs.join(', ')}` : '',
-      meds.length ? `İlaçlar: ${meds.join(', ')}` : '',
-      tasks.length ? `Takip: ${tasks.join(', ')}` : ''
+      result.documentDate ? `${t('featureForm.labels.date')}: ${result.documentDate}` : '',
+      result.clinic ? `${t('featureForm.labels.clinic')}: ${result.clinic}` : '',
+      result.invoice?.total ? `${t('featureForm.labels.amount')}: ${result.invoice.total} ${result.invoice.currency || ''}` : '',
+      labs.length ? `${t('featureForm.labels.lab')}: ${labs.join(', ')}` : '',
+      meds.length ? `${t('featureForm.labels.medications')}: ${meds.join(', ')}` : '',
+      tasks.length ? `${t('featureForm.labels.followup')}: ${tasks.join(', ')}` : ''
     ].filter(Boolean).join('\n');
   }
 
@@ -518,9 +320,9 @@ export function afterRender() {
     if (!box) return;
     box.className = 'feature-form-notice success';
     box.innerHTML = `
-      <strong>OCR tamamlandı</strong>
-      <div class="mt-1">${escapeHtml(result.summary || 'Belgeden yapılandırılmış veri çıkarıldı.')}</div>
-      <div class="text-xs mt-1">Güven: ${Math.round(result.confidence || 0)} / 100${result.warnings?.length ? ` · Uyarı: ${escapeHtml(result.warnings[0])}` : ''}</div>
+      <strong>${t('featureForm.ocr_completed')}</strong>
+      <div class="mt-1">${escapeHtml(result.summary || t('featureForm.ocr_default_summary'))}</div>
+      <div class="text-xs mt-1">${t('featureForm.confidence')}: ${Math.round(result.confidence || 0)} / 100${result.warnings?.length ? `${t('featureForm.separator')} ${t('featureForm.warning')}: ${escapeHtml(result.warnings[0])}` : ''}</div>
     `;
   }
 
@@ -537,7 +339,7 @@ export function afterRender() {
           light: '#FFFFFF'
         }
       });
-      box.innerHTML = `<img src="${dataUrl}" alt="QR sağlık kartı" />`;
+      box.innerHTML = `<img src="${dataUrl}" alt="${t('featureForm.qr_alt')}" />`;
       box.dataset.qrGenerated = 'true';
     } catch {
       box.innerHTML = '<span>QR</span>';
@@ -597,33 +399,33 @@ export function afterRender() {
     const originalText = btn.textContent;
     const file = document.querySelector('.feature-upload-input')?.files?.[0];
     if (!file) {
-      showNotice('Önce belge, fotoğraf veya PDF seçmelisin.', 'error');
+      showNotice(t('featureForm.file_required'), 'error');
       return;
     }
     if (!isDocumentOcrConfigured()) {
-      showNotice('AI/OCR servisi şu an hazır değil. Canlı API env değerleri tanımlanınca aktif olur.', 'error');
+      showNotice(t('featureForm.ocr_not_ready'), 'error');
       return;
     }
 
-    btn.textContent = 'Belge okunuyor...';
+    btn.textContent = t('featureForm.reading_document');
     btn.disabled = true;
     try {
       const response = await runDocumentOcr({
         file,
-        documentKind: firstSelected('Belge türü') || firstSelected('Belge tÃ¼rÃ¼'),
-        readGoal: firstSelected('Okuma hedefi'),
-        extractionOptions: checkedValues('İşaretlenecek bilgiler').length ? checkedValues('İşaretlenecek bilgiler') : checkedValues('Ä°ÅŸaretlenecek bilgiler'),
-        note: textareaValue('Ek not')
+        documentKind: firstSelected(t('featureForm.labels.document_type')),
+        readGoal: firstSelected(t('featureForm.labels.read_goal')),
+        extractionOptions: checkedValues(t('featureForm.labels.extraction_options')),
+        note: textareaValue(t('featureForm.labels.extra_note'))
       });
       if (!response.ok) throw new Error(response.reason || 'ocr_failed');
       currentDocumentOcrResult = response.data;
       renderOcrResult(response.data);
       const visibleValues = [...document.querySelectorAll('.feature-field')]
-        .find((item) => ['Görünen önemli değerler', 'GÃ¶rÃ¼nen Ã¶nemli deÄŸerler'].includes(item.querySelector(':scope > span')?.textContent?.trim()))
+        .find((item) => item.querySelector(':scope > span')?.textContent?.trim() === t('featureForm.labels.visible_values'))
         ?.querySelector('textarea');
       if (visibleValues && !visibleValues.value.trim()) visibleValues.value = ocrSummaryText(response.data);
     } catch (err) {
-      showNotice(`OCR başarısız: ${err.message}`, 'error');
+      showNotice(`${t('featureForm.ocr_failed')}: ${err.message}`, 'error');
     } finally {
       btn.textContent = originalText;
       btn.disabled = false;
@@ -660,7 +462,7 @@ export function afterRender() {
       const title = button.querySelector('strong');
       const desc = button.querySelector('small');
       if (title) title.textContent = file.name;
-      if (desc) desc.textContent = `${file.type || 'Dosya'} · ${Math.ceil(file.size / 1024)} KB`;
+      if (desc) desc.textContent = `${file.type || t('featureForm.file')} ${t('featureForm.separator')} ${Math.ceil(file.size / 1024)} KB`;
     });
   });
 
@@ -671,7 +473,7 @@ export function afterRender() {
   document.getElementById('btnSaveFeature')?.addEventListener('click', async (event) => {
     const btn = event.currentTarget;
     const originalText = btn.textContent;
-    btn.textContent = 'Kaydediliyor...';
+    btn.textContent = t('common.saving');
     btn.disabled = true;
 
     try {
@@ -695,7 +497,7 @@ export function afterRender() {
               storage: 'b2'
             } : item);
           } catch {
-            showNotice('Belge yerel kayda alınacak; bulut upload daha sonra tekrar denenebilir.', 'info');
+            showNotice(t('featureForm.local_document_notice'), 'info');
           }
         }
       }
@@ -707,26 +509,26 @@ export function afterRender() {
         payload: featurePayload
       });
       if (result.storage === 'turso') {
-        const target = result.domainTable ? ` ve ${result.domainTable} tablosuna işlendi` : '';
-        showNotice(`Form Turso test veritabanına yazıldı${target}.`, 'success');
+        const target = result.domainTable ? t('featureForm.domain_table_saved').replace('{table}', result.domainTable) : '';
+        showNotice(t('featureForm.turso_saved').replace('{target}', target), 'success');
       } else {
-        showNotice('Form yerel yedek kayda yazıldı. Turso için VITE_TURSO_* env gerekli.', 'success');
+        showNotice(t('featureForm.local_saved'), 'success');
       }
       if (featureCode === 'qr' && result.publicPath) {
         await renderQrImage(`${window.location.origin}${window.location.pathname}#${result.publicPath}`);
       }
       if (featureCode === 'sitter' && result.invitePath) {
         const inviteUrl = `${window.location.origin}${window.location.pathname}#${result.invitePath}`;
-        const shareText = result.inviteText || 'Pati Sağlık bakıcı daveti hazır.';
+        const shareText = result.inviteText || t('featureForm.sitter_invite_ready');
         try {
-          if (navigator.share) await navigator.share({ title: 'Pati Sağlık Bakıcı Daveti', text: shareText, url: inviteUrl });
+          if (navigator.share) await navigator.share({ title: t('featureForm.sitter_invite_title'), text: shareText, url: inviteUrl });
           else await navigator.clipboard.writeText(`${shareText}\n${inviteUrl}`);
         } catch {}
       }
       const nextRoute = ['clinic-export', 'document-ai', 'vet-prep'].includes(featureCode) ? '/reports' : featureCode === 'sitter' && result.invitePath ? result.invitePath : featureCode === 'qr' && result.publicPath ? result.publicPath : '/home';
       navigate(nextRoute);
     } catch (err) {
-      showNotice(`Kayıt başarısız: ${err.message}`, 'error');
+      showNotice(`${t('featureForm.save_failed')}: ${err.message}`, 'error');
       btn.textContent = originalText;
       btn.disabled = false;
     }

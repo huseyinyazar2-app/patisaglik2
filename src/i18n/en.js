@@ -289,7 +289,24 @@ const en = {
       reminders: { title: 'Vaccine / Medication / Appointment Calendar', desc: 'Regular medication, vaccine and clinic visit reminders' },
       templates: { title: 'Tracking Templates', desc: 'Chronic disease, post-op, pregnancy and birth' },
       senior: { title: 'Senior Pet Monitoring', desc: 'Water, weight, pain and movement sensitivities' }
-    }
+    },
+    timeline_filters: {
+      all: 'All',
+      health: 'Health',
+      measurements: 'Measurement',
+      reminders: 'Calendar',
+      expenses: 'Expense',
+      reports: 'Report'
+    },
+    timeline_reminder: 'Reminder',
+    timeline_clinic_file: 'Clinic prep file',
+    timeline_report_preparing: 'Preparing for {purpose}',
+    timeline_loading: 'Loading timeline...',
+    timeline_empty_title: 'No records in this filter',
+    timeline_empty_desc: 'New free records will appear here chronologically.',
+    timeline_new_record: 'Add New Record',
+    timeline_failed_title: 'Timeline could not be loaded',
+    timeline_failed_desc: 'Check the connection and try again.'
   },
   reports: {
     title: 'Reports', new_report: 'Create New Report',
@@ -601,8 +618,266 @@ const en = {
       }
     ]
   },
-  freeRecords: {
-    common: {
+  featureForm: {
+    choose_file: 'Choose file',
+    file_hint: 'Photo, PDF or document preview',
+    old_record: 'Old record',
+    new_record: 'New record',
+    emergency_card: 'Emergency Health Card',
+    profile: 'Profile',
+    health_profile: 'Health profile',
+    separator: ' · ',
+    ocr_info: 'Before saving the document, you can run real OCR with Gemini. The result is written into the record; it does not produce diagnosis or treatment advice.',
+    read_with_ai: 'Read Document with AI',
+    not_found_title: 'Feature Not Found',
+    form_removed: 'This form is no longer used',
+    form_removed_desc: 'You can reach the current free tracking tools from the home screen.',
+    go_home: 'Back to Home',
+    paid_kicker: 'Credit / Pro Area',
+    paid_desc_suffix: 'This feature is kept separate from free health records.',
+    paid_info: 'The free plan includes record archive, expenses, reminders, QR card and tracking forms. Sitter sharing requires credits or a Pro plan.',
+    view_plans: 'View Plans',
+    hero_desc: '{desc} for {name}',
+    ocr_completed: 'OCR completed',
+    ocr_default_summary: 'Structured data was extracted from the document.',
+    confidence: 'Confidence',
+    warning: 'Warning',
+    qr_alt: 'QR health card',
+    file_required: 'Select a document, photo or PDF first.',
+    ocr_not_ready: 'AI/OCR service is not ready right now. It will activate when live API env values are defined.',
+    reading_document: 'Reading document...',
+    ocr_failed: 'OCR failed',
+    file: 'File',
+    local_document_notice: 'The document will be saved locally; cloud upload can be retried later.',
+    domain_table_saved: ' and written to the {table} table',
+    turso_saved: 'Form was written to the Turso test database{target}.',
+    local_saved: 'Form was written to local backup. VITE_TURSO_* env is required for Turso.',
+    sitter_invite_ready: 'Pati Health sitter invitation is ready.',
+    sitter_invite_title: 'Pati Health Sitter Invitation',
+    save_failed: 'Save failed',
+    labels: {
+      reminder_type: 'Reminder type',
+      title: 'Title',
+      date: 'Date',
+      repeat: 'Repeat',
+      note: 'Note',
+      clinic: 'Clinic',
+      amount: 'Amount',
+      lab: 'Lab',
+      medications: 'Medications',
+      followup: 'Follow-up',
+      document_type: 'Document type',
+      read_goal: 'Reading goal',
+      extraction_options: 'Details to mark',
+      extra_note: 'Extra note',
+      visible_values: 'Visible important values'
+    }
+  },
+  featureForms: {
+    configs: {
+  'photo-followup': {
+    icon: 'camera',
+    eyebrow: 'Ücretsiz takip',
+    title: 'Fotoğraf Karşılaştırmalı Takip',
+    desc: 'Deri, yara veya fiziksel değişimi fotoğraflarla karşılaştırmak için görsel kayıt formu.',
+    tone: 'teal',
+    fields: [
+      { type: 'upload-pair', before: 'Önceki fotoğraf', after: 'Bugünkü fotoğraf' },
+      { type: 'text', label: 'Takip konusu', placeholder: 'Örn. sağ patide kızarıklık' },
+      { type: 'chips', label: 'Görsel değişim', options: ['Azaldı', 'Aynı', 'Arttı', 'Yeni belirti'] },
+      { type: 'textarea', label: 'Kısa not', placeholder: 'Renk, şişlik, akıntı veya kaşıma değişimi...' }
+    ]
+  },
+  'poop-score': {
+    icon: 'activity',
+    eyebrow: 'Günlük kayıt',
+    title: 'Dışkı Skoru',
+    desc: 'Dışkı kalitesini görsel skala ile not almak için hızlı kayıt formu.',
+    tone: 'slate',
+    fields: [
+      { type: 'score', label: 'Skor', options: ['1', '2', '3', '4', '5'] },
+      { type: 'chips', label: 'Ek bulgu', options: ['Normal', 'Mukus', 'Kan', 'Çok sulu', 'Çok sert'] },
+      { type: 'upload', label: 'Fotoğraf ekle' },
+      { type: 'textarea', label: 'Not', placeholder: 'Mama değişimi, ilaç, stres veya diğer gözlemler...' }
+    ]
+  },
+  'diet-log': {
+    icon: 'heartPulse',
+    eyebrow: 'Beslenme takibi',
+    title: 'Mama / Beslenme Değişimi',
+    desc: 'Yeni mamaya geçişte iştah, dışkı ve reaksiyonları izlemek için form.',
+    tone: 'gold',
+    fields: [
+      { type: 'text', label: 'Yeni mama / öğün', placeholder: 'Örn. somonlu hassas mama' },
+      { type: 'chips', label: 'Geçiş günü', options: ['1. gün', '3. gün', '7. gün', '14. gün'] },
+      { type: 'chips', label: 'Reaksiyon', options: ['İştah iyi', 'Kusma', 'İshal', 'Kaşıntı', 'Gaz'] },
+      { type: 'textarea', label: 'Beslenme notu', placeholder: 'Miktar, öğün saati ve fark edilen değişimler...' }
+    ]
+  },
+  expense: {
+    icon: 'briefcase',
+    eyebrow: 'Ücretsiz kayıt',
+    title: 'Masraf Takibi',
+    desc: 'Mama, veteriner, aşı, ilaç ve bakım harcamalarını kategorize etmek için form.',
+    tone: 'teal',
+    fields: [
+      { type: 'chips', label: 'Kategori', options: ['Veteriner', 'Mama', 'Aşı', 'İlaç', 'Bakım'] },
+      { type: 'money', label: 'Tutar', placeholder: '0,00 TL' },
+      { type: 'date', label: 'Tarih' },
+      { type: 'upload', label: 'Fatura / belge ekle' },
+      { type: 'textarea', label: 'Not', placeholder: 'Klinik adı, işlem veya ürün detayı...' }
+    ]
+  },
+  reminders: {
+    icon: 'calendar',
+    eyebrow: 'Takvim',
+    title: 'Aşı / İlaç / Randevu Hatırlatıcı',
+    desc: 'Gelecek sağlık işlerini planlamak için görsel hatırlatıcı formu.',
+    tone: 'teal',
+    fields: [
+      { type: 'chips', label: 'Hatırlatıcı türü', options: ['Aşı', 'İlaç', 'Randevu', 'Pire/Parazit'] },
+      { type: 'text', label: 'Başlık', placeholder: 'Örn. karma aşı kontrolü' },
+      { type: 'date', label: 'Tarih' },
+      { type: 'chips', label: 'Tekrar', options: ['Tek sefer', 'Günlük', 'Haftalık', 'Aylık', 'Yıllık'] },
+      { type: 'textarea', label: 'Not', placeholder: 'Doz, klinik, veteriner veya hazırlık notu...' }
+    ]
+  },
+  'clinic-export': {
+    icon: 'clipboard',
+    eyebrow: 'Rapor',
+    title: 'Sigorta / Klinik Hazırlık Dosyası',
+    desc: 'Petin geçmişini veteriner veya sigorta için tek dosyada toparlama önizlemesi.',
+    tone: 'gold',
+    fields: [
+      { type: 'checks', label: 'Dahil edilecekler', options: ['Pet profili', 'Aşı ve ilaçlar', 'Şikayet geçmişi', 'Fotoğraflar', 'Masraflar', 'Kural tabanlı notlar'] },
+      { type: 'chips', label: 'Dosya amacı', options: ['Klinik ziyareti', 'Sigorta', 'İkinci görüş', 'Arşiv'] },
+      { type: 'textarea', label: 'Veterinere not', placeholder: 'Özellikle bakılmasını istediğiniz konular...' }
+    ]
+  },
+  chronic: {
+    icon: 'clipboard',
+    eyebrow: 'Takip şablonu',
+    title: 'Kronik Hastalık Takibi',
+    desc: 'Diyabet, böbrek, kalp gibi uzun dönemli durumlar için günlük izlem formu.',
+    tone: 'teal',
+    fields: [
+      { type: 'chips', label: 'Şablon', options: ['Diyabet', 'Böbrek', 'Kalp', 'Alerji', 'Özel'] },
+      { type: 'chips', label: 'Bugünkü durum', options: ['Stabil', 'İyi', 'Daha kötü', 'İlaç atlandı'] },
+      { type: 'text', label: 'Ölçüm / gözlem', placeholder: 'Örn. su tüketimi arttı' },
+      { type: 'textarea', label: 'Takip notu', placeholder: 'İştah, su, idrar, halsizlik veya ağrı gözlemi...' }
+    ]
+  },
+  postop: {
+    icon: 'shield',
+    eyebrow: 'Takip şablonu',
+    title: 'Operasyon Sonrası Takip',
+    desc: 'Yara yeri, iştah, ilaç ve genel durum kontrolü için form.',
+    tone: 'slate',
+    fields: [
+      { type: 'chips', label: 'Operasyon günü', options: ['1. gün', '3. gün', '7. gün', '14. gün'] },
+      { type: 'chips', label: 'Yara durumu', options: ['Temiz', 'Kızarık', 'Şiş', 'Akıntı var'] },
+      { type: 'chips', label: 'İlaç kullanımı', options: ['Verildi', 'Atlandı', 'Yan etki var', 'Bitti'] },
+      { type: 'date', label: 'Sonraki doz / kontrol' },
+      { type: 'upload', label: 'Yara fotoğrafı' },
+      { type: 'textarea', label: 'Genel durum', placeholder: 'İştah, tuvalet, hareket, ilaç kullanımı...' }
+    ]
+  },
+  reproduction: {
+    icon: 'calendar',
+    eyebrow: 'Takvim',
+    title: 'Kızgınlık / Gebelik / Doğum Takibi',
+    desc: 'Üreme döngüsü ve doğum sürecini takvimle izlemek için form.',
+    tone: 'gold',
+    fields: [
+      { type: 'chips', label: 'Takip türü', options: ['Kızgınlık', 'Gebelik', 'Doğum sonrası'] },
+      { type: 'date', label: 'Başlangıç tarihi' },
+      { type: 'chips', label: 'Belirti', options: ['Davranış değişimi', 'Akıntı', 'İştah değişimi', 'Yuva arama'] },
+      { type: 'textarea', label: 'Not', placeholder: 'Takvim, belirti veya veteriner görüşü...' }
+    ]
+  },
+  senior: {
+    icon: 'heartPulse',
+    eyebrow: 'Özel mod',
+    title: 'Yaşlı Pet İzlemi',
+    desc: 'Senior petler için su, kilo, ağrı ve hareket hassasiyetlerini takip etme formu.',
+    tone: 'slate',
+    fields: [
+      { type: 'chips', label: 'Günlük durum', options: ['İyi', 'Daha az hareketli', 'Ağrılı', 'İştahsız'] },
+      { type: 'chips', label: 'Odak', options: ['Su', 'Kilo', 'Ağrı', 'Merdiven', 'Uyku'] },
+      { type: 'text', label: 'Gözlem', placeholder: 'Örn. bugün daha çok su içti' },
+      { type: 'textarea', label: 'Not', placeholder: 'Günlük değişim, ağrı belirtisi veya veteriner planı...' }
+    ]
+  },
+  qr: {
+    icon: 'shield',
+    eyebrow: 'Paylaşım',
+    title: 'QR Sağlık Kartı',
+    desc: 'Acil durumda gösterilecek kısa sağlık kartı için görsel önizleme.',
+    tone: 'teal',
+    fields: [
+      { type: 'preview-card' },
+      { type: 'checks', label: 'Paylaşılacak bilgiler', options: ['İsim ve tür', 'Alerjiler', 'Kronik hastalıklar', 'İlaçlar', 'Sahip iletişimi'] },
+      { type: 'chips', label: 'Erişim süresi', options: ['24 saat', '7 gün', 'Süresiz'] }
+    ]
+  },
+  sitter: {
+    icon: 'profile',
+    eyebrow: 'Pro paylaşım',
+    title: 'Bakıcı Modu',
+    desc: 'Pet sitter veya aile üyeleri için sınırlı erişim davet formu.',
+    tone: 'gold',
+    requiresPaid: true,
+    fields: [
+      { type: 'text', label: 'Davet edilecek kişi', placeholder: 'Ad Soyad' },
+      { type: 'text', label: 'Telefon / e-posta', placeholder: 'ornek@email.com' },
+      { type: 'checks', label: 'İzinler', options: ['Günlük not ekle', 'Hatırlatıcı gör', 'Acil kartı gör', 'Raporları gör'] },
+      { type: 'chips', label: 'Erişim süresi', options: ['1 gün', '1 hafta', '1 ay'] }
+    ]
+  },
+  'document-ai': {
+    icon: 'upload',
+    eyebrow: 'AI okuma hazırlığı',
+    title: 'Belge / Tahlil / Fatura AI Okuma',
+    desc: 'Veteriner belgesini kaydedip OCR/AI ayrıştırma kuyruğuna hazırlama formu.',
+    tone: 'slate',
+    fields: [
+      { type: 'upload', label: 'Belge yükle' },
+      { type: 'chips', label: 'Belge türü', options: ['Kan tahlili', 'Görüntüleme', 'Fatura', 'Reçete', 'Aşı kartı', 'Epikriz / rapor'] },
+      { type: 'chips', label: 'Okuma hedefi', options: ['Klinik özeti', 'Tahlil değerleri', 'İlaç / reçete', 'Masraf', 'Takip görevi'] },
+      { type: 'checks', label: 'İşaretlenecek bilgiler', options: ['Tarih', 'Klinik', 'İşlem', 'İlaçlar', 'Masraf', 'Anormal değer', 'Kontrol tarihi'] },
+      { type: 'textarea', label: 'Görünen önemli değerler', placeholder: 'AI/OCR çalışana kadar elle görünen kritik değer, ilaç veya tutarı yazabilirsiniz...' },
+      { type: 'textarea', label: 'Ek not', placeholder: 'Belgeyle ilgili hatırlamak istediğiniz şey...' }
+    ]
+  },
+  'vet-prep': {
+    icon: 'stethoscope',
+    eyebrow: 'Klinik hazırlık',
+    title: 'Kliniğe Hazırlık Modu',
+    desc: 'Veteriner ziyareti öncesi cevapları toplayıp net bir görüşme özeti hazırlama formu.',
+    tone: 'teal',
+    fields: [
+      { type: 'textarea', label: 'Ziyaret nedeni', placeholder: 'Veterinere neden gidiyorsunuz?' },
+      { type: 'chips', label: 'Aciliyet', options: ['Rutin', 'Yakın takip', 'Bugün görülmeli'] },
+      { type: 'checks', label: 'Yanıma alacağım', options: ['Fotoğraflar', 'Tahliller', 'Aşı kartı', 'Mama bilgisi', 'İlaç listesi'] },
+      { type: 'textarea', label: 'Sorularım', placeholder: 'Veterinere sormak istediğiniz maddeler...' }
+    ]
+  },
+  toxic: {
+    icon: 'alert',
+    eyebrow: 'Ücretsiz acil kayıt',
+    title: 'Toksik Madde / Yabancı Cisim Kontrolü',
+    desc: 'Zehirlenme veya yutma şüphesinde hızlı bilgi toplama ekranı.',
+    tone: 'danger',
+    fields: [
+      { type: 'text', label: 'Ne yuttu / temas etti?', placeholder: 'Örn. çikolata, ilaç, oyuncak parçası' },
+      { type: 'chips', label: 'Ne zaman oldu?', options: ['0-1 saat', '1-3 saat', 'Bugün', 'Emin değilim'] },
+      { type: 'checks', label: 'Belirti var mı?', options: ['Kusma', 'Halsizlik', 'Titreme', 'Salya', 'Nefes sorunu'] },
+      { type: 'textarea', label: 'Detay', placeholder: 'Miktar, paket fotoğrafı, davranış değişimi...' }
+    ]
+  }
+}
+  },
+  common: {
       no_date: 'No date',
       other: 'Other',
       record: 'Record',
@@ -828,7 +1103,8 @@ const en = {
         toxin_watch: { title: 'Close urgent follow-up', desc: 'A sign or uncertain timing was recorded. Keep the amount, time and photo ready if possible; seek urgent help if it worsens.' }
       },
       plans: {
-        common: {
+      freeRecords: {
+    common: {
           measurement_observation: 'Measurement/observation',
           routine_check: 'Routine check',
           wound_status: 'Wound status',

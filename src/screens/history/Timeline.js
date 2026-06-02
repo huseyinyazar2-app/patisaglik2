@@ -1,31 +1,31 @@
 import { navigate, goBack } from '../../router.js';
 import { getState } from '../../store.js';
-import { t } from '../../i18n/tr.js';
+import { getLocale, t } from '../../i18n/tr.js';
 import { getFreeRecords } from '../../services/freeRecords.js';
 import { getMeasurements } from '../../services/measurements.js';
 import { getClinicExportDocuments } from '../../services/documents.js';
 
 const FILTER_TABS = [
-  { id: 'all', label: 'Hepsi' },
-  { id: 'health', label: 'Sağlık' },
-  { id: 'measurements', label: 'Ölçüm' },
-  { id: 'reminders', label: 'Takvim' },
-  { id: 'expenses', label: 'Masraf' },
-  { id: 'reports', label: 'Rapor' }
+  { id: 'all', labelKey: 'history.timeline_filters.all' },
+  { id: 'health', labelKey: 'history.timeline_filters.health' },
+  { id: 'measurements', labelKey: 'history.timeline_filters.measurements' },
+  { id: 'reminders', labelKey: 'history.timeline_filters.reminders' },
+  { id: 'expenses', labelKey: 'history.timeline_filters.expenses' },
+  { id: 'reports', labelKey: 'history.timeline_filters.reports' }
 ];
 
 function formatDate(date) {
-  if (!date) return 'Tarih yok';
-  return new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(date));
+  if (!date) return t('history.no_date');
+  return new Intl.DateTimeFormat(getLocale() === 'tr' ? 'tr-TR' : getLocale(), { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(date));
 }
 
 function formatTime(date) {
   if (!date) return '';
-  return new Intl.DateTimeFormat('tr-TR', { hour: '2-digit', minute: '2-digit' }).format(new Date(date));
+  return new Intl.DateTimeFormat(getLocale() === 'tr' ? 'tr-TR' : getLocale(), { hour: '2-digit', minute: '2-digit' }).format(new Date(date));
 }
 
 function formatMoney(amountCents, currency = 'TRY') {
-  return new Intl.NumberFormat('tr-TR', {
+  return new Intl.NumberFormat(getLocale() === 'tr' ? 'tr-TR' : getLocale(), {
     style: 'currency',
     currency,
     maximumFractionDigits: 0
@@ -33,29 +33,11 @@ function formatMoney(amountCents, currency = 'TRY') {
 }
 
 function measurementLabel(type) {
-  const labels = {
-    weight: 'Kilo',
-    temperature: 'Vücut ısısı',
-    respiratory: 'Solunum',
-    respiratory_rate: 'Solunum',
-    heart_rate: 'Kalp atışı'
-  };
-  return labels[type] || type || 'Ölçüm';
+  return t(`reports.detail.measurements.${type}`) || type || t('reports.detail.measurements.default');
 }
 
 function healthTypeLabel(type) {
-  const labels = {
-    photo_followup: 'Foto takip',
-    poop_score: 'Dışkı skoru',
-    diet_log: 'Beslenme',
-    chronic_followup: 'Kronik takip',
-    postop_followup: 'Operasyon sonrası',
-    reproduction_followup: 'Üreme takibi',
-    senior_followup: 'Yaşlı pet',
-    toxin_foreign_body: 'Acil toksik/yabancı cisim',
-    issue: 'Sorun'
-  };
-  return labels[type] || 'Sağlık kaydı';
+  return t(`reports.detail.health_types.${type}`) || t('reports.detail.health_types.default');
 }
 
 function buildTimelineItems(records, measurements, documents) {
@@ -76,8 +58,8 @@ function buildTimelineItems(records, measurements, documents) {
       route: `/history/records/reminders/${item.id}`,
       date: item.due_at || item.created_at,
       icon: 'calendar',
-      title: item.title || item.reminder_type || 'Hatırlatıcı',
-      meta: item.status === 'completed' ? 'Tamamlandı' : 'Planlı',
+      title: item.title || item.reminder_type || t('history.timeline_reminder'),
+      meta: item.status === 'completed' ? t('freeRecords.common.completed') : t('freeRecords.common.scheduled'),
       summary: item.note || item.reminder_type || ''
     })),
     ...(records.expenses || []).map((item) => ({
@@ -86,7 +68,7 @@ function buildTimelineItems(records, measurements, documents) {
       route: `/history/records/expenses/${item.id}`,
       date: item.spent_at || item.created_at,
       icon: 'briefcase',
-      title: item.title || item.category || 'Masraf',
+      title: item.title || item.category || t('history.expense'),
       meta: formatMoney(item.amount_cents, item.currency),
       summary: item.note || item.category || ''
     })),
@@ -97,7 +79,7 @@ function buildTimelineItems(records, measurements, documents) {
       date: item.measured_at || item.created_at,
       icon: item.measurement_type === 'weight' ? 'weight' : item.measurement_type === 'temperature' ? 'thermometer' : 'measurement',
       title: `${measurementLabel(item.measurement_type)}: ${item.value} ${item.unit || ''}`.trim(),
-      meta: 'Ölçüm',
+      meta: t('reports.detail.measurements.default'),
       summary: item.note || ''
     })),
     ...(documents || []).map((item) => ({
@@ -106,9 +88,9 @@ function buildTimelineItems(records, measurements, documents) {
       route: `/reports/${item.id}`,
       date: item.created_at,
       icon: 'reports',
-      title: item.title || 'Klinik hazırlık dosyası',
-      meta: item.status === 'draft' ? 'Taslak' : 'Hazır',
-      summary: item.note || `${item.purpose || 'Klinik'} için hazırlanıyor`
+      title: item.title || t('history.timeline_clinic_file'),
+      meta: item.status === 'draft' ? t('reports.detail.draft') : t('reports.detail.ready'),
+      summary: item.note || t('history.timeline_report_preparing').replace('{purpose}', item.purpose || t('reports.detail.clinic'))
     }))
   ].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
 }
@@ -118,7 +100,7 @@ function renderTabs(activeFilter) {
     <div class="filter-tabs">
       ${FILTER_TABS.map((tab) => `
         <button class="filter-tab ${activeFilter === tab.id ? 'active' : ''}" data-filter="${tab.id}">
-          ${tab.label}
+          ${t(tab.labelKey)}
         </button>
       `).join('')}
     </div>
@@ -129,7 +111,7 @@ function renderTimeline(items = null, activeFilter = 'all') {
   if (!items) {
     return `
       <div class="free-record-panel">
-        <p>Zaman akışı getiriliyor...</p>
+        <p>${t('history.timeline_loading')}</p>
       </div>
     `;
   }
@@ -139,8 +121,8 @@ function renderTimeline(items = null, activeFilter = 'all') {
     return `
       <div class="empty-state">
         <div class="modern-empty-icon">${window.__icons?.clock}</div>
-        <div class="empty-state-title">Bu filtrede kayıt yok</div>
-        <div class="empty-state-desc">Yeni ücretsiz kayıt ekledikçe burada tarih sırasıyla görünecek.</div>
+        <div class="empty-state-title">${t('history.timeline_empty_title')}</div>
+        <div class="empty-state-desc">${t('history.timeline_empty_desc')}</div>
       </div>
     `;
   }
@@ -165,7 +147,7 @@ function renderTimeline(items = null, activeFilter = 'all') {
                   <span class="modern-timeline-icon">${window.__icons?.[item.icon] || window.__icons?.clipboard}</span>
                   <div style="flex: 1;">
                     <div class="font-semibold text-sm">${item.title}</div>
-                    <div class="text-xs text-tertiary">${formatTime(item.date)} · ${item.meta}</div>
+                    <div class="text-xs text-tertiary">${formatTime(item.date)} ${t('history.separator')} ${item.meta}</div>
                   </div>
                   <span style="width: 18px; height: 18px; color: var(--text-tertiary);">${window.__icons?.chevronRight}</span>
                 </div>
@@ -209,12 +191,12 @@ export function render(params = {}, query = {}) {
         <div class="modal-backdrop" id="fabBackdrop"></div>
         <div class="modal">
           <div class="modal-handle"></div>
-          <div class="modal-title">Yeni Kayıt Ekle</div>
+          <div class="modal-title">${t('history.timeline_new_record')}</div>
           <div class="modal-actions">
-            <button class="btn btn-primary btn-full" id="fabHealth">${window.__icons?.heartPulse} Sağlık Kaydı</button>
-            <button class="btn btn-outline btn-full" id="fabNewMeasurement">${window.__icons?.measurement} Ölçüm</button>
-            <button class="btn btn-outline btn-full" id="fabExpense">${window.__icons?.briefcase} Masraf</button>
-            <button class="btn btn-outline btn-full" id="fabReminder">${window.__icons?.calendar} Hatırlatıcı</button>
+            <button class="btn btn-primary btn-full" id="fabHealth">${window.__icons?.heartPulse} ${t('reports.detail.health_types.default')}</button>
+            <button class="btn btn-outline btn-full" id="fabNewMeasurement">${window.__icons?.measurement} ${t('reports.detail.measurements.default')}</button>
+            <button class="btn btn-outline btn-full" id="fabExpense">${window.__icons?.briefcase} ${t('history.expense')}</button>
+            <button class="btn btn-outline btn-full" id="fabReminder">${window.__icons?.calendar} ${t('history.timeline_reminder')}</button>
             <button class="btn btn-ghost btn-full" id="fabCancel">${t('common.cancel')}</button>
           </div>
         </div>
@@ -262,8 +244,8 @@ export function afterRender(params = {}, query = {}) {
       target.innerHTML = `
         <div class="empty-state">
           <div class="modern-empty-icon">${window.__icons?.alert}</div>
-          <div class="empty-state-title">Zaman akışı getirilemedi</div>
-          <div class="empty-state-desc">Bağlantıyı kontrol edip tekrar deneyin.</div>
+          <div class="empty-state-title">${t('history.timeline_failed_title')}</div>
+          <div class="empty-state-desc">${t('history.timeline_failed_desc')}</div>
         </div>
       `;
     }

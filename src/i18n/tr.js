@@ -318,7 +318,24 @@ const tr = {
       reminders: { title: 'Aşı / İlaç / Randevu Takvimi', desc: 'Düzenli ilaç, aşı ve klinik ziyaret hatırlatmaları' },
       templates: { title: 'Takip Şablonları', desc: 'Kronik hastalık, operasyon sonrası, gebelik ve doğum' },
       senior: { title: 'Yaşlı Pet İzlemi', desc: 'Su, kilo, ağrı ve hareket hassasiyetleri' }
-    }
+    },
+    timeline_filters: {
+      all: 'Hepsi',
+      health: 'Sağlık',
+      measurements: 'Ölçüm',
+      reminders: 'Takvim',
+      expenses: 'Masraf',
+      reports: 'Rapor'
+    },
+    timeline_reminder: 'Hatırlatıcı',
+    timeline_clinic_file: 'Klinik hazırlık dosyası',
+    timeline_report_preparing: '{purpose} için hazırlanıyor',
+    timeline_loading: 'Zaman akışı getiriliyor...',
+    timeline_empty_title: 'Bu filtrede kayıt yok',
+    timeline_empty_desc: 'Yeni ücretsiz kayıt ekledikçe burada tarih sırasıyla görünecek.',
+    timeline_new_record: 'Yeni Kayıt Ekle',
+    timeline_failed_title: 'Zaman akışı getirilemedi',
+    timeline_failed_desc: 'Bağlantıyı kontrol edip tekrar deneyin.'
   },
   reports: {
     title: 'Raporlar', new_report: 'Yeni Rapor Oluştur',
@@ -630,234 +647,493 @@ const tr = {
       }
     ]
   },
-  freeRecords: {
-    common: {
-      no_date: 'Tarih yok',
-      other: 'Diğer',
-      record: 'Kayıt',
-      no_records_yet: 'Henüz kayıt yok',
-      none_yet: 'Henüz yok',
-      expense: 'Masraf',
-      general_expense: 'Genel masraf',
-      reminder: 'Hatırlatıcı',
-      once: 'Tek sefer',
-      scheduled: 'Planlı',
-      completed: 'Tamamlandı',
-      health_record: 'Sağlık kaydı',
-      form_record: 'Form kaydı'
-    },
-    types: {
-      poop_score: 'Dışkı',
-      photo_followup: 'Foto',
-      diet_log: 'Beslenme',
-      issue: 'Sorun',
-      chronic_followup: 'Kronik',
-      postop_followup: 'Operasyon',
-      reproduction_followup: 'Üreme',
-      senior_followup: 'Yaşlı',
-      toxin_foreign_body: 'Acil'
-    },
-    list: {
-      configs: {
-        expenses: {
-          title: 'Masraf Takibi',
-          eyebrow: 'Ücretsiz kayıtlar',
-          desc: 'mama, veteriner, aşı, ilaç ve bakım harcamaları',
-          empty: 'Henüz masraf kaydı yok.',
-          button: 'Masraf Ekle'
-        },
-        reminders: {
-          title: 'Aşı / İlaç / Randevu',
-          eyebrow: 'Takvim',
-          desc: 'planlanan sağlık işleri ve tekrar eden hatırlatıcılar',
-          empty: 'Henüz hatırlatıcı yok.',
-          button: 'Hatırlatıcı Ekle'
-        },
-        health: {
-          title: 'Sağlık Dosyaları',
-          eyebrow: 'Takip arşivi',
-          desc: 'dışkı skoru, foto takip, beslenme ve takip şablonları',
-          empty: 'Henüz sağlık kaydı yok.',
-          button: 'Takip Kaydı Ekle'
-        }
-      },
-      tabs: { expenses: 'Masraf', reminders: 'Takvim', health: 'Sağlık' },
-      filters: {
-        expenses: [['all', 'Hepsi'], ['veteriner', 'Veteriner'], ['mama', 'Mama'], ['aşı', 'Aşı'], ['ilaç', 'İlaç'], ['bakım', 'Bakım']],
-        reminders: [['all', 'Hepsi'], ['scheduled', 'Planlı'], ['aşı', 'Aşı'], ['ilaç', 'İlaç'], ['randevu', 'Randevu']],
-        health: [['all', 'Hepsi'], ['poop_score', 'Dışkı'], ['photo_followup', 'Foto'], ['diet_log', 'Beslenme'], ['issue', 'Sorun'], ['chronic_followup', 'Kronik'], ['postop_followup', 'Operasyon'], ['reproduction_followup', 'Üreme'], ['senior_followup', 'Yaşlı'], ['toxin_foreign_body', 'Acil']]
-      },
-      sorts: {
-        expenses: [['newest', 'Yeni'], ['amount_desc', 'Tutar ↓'], ['amount_asc', 'Tutar ↑']],
-        reminders: [['due_asc', 'Yakın'], ['due_desc', 'Uzak'], ['newest', 'Yeni']],
-        health: [['newest', 'Yeni'], ['oldest', 'Eski'], ['type', 'Türe göre']]
-      },
-      healthActions: {
-        poop_score: 'Dışkı Kaydı Ekle',
-        photo_followup: 'Foto Takip Ekle',
-        diet_log: 'Beslenme Kaydı Ekle',
-        issue: 'Sorun Kaydı Ekle',
-        chronic_followup: 'Kronik Takip Ekle',
-        postop_followup: 'Operasyon Takibi Ekle',
-        reproduction_followup: 'Üreme Takibi Ekle',
-        senior_followup: 'Yaşlı Pet Kaydı Ekle',
-        toxin_foreign_body: 'Acil Kayıt Ekle'
-      },
-      programs: {
-        chronic_followup: { title: 'Kronik takip', cadence: 'Haftalık durum' },
-        postop_followup: { title: 'Operasyon sonrası', cadence: 'Yara ve ilaç kontrolü' },
-        diet_log: { title: 'Beslenme geçişi', cadence: 'Reaksiyon takibi' },
-        poop_score: { title: 'Dışkı skoru', cadence: 'Günlük kalite' },
-        reproduction_followup: { title: 'Üreme takibi', cadence: 'Takvim ve belirti' },
-        senior_followup: { title: 'Senior izlem', cadence: 'Hassasiyet takibi' }
-      },
-      filter: 'Filtre',
-      sort: 'Sıralama',
-      programs_title: 'Takip programları',
-      programs_summary: 'Şablon durum özeti',
-      last_7_days: 'Son 7 gün yoğunluğu',
-      no_distribution: 'Henüz dağılım yok.',
-      summary: 'Özet',
-      records_preparing: 'Kayıtlar hazırlanıyor',
-      distribution: 'Dağılım',
-      waiting_data: 'Veri bekleniyor',
-      total: 'Toplam',
-      top: 'En yoğun',
-      expense_count: '{count} masraf kaydı',
-      record_count: '{count} kayıt',
-      seven_days: '7 gün',
-      upcoming_task: 'yaklaşan iş',
-      next: 'Sıradaki',
-      no_plan: 'Plan yok',
-      health_count: 'sağlık kaydı',
-      last_record: 'Son kayıt',
-      records_loading: 'Kayıtlar getiriliyor...',
-      empty_filter: 'Bu filtrede kayıt yok.',
-      empty_filter_desc: 'Farklı bir filtre seçerek tekrar deneyebilirsin.',
-      empty_desc: 'Yeni kayıt eklediğinde burada listelenecek.',
-      pet_desc: '{name} için {desc}'
-    },
-    detail: {
-      configs: {
-        expenses: { title: 'Masraf Detayı' },
-        reminders: { title: 'Hatırlatıcı Detayı' },
-        health: { title: 'Sağlık Kaydı Detayı' }
-      },
+  featureForm: {
+    choose_file: 'Dosya seç',
+    file_hint: 'Fotoğraf, PDF veya belge önizlemesi',
+    old_record: 'Eski kayıt',
+    new_record: 'Yeni kayıt',
+    emergency_card: 'Acil Sağlık Kartı',
+    profile: 'Profil',
+    health_profile: 'Sağlık profili',
+    separator: ' · ',
+    ocr_info: 'Belgeyi kaydetmeden önce Gemini ile gerçek OCR okutabilirsin. Sonuç kayda işlenir; teşhis veya tedavi önerisi üretmez.',
+    read_with_ai: 'Belgeyi AI ile Oku',
+    not_found_title: 'Özellik Bulunamadı',
+    form_removed: 'Bu form artık kullanılmıyor',
+    form_removed_desc: 'Geçerli ücretsiz takip araçlarına ana sayfadan ulaşabilirsin.',
+    go_home: 'Ana Sayfaya Dön',
+    paid_kicker: 'Kredi / Pro Alanı',
+    paid_desc_suffix: 'Bu özellik ücretsiz sağlık kayıtlarından ayrı tutulur.',
+    paid_info: 'Ücretsiz planda kayıt arşivi, masraf, hatırlatıcı, QR kart ve takip formları açıktır. Bakıcı paylaşımı için kredi veya Pro plan gerekir.',
+    view_plans: 'Planları Gör',
+    hero_desc: '{name} için {desc}',
+    ocr_completed: 'OCR tamamlandı',
+    ocr_default_summary: 'Belgeden yapılandırılmış veri çıkarıldı.',
+    confidence: 'Güven',
+    warning: 'Uyarı',
+    qr_alt: 'QR sağlık kartı',
+    file_required: 'Önce belge, fotoğraf veya PDF seçmelisin.',
+    ocr_not_ready: 'AI/OCR servisi şu an hazır değil. Canlı API env değerleri tanımlanınca aktif olur.',
+    reading_document: 'Belge okunuyor...',
+    ocr_failed: 'OCR başarısız',
+    file: 'Dosya',
+    local_document_notice: 'Belge yerel kayda alınacak; bulut upload daha sonra tekrar denenebilir.',
+    domain_table_saved: ' ve {table} tablosuna işlendi',
+    turso_saved: 'Form Turso test veritabanına yazıldı{target}.',
+    local_saved: 'Form yerel yedek kayda yazıldı. Turso için VITE_TURSO_* env gerekli.',
+    sitter_invite_ready: 'Pati Sağlık bakıcı daveti hazır.',
+    sitter_invite_title: 'Pati Sağlık Bakıcı Daveti',
+    save_failed: 'Kayıt başarısız',
+    labels: {
+      reminder_type: 'Hatırlatıcı türü',
+      title: 'Başlık',
+      date: 'Tarih',
       repeat: 'Tekrar',
-      no_size: 'Boyut yok',
-      open: 'Aç',
-      reminder_ics_title: 'Pati Sağlık Hatırlatıcı',
-      reminder_ics_desc: 'Pati Sağlık hatırlatıcısı',
-      appointment: 'Randevu',
-      medication: 'İlaç',
-      daily: 'Günlük',
-      weekly: 'Haftalık',
-      followup_reminder: 'Takip hatırlatıcısı',
-      set_reminder: 'Hatırlatıcı Kur',
-      previous_record: 'Önceki kayıt',
-      today_record: 'Bugünkü kayıt',
-      file_pending: 'Dosya bekleniyor',
-      media_records: 'Medya kayıtları',
-      media_count: '{count} dosya bu {subject} bağlı',
-      file: 'Dosya',
-      document: 'Belge',
-      file_lower: 'dosya',
-      subject_expense: 'masraf kaydına',
-      subject_reminder: 'hatırlatıcıya',
-      subject_health: 'sağlık kaydına',
-      loading: 'Kayıt detayı getiriliyor...',
-      notification_prep: 'Bildirim hazırlığı',
-      calendar_status_title: 'Takvim durumu güncellenebilir',
-      calendar_status_desc: 'PWA/Capacitor bildirim izni geldiğinde bu kayıt durumları kullanılacak.',
-      remind_tomorrow: 'Yarın Hatırlat',
-      export_calendar: 'Takvime Aktar',
-      kicker: 'Ücretsiz kayıt detayı',
-      hero_desc: '{name} için kaydedilen bilginin okunabilir özeti.',
-      new_record: 'Yeni Kayıt Ekle',
-      back_to_list: 'Listeye Dön',
-      processing: 'İşleniyor...',
-      reminder_update_failed: 'Hatırlatıcı güncellenemedi',
-      not_found_title: 'Kayıt bulunamadı',
-      not_found_desc: 'Kayıt silinmiş veya farklı bir pete ait olabilir.',
-      no_duration: 'Süre kaydı yok',
-      day_count: '{count}. gün',
-      vet_search: 'Veteriner Ara',
-      open_nearby_clinics: 'Yakındaki Klinikleri Aç',
-      alert_disclaimer: 'Bu uyarı teşhis değildir; veteriner görüşmesine hazırlık için kayıtları düzenler.',
-      payload_labels: {
-        score: 'Skor',
-        extra_finding: 'Ek bulgu',
-        note: 'Not',
-        reaction: 'Reaksiyon',
-        diet_note: 'Beslenme notu',
-        today_status: 'Bugünkü durum',
-        followup_note: 'Takip notu',
-        medication_use: 'İlaç kullanımı',
-        wound_status: 'Yara durumu',
-        general_status: 'Genel durum',
-        followup_type: 'Takip türü',
-        sign: 'Belirti',
-        daily_status: 'Günlük durum',
-        focus: 'Odak',
-        observation: 'Gözlem',
-        detail: 'Detay',
-        what_ingested: 'Ne yuttu / temas etti?',
-        when_happened: 'Ne zaman oldu?',
-        sign_question: 'Belirti var mı?',
-        start_date: 'Başlangıç tarihi',
-        template: 'Şablon',
-        measurement_observation: 'Ölçüm / gözlem',
-        surgery_day: 'Operasyon günü',
-        next_dose_check: 'Sonraki doz / kontrol',
-        new_food_meal: 'Yeni mama / öğün',
-        transition_day: 'Geçiş günü',
-        visual_change: 'Görsel değişim'
+      note: 'Not',
+      clinic: 'Klinik',
+      amount: 'Tutar',
+      lab: 'Tahlil',
+      medications: 'İlaçlar',
+      followup: 'Takip',
+      document_type: 'Belge türü',
+      read_goal: 'Okuma hedefi',
+      extraction_options: 'İşaretlenecek bilgiler',
+      extra_note: 'Ek not',
+      visible_values: 'Görünen önemli değerler'
+    }
+  },
+  featureForms: {
+  configs: {
+  'photo-followup': {
+  icon: 'camera',
+  eyebrow: 'Ücretsiz takip',
+  title: 'Fotoğraf Karşılaştırmalı Takip',
+  desc: 'Deri, yara veya fiziksel değişimi fotoğraflarla karşılaştırmak için görsel kayıt formu.',
+  tone: 'teal',
+  fields: [
+    { type: 'upload-pair', before: 'Önceki fotoğraf', after: 'Bugünkü fotoğraf' },
+    { type: 'text', label: 'Takip konusu', placeholder: 'Örn. sağ patide kızarıklık' },
+    { type: 'chips', label: 'Görsel değişim', options: ['Azaldı', 'Aynı', 'Arttı', 'Yeni belirti'] },
+    { type: 'textarea', label: 'Kısa not', placeholder: 'Renk, şişlik, akıntı veya kaşıma değişimi...' }
+  ]
+  },
+  'poop-score': {
+  icon: 'activity',
+  eyebrow: 'Günlük kayıt',
+  title: 'Dışkı Skoru',
+  desc: 'Dışkı kalitesini görsel skala ile not almak için hızlı kayıt formu.',
+  tone: 'slate',
+  fields: [
+    { type: 'score', label: 'Skor', options: ['1', '2', '3', '4', '5'] },
+    { type: 'chips', label: 'Ek bulgu', options: ['Normal', 'Mukus', 'Kan', 'Çok sulu', 'Çok sert'] },
+    { type: 'upload', label: 'Fotoğraf ekle' },
+    { type: 'textarea', label: 'Not', placeholder: 'Mama değişimi, ilaç, stres veya diğer gözlemler...' }
+  ]
+  },
+  'diet-log': {
+  icon: 'heartPulse',
+  eyebrow: 'Beslenme takibi',
+  title: 'Mama / Beslenme Değişimi',
+  desc: 'Yeni mamaya geçişte iştah, dışkı ve reaksiyonları izlemek için form.',
+  tone: 'gold',
+  fields: [
+    { type: 'text', label: 'Yeni mama / öğün', placeholder: 'Örn. somonlu hassas mama' },
+    { type: 'chips', label: 'Geçiş günü', options: ['1. gün', '3. gün', '7. gün', '14. gün'] },
+    { type: 'chips', label: 'Reaksiyon', options: ['İştah iyi', 'Kusma', 'İshal', 'Kaşıntı', 'Gaz'] },
+    { type: 'textarea', label: 'Beslenme notu', placeholder: 'Miktar, öğün saati ve fark edilen değişimler...' }
+  ]
+  },
+  expense: {
+  icon: 'briefcase',
+  eyebrow: 'Ücretsiz kayıt',
+  title: 'Masraf Takibi',
+  desc: 'Mama, veteriner, aşı, ilaç ve bakım harcamalarını kategorize etmek için form.',
+  tone: 'teal',
+  fields: [
+    { type: 'chips', label: 'Kategori', options: ['Veteriner', 'Mama', 'Aşı', 'İlaç', 'Bakım'] },
+    { type: 'money', label: 'Tutar', placeholder: '0,00 TL' },
+    { type: 'date', label: 'Tarih' },
+    { type: 'upload', label: 'Fatura / belge ekle' },
+    { type: 'textarea', label: 'Not', placeholder: 'Klinik adı, işlem veya ürün detayı...' }
+  ]
+  },
+  reminders: {
+  icon: 'calendar',
+  eyebrow: 'Takvim',
+  title: 'Aşı / İlaç / Randevu Hatırlatıcı',
+  desc: 'Gelecek sağlık işlerini planlamak için görsel hatırlatıcı formu.',
+  tone: 'teal',
+  fields: [
+    { type: 'chips', label: 'Hatırlatıcı türü', options: ['Aşı', 'İlaç', 'Randevu', 'Pire/Parazit'] },
+    { type: 'text', label: 'Başlık', placeholder: 'Örn. karma aşı kontrolü' },
+    { type: 'date', label: 'Tarih' },
+    { type: 'chips', label: 'Tekrar', options: ['Tek sefer', 'Günlük', 'Haftalık', 'Aylık', 'Yıllık'] },
+    { type: 'textarea', label: 'Not', placeholder: 'Doz, klinik, veteriner veya hazırlık notu...' }
+  ]
+  },
+  'clinic-export': {
+  icon: 'clipboard',
+  eyebrow: 'Rapor',
+  title: 'Sigorta / Klinik Hazırlık Dosyası',
+  desc: 'Petin geçmişini veteriner veya sigorta için tek dosyada toparlama önizlemesi.',
+  tone: 'gold',
+  fields: [
+    { type: 'checks', label: 'Dahil edilecekler', options: ['Pet profili', 'Aşı ve ilaçlar', 'Şikayet geçmişi', 'Fotoğraflar', 'Masraflar', 'Kural tabanlı notlar'] },
+    { type: 'chips', label: 'Dosya amacı', options: ['Klinik ziyareti', 'Sigorta', 'İkinci görüş', 'Arşiv'] },
+    { type: 'textarea', label: 'Veterinere not', placeholder: 'Özellikle bakılmasını istediğiniz konular...' }
+  ]
+  },
+  chronic: {
+  icon: 'clipboard',
+  eyebrow: 'Takip şablonu',
+  title: 'Kronik Hastalık Takibi',
+  desc: 'Diyabet, böbrek, kalp gibi uzun dönemli durumlar için günlük izlem formu.',
+  tone: 'teal',
+  fields: [
+    { type: 'chips', label: 'Şablon', options: ['Diyabet', 'Böbrek', 'Kalp', 'Alerji', 'Özel'] },
+    { type: 'chips', label: 'Bugünkü durum', options: ['Stabil', 'İyi', 'Daha kötü', 'İlaç atlandı'] },
+    { type: 'text', label: 'Ölçüm / gözlem', placeholder: 'Örn. su tüketimi arttı' },
+    { type: 'textarea', label: 'Takip notu', placeholder: 'İştah, su, idrar, halsizlik veya ağrı gözlemi...' }
+  ]
+  },
+  postop: {
+  icon: 'shield',
+  eyebrow: 'Takip şablonu',
+  title: 'Operasyon Sonrası Takip',
+  desc: 'Yara yeri, iştah, ilaç ve genel durum kontrolü için form.',
+  tone: 'slate',
+  fields: [
+    { type: 'chips', label: 'Operasyon günü', options: ['1. gün', '3. gün', '7. gün', '14. gün'] },
+    { type: 'chips', label: 'Yara durumu', options: ['Temiz', 'Kızarık', 'Şiş', 'Akıntı var'] },
+    { type: 'chips', label: 'İlaç kullanımı', options: ['Verildi', 'Atlandı', 'Yan etki var', 'Bitti'] },
+    { type: 'date', label: 'Sonraki doz / kontrol' },
+    { type: 'upload', label: 'Yara fotoğrafı' },
+    { type: 'textarea', label: 'Genel durum', placeholder: 'İştah, tuvalet, hareket, ilaç kullanımı...' }
+  ]
+  },
+  reproduction: {
+  icon: 'calendar',
+  eyebrow: 'Takvim',
+  title: 'Kızgınlık / Gebelik / Doğum Takibi',
+  desc: 'Üreme döngüsü ve doğum sürecini takvimle izlemek için form.',
+  tone: 'gold',
+  fields: [
+    { type: 'chips', label: 'Takip türü', options: ['Kızgınlık', 'Gebelik', 'Doğum sonrası'] },
+    { type: 'date', label: 'Başlangıç tarihi' },
+    { type: 'chips', label: 'Belirti', options: ['Davranış değişimi', 'Akıntı', 'İştah değişimi', 'Yuva arama'] },
+    { type: 'textarea', label: 'Not', placeholder: 'Takvim, belirti veya veteriner görüşü...' }
+  ]
+  },
+  senior: {
+  icon: 'heartPulse',
+  eyebrow: 'Özel mod',
+  title: 'Yaşlı Pet İzlemi',
+  desc: 'Senior petler için su, kilo, ağrı ve hareket hassasiyetlerini takip etme formu.',
+  tone: 'slate',
+  fields: [
+    { type: 'chips', label: 'Günlük durum', options: ['İyi', 'Daha az hareketli', 'Ağrılı', 'İştahsız'] },
+    { type: 'chips', label: 'Odak', options: ['Su', 'Kilo', 'Ağrı', 'Merdiven', 'Uyku'] },
+    { type: 'text', label: 'Gözlem', placeholder: 'Örn. bugün daha çok su içti' },
+    { type: 'textarea', label: 'Not', placeholder: 'Günlük değişim, ağrı belirtisi veya veteriner planı...' }
+  ]
+  },
+  qr: {
+  icon: 'shield',
+  eyebrow: 'Paylaşım',
+  title: 'QR Sağlık Kartı',
+  desc: 'Acil durumda gösterilecek kısa sağlık kartı için görsel önizleme.',
+  tone: 'teal',
+  fields: [
+    { type: 'preview-card' },
+    { type: 'checks', label: 'Paylaşılacak bilgiler', options: ['İsim ve tür', 'Alerjiler', 'Kronik hastalıklar', 'İlaçlar', 'Sahip iletişimi'] },
+    { type: 'chips', label: 'Erişim süresi', options: ['24 saat', '7 gün', 'Süresiz'] }
+  ]
+  },
+  sitter: {
+  icon: 'profile',
+  eyebrow: 'Pro paylaşım',
+  title: 'Bakıcı Modu',
+  desc: 'Pet sitter veya aile üyeleri için sınırlı erişim davet formu.',
+  tone: 'gold',
+  requiresPaid: true,
+  fields: [
+    { type: 'text', label: 'Davet edilecek kişi', placeholder: 'Ad Soyad' },
+    { type: 'text', label: 'Telefon / e-posta', placeholder: 'ornek@email.com' },
+    { type: 'checks', label: 'İzinler', options: ['Günlük not ekle', 'Hatırlatıcı gör', 'Acil kartı gör', 'Raporları gör'] },
+    { type: 'chips', label: 'Erişim süresi', options: ['1 gün', '1 hafta', '1 ay'] }
+  ]
+  },
+  'document-ai': {
+  icon: 'upload',
+  eyebrow: 'AI okuma hazırlığı',
+  title: 'Belge / Tahlil / Fatura AI Okuma',
+  desc: 'Veteriner belgesini kaydedip OCR/AI ayrıştırma kuyruğuna hazırlama formu.',
+  tone: 'slate',
+  fields: [
+    { type: 'upload', label: 'Belge yükle' },
+    { type: 'chips', label: 'Belge türü', options: ['Kan tahlili', 'Görüntüleme', 'Fatura', 'Reçete', 'Aşı kartı', 'Epikriz / rapor'] },
+    { type: 'chips', label: 'Okuma hedefi', options: ['Klinik özeti', 'Tahlil değerleri', 'İlaç / reçete', 'Masraf', 'Takip görevi'] },
+    { type: 'checks', label: 'İşaretlenecek bilgiler', options: ['Tarih', 'Klinik', 'İşlem', 'İlaçlar', 'Masraf', 'Anormal değer', 'Kontrol tarihi'] },
+    { type: 'textarea', label: 'Görünen önemli değerler', placeholder: 'AI/OCR çalışana kadar elle görünen kritik değer, ilaç veya tutarı yazabilirsiniz...' },
+    { type: 'textarea', label: 'Ek not', placeholder: 'Belgeyle ilgili hatırlamak istediğiniz şey...' }
+  ]
+  },
+  'vet-prep': {
+  icon: 'stethoscope',
+  eyebrow: 'Klinik hazırlık',
+  title: 'Kliniğe Hazırlık Modu',
+  desc: 'Veteriner ziyareti öncesi cevapları toplayıp net bir görüşme özeti hazırlama formu.',
+  tone: 'teal',
+  fields: [
+    { type: 'textarea', label: 'Ziyaret nedeni', placeholder: 'Veterinere neden gidiyorsunuz?' },
+    { type: 'chips', label: 'Aciliyet', options: ['Rutin', 'Yakın takip', 'Bugün görülmeli'] },
+    { type: 'checks', label: 'Yanıma alacağım', options: ['Fotoğraflar', 'Tahliller', 'Aşı kartı', 'Mama bilgisi', 'İlaç listesi'] },
+    { type: 'textarea', label: 'Sorularım', placeholder: 'Veterinere sormak istediğiniz maddeler...' }
+  ]
+  },
+  toxic: {
+  icon: 'alert',
+  eyebrow: 'Ücretsiz acil kayıt',
+  title: 'Toksik Madde / Yabancı Cisim Kontrolü',
+  desc: 'Zehirlenme veya yutma şüphesinde hızlı bilgi toplama ekranı.',
+  tone: 'danger',
+  fields: [
+    { type: 'text', label: 'Ne yuttu / temas etti?', placeholder: 'Örn. çikolata, ilaç, oyuncak parçası' },
+    { type: 'chips', label: 'Ne zaman oldu?', options: ['0-1 saat', '1-3 saat', 'Bugün', 'Emin değilim'] },
+    { type: 'checks', label: 'Belirti var mı?', options: ['Kusma', 'Halsizlik', 'Titreme', 'Salya', 'Nefes sorunu'] },
+    { type: 'textarea', label: 'Detay', placeholder: 'Miktar, paket fotoğrafı, davranış değişimi...' }
+  ]
+  }
+}
+  },
+  common: {
+    no_date: 'Tarih yok',
+    other: 'Diğer',
+    record: 'Kayıt',
+    no_records_yet: 'Henüz kayıt yok',
+    none_yet: 'Henüz yok',
+    expense: 'Masraf',
+    general_expense: 'Genel masraf',
+    reminder: 'Hatırlatıcı',
+    once: 'Tek sefer',
+    scheduled: 'Planlı',
+    completed: 'Tamamlandı',
+    health_record: 'Sağlık kaydı',
+    form_record: 'Form kaydı'
+  },
+  types: {
+    poop_score: 'Dışkı',
+    photo_followup: 'Foto',
+    diet_log: 'Beslenme',
+    issue: 'Sorun',
+    chronic_followup: 'Kronik',
+    postop_followup: 'Operasyon',
+    reproduction_followup: 'Üreme',
+    senior_followup: 'Yaşlı',
+    toxin_foreign_body: 'Acil'
+  },
+  list: {
+    configs: {
+      expenses: {
+        title: 'Masraf Takibi',
+        eyebrow: 'Ücretsiz kayıtlar',
+        desc: 'mama, veteriner, aşı, ilaç ve bakım harcamaları',
+        empty: 'Henüz masraf kaydı yok.',
+        button: 'Masraf Ekle'
       },
-      keywords: {
-        blood: ['kan'],
-        poop_watch: ['mukus', 'çok sulu', 'çok sert'],
-        vomiting_diarrhea: ['kusma', 'ishal'],
-        diet_watch: ['kaşıntı', 'gaz'],
-        chronic_watch: ['daha kötü', 'ilaç atlandı'],
-        discharge: ['akıntı'],
-        wound_watch: ['kızarık', 'şiş'],
-        medication_watch: ['atlandı', 'yan etki'],
-        reproduction_watch: ['akıntı', 'iştah değişimi'],
-        senior_watch: ['ağrılı', 'iştahsız', 'ağrı'],
-        toxin_danger: ['nefes sorunu', 'titreme', 'ilaç', 'çikolata', '0-1 saat'],
-        toxin_watch: ['kusma', 'halsizlik', 'salya', '1-3 saat', 'emin değilim'],
-        media_before: ['önce'],
-        media_after: ['bugün', 'sonra', 'yeni'],
-        change_danger: ['arttı', 'yeni'],
-        change_good: ['azaldı']
+      reminders: {
+        title: 'Aşı / İlaç / Randevu',
+        eyebrow: 'Takvim',
+        desc: 'planlanan sağlık işleri ve tekrar eden hatırlatıcılar',
+        empty: 'Henüz hatırlatıcı yok.',
+        button: 'Hatırlatıcı Ekle'
       },
-      fields: {
-        category: 'Kategori',
-        note: 'Not',
-        created_at: 'Kayıt tarihi',
-        type: 'Tür',
-        repeat: 'Tekrar',
-        status: 'Durum',
-        record_type: 'Kayıt türü',
-        summary: 'Özet',
-        source: 'Kaynak'
-      },
-      alerts: {
-        poop_danger: { title: 'Dışkı kaydında dikkat', desc: 'Skor uç değerde veya kan bulgusu var. Devam ederse veteriner görüşmesi için notları hazır tut.' },
-        poop_watch: { title: 'Yakın takip önerilir', desc: 'Skor normalden sapmış görünüyor. Beslenme, su tüketimi ve tekrar eden kayıtları izlemek iyi olur.' },
-        diet_danger: { title: 'Beslenme reaksiyonu', desc: 'Kusma veya ishal işaretlenmiş. Mama geçişini ve tekrar eden belirtileri dikkatle takip et.' },
-        diet_watch: { title: 'Hassasiyet olabilir', desc: 'Kaşıntı veya gaz gibi reaksiyonlar kaydedilmiş. Sonraki öğünlerde aynı belirtiyi kontrol et.' },
-        chronic_watch: { title: 'Kronik takip uyarısı', desc: 'Durum kötüleşme veya ilaç atlama içeriyor. Ölçüm ve notları aynı gün içinde tamamlamak faydalı olur.' },
-        postop_danger: { title: 'Yara yeri dikkat', desc: 'Akıntı işaretlenmiş. Fotoğraf kaydı ve veteriner kontrol planı önerilir.' },
-        postop_watch: { title: 'Yara yakın takip', desc: 'Kızarıklık veya şişlik kaydedilmiş. Aynı açıdan fotoğrafla değişimi takip et.' },
-        medication_watch: { title: 'İlaç takibi', desc: 'İlaç atlama veya yan etki kaydedilmiş. Bir sonraki doz/kontrol için hatırlatıcı planla.' },
-        reproduction_watch: { title: 'Üreme takibi dikkat', desc: 'Belirti değişimi kaydedilmiş. Takvim ve veteriner notlarını güncel tut.' },
-        senior_watch: { title: 'Senior hassasiyet', desc: 'Ağrı veya iştah hassasiyeti kaydedilmiş. Su, kilo ve hareket notlarını düzenli karşılaştır.' },
-        toxin_danger: { title: 'Acil veteriner yönlendirmesi', desc: 'Toksik madde/yabancı cisim şüphesi ve riskli belirti/zaman bilgisi var. Paket, miktar ve zamanı not edip beklemeden veterinerle görüş.' },
-        toxin_watch: { title: 'Yakın acil takip', desc: 'Belirti veya belirsiz zaman bilgisi kaydedilmiş. Miktarı, saatini ve mümkünse fotoğrafını hazır tut; kötüleşirse acil destek al.' }
-      },
-      plans: {
-        common: {
+      health: {
+        title: 'Sağlık Dosyaları',
+        eyebrow: 'Takip arşivi',
+        desc: 'dışkı skoru, foto takip, beslenme ve takip şablonları',
+        empty: 'Henüz sağlık kaydı yok.',
+        button: 'Takip Kaydı Ekle'
+      }
+    },
+    tabs: { expenses: 'Masraf', reminders: 'Takvim', health: 'Sağlık' },
+    filters: {
+      expenses: [['all', 'Hepsi'], ['veteriner', 'Veteriner'], ['mama', 'Mama'], ['aşı', 'Aşı'], ['ilaç', 'İlaç'], ['bakım', 'Bakım']],
+      reminders: [['all', 'Hepsi'], ['scheduled', 'Planlı'], ['aşı', 'Aşı'], ['ilaç', 'İlaç'], ['randevu', 'Randevu']],
+      health: [['all', 'Hepsi'], ['poop_score', 'Dışkı'], ['photo_followup', 'Foto'], ['diet_log', 'Beslenme'], ['issue', 'Sorun'], ['chronic_followup', 'Kronik'], ['postop_followup', 'Operasyon'], ['reproduction_followup', 'Üreme'], ['senior_followup', 'Yaşlı'], ['toxin_foreign_body', 'Acil']]
+    },
+    sorts: {
+      expenses: [['newest', 'Yeni'], ['amount_desc', 'Tutar ↓'], ['amount_asc', 'Tutar ↑']],
+      reminders: [['due_asc', 'Yakın'], ['due_desc', 'Uzak'], ['newest', 'Yeni']],
+      health: [['newest', 'Yeni'], ['oldest', 'Eski'], ['type', 'Türe göre']]
+    },
+    healthActions: {
+      poop_score: 'Dışkı Kaydı Ekle',
+      photo_followup: 'Foto Takip Ekle',
+      diet_log: 'Beslenme Kaydı Ekle',
+      issue: 'Sorun Kaydı Ekle',
+      chronic_followup: 'Kronik Takip Ekle',
+      postop_followup: 'Operasyon Takibi Ekle',
+      reproduction_followup: 'Üreme Takibi Ekle',
+      senior_followup: 'Yaşlı Pet Kaydı Ekle',
+      toxin_foreign_body: 'Acil Kayıt Ekle'
+    },
+    programs: {
+      chronic_followup: { title: 'Kronik takip', cadence: 'Haftalık durum' },
+      postop_followup: { title: 'Operasyon sonrası', cadence: 'Yara ve ilaç kontrolü' },
+      diet_log: { title: 'Beslenme geçişi', cadence: 'Reaksiyon takibi' },
+      poop_score: { title: 'Dışkı skoru', cadence: 'Günlük kalite' },
+      reproduction_followup: { title: 'Üreme takibi', cadence: 'Takvim ve belirti' },
+      senior_followup: { title: 'Senior izlem', cadence: 'Hassasiyet takibi' }
+    },
+    filter: 'Filtre',
+    sort: 'Sıralama',
+    programs_title: 'Takip programları',
+    programs_summary: 'Şablon durum özeti',
+    last_7_days: 'Son 7 gün yoğunluğu',
+    no_distribution: 'Henüz dağılım yok.',
+    summary: 'Özet',
+    records_preparing: 'Kayıtlar hazırlanıyor',
+    distribution: 'Dağılım',
+    waiting_data: 'Veri bekleniyor',
+    total: 'Toplam',
+    top: 'En yoğun',
+    expense_count: '{count} masraf kaydı',
+    record_count: '{count} kayıt',
+    seven_days: '7 gün',
+    upcoming_task: 'yaklaşan iş',
+    next: 'Sıradaki',
+    no_plan: 'Plan yok',
+    health_count: 'sağlık kaydı',
+    last_record: 'Son kayıt',
+    records_loading: 'Kayıtlar getiriliyor...',
+    empty_filter: 'Bu filtrede kayıt yok.',
+    empty_filter_desc: 'Farklı bir filtre seçerek tekrar deneyebilirsin.',
+    empty_desc: 'Yeni kayıt eklediğinde burada listelenecek.',
+    pet_desc: '{name} için {desc}'
+  },
+  detail: {
+    configs: {
+      expenses: { title: 'Masraf Detayı' },
+      reminders: { title: 'Hatırlatıcı Detayı' },
+      health: { title: 'Sağlık Kaydı Detayı' }
+    },
+    repeat: 'Tekrar',
+    no_size: 'Boyut yok',
+    open: 'Aç',
+    reminder_ics_title: 'Pati Sağlık Hatırlatıcı',
+    reminder_ics_desc: 'Pati Sağlık hatırlatıcısı',
+    appointment: 'Randevu',
+    medication: 'İlaç',
+    daily: 'Günlük',
+    weekly: 'Haftalık',
+    followup_reminder: 'Takip hatırlatıcısı',
+    set_reminder: 'Hatırlatıcı Kur',
+    previous_record: 'Önceki kayıt',
+    today_record: 'Bugünkü kayıt',
+    file_pending: 'Dosya bekleniyor',
+    media_records: 'Medya kayıtları',
+    media_count: '{count} dosya bu {subject} bağlı',
+    file: 'Dosya',
+    document: 'Belge',
+    file_lower: 'dosya',
+    subject_expense: 'masraf kaydına',
+    subject_reminder: 'hatırlatıcıya',
+    subject_health: 'sağlık kaydına',
+    loading: 'Kayıt detayı getiriliyor...',
+    notification_prep: 'Bildirim hazırlığı',
+    calendar_status_title: 'Takvim durumu güncellenebilir',
+    calendar_status_desc: 'PWA/Capacitor bildirim izni geldiğinde bu kayıt durumları kullanılacak.',
+    remind_tomorrow: 'Yarın Hatırlat',
+    export_calendar: 'Takvime Aktar',
+    kicker: 'Ücretsiz kayıt detayı',
+    hero_desc: '{name} için kaydedilen bilginin okunabilir özeti.',
+    new_record: 'Yeni Kayıt Ekle',
+    back_to_list: 'Listeye Dön',
+    processing: 'İşleniyor...',
+    reminder_update_failed: 'Hatırlatıcı güncellenemedi',
+    not_found_title: 'Kayıt bulunamadı',
+    not_found_desc: 'Kayıt silinmiş veya farklı bir pete ait olabilir.',
+    no_duration: 'Süre kaydı yok',
+    day_count: '{count}. gün',
+    vet_search: 'Veteriner Ara',
+    open_nearby_clinics: 'Yakındaki Klinikleri Aç',
+    alert_disclaimer: 'Bu uyarı teşhis değildir; veteriner görüşmesine hazırlık için kayıtları düzenler.',
+    payload_labels: {
+      score: 'Skor',
+      extra_finding: 'Ek bulgu',
+      note: 'Not',
+      reaction: 'Reaksiyon',
+      diet_note: 'Beslenme notu',
+      today_status: 'Bugünkü durum',
+      followup_note: 'Takip notu',
+      medication_use: 'İlaç kullanımı',
+      wound_status: 'Yara durumu',
+      general_status: 'Genel durum',
+      followup_type: 'Takip türü',
+      sign: 'Belirti',
+      daily_status: 'Günlük durum',
+      focus: 'Odak',
+      observation: 'Gözlem',
+      detail: 'Detay',
+      what_ingested: 'Ne yuttu / temas etti?',
+      when_happened: 'Ne zaman oldu?',
+      sign_question: 'Belirti var mı?',
+      start_date: 'Başlangıç tarihi',
+      template: 'Şablon',
+      measurement_observation: 'Ölçüm / gözlem',
+      surgery_day: 'Operasyon günü',
+      next_dose_check: 'Sonraki doz / kontrol',
+      new_food_meal: 'Yeni mama / öğün',
+      transition_day: 'Geçiş günü',
+      visual_change: 'Görsel değişim'
+    },
+    keywords: {
+      blood: ['kan'],
+      poop_watch: ['mukus', 'çok sulu', 'çok sert'],
+      vomiting_diarrhea: ['kusma', 'ishal'],
+      diet_watch: ['kaşıntı', 'gaz'],
+      chronic_watch: ['daha kötü', 'ilaç atlandı'],
+      discharge: ['akıntı'],
+      wound_watch: ['kızarık', 'şiş'],
+      medication_watch: ['atlandı', 'yan etki'],
+      reproduction_watch: ['akıntı', 'iştah değişimi'],
+      senior_watch: ['ağrılı', 'iştahsız', 'ağrı'],
+      toxin_danger: ['nefes sorunu', 'titreme', 'ilaç', 'çikolata', '0-1 saat'],
+      toxin_watch: ['kusma', 'halsizlik', 'salya', '1-3 saat', 'emin değilim'],
+      media_before: ['önce'],
+      media_after: ['bugün', 'sonra', 'yeni'],
+      change_danger: ['arttı', 'yeni'],
+      change_good: ['azaldı']
+    },
+    fields: {
+      category: 'Kategori',
+      note: 'Not',
+      created_at: 'Kayıt tarihi',
+      type: 'Tür',
+      repeat: 'Tekrar',
+      status: 'Durum',
+      record_type: 'Kayıt türü',
+      summary: 'Özet',
+      source: 'Kaynak'
+    },
+    alerts: {
+      poop_danger: { title: 'Dışkı kaydında dikkat', desc: 'Skor uç değerde veya kan bulgusu var. Devam ederse veteriner görüşmesi için notları hazır tut.' },
+      poop_watch: { title: 'Yakın takip önerilir', desc: 'Skor normalden sapmış görünüyor. Beslenme, su tüketimi ve tekrar eden kayıtları izlemek iyi olur.' },
+      diet_danger: { title: 'Beslenme reaksiyonu', desc: 'Kusma veya ishal işaretlenmiş. Mama geçişini ve tekrar eden belirtileri dikkatle takip et.' },
+      diet_watch: { title: 'Hassasiyet olabilir', desc: 'Kaşıntı veya gaz gibi reaksiyonlar kaydedilmiş. Sonraki öğünlerde aynı belirtiyi kontrol et.' },
+      chronic_watch: { title: 'Kronik takip uyarısı', desc: 'Durum kötüleşme veya ilaç atlama içeriyor. Ölçüm ve notları aynı gün içinde tamamlamak faydalı olur.' },
+      postop_danger: { title: 'Yara yeri dikkat', desc: 'Akıntı işaretlenmiş. Fotoğraf kaydı ve veteriner kontrol planı önerilir.' },
+      postop_watch: { title: 'Yara yakın takip', desc: 'Kızarıklık veya şişlik kaydedilmiş. Aynı açıdan fotoğrafla değişimi takip et.' },
+      medication_watch: { title: 'İlaç takibi', desc: 'İlaç atlama veya yan etki kaydedilmiş. Bir sonraki doz/kontrol için hatırlatıcı planla.' },
+      reproduction_watch: { title: 'Üreme takibi dikkat', desc: 'Belirti değişimi kaydedilmiş. Takvim ve veteriner notlarını güncel tut.' },
+      senior_watch: { title: 'Senior hassasiyet', desc: 'Ağrı veya iştah hassasiyeti kaydedilmiş. Su, kilo ve hareket notlarını düzenli karşılaştır.' },
+      toxin_danger: { title: 'Acil veteriner yönlendirmesi', desc: 'Toksik madde/yabancı cisim şüphesi ve riskli belirti/zaman bilgisi var. Paket, miktar ve zamanı not edip beklemeden veterinerle görüş.' },
+      toxin_watch: { title: 'Yakın acil takip', desc: 'Belirti veya belirsiz zaman bilgisi kaydedilmiş. Miktarı, saatini ve mümkünse fotoğrafını hazır tut; kötüleşirse acil destek al.' }
+    },
+    plans: {
+    freeRecords: {
+    common: {
           measurement_observation: 'Ölçüm/gözlem',
           routine_check: 'Rutin kontrol',
           wound_status: 'Yara durumu',
