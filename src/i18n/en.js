@@ -579,6 +579,39 @@ const en = {
         no_wound_status: 'No wound status',
         media_count: '{count} media'
       }
+    },
+    submissions: {
+      sitter_default_name: 'Caregiver',
+      invite_no_permissions: 'None selected',
+      invite_text: '{name} caregiver invite is ready in Pati Health. Duration: {duration}. Permissions: {permissions}.',
+      expense_other: 'Other',
+      reminder_general: 'General',
+      reminder_once: 'One-time',
+      postop_reminder_title: 'Post-op medication/check',
+      postop_reminder_note: 'Created automatically. Medication status: {status}. Check the wound and overall condition again.',
+      reproduction_default_followup: 'Reproduction follow-up',
+      reproduction_reminder_title: '{type} check',
+      reproduction_reminder_note: 'Created automatically. Review sign changes, appetite and veterinary notes.',
+      fallbacks: {
+        photo_followup: 'Photo comparison follow-up',
+        poop_score: 'Stool score',
+        diet_log: 'Diet change',
+        chronic: 'Chronic condition follow-up',
+        postop: 'Post-op follow-up',
+        reproduction: 'Heat / pregnancy / birth follow-up',
+        senior: 'Senior pet monitoring',
+        toxic: 'Toxic substance / foreign body check',
+        issue: 'Health issue'
+      },
+      clinic_visit: 'Clinic visit',
+      clinic_export_title: '{purpose} prep file',
+      document_default_kind: 'Document',
+      document_default_goal: 'Clinic summary',
+      document_title: '{kind} document',
+      ocr_pending: 'This document will be parsed when AI/OCR reading is connected to the server/API layer.',
+      vet_prep_default_urgency: 'Routine',
+      vet_visit: 'Veterinary visit',
+      vet_prep_title: '{urgency} vet prep file'
     }
   },
   notifications: {

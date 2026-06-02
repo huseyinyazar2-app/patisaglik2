@@ -608,6 +608,39 @@ const tr = {
         no_wound_status: 'Yara durumu yok',
         media_count: '{count} medya'
       }
+    },
+    submissions: {
+      sitter_default_name: 'Bakıcı',
+      invite_no_permissions: 'Seçilmedi',
+      invite_text: '{name} için Pati Sağlık bakıcı daveti hazır. Süre: {duration}. İzinler: {permissions}.',
+      expense_other: 'Diğer',
+      reminder_general: 'Genel',
+      reminder_once: 'Tek sefer',
+      postop_reminder_title: 'Operasyon sonrası ilaç/kontrol',
+      postop_reminder_note: 'Otomatik oluşturuldu. İlaç durumu: {status}. Yara ve genel durumu tekrar kontrol et.',
+      reproduction_default_followup: 'Üreme takibi',
+      reproduction_reminder_title: '{type} kontrolü',
+      reproduction_reminder_note: 'Otomatik oluşturuldu. Belirti değişimi, iştah ve veteriner notlarını kontrol et.',
+      fallbacks: {
+        photo_followup: 'Fotoğraf karşılaştırmalı takip',
+        poop_score: 'Dışkı skoru',
+        diet_log: 'Beslenme değişimi',
+        chronic: 'Kronik hastalık takibi',
+        postop: 'Operasyon sonrası takip',
+        reproduction: 'Kızgınlık / gebelik / doğum takibi',
+        senior: 'Yaşlı pet izlemi',
+        toxic: 'Toksik madde / yabancı cisim kontrolü',
+        issue: 'Sağlık sorunu'
+      },
+      clinic_visit: 'Klinik ziyareti',
+      clinic_export_title: '{purpose} hazırlık dosyası',
+      document_default_kind: 'Belge',
+      document_default_goal: 'Klinik özeti',
+      document_title: '{kind} belgesi',
+      ocr_pending: 'AI/OCR okuma server/API katmanına bağlandığında bu belge ayrıştırılacak.',
+      vet_prep_default_urgency: 'Rutin',
+      vet_visit: 'Veteriner ziyareti',
+      vet_prep_title: '{urgency} veteriner hazırlık dosyası'
     }
   },
   notifications: {
@@ -711,6 +744,11 @@ function readValue(dictionary, key) {
 export function t(key) {
   const locale = getLocale();
   return readValue(dictionaries[locale], key) ?? readValue(en, key) ?? readValue(tr, key) ?? key;
+}
+
+export function translateForLocale(locale, key) {
+  const normalized = normalizeLocale(locale);
+  return readValue(dictionaries[normalized], key) ?? readValue(en, key) ?? readValue(tr, key) ?? key;
 }
 
 export default tr;
