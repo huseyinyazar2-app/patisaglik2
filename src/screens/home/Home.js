@@ -1,16 +1,41 @@
 import { navigate } from '../../router.js';
 import { getState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
-import { getActivePet } from '../../mock/pets.js';
+import { getActivePet as getMockActivePet } from '../../mock/pets.js';
+import { getLocalPets } from '../../services/pets.js';
 import { getFreeRecords, mergeRecentRecords } from '../../services/freeRecords.js';
 
-const petPhotos = {
-  dog: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?ixlib=rb-4.0.3&auto=format&fit=crop&w=240&q=80',
-  cat: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&auto=format&fit=crop&w=240&q=80'
+const petIllustrations = {
+  cat: '🐈',
+  dog: '🐕',
+  bird: '🦜',
+  fish: '🐠',
+  reptile: '🦎',
+  small_mammal: '🐇',
+  exotic: '🐾'
 };
 
 function tx(key, vars = {}) {
   return String(t(key)).replace(/\{(\w+)\}/g, (_, name) => vars[name] ?? '');
+}
+
+function getHomePet(activePetId) {
+  return getLocalPets().find((pet) => pet.id === activePetId) || getMockActivePet(activePetId);
+}
+
+function renderPetVisual(pet, className = 'home-hero-photo') {
+  if (pet.photo) {
+    return `<img class="${className}" src="${pet.photo}" alt="${pet.name}" />`;
+  }
+  if (className === 'pet-switcher-avatar') {
+    return `<span class="${className} pet-illustration-avatar"><span>${petIllustrations[pet.type] || petIllustrations.exotic}</span></span>`;
+  }
+  return `
+    <button class="${className} pet-illustration-avatar" id="btnPetImage" type="button" aria-label="${t('pets.photo_add')}">
+      <span>${petIllustrations[pet.type] || petIllustrations.exotic}</span>
+      ${className === 'home-hero-photo' ? `<small>${t('pets.photo_add')}</small>` : ''}
+    </button>
+  `;
 }
 
 function healthStatus(pet) {
@@ -54,24 +79,28 @@ function getInsightCards(pet, activeFollowups, records = null) {
   return [
     {
       icon: 'clipboard',
+      route: lastRecord?.kind === 'expense' ? '/history/expenses' : lastRecord?.kind === 'reminder' ? '/history/reminders' : '/history/health-records',
       title: t('home.insights.last_record'),
       value: lastRecord ? formatShortDate(lastRecord.date) : formatShortDate(pet.lastCheckDate),
       desc: lastRecord ? getRecordTitle(lastRecord) : t('home.history_source')
     },
     {
       icon: 'briefcase',
+      route: '/history/expenses',
       title: t('home.insights.expense'),
       value: expenseTotal ? formatMoney(expenseTotal) : '0 TL',
       desc: records?.expenses?.length ? tx('home.processed_record_count', { count: records.expenses.length }) : t('home.no_expense')
     },
     {
       icon: 'bell',
+      route: '/history/reminders',
       title: t('home.insights.next_task'),
       value: nextReminder ? formatShortDate(nextReminder.due_at) : t('home.no_plan'),
       desc: nextReminder ? nextReminder.title : t('home.no_reminder')
     },
     {
       icon: 'shield',
+      route: '/history/health-records',
       title: t('home.insights.followup_note'),
       value: healthCount ? tx('home.record_count', { count: healthCount }) : (profileNotes.length ? tx('home.record_count', { count: profileNotes.length }) : t('home.clean')),
       desc: healthCount ? t('home.health_archive_source') : (profileNotes.length ? t('home.profile_note_flagged') : t('home.no_risk_note'))
@@ -81,7 +110,7 @@ function getInsightCards(pet, activeFollowups, records = null) {
 
 function renderInsightCards(cards) {
   return cards.map(card => `
-    <button class="home-insight-card" data-insight="${card.title}">
+    <button class="home-insight-card" data-route="${card.route}" data-insight="${card.title}">
       <div class="premium-icon-box">${window.__icons?.[card.icon]}</div>
       <div>
         <span>${card.title}</span>
@@ -152,8 +181,7 @@ function renderFollowups(activeFollowups, healthRecords = []) {
 
 export function render() {
   const state = getState();
-  const pet = getActivePet(state.activePetId);
-  const petPhoto = petPhotos[pet.type] || petPhotos.dog;
+  const pet = getHomePet(state.activePetId);
   const status = healthStatus(pet);
   const activeFollowups = (state.followups || []).filter(f => f.status === 'active' && f.petId === state.activePetId);
   const insightCards = getInsightCards(pet, activeFollowups);
@@ -165,7 +193,7 @@ export function render() {
       <div class="premium-home-header">
         <button class="header-icon" id="btnMenu">${window.__icons?.check}</button>
         <button class="pet-switcher-btn" id="btnPetSelectHeader">
-          <img src="${petPhoto}" class="pet-switcher-avatar" alt="${pet.name}" />
+          ${renderPetVisual(pet, 'pet-switcher-avatar')}
           <span>${pet.name}</span>
           ${window.__icons?.chevronRight}
         </button>
@@ -175,7 +203,7 @@ export function render() {
       <div class="section pt-0">
         <div class="home-hero-panel">
           <div class="home-hero-top">
-            <img class="home-hero-photo" src="${petPhoto}" alt="${pet.name}" />
+            ${renderPetVisual(pet)}
             <div>
               <div class="premium-screen-kicker">${t('home.free_area')}</div>
               <h1>${pet.name}</h1>
@@ -267,18 +295,22 @@ export function afterRender() {
   const state = getState();
   document.getElementById('btnProfile')?.addEventListener('click', () => navigate('/profile'));
   document.getElementById('btnPetSelectHeader')?.addEventListener('click', () => navigate('/pets/select'));
+  document.getElementById('btnPetImage')?.addEventListener('click', () => navigate('/profile/passport'));
   document.getElementById('btnStartCheck')?.addEventListener('click', () => navigate('/check'));
   document.getElementById('btnTimeline')?.addEventListener('click', () => navigate('/history'));
   document.getElementById('btnReports')?.addEventListener('click', () => navigate('/reports'));
-  document.querySelectorAll('[data-route]').forEach(btn => {
-    btn.addEventListener('click', () => navigate(btn.dataset.route));
-  });
+  function bindRouteButtons(root = document) {
+    root.querySelectorAll('[data-route]').forEach(btn => {
+      btn.addEventListener('click', () => navigate(btn.dataset.route));
+    });
+  }
+  bindRouteButtons();
   document.querySelectorAll('.btn-followup').forEach(btn => {
     btn.addEventListener('click', e => navigate(`/followups/${e.currentTarget.dataset.id}`));
   });
 
   getFreeRecords({ petId: state.activePetId }).then((records) => {
-    const pet = getActivePet(state.activePetId);
+    const pet = getHomePet(state.activePetId);
     const activeFollowups = (state.followups || []).filter(f => f.status === 'active' && f.petId === state.activePetId);
     const upcoming = document.getElementById('homeUpcoming');
     const insight = document.getElementById('homeInsightGrid');
@@ -300,6 +332,7 @@ export function afterRender() {
         btn.addEventListener('click', e => navigate(`/followups/${e.currentTarget.dataset.id}`));
       });
     }
+    if (insight) bindRouteButtons(insight);
     if (count) count.textContent = activeFollowups.length ? tx('home.file_count', { count: activeFollowups.length }) : tx('home.record_count', { count: records.healthRecords.length });
   }).catch(() => {});
 }

@@ -35,6 +35,37 @@ const en = {
     location: 'Location / Area', location_placeholder: 'e.g. Kadıköy, park, foster address',
     volunteer_note: 'Volunteer / care note', volunteer_note_placeholder: 'Short note for street animal, foster or shared care...',
     breed_placeholder: 'Breed / species detail', chronic_placeholder: 'Known chronic conditions',
+    breed_free_entry: 'You can type it manually if it is not listed.',
+    species_detail: 'Species detail',
+    species_detail_placeholder: 'Subtype / variety / habitat',
+    breed_options: {
+      cat: [
+        'Abyssinian', 'American Bobtail', 'American Curl', 'American Shorthair', 'American Wirehair',
+        'Balinese', 'Bengal', 'Birman', 'Bombay', 'British Longhair', 'British Shorthair', 'Burmese',
+        'Chartreux', 'Cornish Rex', 'Devon Rex', 'Egyptian Mau', 'Exotic Shorthair', 'Havana Brown',
+        'Himalayan', 'Japanese Bobtail', 'Korat', 'Maine Coon', 'Manx', 'Munchkin', 'Norwegian Forest Cat',
+        'Ocicat', 'Oriental Shorthair', 'Persian', 'Ragdoll', 'Russian Blue', 'Scottish Fold', 'Selkirk Rex',
+        'Siamese', 'Siberian', 'Singapura', 'Somali', 'Sphynx', 'Tonkinese', 'Turkish Angora', 'Turkish Van'
+      ],
+      dog: [
+        'Affenpinscher', 'Akita', 'Alaskan Malamute', 'American Bulldog', 'Australian Cattle Dog',
+        'Australian Shepherd', 'Basenji', 'Basset Hound', 'Beagle', 'Belgian Malinois', 'Bernese Mountain Dog',
+        'Bichon Frise', 'Border Collie', 'Boston Terrier', 'Boxer', 'Brittany', 'Bulldog', 'Bull Terrier',
+        'Cane Corso', 'Cavalier King Charles Spaniel', 'Chihuahua', 'Chow Chow', 'Cocker Spaniel', 'Collie',
+        'Corgi', 'Dachshund', 'Dalmatian', 'Doberman Pinscher', 'Dogo Argentino', 'English Setter',
+        'French Bulldog', 'German Shepherd', 'German Shorthaired Pointer', 'Golden Retriever', 'Great Dane',
+        'Greyhound', 'Havanese', 'Jack Russell Terrier', 'Labrador Retriever', 'Maltese', 'Mastiff',
+        'Miniature Pinscher', 'Newfoundland', 'Papillon', 'Pekingese', 'Pointer', 'Pomeranian', 'Poodle',
+        'Pug', 'Rhodesian Ridgeback', 'Rottweiler', 'Samoyed', 'Schnauzer', 'Shar Pei', 'Shiba Inu',
+        'Shih Tzu', 'Siberian Husky', 'Staffordshire Bull Terrier', 'Vizsla', 'Weimaraner', 'Whippet',
+        'Yorkshire Terrier'
+      ],
+      bird: ['Budgerigar', 'Cockatiel', 'Lovebird', 'Canary', 'African grey parrot', 'Amazon parrot', 'Macaw', 'Finch', 'Pigeon'],
+      fish: ['Betta', 'Goldfish', 'Guppy', 'Molly', 'Platy', 'Neon tetra', 'Cichlid', 'Koi', 'Discus', 'Shrimp aquarium'],
+      reptile: ['Bearded dragon', 'Leopard gecko', 'Corn snake', 'Ball python', 'Turtle', 'Iguana', 'Chameleon'],
+      small_mammal: ['Rabbit', 'Hamster', 'Guinea pig', 'Chinchilla', 'Gerbil', 'Ferret', 'Mouse', 'Rat'],
+      exotic: ['Hedgehog', 'Sugar glider', 'Tarantula', 'Axolotl', 'Frog', 'Exotic bird', 'Other']
+    },
     allergies_placeholder: 'Known allergies', medications_placeholder: 'Regular medications',
     medical_history: 'Medical History',
     medical_history_placeholder: 'Previous accidents, surgeries, temperament notes or anything important to know...',

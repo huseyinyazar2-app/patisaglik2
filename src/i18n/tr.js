@@ -64,6 +64,37 @@ const tr = {
     location: 'Konum / Bölge', location_placeholder: 'Örn. Kadıköy, park, geçici yuva adresi',
     volunteer_note: 'Gönüllü / bakım notu', volunteer_note_placeholder: 'Sokak hayvanı, geçici yuva veya bakım paylaşımı için kısa not...',
     breed_placeholder: 'Irk / tür detayı', chronic_placeholder: 'Varsa kronik durum',
+    breed_free_entry: 'Listede yoksa elle yazabilirsiniz.',
+    species_detail: 'Tür detayı',
+    species_detail_placeholder: 'Alt tür / varyete / yaşam alanı',
+    breed_options: {
+      cat: [
+        'Abyssinian', 'American Bobtail', 'American Curl', 'American Shorthair', 'American Wirehair',
+        'Balinese', 'Bengal', 'Birman', 'Bombay', 'British Longhair', 'British Shorthair', 'Burmese',
+        'Chartreux', 'Cornish Rex', 'Devon Rex', 'Egyptian Mau', 'Exotic Shorthair', 'Havana Brown',
+        'Himalayan', 'Japanese Bobtail', 'Korat', 'Maine Coon', 'Manx', 'Munchkin', 'Norwegian Forest Cat',
+        'Ocicat', 'Oriental Shorthair', 'Persian', 'Ragdoll', 'Russian Blue', 'Scottish Fold', 'Selkirk Rex',
+        'Siamese', 'Siberian', 'Singapura', 'Somali', 'Sphynx', 'Tonkinese', 'Turkish Angora', 'Turkish Van'
+      ],
+      dog: [
+        'Affenpinscher', 'Akita', 'Alaskan Malamute', 'American Bulldog', 'Australian Cattle Dog',
+        'Australian Shepherd', 'Basenji', 'Basset Hound', 'Beagle', 'Belgian Malinois', 'Bernese Mountain Dog',
+        'Bichon Frise', 'Border Collie', 'Boston Terrier', 'Boxer', 'Brittany', 'Bulldog', 'Bull Terrier',
+        'Cane Corso', 'Cavalier King Charles Spaniel', 'Chihuahua', 'Chow Chow', 'Cocker Spaniel', 'Collie',
+        'Corgi', 'Dachshund', 'Dalmatian', 'Doberman Pinscher', 'Dogo Argentino', 'English Setter',
+        'French Bulldog', 'German Shepherd', 'German Shorthaired Pointer', 'Golden Retriever', 'Great Dane',
+        'Greyhound', 'Havanese', 'Jack Russell Terrier', 'Labrador Retriever', 'Maltese', 'Mastiff',
+        'Miniature Pinscher', 'Newfoundland', 'Papillon', 'Pekingese', 'Pointer', 'Pomeranian', 'Poodle',
+        'Pug', 'Rhodesian Ridgeback', 'Rottweiler', 'Samoyed', 'Schnauzer', 'Shar Pei', 'Shiba Inu',
+        'Shih Tzu', 'Siberian Husky', 'Staffordshire Bull Terrier', 'Vizsla', 'Weimaraner', 'Whippet',
+        'Yorkshire Terrier'
+      ],
+      bird: ['Muhabbet kuşu', 'Sultan papağanı', 'Cennet papağanı', 'Kanarya', 'Jako papağanı', 'Amazon papağanı', 'Macaw', 'Hint bülbülü', 'Güvercin'],
+      fish: ['Betta', 'Japon balığı', 'Lepistes', 'Molly', 'Plati', 'Neon tetra', 'Çiklit', 'Koi', 'Discus', 'Karides akvaryumu'],
+      reptile: ['Sakallı ejder', 'Leopard gecko', 'Corn snake', 'Ball python', 'Kaplumbağa', 'İguana', 'Bukalemun'],
+      small_mammal: ['Tavşan', 'Hamster', 'Guinea pig', 'Chinchilla', 'Gerbil', 'Ferret', 'Fare', 'Sıçan'],
+      exotic: ['Kirpi', 'Şeker planörü', 'Tarantula', 'Aksolotl', 'Kurbağa', 'Egzotik kuş', 'Diğer']
+    },
     allergies_placeholder: 'Varsa alerjiler', medications_placeholder: 'Varsa düzenli ilaçlar',
     medical_history: 'Tıbbi Geçmiş ve Öykü',
     medical_history_placeholder: 'Geçirdiği kazalar, ameliyatlar, genel huyu veya dikkat edilmesi gereken notlar...',

@@ -1569,6 +1569,21 @@
   object-fit: cover;
 }
 
+.pet-switcher-avatar.pet-illustration-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-light);
+  background: linear-gradient(145deg, var(--primary-50), var(--cream));
+  color: var(--primary-dark);
+  padding: 0;
+}
+
+.pet-switcher-avatar.pet-illustration-avatar span {
+  font-size: 16px;
+  line-height: 1;
+}
+
 .pet-switcher-btn span {
   font-weight: 700;
   font-size: var(--font-size-sm);

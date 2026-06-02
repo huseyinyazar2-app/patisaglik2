@@ -14,6 +14,13 @@ const petTypes = [
   ['exotic', 'pets.exotic']
 ];
 
+function breedOptionsHtml(type = 'cat') {
+  const options = t(`pets.breed_options.${type}`);
+  return (Array.isArray(options) ? options : t('pets.breed_options.exotic'))
+    .map(item => `<option value="${item}"></option>`)
+    .join('');
+}
+
 function extractTags(text) {
   const lower = String(text || '').toLocaleLowerCase('tr-TR');
   const tags = [];
@@ -61,6 +68,16 @@ export function render() {
             </div>
           </div>
 
+          <label class="feature-field">
+            <span>${t('pets.name')}</span>
+            <input type="text" id="pet-name" placeholder="${t('pets.name')}" />
+          </label>
+
+          <label class="feature-field">
+            <span>${t('pets.birth_date')}</span>
+            <input type="date" id="pet-birthdate" />
+          </label>
+
           <div class="feature-field">
             <span>${t('pets.ownership')}</span>
             <div class="feature-chip-row" id="pet-ownership-group">
@@ -70,19 +87,14 @@ export function render() {
             </div>
           </div>
 
-          <label class="feature-field">
+          <label class="feature-field pet-care-extra" hidden>
             <span>${t('pets.location')}</span>
             <input type="text" id="pet-location" placeholder="${t('pets.location_placeholder')}" />
           </label>
 
-          <label class="feature-field">
+          <label class="feature-field pet-care-extra" hidden>
             <span>${t('pets.volunteer_note')}</span>
             <textarea id="pet-volunteer-note" placeholder="${t('pets.volunteer_note_placeholder')}"></textarea>
-          </label>
-
-          <label class="feature-field">
-            <span>${t('pets.name')}</span>
-            <input type="text" id="pet-name" placeholder="${t('pets.name')}" />
           </label>
 
           <div class="feature-field">
@@ -95,13 +107,10 @@ export function render() {
           </div>
 
           <label class="feature-field">
-            <span>${t('pets.breed')}</span>
-            <input type="text" id="pet-breed" placeholder="${t('pets.breed_placeholder')}" />
-          </label>
-
-          <label class="feature-field">
-            <span>${t('pets.birth_date')}</span>
-            <input type="date" id="pet-birthdate" />
+            <span id="pet-breed-label">${t('pets.breed')}</span>
+            <input type="text" id="pet-breed" list="pet-breed-options" placeholder="${t('pets.breed_placeholder')}" />
+            <datalist id="pet-breed-options">${breedOptionsHtml('cat')}</datalist>
+            <small class="text-xs text-tertiary mt-1">${t('pets.breed_free_entry')}</small>
           </label>
 
           <label class="feature-field">
@@ -160,8 +169,33 @@ export function afterRender() {
     button.addEventListener('click', () => {
       button.parentElement?.querySelectorAll('button').forEach((item) => item.classList.remove('selected'));
       button.classList.add('selected');
+      if (button.dataset.ownership) updateOwnershipFields();
+      if (button.dataset.type) updateBreedField(button.dataset.type);
     });
   });
+
+  function updateOwnershipFields() {
+    const ownership = document.querySelector('#pet-ownership-group button.selected')?.dataset.ownership || 'owned';
+    document.querySelectorAll('.pet-care-extra').forEach(field => {
+      field.hidden = ownership === 'owned';
+    });
+  }
+
+  function updateBreedField(type = 'cat') {
+    const label = document.getElementById('pet-breed-label');
+    const input = document.getElementById('pet-breed');
+    const list = document.getElementById('pet-breed-options');
+    const isClassicBreed = ['cat', 'dog'].includes(type);
+    if (label) label.textContent = isClassicBreed ? t('pets.breed') : t('pets.species_detail');
+    if (input) {
+      input.value = '';
+      input.placeholder = isClassicBreed ? t('pets.breed_placeholder') : t('pets.species_detail_placeholder');
+    }
+    if (list) list.innerHTML = breedOptionsHtml(type);
+  }
+
+  updateOwnershipFields();
+  updateBreedField('cat');
 
   document.getElementById('pet-save-btn')?.addEventListener('click', async (event) => {
     const btn = event.currentTarget;

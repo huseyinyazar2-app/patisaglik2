@@ -1961,6 +1961,30 @@
   animation: petPhotoFloat 5s ease-in-out infinite;
 }
 
+.home-hero-photo.pet-illustration-avatar {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background:
+    radial-gradient(circle at 30% 18%, rgba(255, 255, 255, 0.85), transparent 34%),
+    linear-gradient(145deg, rgba(232, 248, 244, 0.98), rgba(255, 250, 238, 0.96));
+  color: var(--primary-dark);
+  cursor: pointer;
+}
+
+.home-hero-photo.pet-illustration-avatar span {
+  font-size: 34px;
+  line-height: 1;
+}
+
+.home-hero-photo.pet-illustration-avatar small {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--primary-dark);
+}
+
 .home-hero-panel h1,
 .profile-premium-header h1,
 .ai-premium-hero h1 {

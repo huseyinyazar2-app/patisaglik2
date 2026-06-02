@@ -17,13 +17,6 @@ const deviceOptions = [
     titleKey: 'pets.basic_kit',
     descKey: 'pets.basic_kit_desc',
     bgColor: 'var(--teal-50)'
-  },
-  {
-    id: 'later',
-    iconKey: 'clock',
-    titleKey: 'pets.device_later',
-    descKey: 'pets.device_later_desc',
-    bgColor: 'var(--secondary-50)'
   }
 ];
 
@@ -87,11 +80,10 @@ export function afterRender(params = {}, query = {}) {
       card.classList.add('selected');
 
       // Save device mode to state
-      const storeMode = deviceMode === 'later' ? 'phone_only' : deviceMode;
       setState(s => {
-        s.deviceMode = storeMode;
+        s.deviceMode = deviceMode;
       });
-      localStorage.setItem('pati_device_mode', storeMode);
+      localStorage.setItem('pati_device_mode', deviceMode);
 
       // Small delay for visual feedback before navigating
       setTimeout(() => {
