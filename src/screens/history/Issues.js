@@ -1,6 +1,7 @@
 import { navigate, goBack } from '../../router.js';
 import { getState } from '../../store.js';
 import { getFreeRecords } from '../../services/freeRecords.js';
+import { t, translateForLocale } from '../../i18n/tr.js';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -12,7 +13,7 @@ function escapeHtml(value) {
 }
 
 function formatDate(date) {
-  if (!date || Number.isNaN(Date.parse(date))) return 'Tarih yok';
+  if (!date || Number.isNaN(Date.parse(date))) return t('common.no_date');
   return new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(date));
 }
 
@@ -34,22 +35,22 @@ function itemDate(item) {
 }
 
 function issueTitle(item) {
-  return item.title || field(item.payload, ['Sorun adı', 'issue_name'], 'Sağlık sorunu');
+  return item.title || field(item.payload, [translateForLocale('tr', 'formLabels.issue_name'), 'issue_name'], t('issueDetail.default_title'));
 }
 
 function issueCategory(item) {
-  return field(item.payload, ['Kategori', 'category'], 'Genel takip');
+  return field(item.payload, [translateForLocale('tr', 'formLabels.issue_category'), 'category'], t('issueDetail.general_tracking'));
 }
 
 function issueDescription(item) {
-  return item.summary || field(item.payload, ['Açıklama', 'description', 'Takip notu'], 'Detay eklenmemiş.');
+  return item.summary || field(item.payload, [translateForLocale('tr', 'formLabels.description'), 'description', translateForLocale('tr', 'formLabels.followup_note')], t('issueDetail.no_detail'));
 }
 
 function issueStatus(item) {
-  const text = `${field(item.payload, ['Takip sıklığı', 'tracking_frequency'])} ${item.summary || ''}`.toLocaleLowerCase('tr-TR');
-  if (text.includes('istemiyorum') || text.includes('kapalı')) return { label: 'Pasif', className: 'bg-gray-200 text-gray-600' };
-  if (text.includes('günlük')) return { label: 'Yakın takip', className: 'danger' };
-  return { label: 'Takipte', className: 'primary' };
+  const text = `${field(item.payload, [translateForLocale('tr', 'formLabels.tracking_freq'), 'tracking_frequency'])} ${item.summary || ''}`.toLocaleLowerCase('tr-TR');
+  if (text.includes('istemiyorum') || text.includes('kapal\u0131')) return { label: t('issues.status_passive'), className: 'bg-gray-200 text-gray-600' };
+  if (text.includes('g\u00fcnl\u00fck')) return { label: t('issues.status_close'), className: 'danger' };
+  return { label: t('issues.status_tracking'), className: 'primary' };
 }
 
 function renderIssueCards(issues = []) {
@@ -57,8 +58,8 @@ function renderIssueCards(issues = []) {
     return `
       <div class="empty-state">
         <div class="empty-state-icon modern-empty-icon">${window.__icons?.search || ''}</div>
-        <div class="font-bold mb-2">Takip edilen sorun yok</div>
-        <div class="text-sm text-secondary px-4">Yeni bir şikayet veya sağlık sorunu eklediğinde burada listelenecek.</div>
+        <div class="font-bold mb-2">${t('issues.empty_title')}</div>
+        <div class="text-sm text-secondary px-4">${t('issues.empty_desc')}</div>
       </div>
     `;
   }
@@ -66,7 +67,7 @@ function renderIssueCards(issues = []) {
   return issues.map((issue) => {
     const status = issueStatus(issue);
     return `
-      <button class="issue-card live-issue-card" data-id="${escapeHtml(issue.id)}" style="border-left-color: ${status.label === 'Pasif' ? 'var(--gray-400)' : 'var(--primary)'};">
+      <button class="issue-card live-issue-card" data-id="${escapeHtml(issue.id)}" style="border-left-color: ${status.className.includes('gray') ? 'var(--gray-400)' : 'var(--primary)'};">
         <div class="issue-card-header">
           <div class="issue-card-name">${escapeHtml(issueTitle(issue))}</div>
           <span class="chip-status ${status.className} text-xs">${escapeHtml(status.label)}</span>
@@ -88,7 +89,7 @@ export function render() {
         <div class="header-left">
           <button class="header-back" id="btnBack">${window.__icons?.back || ''}</button>
         </div>
-        <div class="header-title">Sorun Takibi</div>
+        <div class="header-title">${t('issues.title')}</div>
         <div class="header-right">
           <span class="premium-header-shield">${window.__icons?.search || ''}</span>
         </div>
@@ -98,24 +99,24 @@ export function render() {
         <div class="feature-form-hero teal">
           <div class="premium-icon-box">${window.__icons?.heartPulse || ''}</div>
           <div>
-            <div class="premium-screen-kicker">Ücretsiz sağlık arşivi</div>
-            <h1>Sağlık Sorunları</h1>
-            <p>Şikayet, belirti ve takip gerektiren durumların kayıt listesi.</p>
+            <div class="premium-screen-kicker">${t('issues.kicker')}</div>
+            <h1>${t('issues.hero_title')}</h1>
+            <p>${t('issues.hero_desc')}</p>
           </div>
         </div>
 
         <div class="record-summary-panel">
           <div class="record-summary-grid" id="issueSummary">
-            <div><span>Aktif takip</span><strong>-</strong><small>Kayıtlar hazırlanıyor</small></div>
-            <div><span>Son kayıt</span><strong>-</strong><small>Kayıt bekleniyor</small></div>
+            <div><span>${t('issues.active_followup')}</span><strong>-</strong><small>${t('reportsScreen.records_preparing')}</small></div>
+            <div><span>${t('issues.last_record')}</span><strong>-</strong><small>${t('issues.waiting_record')}</small></div>
           </div>
         </div>
 
         <div class="issues-list record-list-stack" id="issueList">
-          <div class="free-record-panel"><p>Kayıtlar getiriliyor...</p></div>
+          <div class="free-record-panel"><p>${t('issues.records_loading')}</p></div>
         </div>
 
-        <button class="btn btn-primary btn-full btn-lg mt-4" id="btnAddIssue">Sorun Ekle</button>
+        <button class="btn btn-primary btn-full btn-lg mt-4" id="btnAddIssue">${t('issues.add_issue')}</button>
       </div>
     </div>
   `;
@@ -133,12 +134,12 @@ export function afterRender() {
       .sort((a, b) => new Date(itemDate(b) || 0) - new Date(itemDate(a) || 0));
     const summary = document.getElementById('issueSummary');
     const target = document.getElementById('issueList');
-    const active = issues.filter((item) => issueStatus(item).label !== 'Pasif');
+    const active = issues.filter((item) => issueStatus(item).label !== t('issues.status_passive'));
 
     if (summary) {
       summary.innerHTML = `
-        <div><span>Aktif takip</span><strong>${active.length}</strong><small>${issues.length} toplam sorun kaydı</small></div>
-        <div><span>Son kayıt</span><strong>${issues[0] ? formatDate(itemDate(issues[0])) : '-'}</strong><small>${issues[0] ? escapeHtml(issueTitle(issues[0])) : 'Henüz yok'}</small></div>
+        <div><span>${t('issues.active_followup')}</span><strong>${active.length}</strong><small>${t('issues.total_issue_count', { count: issues.length })}</small></div>
+        <div><span>${t('issues.last_record')}</span><strong>${issues[0] ? formatDate(itemDate(issues[0])) : '-'}</strong><small>${issues[0] ? escapeHtml(issueTitle(issues[0])) : t('issues.none_yet')}</small></div>
       `;
     }
 
@@ -154,7 +155,7 @@ export function afterRender() {
       target.innerHTML = `
         <div class="empty-state">
           <div class="empty-state-icon">${window.__icons?.alert || ''}</div>
-          <div class="empty-state-title">Kayıtlar alınamadı</div>
+          <div class="empty-state-title">${t('issues.load_failed')}</div>
           <div class="empty-state-desc">${escapeHtml(err.message)}</div>
         </div>
       `;

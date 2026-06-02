@@ -1,3 +1,5 @@
+import { translateForLocale } from '../i18n/tr.js';
+
 function normalize(value) {
   return String(value || '').toLocaleLowerCase('tr-TR');
 }
@@ -48,18 +50,18 @@ export function buildPetRiskContext(pet = {}) {
   if (lifeStage === 'young') tags.add('young_risk');
   if (lifeStage === 'senior' || lifeStage === 'geriatric') tags.add('senior_risk');
   if (normalize(chronic).includes('diyabet')) tags.add('diabetes_risk');
-  if (normalize(chronic).includes('böbrek') || normalize(chronic).includes('bobrek')) tags.add('kidney_risk');
+  if (normalize(chronic).includes('b\u00f6brek') || normalize(chronic).includes('bobrek')) tags.add('kidney_risk');
   if (normalize(chronic).includes('kalp')) tags.add('cardiac_risk');
   if (pet.isBrachycephalic) tags.add('brachycephalic_risk');
 
   const warnings = [];
-  if (tags.has('brachycephalic_risk')) warnings.push('Kısa burunlu/solunum hassasiyeti olan ırklarda nefes belirtileri daha temkinli değerlendirilir.');
-  if (tags.has('large_breed_risk')) warnings.push('Büyük ırk/kilo bağlamında karın şişliği, öğürme ve ani halsizlik daha ciddi ele alınır.');
-  if (tags.has('newborn_risk')) warnings.push('Yeni doğan/yavru petlerde iştahsızlık, ishal, kusma ve ısı kaybı daha hızlı risk oluşturabilir.');
-  if (tags.has('senior_risk')) warnings.push('Yaşlı petlerde halsizlik, iştah kaybı ve solunum/idrar değişiklikleri daha yakından izlenmelidir.');
-  if (tags.has('diabetes_risk')) warnings.push('Diyabet öyküsünde iştah, kusma, su tüketimi ve halsizlik daha dikkatli değerlendirilir.');
-  if (tags.has('kidney_risk')) warnings.push('Böbrek öyküsünde su tüketimi, idrar ve iştah değişiklikleri daha kritik olabilir.');
-  if (tags.has('cardiac_risk')) warnings.push('Kalp öyküsünde öksürük, solunum sayısı ve efor intoleransı daha yüksek risklidir.');
+  if (tags.has('brachycephalic_risk')) warnings.push(translateForLocale('tr', 'petContext.brachy_warning'));
+  if (tags.has('large_breed_risk')) warnings.push(translateForLocale('tr', 'petContext.large_breed_warning'));
+  if (tags.has('newborn_risk')) warnings.push(translateForLocale('tr', 'petContext.newborn_warning'));
+  if (tags.has('senior_risk')) warnings.push(translateForLocale('tr', 'petContext.senior_warning'));
+  if (tags.has('diabetes_risk')) warnings.push(translateForLocale('tr', 'petContext.diabetes_warning'));
+  if (tags.has('kidney_risk')) warnings.push(translateForLocale('tr', 'petContext.kidney_warning'));
+  if (tags.has('cardiac_risk')) warnings.push(translateForLocale('tr', 'petContext.cardiac_warning'));
 
   return {
     lifeStage,

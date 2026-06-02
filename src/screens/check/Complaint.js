@@ -41,9 +41,9 @@ export function render() {
       </div>
 
       <div class="section pt-4" style="padding-bottom: 120px;">
-        <div class="premium-screen-kicker mb-2">AI Ön Kontrol</div>
+        <div class="premium-screen-kicker mb-2">${t('complaintScreen.kicker')}</div>
         <h2 class="text-xl font-bold mb-2">${t('check.whats_wrong').replace('{name}', pet.name)}</h2>
-        <p class="text-sm text-secondary mb-4">Önce ana şikayeti seçin. Sonra sadece ilişkili ek bulguları ekleyin; alakasız sorunlar ayrı kontrol olarak ele alınır.</p>
+        <p class="text-sm text-secondary mb-4">${t('complaintScreen.desc')}</p>
 
         <div class="card mb-4">
           <div class="form-group" style="margin-bottom: 0;">
@@ -57,7 +57,7 @@ export function render() {
         </div>
 
         <div class="divider" style="margin: 24px 0 16px 0;">
-          <span class="divider-text" style="font-weight: 600; color: var(--text-tertiary);">ana şikayet</span>
+          <span class="divider-text" style="font-weight: 600; color: var(--text-tertiary);">${t('complaintScreen.primary')}</span>
         </div>
 
         <div class="card mb-4" style="padding: 16px;">
@@ -67,16 +67,16 @@ export function render() {
         </div>
 
         <div class="card mb-4 ${primaryComplaintLabel ? '' : 'hidden'}" style="padding: 16px;" id="secondaryComplaintCard">
-          <div class="text-xs font-bold text-tertiary mb-3" style="text-transform: uppercase; letter-spacing: .05em;">İlişkili ek bulgular</div>
+          <div class="text-xs font-bold text-tertiary mb-3" style="text-transform: uppercase; letter-spacing: .05em;">${t('complaintScreen.related')}</div>
           <div class="chip-group" id="secondaryChipGroup">
             ${secondaryChipsHtml}
           </div>
-          <div class="text-xs text-tertiary mt-3">En fazla 3 ek bulgu seçin. Listede yoksa ayrı kontrol açmak daha doğru olur.</div>
+          <div class="text-xs text-tertiary mt-3">${t('complaintScreen.related_limit')}</div>
         </div>
 
         <div class="info-box info" style="background: var(--primary-50); border-color: var(--primary-100);">
           <span class="info-box-icon" style="width: 18px; display: inline-flex;">${window.__icons?.shield}</span>
-          <span>Önce şikayeti anlayıp acil durumları ayıracağız. Sonra sadece ilgili soruları ve gerekli medya/ölçüm kayıtlarını isteyeceğiz.</span>
+          <span>${t('complaintScreen.info')}</span>
         </div>
       </div>
 
@@ -113,12 +113,12 @@ export function afterRender() {
       const primary = getState().session.primaryComplaintLabel;
       const incompatible = getIncompatibleComplaintLabels(primary);
       if (incompatible.includes(value)) {
-        showToast('Bu belirti ayrı bir şikayet gibi görünüyor. Yeni kontrol açmak daha doğru olur.');
+        showToast(t('complaintScreen.incompatible'));
         return;
       }
       const selected = Array.from(document.querySelectorAll('#secondaryChipGroup .chip.selected')).map(c => c.dataset.secondaryComplaint);
       if (!e.currentTarget.classList.contains('selected') && selected.length >= 3) {
-        showToast('Akışı kısa tutmak için en fazla 3 ilişkili ek bulgu seçin.');
+        showToast(t('complaintScreen.max_related'));
         return;
       }
       e.currentTarget.classList.toggle('selected');
@@ -128,16 +128,17 @@ export function afterRender() {
   document.getElementById('btnVoice')?.addEventListener('click', () => {
     const input = document.getElementById('complaintInput');
     const original = input.value;
-    input.value = original + (original ? ' ' : '') + 'Sesli dinleniyor...';
+    input.value = original + (original ? ' ' : '') + t('complaintScreen.listening');
     setTimeout(() => {
-      input.value = original + (original ? ' ' : '') + 'Kusma ve iştahsızlık var, çok halsiz duruyor.';
+      input.value = original + (original ? ' ' : '') + t('complaintScreen.voice_demo');
+      const demoChips = t('complaintScreen.voice_demo_chips');
       setState(current => {
-        current.session.primaryComplaintLabel = 'Kusma';
-        current.session.primaryComplaintId = getComplaintTypeByLabel('Kusma')?.id || null;
-        current.session.selectedChips = ['Kusma', 'İştahsızlık', 'Halsizlik / Genel Durum'];
+        current.session.primaryComplaintLabel = demoChips[0];
+        current.session.primaryComplaintId = getComplaintTypeByLabel(demoChips[0])?.id || null;
+        current.session.selectedChips = demoChips;
       });
       document.querySelectorAll('.chip').forEach(c => {
-        if (['Kusma', 'İştahsızlık', 'Halsizlik / Genel Durum'].includes(c.dataset.primaryComplaint || c.dataset.secondaryComplaint)) {
+        if (demoChips.includes(c.dataset.primaryComplaint || c.dataset.secondaryComplaint)) {
           c.classList.add('selected');
         }
       });
@@ -151,12 +152,12 @@ export function afterRender() {
     const selectedChips = [primaryComplaint, ...secondaryChips].filter(Boolean);
 
     if (!complaintText && selectedChips.length === 0) {
-      showToast('Lütfen şikayeti yazın veya belirti seçin.');
+      showToast(t('complaintScreen.required'));
       return;
     }
 
     if (secondaryChips.length > 3) {
-      showToast('En fazla 3 ilişkili ek bulgu seçin.');
+      showToast(t('complaintScreen.max_related'));
       return;
     }
 

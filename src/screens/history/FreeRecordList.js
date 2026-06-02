@@ -2,7 +2,7 @@ import { navigate, goBack } from '../../router.js';
 import { getState } from '../../store.js';
 import { getActivePet } from '../../mock/pets.js';
 import { getFreeRecords } from '../../services/freeRecords.js';
-import { getLocale, t } from '../../i18n/tr.js';
+import { getLocale, t, translateForLocale } from '../../i18n/tr.js';
 
 const staticConfig = {
   expenses: { icon: 'briefcase', addRoute: '/feature/expense' },
@@ -199,13 +199,13 @@ const healthPrograms = [
 
 function recordStatus(item) {
   const payload = item.payload || {};
-  if (item.record_type === 'poop_score') return payloadFirst(payload, ['Skor'], 'Skor yok');
-  if (item.record_type === 'diet_log') return payloadFirst(payload, ['Reaksiyon'], 'Reaksiyon yok');
-  if (item.record_type === 'chronic_followup') return payloadFirst(payload, ['Bugünkü durum', 'Şablon'], 'Durum yok');
-  if (item.record_type === 'postop_followup') return payloadFirst(payload, ['Yara durumu', 'Operasyon günü'], 'Durum yok');
-  if (item.record_type === 'reproduction_followup') return payloadFirst(payload, ['Takip türü', 'Belirti'], 'Takvim yok');
-  if (item.record_type === 'senior_followup') return payloadFirst(payload, ['Günlük durum', 'Odak'], 'Durum yok');
-  if (item.record_type === 'toxin_foreign_body') return payloadFirst(payload, ['Belirti var mı?', 'Ne zaman oldu?'], 'Acil kayıt');
+  if (item.record_type === 'poop_score') return payloadFirst(payload, [translateForLocale('tr', 'formLabels.score')], t('freeRecordList.no_score'));
+  if (item.record_type === 'diet_log') return payloadFirst(payload, [translateForLocale('tr', 'formLabels.reaction')], t('freeRecordList.no_reaction'));
+  if (item.record_type === 'chronic_followup') return payloadFirst(payload, [translateForLocale('tr', 'formLabels.today_status'), translateForLocale('tr', 'formLabels.template')], t('freeRecordList.no_status'));
+  if (item.record_type === 'postop_followup') return payloadFirst(payload, [translateForLocale('tr', 'formLabels.wound_status'), translateForLocale('tr', 'formLabels.operation_day')], t('freeRecordList.no_status'));
+  if (item.record_type === 'reproduction_followup') return payloadFirst(payload, [translateForLocale('tr', 'formLabels.followup_type'), translateForLocale('tr', 'formLabels.symptom')], t('freeRecordList.no_calendar'));
+  if (item.record_type === 'senior_followup') return payloadFirst(payload, [translateForLocale('tr', 'formLabels.daily_status'), translateForLocale('tr', 'formLabels.focus')], t('freeRecordList.no_status'));
+  if (item.record_type === 'toxin_foreign_body') return payloadFirst(payload, [translateForLocale('tr', 'formLabels.has_symptom'), translateForLocale('tr', 'formLabels.when_happened')], t('freeRecordList.emergency_record'));
   return item.summary || typeLabel(item.record_type);
 }
 

@@ -20,11 +20,11 @@ function answerValues(value) {
 
 function answerRisk(value) {
   const text = String(value).toLocaleLowerCase('tr-TR');
-  if (text === 'hayır' || text === 'hiç' || text === 'normal' || text === 'skipped') return 0;
-  if (text.includes('emin değilim')) return 5;
-  if (text.includes('sürekli') || text.includes('hiç') || text.includes('mor') || text.includes('mavi') || text.includes('soluk')) return 24;
-  if (text.includes('kan') || text.includes('şiddetli') || text.includes('çok') || text.includes('4 veya')) return 18;
-  if (text.includes('evet') || text.includes('art') || text.includes('zor') || text.includes('azaldı')) return 10;
+  if (text === 'hay\u0131r' || text === 'hi\u00e7' || text === 'normal' || text === 'skipped') return 0;
+  if (text.includes('emin de\u011filim')) return 5;
+  if (text.includes('s\u00fcrekli') || text.includes('hi\u00e7') || text.includes('mor') || text.includes('mavi') || text.includes('soluk')) return 24;
+  if (text.includes('kan') || text.includes('\u015fiddetli') || text.includes('\u00e7ok') || text.includes('4 veya')) return 18;
+  if (text.includes('evet') || text.includes('art') || text.includes('zor') || text.includes('azald\u0131')) return 10;
   if (text.includes('2-3') || text.includes('1 haftadan uzun')) return 8;
   return 2;
 }
