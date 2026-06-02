@@ -1,4 +1,3 @@
-// Pati Sağlık — Photo Preview Screen
 import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
@@ -28,7 +27,7 @@ export function render(params = {}, query = {}) {
         <div class="preview-image" style="background: linear-gradient(135deg, var(--gray-100), var(--gray-200));">
           <div style="text-align: center;">
             <div style="font-size: 64px; margin-bottom: var(--space-2);">📸</div>
-            <div style="font-size: var(--font-size-sm); color: var(--text-tertiary);">Fotoğraf önizlemesi</div>
+            <div style="font-size: var(--font-size-sm); color: var(--text-tertiary);">${t('photoPreview.title')}</div>
           </div>
         </div>
 

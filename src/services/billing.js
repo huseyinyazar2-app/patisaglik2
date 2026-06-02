@@ -1,12 +1,13 @@
 import { getDbClient } from './dbClient.js';
+import { translateForLocale } from '../i18n/tr.js';
 
 const LOCAL_PLAN_KEY = 'pati_local_plan_code';
 
 const fallbackPlans = [
-  { id: 'plan-free', code: 'free', billing_type: 'free', name_tr: 'Ücretsiz', price_cents: 0, currency: 'TRY', max_pets: 1, monthly_credit_allowance: 0, features: '{"ai":false,"documents":false,"members":1}' },
-  { id: 'plan-credit', code: 'credit', billing_type: 'credit', name_tr: 'Kredi Paketi', price_cents: 0, currency: 'TRY', max_pets: 3, monthly_credit_allowance: 0, features: '{"ai":true,"documents":true,"members":2}' },
-  { id: 'plan-monthly', code: 'monthly', billing_type: 'subscription', name_tr: 'Aylık Pro', price_cents: 0, currency: 'TRY', max_pets: 10, monthly_credit_allowance: 100, features: '{"ai":true,"documents":true,"members":10}' },
-  { id: 'plan-yearly', code: 'yearly', billing_type: 'subscription', name_tr: 'Yıllık Pro', price_cents: 0, currency: 'TRY', max_pets: 10, monthly_credit_allowance: 1400, features: '{"ai":true,"documents":true,"members":10}' }
+  { id: 'plan-free', code: 'free', billing_type: 'free', name_tr: translateForLocale('tr', 'billingPlans.free'), price_cents: 0, currency: 'TRY', max_pets: 1, monthly_credit_allowance: 0, features: '{"ai":false,"documents":false,"members":1}' },
+  { id: 'plan-credit', code: 'credit', billing_type: 'credit', name_tr: translateForLocale('tr', 'billingPlans.credit'), price_cents: 0, currency: 'TRY', max_pets: 3, monthly_credit_allowance: 0, features: '{"ai":true,"documents":true,"members":2}' },
+  { id: 'plan-monthly', code: 'monthly', billing_type: 'subscription', name_tr: translateForLocale('tr', 'billingPlans.monthly'), price_cents: 0, currency: 'TRY', max_pets: 10, monthly_credit_allowance: 100, features: '{"ai":true,"documents":true,"members":10}' },
+  { id: 'plan-yearly', code: 'yearly', billing_type: 'subscription', name_tr: translateForLocale('tr', 'billingPlans.yearly'), price_cents: 0, currency: 'TRY', max_pets: 10, monthly_credit_allowance: 1400, features: '{"ai":true,"documents":true,"members":10}' }
 ];
 
 const planOrder = ['free', 'credit', 'monthly', 'yearly'];

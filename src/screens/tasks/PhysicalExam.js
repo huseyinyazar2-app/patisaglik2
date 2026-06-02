@@ -6,7 +6,7 @@ import { showToast } from '../../ui/toast.js';
 export function render(params = {}, query = {}) {
   const taskId = params.taskId;
   const state = getState();
-  const task = state.session?.tasks?.find(t => t.id === taskId) || { key: 'crt', title: 'Fiziksel Muayene' };
+  const task = state.session?.tasks?.find(t => t.id === taskId) || { key: 'crt', title: t('physicalExam.fallback_title') };
   
   let contentHtml = '';
   let iconHtml = '';
@@ -15,24 +15,24 @@ export function render(params = {}, query = {}) {
     iconHtml = '<div style="font-size: 48px; margin-bottom: 16px;">🩸</div>';
     contentHtml = `
       <div class="info-box info mb-4">
-        <h4 style="font-weight: 700; margin-bottom: 4px;">Kılcal Damar Dolum Süresi (CRT)</h4>
-        <p class="text-sm">Parmağınızla petinizin diş etine beyazlayana kadar bastırın. Parmağınızı çektiğinizde pembe rengin geri gelmesi kaç saniye sürdü?</p>
+        <h4 style="font-weight: 700; margin-bottom: 4px;">${t('physicalExam.crt_title')}</h4>
+        <p class="text-sm">${t('physicalExam.crt_desc')}</p>
       </div>
       
       <div class="mb-4">
-        <label class="font-bold text-sm mb-2 block">Renk Geri Dönüş Süresi</label>
+        <label class="font-bold text-sm mb-2 block">${t('physicalExam.crt_label')}</label>
         <div class="flex flex-col gap-2">
           <label class="radio-item text-left" style="padding: 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
             <input type="radio" name="crt_time" value="1_sec" class="hidden">
-            <span style="font-weight: 500;">Anında (1 saniyeden az)</span>
+            <span style="font-weight: 500;">${t('physicalExam.crt_instant')}</span>
           </label>
           <label class="radio-item text-left" style="padding: 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
             <input type="radio" name="crt_time" value="1_2_sec" class="hidden">
-            <span style="font-weight: 500;">1-2 Saniye (Normal)</span>
+            <span style="font-weight: 500;">${t('physicalExam.crt_normal')}</span>
           </label>
           <label class="radio-item text-left" style="padding: 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
             <input type="radio" name="crt_time" value="over_2_sec" class="hidden">
-            <span style="font-weight: 500; color: var(--risk-high);">2 Saniyeden uzun (Acil Olabilir!)</span>
+            <span style="font-weight: 500; color: var(--risk-high);">${t('physicalExam.crt_slow')}</span>
           </label>
         </div>
       </div>
@@ -41,24 +41,24 @@ export function render(params = {}, query = {}) {
     iconHtml = '<div style="font-size: 48px; margin-bottom: 16px;">💧</div>';
     contentHtml = `
       <div class="info-box info mb-4">
-        <h4 style="font-weight: 700; margin-bottom: 4px;">Deri Elastikiyeti (Dehidrasyon Testi)</h4>
-        <p class="text-sm">Petinizin boyun/ense kısmındaki deriyi hafifçe yukarı doğru çekip bırakın. Deri ne kadar sürede eski haline döndü?</p>
+        <h4 style="font-weight: 700; margin-bottom: 4px;">${t('physicalExam.skin_title')}</h4>
+        <p class="text-sm">${t('physicalExam.skin_desc')}</p>
       </div>
       
       <div class="mb-4">
-        <label class="font-bold text-sm mb-2 block">Derinin Eski Haline Dönme Hızı</label>
+        <label class="font-bold text-sm mb-2 block">${t('physicalExam.skin_label')}</label>
         <div class="flex flex-col gap-2">
           <label class="radio-item text-left" style="padding: 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
             <input type="radio" name="skin_time" value="instant" class="hidden">
-            <span style="font-weight: 500;">Anında yaylandı (Normal)</span>
+            <span style="font-weight: 500;">${t('physicalExam.skin_instant')}</span>
           </label>
           <label class="radio-item text-left" style="padding: 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
             <input type="radio" name="skin_time" value="slow" class="hidden">
-            <span style="font-weight: 500;">Biraz yavaş düzeldi</span>
+            <span style="font-weight: 500;">${t('physicalExam.skin_slow')}</span>
           </label>
           <label class="radio-item text-left" style="padding: 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
             <input type="radio" name="skin_time" value="stays_up" class="hidden">
-            <span style="font-weight: 500; color: var(--risk-high);">Çadır gibi havada kaldı (Ağır Dehidrasyon)</span>
+            <span style="font-weight: 500; color: var(--risk-high);">${t('physicalExam.skin_stays')}</span>
           </label>
         </div>
       </div>
@@ -67,24 +67,24 @@ export function render(params = {}, query = {}) {
     iconHtml = '<div style="font-size: 48px; margin-bottom: 16px;">😿</div>';
     contentHtml = `
       <div class="info-box info mb-4">
-        <h4 style="font-weight: 700; margin-bottom: 4px;">Ağrı Skalası (Pain Score)</h4>
-        <p class="text-sm">Lütfen petinizin yüz ifadesine ve genel duruşuna bakarak bir değerlendirme yapın.</p>
+        <h4 style="font-weight: 700; margin-bottom: 4px;">${t('physicalExam.pain_title')}</h4>
+        <p class="text-sm">${t('physicalExam.pain_desc')}</p>
       </div>
       
       <div class="mb-4">
-        <label class="font-bold text-sm mb-2 block">Duruş ve İfade</label>
+        <label class="font-bold text-sm mb-2 block">${t('physicalExam.pain_label')}</label>
         <div class="flex flex-col gap-2">
           <label class="radio-item text-left" style="padding: 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
             <input type="radio" name="pain" value="none" class="hidden">
-            <span style="font-weight: 500;">Rahat, kulaklar dik, gözler açık (Ağrı yok)</span>
+            <span style="font-weight: 500;">${t('physicalExam.pain_none')}</span>
           </label>
           <label class="radio-item text-left" style="padding: 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
             <input type="radio" name="pain" value="mild" class="hidden">
-            <span style="font-weight: 500;">Hafif gergin, gözleri hafif kısık</span>
+            <span style="font-weight: 500;">${t('physicalExam.pain_mild')}</span>
           </label>
           <label class="radio-item text-left" style="padding: 12px; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
             <input type="radio" name="pain" value="severe" class="hidden">
-            <span style="font-weight: 500; color: var(--risk-high);">Kambur duruyor, kulaklar düşük, gözler kısık/kapalı (Şiddetli Ağrı)</span>
+            <span style="font-weight: 500; color: var(--risk-high);">${t('physicalExam.pain_severe')}</span>
           </label>
         </div>
       </div>
@@ -108,8 +108,8 @@ export function render(params = {}, query = {}) {
         </div>
         
         <div class="mb-4">
-          <label class="font-bold text-sm mb-2 block">Not (Opsiyonel)</label>
-          <textarea id="noteInput" class="complaint-textarea w-full" style="min-height: 80px;" placeholder="Eklemek istediğiniz bir detay var mı?"></textarea>
+          <label class="font-bold text-sm mb-2 block">${t('measurementTask.note_label')}</label>
+          <textarea id="noteInput" class="complaint-textarea w-full" style="min-height: 80px;" placeholder="${t('measurementTask.note_placeholder')}"></textarea>
         </div>
       </div>
       
@@ -156,7 +156,7 @@ export function afterRender(params = {}) {
     // Check if a radio is selected
     const checked = document.querySelector('input[type="radio"]:checked');
     if (!checked) {
-      showToast('Lütfen bir seçenek işaretleyin.');
+      showToast(t('physicalExam.required'));
       return;
     }
     

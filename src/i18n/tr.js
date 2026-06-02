@@ -177,11 +177,15 @@ const tr = {
   redflags: {
     title: 'Acil belirti kontrolü',
     desc: 'Aşağıdaki belirtilerden biri varsa beklemeden veteriner desteği gerekebilir.',
+    step_title: 'Adım 1/5',
+    required_all: 'Lütfen tüm acil durum sorularını yanıtlayın.',
     yes: 'Evet', no: 'Hayır', unsure: 'Emin değilim'
   },
   emergency: {
     title: 'Acil veteriner değerlendirmesi gerekebilir',
     desc: 'Belirttiğiniz işaretler acil olabilir. Lütfen vakit kaybetmeden en yakın veteriner kliniğine başvurun.',
+    important_warning: 'Önemli Uyarı',
+    important_warning_desc: 'Bu uygulama veteriner teşhisi yerine geçmez. Lütfen vakit kaybetmeden profesyonel destek alın.',
     find_clinic: 'En Yakın Kliniği Bul',
     save_record: 'Acil Kaydı Geçmişe Ekle',
     create_summary: 'Veterinerle Paylaşılacak Özet Oluştur',
@@ -214,12 +218,24 @@ const tr = {
     redflags: 'Acil Belirti Yanıtları', no_redflags: 'Acil belirti bildirimi yok',
     answers: 'Soru Cevapları', records: 'Eklenen Kayıtlar', history: 'Geçmiş Bağlantıları',
     evaluate: 'Değerlendir', complete_tasks: 'Eksik Görevleri Tamamla', edit: 'Düzenle',
-    save_draft: 'Kaydet ve Sonra Devam Et', cancel: 'İptal'
+    save_draft: 'Kaydet ve Sonra Devam Et', cancel: 'İptal',
+    step_title: 'Adım 4/5',
+    duration: 'Süre',
+    severity: 'Şiddet',
+    general: 'Genel',
+    answers_count: '{count} soru yanıtlandı.',
+    visual: 'Görsel',
+    measurement: 'Ölçüm',
+    tasks_skipped: '{count} {label} görev atlandı.'
   },
   processing: {
     title: 'Kontrol değerlendiriliyor',
     desc: 'Şikayet, cevaplar, eklenen kayıtlar ve pet geçmişi birlikte değerlendiriliyor.',
     steps: ['Şikayet özeti hazırlanıyor', 'Cevaplar kontrol ediliyor', 'Medya kayıtları inceleniyor', 'Pet geçmişiyle karşılaştırılıyor', 'Risk sonucu oluşturuluyor', 'Rapor taslağı hazırlanıyor'],
+    step_complaint: 'Şikayet ve belirtiler değerlendiriliyor',
+    step_risk: 'Yanıtlar klinik risk açısından kontrol ediliyor',
+    step_evidence: 'Eklenen medya ve ölçümler inceleniyor',
+    step_report: 'Ön değerlendirme raporu hazırlanıyor',
     disclaimer: 'Bu değerlendirme veteriner muayenesinin yerine geçmez.'
   },
   result: {
@@ -2104,6 +2120,23 @@ JSON döndür:
     none_yet: 'Henüz yok',
     load_failed: 'Kayıtlar alınamadı'
   },
+  issueAdd: {
+    name_placeholder: 'Örn: Sol göz akıntısı',
+    desc_placeholder: 'Detaylı bilgi...',
+    frequency_daily: 'Günlük',
+    frequency_weekly: 'Haftalık',
+    frequency_monthly: 'Aylık',
+    frequency_none: 'Hatırlatma İstemiyorum',
+    name_required: 'Lütfen sorun adını girin',
+    save_failed: 'Sorun kaydedilemedi: {error}',
+    payload_labels: {
+      name: 'Sorun adı',
+      category: 'Kategori',
+      first_noticed: 'İlk fark edilme',
+      description: 'Açıklama',
+      frequency: 'Takip sıklığı'
+    }
+  },
   freeRecordList: {
     no_score: 'Skor yok',
     no_reaction: 'Reaksiyon yok',
@@ -2139,6 +2172,47 @@ JSON döndür:
     invalid_value: 'Lütfen geçerli bir değer girin',
     saved: 'Ölçüm kaydedildi',
     save_failed: 'Ölçüm kaydedilemedi: {error}'
+  },
+  measurementTask: {
+    fallback_title: 'Ölçüm',
+    method_label: 'Ölçüm Yöntemi',
+    rectal_recommended: 'Rektal (Önerilen)',
+    note_label: 'Not (Opsiyonel)',
+    note_placeholder: 'Eklemek istediğiniz bir detay var mı?',
+    invalid_value: 'Lütfen geçerli bir değer girin.',
+    ai_note: 'AI kontrol ölçümü: {title}',
+    archive_failed: 'Ölçüm arşive yazılamadı: {error}'
+  },
+  physicalExam: {
+    fallback_title: 'Fiziksel Muayene',
+    crt_title: 'Kılcal Damar Dolum Süresi (CRT)',
+    crt_desc: 'Parmağınızla petinizin diş etine beyazlayana kadar bastırın. Parmağınızı çektiğinizde pembe rengin geri gelmesi kaç saniye sürdü?',
+    crt_label: 'Renk Geri Dönüş Süresi',
+    crt_instant: 'Anında (1 saniyeden az)',
+    crt_normal: '1-2 Saniye (Normal)',
+    crt_slow: '2 Saniyeden uzun (Acil Olabilir!)',
+    skin_title: 'Deri Elastikiyeti (Dehidrasyon Testi)',
+    skin_desc: 'Petinizin boyun/ense kısmındaki deriyi hafifçe yukarı doğru çekip bırakın. Deri ne kadar sürede eski haline döndü?',
+    skin_label: 'Derinin Eski Haline Dönme Hızı',
+    skin_instant: 'Anında yaylandı (Normal)',
+    skin_slow: 'Biraz yavaş düzeldi',
+    skin_stays: 'Çadır gibi havada kaldı (Ağır Dehidrasyon)',
+    pain_title: 'Ağrı Skalası (Pain Score)',
+    pain_desc: 'Lütfen petinizin yüz ifadesine ve genel duruşuna bakarak bir değerlendirme yapın.',
+    pain_label: 'Duruş ve İfade',
+    pain_none: 'Rahat, kulaklar dik, gözler açık (Ağrı yok)',
+    pain_mild: 'Hafif gergin, gözleri hafif kısık',
+    pain_severe: 'Kambur duruyor, kulaklar düşük, gözler kısık/kapalı (Şiddetli Ağrı)',
+    required: 'Lütfen bir seçenek işaretleyin.'
+  },
+  basicKit: {
+    title: 'Basic Kit Cihazı',
+    connecting: 'Cihaza Bağlanılıyor...',
+    required: 'Basic Kit Gerekli',
+    connecting_desc: 'Lütfen Basic Kit cihazınızı açın ve Bluetooth bağlantısını onaylayın. Kamerayı kulak içine veya deriye yaklaştırın.',
+    required_desc: 'Bu görev için Pati Sağlık Basic Kit donanımı gerekmektedir. Cihazınız varsa ayarlardan aktifleştirebilirsiniz.',
+    device_settings: 'Cihaz Ayarlarına Git',
+    searching: 'Cihaz Aranıyor...'
   },
   taskGuides: {
     photo_title: 'Fotoğraf Çekim İpuçları',
@@ -2199,6 +2273,40 @@ JSON döndür:
     test_note: 'Bu ekrandaki plan değiştirme test içindir; gerçek ödeme ve abonelik doğrulaması production servisinde tamamlanacak.',
     load_failed: 'Plan bilgisi alınamadı: {error}'
   },
+  billingPlans: {
+    free: 'Ücretsiz',
+    credit: 'Kredi Paketi',
+    monthly: 'Aylık Pro',
+    yearly: 'Yıllık Pro'
+  },
+  notificationService: {
+    test_body: 'Hatırlatıcı bildirimleri bu cihazda aktif.',
+    reminder_title: 'Pati Sağlık Hatırlatıcı',
+    reminder_fallback: 'Hatırlatıcı',
+    reminder_due_soon: '{title} zamanı yaklaşıyor.',
+    reminder_due_now: '{title} zamanı geldi.'
+  },
+  devicesScreen: {
+    not_tested: 'Henüz test edilmedi',
+    kit_active_desc: 'Basic Kit bağlantısı aktif. Kulak kamerası ve ölçüm görevleri açık.',
+    phone_desc: 'Cihaz olmadan manuel ölçüm ve telefon sensörleri (kamera/mikrofon) kullanılıyor.',
+    last_test: 'Son test: {value}',
+    ear_skin_camera: 'Kulak ve Deri Kamerası',
+    ear_skin_camera_desc: 'Dar alanlarda net makro çekim yapın.',
+    digital_thermometer: 'Hassas Dijital Derece',
+    digital_thermometer_desc: 'Uygulamaya anında aktarılan ölçümler.',
+    urine_strip_reader: 'İdrar Analiz Stripi Okuyucu',
+    urine_strip_reader_desc: 'Kamera ile renk dönüşümünü otomatik analiz edin.',
+    buy_kit: 'Basic Kit Satın Al',
+    last_test_ready: 'Son test: {value} · Native eşleşme hazır'
+  },
+  petProfiles: {
+    open_map: 'Haritada Aç',
+    share_location: 'Konumu Paylaş',
+    share_title: 'Pati Sağlık Konum Paylaşımı',
+    location_copied: 'Konum bağlantısı kopyalandı.',
+    location_copy_failed: 'Konum bağlantısı kopyalanamadı. Harita bağlantısını açarak paylaşabilirsiniz.'
+  },
   sitterInvite: {
     accepted: 'Kabul edildi',
     declined: 'Reddedildi',
@@ -2220,6 +2328,47 @@ JSON döndür:
     boncuk_history: 'Küçükken araba çarpmıştı, kalça kemiğinde çatlak vardı. Bir de bağışıklığı bazen düşüyor.',
     good_status: 'Genel durum iyi görünüyor',
     watch_status: 'Takip gereken kayıt var'
+  },
+  petsService: {
+    age_years: '{count} yaş',
+    profile_ready: 'Profil kaydı hazır'
+  },
+  userDefaults: {
+    country: 'Türkiye',
+    name: 'Kullanıcı',
+    seed_name: 'Ayşe Yılmaz'
+  },
+  vetReadyDefaults: {
+    urgency_green: 'Yeşil',
+    home_monitoring: 'Evde kontrollü izlem'
+  },
+  main: {
+    screen_load_failed: 'Ekran yüklenemedi'
+  },
+  sessionDetail: {
+    title: 'Eski Kontrol Kaydı',
+    kicker: 'Canlı Arşiv Uyumluluğu',
+    heading: 'Bu bağlantı eski kontrol ekranına ait',
+    desc: 'Eski AI kontrol oturumları artık ücretsiz sağlık arşivinde sahte veriyle gösterilmiyor. Kayıtlarınızı zaman çizelgesi veya sağlık kayıtları ekranından takip edebilirsiniz.',
+    health_records: 'Sağlık Kayıtları'
+  },
+  audioPreview: {
+    title: 'Kayıt Önizleme',
+    note_label: 'Bu ses kaydı ile ilgili notunuz (Opsiyonel)',
+    note_placeholder: 'Örn: Sadece yatarken duyuluyor...'
+  },
+  audioRecord: {
+    title: 'Ses Kaydı',
+    tap_to_record: 'Kayıt için dokunun',
+    recording: 'Kaydediliyor...'
+  },
+  photoCapture: {
+    frame_hint: 'Alanı çerçeve içine alın',
+    shoot: 'Çek',
+    flip_camera: 'Kamerayı Çevir'
+  },
+  photoPreview: {
+    title: 'Fotoğraf önizlemesi'
   },
   common: {
     save: 'Kaydet', saving: 'Kaydediliyor...', cancel: 'İptal', back: 'Geri', next: 'Devam', done: 'Tamam',

@@ -18,7 +18,7 @@ function saveDeviceMode(mode) {
 }
 
 function formatStatusDate(value) {
-  if (!value) return 'Henüz test edilmedi';
+  if (!value) return t('devicesScreen.not_tested');
   return new Intl.DateTimeFormat('tr-TR', {
     day: 'numeric',
     month: 'long',
@@ -47,8 +47,8 @@ export function render(params = {}, query = {}) {
         <div class="card p-5 mb-6 text-center ${hasKit ? 'bg-secondary-50 border-secondary' : 'bg-white border-border-color'} border-2 transition-all">
           <div class="modern-device-hero">${hasKit ? window.__icons?.kit : window.__icons?.profile}</div>
           <h2 class="font-bold text-lg mb-1">${hasKit ? t('profile.device_kit') : t('profile.device_phone')}</h2>
-          <p class="text-sm text-secondary">${hasKit ? 'Basic Kit bağlantısı aktif. Kulak kamerası ve ölçüm görevleri açık.' : 'Cihaz olmadan manuel ölçüm ve telefon sensörleri (kamera/mikrofon) kullanılıyor.'}</p>
-          <p class="text-xs text-tertiary mt-2" id="kitStatusText">Son test: ${formatStatusDate(kitStatus.checkedAt)}</p>
+          <p class="text-sm text-secondary">${hasKit ? t('devicesScreen.kit_active_desc') : t('devicesScreen.phone_desc')}</p>
+          <p class="text-xs text-tertiary mt-2" id="kitStatusText">${t('devicesScreen.last_test', { value: formatStatusDate(kitStatus.checkedAt) })}</p>
         </div>
         
         <div class="bg-white rounded-xl shadow-sm border border-border-color overflow-hidden mb-6">
@@ -59,22 +59,22 @@ export function render(params = {}, query = {}) {
             <div class="flex items-start gap-3 mb-4">
               <div class="modern-timeline-icon">${window.__icons?.camera}</div>
               <div>
-                <div class="font-semibold text-sm">Kulak ve Deri Kamerası</div>
-                <div class="text-xs text-secondary mt-1">Dar alanlarda net makro çekim yapın.</div>
+                <div class="font-semibold text-sm">${t('devicesScreen.ear_skin_camera')}</div>
+                <div class="text-xs text-secondary mt-1">${t('devicesScreen.ear_skin_camera_desc')}</div>
               </div>
             </div>
             <div class="flex items-start gap-3 mb-4">
               <div class="modern-timeline-icon">${window.__icons?.thermometer}</div>
               <div>
-                <div class="font-semibold text-sm">Hassas Dijital Derece</div>
-                <div class="text-xs text-secondary mt-1">Uygulamaya anında aktarılan ölçümler.</div>
+                <div class="font-semibold text-sm">${t('devicesScreen.digital_thermometer')}</div>
+                <div class="text-xs text-secondary mt-1">${t('devicesScreen.digital_thermometer_desc')}</div>
               </div>
             </div>
             <div class="flex items-start gap-3">
               <div class="modern-timeline-icon">${window.__icons?.activity}</div>
               <div>
-                <div class="font-semibold text-sm">İdrar Analiz Stripi Okuyucu</div>
-                <div class="text-xs text-secondary mt-1">Kamera ile renk dönüşümünü otomatik analiz edin.</div>
+                <div class="font-semibold text-sm">${t('devicesScreen.urine_strip_reader')}</div>
+                <div class="text-xs text-secondary mt-1">${t('devicesScreen.urine_strip_reader_desc')}</div>
               </div>
             </div>
           </div>
@@ -88,7 +88,7 @@ export function render(params = {}, query = {}) {
             <button class="btn btn-primary btn-full" id="btnActivateKit">
               ${window.__icons?.spark} ${t('profile.activate_kit')}
             </button>
-            <button class="btn btn-ghost btn-full mt-2 text-primary text-sm font-semibold" id="btnBuyKit">Basic Kit Satın Al</button>
+            <button class="btn btn-ghost btn-full mt-2 text-primary text-sm font-semibold" id="btnBuyKit">${t('devicesScreen.buy_kit')}</button>
           `}
         </div>
         
@@ -118,7 +118,7 @@ export function afterRender() {
     };
     localStorage.setItem(DEVICE_STATUS_KEY, JSON.stringify(status));
     const target = document.getElementById('kitStatusText');
-    if (target) target.textContent = `Son test: ${formatStatusDate(status.checkedAt)} · Native eşleşme hazır`;
+    if (target) target.textContent = t('devicesScreen.last_test_ready', { value: formatStatusDate(status.checkedAt) });
   });
 
   document.getElementById('btnBuyKit')?.addEventListener('click', () => {

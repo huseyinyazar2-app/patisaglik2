@@ -1,4 +1,5 @@
 import { getDbClient } from './dbClient.js';
+import { translateForLocale } from '../i18n/tr.js';
 
 const LOCAL_USER_KEY = 'pati_user_profile';
 
@@ -20,7 +21,7 @@ export function getLocalUserProfile(base = {}) {
     locale: base.locale || local.locale || 'tr',
     timezone: base.timezone || local.timezone || 'Europe/Istanbul',
     location: {
-      country: base.location?.country || local.location?.country || 'Türkiye',
+      country: base.location?.country || local.location?.country || translateForLocale('tr', 'userDefaults.country'),
       province: base.location?.province || local.location?.province || '',
       district: base.location?.district || local.location?.district || '',
       neighborhood: base.location?.neighborhood || local.location?.neighborhood || ''
@@ -50,7 +51,7 @@ export async function saveUserProfile({ userId = 'user-1', profile }) {
           SET display_name = ?, email = ?, phone = ?, locale = ?, timezone = ?, metadata = ?, updated_at = ?
           WHERE id = ?`,
     args: [
-      normalized.name || 'Kullanıcı',
+      normalized.name || translateForLocale(normalized.locale || 'tr', 'userDefaults.name'),
       normalized.email || null,
       normalized.phone || null,
       normalized.locale || 'tr',

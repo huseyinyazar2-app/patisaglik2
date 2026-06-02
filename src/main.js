@@ -1,4 +1,3 @@
-// Pati Sağlık — Main Application Entry Point
 import { registerRoute, initRouter, navigate, setBeforeNavigate } from './router.js';
 import { getState } from './store.js';
 import { startReminderScheduler } from './services/reminderScheduler.js';
@@ -166,9 +165,9 @@ async function loadScreen(modulePath, params = {}, query = {}) {
     renderApp(`
       <div class="screen screen-padded" style="padding-top: 100px; text-align: center;">
         <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
-        <h3>Ekran yüklenemedi</h3>
+        <h3>${t('main.screen_load_failed')}</h3>
         <p class="text-secondary mt-2">${err.message}</p>
-        <button class="btn btn-primary mt-4" onclick="location.hash='#/home'">Ana Sayfaya Dön</button>
+        <button class="btn btn-primary mt-4" onclick="location.hash='#/home'">${t('result.go_home')}</button>
       </div>
     `, false);
   }

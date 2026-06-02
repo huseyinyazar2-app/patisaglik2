@@ -1,6 +1,6 @@
-// Pati Sağlık — Legacy Session Compatibility Screen
 import { navigate, goBack } from '../../router.js';
 import { getState } from '../../store.js';
+import { t } from '../../i18n/tr.js';
 
 function icon(name, size = 22) {
   const svg = window.__icons?.[name] || '';
@@ -16,7 +16,7 @@ export function render() {
         <div class="header-left">
           <button class="header-back" id="backBtn">${icon('back', 22)}</button>
         </div>
-        <div class="header-title">Eski Kontrol Kaydı</div>
+        <div class="header-title">${t('sessionDetail.title')}</div>
         <div class="header-right"></div>
       </div>
 
@@ -24,11 +24,10 @@ export function render() {
         <div class="summary-section">
           <div class="premium-icon-box mb-3">${icon('shield', 30)}</div>
           <div>
-            <div class="summary-section-title">Canlı Arşiv Uyumluluğu</div>
-            <h2 class="mb-2">Bu bağlantı eski kontrol ekranına ait</h2>
+            <div class="summary-section-title">${t('sessionDetail.kicker')}</div>
+            <h2 class="mb-2">${t('sessionDetail.heading')}</h2>
             <p class="text-tertiary">
-              Eski AI kontrol oturumları artık ücretsiz sağlık arşivinde sahte veriyle gösterilmiyor.
-              Kayıtlarınızı zaman çizelgesi veya sağlık kayıtları ekranından takip edebilirsiniz.
+              ${t('sessionDetail.desc')}
             </p>
           </div>
         </div>
@@ -36,11 +35,11 @@ export function render() {
         <div class="flex flex-col gap-3 mt-4">
           <button class="btn btn-primary btn-full" id="timelineBtn">
             ${icon('clock', 20)}
-            Zaman Çizelgesi
+            ${t('tabs.history')}
           </button>
           <button class="btn btn-secondary btn-full" id="healthRecordsBtn">
             ${icon('heartPulse', 20)}
-            Sağlık Kayıtları
+            ${t('sessionDetail.health_records')}
           </button>
         </div>
       </div>

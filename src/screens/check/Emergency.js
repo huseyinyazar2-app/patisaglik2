@@ -50,8 +50,8 @@ export function render(params = {}, query = {}) {
         ` : ''}
         
         <div class="info-box danger mb-6" style="padding: 14px 18px; border-radius: var(--radius-lg);">
-          <div style="font-weight: 800; margin-bottom: 4px; font-size: 14px;">Önemli Uyarı</div>
-          <div style="font-size: 12px; font-weight: 500; line-height: 1.5;">Bu uygulama veteriner teşhisi yerine geçmez. Lütfen vakit kaybetmeden profesyonel destek alın.</div>
+          <div style="font-weight: 800; margin-bottom: 4px; font-size: 14px;">${t('emergency.important_warning')}</div>
+          <div style="font-size: 12px; font-weight: 500; line-height: 1.5;">${t('emergency.important_warning_desc')}</div>
         </div>
         
         <div class="flex flex-col gap-3 w-full" style="margin-bottom: 24px;">
@@ -81,7 +81,7 @@ export function render(params = {}, query = {}) {
 export function afterRender() {
   document.getElementById('btnFindClinic')?.addEventListener('click', () => {
     // Open maps search for vet clinics
-    window.open('https://www.google.com/maps/search/veteriner+kliniği', '_blank');
+    window.open('https://www.google.com/maps/search/veterinary+clinic', '_blank');
   });
   
   document.getElementById('btnCreateSummary')?.addEventListener('click', () => {

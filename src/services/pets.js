@@ -1,5 +1,6 @@
 import { getDbClient } from './dbClient.js';
 import { buildPetRiskContext } from './petContext.js';
+import { translateForLocale } from '../i18n/tr.js';
 
 const LOCAL_KEY = 'pati_pets';
 
@@ -49,7 +50,7 @@ function ageLabel(birthDate) {
   const now = new Date();
   const years = now.getFullYear() - birth.getFullYear();
   const adjusted = now < new Date(now.getFullYear(), birth.getMonth(), birth.getDate()) ? years - 1 : years;
-  if (adjusted > 0) return `${adjusted} yaş`;
+  if (adjusted > 0) return translateForLocale('tr', 'petsService.age_years', { count: adjusted });
   const months = Math.max(1, (now.getFullYear() - birth.getFullYear()) * 12 + now.getMonth() - birth.getMonth());
   return `${months} ay`;
 }
@@ -74,7 +75,7 @@ function normalize(row) {
     chronicDiseases: metadata.chronic ? [metadata.chronic] : row.chronicDiseases || [],
     allergies: metadata.allergies ? [metadata.allergies] : row.allergies || [],
     medications: metadata.medications ? [metadata.medications] : row.medications || [],
-    statusText: row.medical_summary || row.statusText || 'Profil kaydı hazır',
+    statusText: row.medical_summary || row.statusText || translateForLocale('tr', 'petsService.profile_ready'),
     overallStatus: metadata.overallStatus || 'good',
     photo: row.avatar_url || null,
     publicProfileToken: row.public_profile_token || metadata.publicProfileToken || '',

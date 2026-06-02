@@ -72,14 +72,14 @@ export function render() {
             </label>
             <label class="feature-field">
               <span>${t('account.province')}</span>
-              <input id="accountProvince" autocomplete="address-level1" placeholder="İstanbul" value="${escapeHtml(profile.location.province)}" />
+              <input id="accountProvince" autocomplete="address-level1" placeholder="${t('account.province_placeholder')}" value="${escapeHtml(profile.location.province)}" />
             </label>
           </div>
 
           <div class="feature-photo-pair">
             <label class="feature-field">
               <span>${t('account.district')}</span>
-              <input id="accountDistrict" autocomplete="address-level2" placeholder="Kadıköy" value="${escapeHtml(profile.location.district)}" />
+              <input id="accountDistrict" autocomplete="address-level2" placeholder="${t('account.district_placeholder')}" value="${escapeHtml(profile.location.district)}" />
             </label>
             <label class="feature-field">
               <span>${t('account.neighborhood')}</span>
@@ -138,12 +138,12 @@ export function afterRender() {
         userId: state.user?.id || 'user-1',
         profile: {
           phone,
-          name: value('accountName') || state.user?.name || 'Kullanıcı',
+          name: value('accountName') || state.user?.name || t('userDefaults.name'),
           email: value('accountEmail'),
           locale: value('accountLocale') || 'tr',
           timezone: value('accountTimezone') || 'Europe/Istanbul',
           location: {
-            country: value('accountCountry') || 'Türkiye',
+            country: value('accountCountry') || t('userDefaults.country'),
             province: value('accountProvince'),
             district: value('accountDistrict'),
             neighborhood: value('accountNeighborhood')

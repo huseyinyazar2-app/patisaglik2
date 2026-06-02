@@ -8,15 +8,15 @@ function getProcessingSteps(session) {
     || tasks.some(task => ['photo', 'video', 'audio', 'measurement', 'physical_exam', 'mixed', 'comparison'].includes(task.type) && task.status === 'completed');
 
   const steps = [
-    'Şikayet ve belirtiler değerlendiriliyor',
-    'Yanıtlar klinik risk açısından kontrol ediliyor',
+    t('processing.step_complaint'),
+    t('processing.step_risk'),
   ];
 
   if (hasEvidence) {
-    steps.push('Eklenen medya ve ölçümler inceleniyor');
+    steps.push(t('processing.step_evidence'));
   }
 
-  steps.push('Ön değerlendirme raporu hazırlanıyor');
+  steps.push(t('processing.step_report'));
   return steps;
 }
 

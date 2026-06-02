@@ -1,4 +1,3 @@
-// Pati Sağlık — Photo Capture Screen
 import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
@@ -31,7 +30,7 @@ export function render(params = {}, query = {}) {
         <!-- Capture frame overlay -->
         <div class="capture-frame" id="captureFrame">
           <span style="font-size: var(--font-size-xs); text-align: center; padding: var(--space-2);">
-            Alanı çerçeve içine alın
+            ${t('photoCapture.frame_hint')}
           </span>
         </div>
 
@@ -52,12 +51,12 @@ export function render(params = {}, query = {}) {
         </button>
 
         <!-- Shutter -->
-        <button class="capture-btn" id="shutterBtn" title="Çek">
+        <button class="capture-btn" id="shutterBtn" title="${t('photoCapture.shoot')}">
           <div style="width: 58px; height: 58px; border-radius: var(--radius-full); background: white; margin: auto;"></div>
         </button>
 
         <!-- Flip Camera -->
-        <button class="capture-btn-small" id="flipBtn" title="Kamerayı Çevir">
+        <button class="capture-btn-small" id="flipBtn" title="${t('photoCapture.flip_camera')}">
           <span style="font-size: 22px;">🔄</span>
         </button>
       </div>

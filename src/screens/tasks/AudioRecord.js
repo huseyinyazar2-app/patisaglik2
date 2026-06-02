@@ -11,7 +11,7 @@ export function render(params = {}, query = {}) {
         <div class="header-left">
           <button class="header-icon text-white" id="btnBack">${window.__icons?.back}</button>
         </div>
-        <div class="header-title">Ses Kaydı</div>
+        <div class="header-title">${t('audioRecord.title')}</div>
         <div class="header-right"></div>
       </div>
       
@@ -31,7 +31,7 @@ export function render(params = {}, query = {}) {
           <div class="audio-bar" style="background: var(--white);"></div>
         </div>
         
-        <div class="text-white opacity-70 mt-4" id="statusText">Kayıt için dokunun</div>
+        <div class="text-white opacity-70 mt-4" id="statusText">${t('audioRecord.tap_to_record')}</div>
       </div>
       
       <div class="capture-controls" style="position: absolute; bottom: 0; left: 0; right: 0;">
@@ -63,7 +63,7 @@ export function afterRender(params = {}) {
     if (!isRecording) {
       // Start recording
       isRecording = true;
-      statusText.innerText = 'Kaydediliyor...';
+      statusText.innerText = t('audioRecord.recording');
       btnRecord.style.borderRadius = '8px'; // Square for stop
       btnRecord.style.transform = 'scale(0.8)';
       

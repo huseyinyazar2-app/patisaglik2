@@ -1,3 +1,5 @@
+import { translateForLocale } from '../i18n/tr.js';
+
 const LOCAL_KEY = 'pati_vet_ready_reports';
 
 function makeId(prefix = 'vet-report') {
@@ -50,8 +52,8 @@ export function saveVetReadyReport({ session = {}, pet = {}, assessment = {}, gu
       level: assessment.level || 'low',
       score: assessment.score || 0,
       confidence: assessment.confidence || 0,
-      title: urgency.title || 'Yeşil',
-      action: urgency.action || 'Evde kontrollü izlem'
+      title: urgency.title || translateForLocale('tr', 'vetReadyDefaults.urgency_green'),
+      action: urgency.action || translateForLocale('tr', 'vetReadyDefaults.home_monitoring')
     },
     redFlags: session.redFlagAnswers || {},
     answers: session.questionAnswers || {},

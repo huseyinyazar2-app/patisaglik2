@@ -1,6 +1,7 @@
 import { getState } from '../store.js';
 import { getFreeRecords } from './freeRecords.js';
 import { getNotificationPermissionState, getNotificationSettings } from './notifications.js';
+import { t } from '../i18n/tr.js';
 
 const NOTIFIED_KEY = 'pati_notified_reminders';
 const STATUS_KEY = 'pati_reminder_scheduler_status';
@@ -46,8 +47,8 @@ function inQuietHours(quietHours) {
 }
 
 function notifyReminder(reminder) {
-  new Notification('Pati Sağlık Hatırlatıcı', {
-    body: `${reminder.title || reminder.reminder_type || 'Hatırlatıcı'} zamanı geldi.`,
+  new Notification(t('notificationService.reminder_title'), {
+    body: t('notificationService.reminder_due_now', { title: reminder.title || reminder.reminder_type || t('notificationService.reminder_fallback') }),
     tag: `pati-reminder-${reminder.id}-${reminder.due_at}`,
     data: { reminderId: reminder.id, dueAt: reminder.due_at }
   });

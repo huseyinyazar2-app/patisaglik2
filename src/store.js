@@ -1,5 +1,5 @@
-// Pati Sağlık — Simple Reactive Store
 import { getPetById } from './mock/pets.js';
+import { translateForLocale } from './i18n/tr.js';
 
 function readUserProfile() {
   try {
@@ -29,12 +29,12 @@ const state = {
   version: 'v3.0',
   user: {
     id: storedUser.id || 'user-1',
-    name: storedUser.name || 'Ayşe Yılmaz',
+    name: storedUser.name || translateForLocale('tr', 'userDefaults.seed_name'),
     email: storedUser.email || 'ayse@email.com',
     phone: storedUser.phone || '',
     locale: storedUser.locale || 'tr',
     timezone: storedUser.timezone || 'Europe/Istanbul',
-    location: storedUser.location || { country: 'Türkiye', province: '', district: '', neighborhood: '' },
+    location: storedUser.location || { country: translateForLocale('tr', 'userDefaults.country'), province: '', district: '', neighborhood: '' },
     notificationPreference: storedUser.notificationPreference || 'push',
     isLoggedIn: true
   },

@@ -1,3 +1,5 @@
+import { t } from '../i18n/tr.js';
+
 export function showToast(message, { duration = 2500 } = {}) {
   const doc = globalThis.document;
   if (!doc) return;
@@ -22,7 +24,7 @@ export function showConfirmDialog({
   title = 'Onay gerekli',
   message = '',
   confirmText = 'Onayla',
-  cancelText = 'Vazgeç',
+  cancelText = t('common.cancel'),
   danger = false
 } = {}) {
   const doc = globalThis.document;

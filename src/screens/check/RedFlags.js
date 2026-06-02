@@ -65,7 +65,7 @@ export function render() {
         <div class="header-left">
           <button class="header-icon" id="btnBack">${window.__icons?.back}</button>
         </div>
-        <div class="header-title" style="font-weight: 700;">Adım 1/5</div>
+        <div class="header-title" style="font-weight: 700;">${t('redflags.step_title')}</div>
         <div class="header-right"></div>
       </div>
 
@@ -132,7 +132,7 @@ export function afterRender() {
     const answeredCount = document.querySelectorAll('.red-flag-list input:checked').length;
     
     if (answeredCount < allQuestions.length) {
-      showToast('Lütfen tüm acil durum sorularını yanıtlayın.');
+      showToast(t('redflags.required_all'));
       return;
     }
     

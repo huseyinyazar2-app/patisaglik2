@@ -20,7 +20,7 @@ export function render(params = {}, query = {}) {
       <div class="section pt-6 pb-24">
         <div class="form-group">
           <label class="block text-sm font-bold mb-2">${t('history.issue_name')}</label>
-          <input type="text" id="inputName" class="w-full p-3 rounded-lg border border-border-color bg-gray-50 focus:border-primary focus:outline-none" placeholder="Örn: Sol göz akıntısı">
+          <input type="text" id="inputName" class="w-full p-3 rounded-lg border border-border-color bg-gray-50 focus:border-primary focus:outline-none" placeholder="${t('issueAdd.name_placeholder')}">
         </div>
         
         <div class="form-group mt-4">
@@ -37,16 +37,16 @@ export function render(params = {}, query = {}) {
         
         <div class="form-group mt-4">
           <label class="block text-sm font-bold mb-2">${t('history.issue_desc')}</label>
-          <textarea id="inputDesc" class="complaint-textarea w-full" placeholder="Detaylı bilgi..."></textarea>
+          <textarea id="inputDesc" class="complaint-textarea w-full" placeholder="${t('issueAdd.desc_placeholder')}"></textarea>
         </div>
         
         <div class="form-group mt-4">
           <label class="block text-sm font-bold mb-2">${t('history.tracking_freq')}</label>
           <select id="inputFrequency" class="w-full p-3 rounded-lg border border-border-color bg-gray-50 focus:border-primary focus:outline-none appearance-none">
-            <option>Günlük</option>
-            <option selected>Haftalık</option>
-            <option>Aylık</option>
-            <option>Hatırlatma İstemiyorum</option>
+            <option>${t('issueAdd.frequency_daily')}</option>
+            <option selected>${t('issueAdd.frequency_weekly')}</option>
+            <option>${t('issueAdd.frequency_monthly')}</option>
+            <option>${t('issueAdd.frequency_none')}</option>
           </select>
         </div>
         <div class="feature-form-notice hidden" id="issueFormNotice" role="status"></div>
@@ -76,32 +76,33 @@ export function afterRender() {
     const btn = event.currentTarget;
     const name = document.getElementById('inputName').value;
     if (!name.trim()) {
-      showNotice('Lütfen sorun adını girin');
+      showNotice(t('issueAdd.name_required'));
       return;
     }
 
     btn.disabled = true;
-    btn.textContent = 'Kaydediliyor...';
+    btn.textContent = t('common.saving');
 
     try {
+      const payloadLabels = t('issueAdd.payload_labels');
       await submitFeatureForm({
         userId: state.user?.id || 'user-1',
         petId: state.activePetId || 'pet-1',
         featureCode: 'issue',
         locale: state.user?.locale || 'tr',
         payload: {
-          'Sorun adı': name,
-          Kategori: document.getElementById('inputCategory')?.value || '',
-          'İlk fark edilme': document.getElementById('inputDate')?.value || '',
-          Açıklama: document.getElementById('inputDesc')?.value || '',
-          'Takip sıklığı': document.getElementById('inputFrequency')?.value || ''
+          [payloadLabels.name]: name,
+          [payloadLabels.category]: document.getElementById('inputCategory')?.value || '',
+          [payloadLabels.first_noticed]: document.getElementById('inputDate')?.value || '',
+          [payloadLabels.description]: document.getElementById('inputDesc')?.value || '',
+          [payloadLabels.frequency]: document.getElementById('inputFrequency')?.value || ''
         }
       });
       navigate('/history/issues');
     } catch (err) {
       btn.disabled = false;
       btn.textContent = t('common.save');
-      showNotice(`Sorun kaydedilemedi: ${err.message}`);
+      showNotice(t('issueAdd.save_failed', { error: err.message }));
     }
   });
 }

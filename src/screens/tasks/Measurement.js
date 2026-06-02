@@ -20,7 +20,7 @@ const measurementMeta = {
 export function render(params = {}, query = {}) {
   const taskId = params.taskId;
   const state = getState();
-  const task = state.session?.tasks?.find(t => t.id === taskId) || { title: 'Ölçüm', key: 'temperature' };
+  const task = state.session?.tasks?.find(t => t.id === taskId) || { title: t('measurementTask.fallback_title'), key: 'temperature' };
   const meta = measurementMeta[task.key] || measurementMeta.temperature_measurement;
   const isTemp = meta.type === 'temperature';
   const unit = meta.unit;
@@ -49,11 +49,11 @@ export function render(params = {}, query = {}) {
         
         ${isTemp ? `
           <div class="mb-4">
-            <label class="font-bold text-sm mb-2 block">Ölçüm Yöntemi</label>
+            <label class="font-bold text-sm mb-2 block">${t('measurementTask.method_label')}</label>
             <div class="flex gap-2">
               <label class="radio-item flex-1 text-center" style="padding: 10px 4px; border: 1px solid var(--primary); background: var(--primary-50);">
                 <input type="radio" name="method" value="rectal" checked class="hidden">
-                <span style="font-size: 13px; font-weight: 600; color: var(--primary-dark);">Rektal (Önerilen)</span>
+                <span style="font-size: 13px; font-weight: 600; color: var(--primary-dark);">${t('measurementTask.rectal_recommended')}</span>
               </label>
               <label class="radio-item flex-1 text-center" style="padding: 10px 4px; border: 1px solid var(--border-color); background: var(--white);">
                 <input type="radio" name="method" value="ear" class="hidden">
@@ -64,8 +64,8 @@ export function render(params = {}, query = {}) {
         ` : ''}
         
         <div class="mb-4">
-          <label class="font-bold text-sm mb-2 block">Not (Opsiyonel)</label>
-          <textarea id="noteInput" class="complaint-textarea w-full" style="min-height: 80px;" placeholder="Eklemek istediğiniz bir detay var mı?"></textarea>
+          <label class="font-bold text-sm mb-2 block">${t('measurementTask.note_label')}</label>
+          <textarea id="noteInput" class="complaint-textarea w-full" style="min-height: 80px;" placeholder="${t('measurementTask.note_placeholder')}"></textarea>
         </div>
       </div>
       
@@ -112,7 +112,7 @@ export function afterRender(params = {}) {
   document.getElementById('btnSave')?.addEventListener('click', async () => {
     const val = document.getElementById('valInput').value;
     if (!val) {
-      showToast('Lütfen geçerli bir değer girin.');
+      showToast(t('measurementTask.invalid_value'));
       return;
     }
     
@@ -139,7 +139,7 @@ export function afterRender(params = {}) {
         value: val,
         unit: measurementMeta[task.key]?.unit || unit,
         measuredAt: new Date().toISOString(),
-        note: `AI kontrol ölçümü: ${task.title}`,
+        note: t('measurementTask.ai_note', { title: task.title }),
         metadata: {
           source: 'ai_triage',
           triageSessionId: state.session?.id || '',
@@ -148,7 +148,7 @@ export function afterRender(params = {}) {
         }
       });
     } catch (err) {
-      showToast(`Ölçüm arşive yazılamadı: ${err.message}`);
+      showToast(t('measurementTask.archive_failed', { error: err.message }));
     }
     navigate('/check/new/task-plan');
   });

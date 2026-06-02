@@ -57,8 +57,8 @@ function renderPetList(pets = null, activeId = null) {
           ${pet.volunteerNote ? `<div class="pet-meta">${escapeHtml(pet.volunteerNote)}</div>` : ''}
           ${canShareLocation ? `
             <div class="pet-card-map-actions">
-              <button type="button" class="pet-map-action" data-map-location="${escapeHtml(pet.location)}">${window.__icons?.search} Haritada Aç</button>
-              <button type="button" class="pet-map-action secondary" data-share-location="${escapeHtml(pet.location)}" data-pet-name="${escapeHtml(pet.name)}">${window.__icons?.upload} Konumu Paylaş</button>
+              <button type="button" class="pet-map-action" data-map-location="${escapeHtml(pet.location)}">${window.__icons?.search} ${t('petProfiles.open_map')}</button>
+              <button type="button" class="pet-map-action secondary" data-share-location="${escapeHtml(pet.location)}" data-pet-name="${escapeHtml(pet.name)}">${window.__icons?.upload} ${t('petProfiles.share_location')}</button>
             </div>
           ` : ''}
         </div>
@@ -143,7 +143,7 @@ export function afterRender() {
         const url = mapUrl(button.dataset.shareLocation);
         if (navigator.share) {
           try {
-            await navigator.share({ title: 'Pati Sağlık Konum Paylaşımı', text, url });
+          await navigator.share({ title: t('petProfiles.share_title'), text, url });
           } catch {
             return;
           }
@@ -151,9 +151,9 @@ export function afterRender() {
         }
         try {
           await navigator.clipboard.writeText(`${text}\n${url}`);
-          showToast('Konum bağlantısı kopyalandı.');
+          showToast(t('petProfiles.location_copied'));
         } catch {
-          showToast('Konum bağlantısı kopyalanamadı. Harita bağlantısını açarak paylaşabilirsiniz.');
+          showToast(t('petProfiles.location_copy_failed'));
         }
       });
     });

@@ -1,3 +1,5 @@
+import { t } from '../i18n/tr.js';
+
 const SETTINGS_KEY = 'pati_notification_settings';
 const NATIVE_IDS_KEY = 'pati_native_notification_ids';
 
@@ -69,8 +71,8 @@ export async function requestNativeNotificationPermission() {
 
 export function sendTestNotification() {
   if (!('Notification' in window) || Notification.permission !== 'granted') return false;
-  new Notification('Pati Sağlık', {
-    body: 'Hatırlatıcı bildirimleri bu cihazda aktif.',
+  new Notification(t('app.name'), {
+    body: t('notificationService.test_body'),
     tag: 'pati-test-notification'
   });
   return true;
@@ -96,8 +98,8 @@ export async function syncNativeReminderPlan(plan = []) {
     .slice(0, 16)
     .map((item) => ({
       id: notificationId(`${item.id}-${item.dueAt}`),
-      title: 'Pati Sağlık Hatırlatıcı',
-      body: `${item.title || item.type || 'Hatırlatıcı'} zamanı yaklaşıyor.`,
+      title: t('notificationService.reminder_title'),
+      body: t('notificationService.reminder_due_soon', { title: item.title || item.type || t('notificationService.reminder_fallback') }),
       schedule: { at: new Date(item.dueAt) },
       extra: { reminderId: item.id, dueAt: item.dueAt, type: item.type }
     }));
@@ -120,7 +122,7 @@ export function getReminderNotificationPlan(reminders = []) {
     .slice(0, 8)
     .map((item) => ({
       id: item.id,
-      title: item.title || item.reminder_type || 'Hatırlatıcı',
+      title: item.title || item.reminder_type || t('notificationService.reminder_fallback'),
       type: item.reminder_type || 'Genel',
       dueAt: item.due_at,
       repeatRule: item.repeat_rule || 'Tek sefer'

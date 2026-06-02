@@ -148,11 +148,15 @@ const en = {
   redflags: {
     title: 'Urgent sign check',
     desc: 'If any of these signs are present, veterinary help may be needed without delay.',
+    step_title: 'Step 1/5',
+    required_all: 'Please answer all emergency questions.',
     yes: 'Yes', no: 'No', unsure: 'Not sure'
   },
   emergency: {
     title: 'Urgent veterinary assessment may be needed',
     desc: 'The signs you selected may be urgent. Please contact the nearest veterinary clinic without delay.',
+    important_warning: 'Important Warning',
+    important_warning_desc: 'This app does not replace a veterinary diagnosis. Please seek professional support without delay.',
     find_clinic: 'Find Nearest Clinic',
     save_record: 'Add Emergency Record to History',
     create_summary: 'Create Vet Summary',
@@ -185,12 +189,24 @@ const en = {
     redflags: 'Urgent Sign Answers', no_redflags: 'No urgent signs reported',
     answers: 'Question Answers', records: 'Added Records', history: 'History Links',
     evaluate: 'Evaluate', complete_tasks: 'Complete Missing Tasks', edit: 'Edit',
-    save_draft: 'Save and Continue Later', cancel: 'Cancel'
+    save_draft: 'Save and Continue Later', cancel: 'Cancel',
+    step_title: 'Step 4/5',
+    duration: 'Duration',
+    severity: 'Severity',
+    general: 'General',
+    answers_count: '{count} question(s) answered.',
+    visual: 'Visual',
+    measurement: 'Measurement',
+    tasks_skipped: '{count} {label} task(s) skipped.'
   },
   processing: {
     title: 'Evaluating check',
     desc: 'The concern, answers, added records and pet history are being reviewed together.',
     steps: ['Preparing concern summary', 'Checking answers', 'Reviewing media records', 'Comparing with pet history', 'Creating risk result', 'Preparing report draft'],
+    step_complaint: 'Reviewing the complaint and signs',
+    step_risk: 'Checking answers for clinical risk',
+    step_evidence: 'Reviewing added media and measurements',
+    step_report: 'Preparing the pre-assessment report',
     disclaimer: 'This assessment does not replace a veterinary examination.'
   },
   result: {
@@ -2075,6 +2091,23 @@ Return JSON:
     none_yet: 'None yet',
     load_failed: 'Records could not be loaded'
   },
+  issueAdd: {
+    name_placeholder: 'Example: discharge from left eye',
+    desc_placeholder: 'Detailed information...',
+    frequency_daily: 'Daily',
+    frequency_weekly: 'Weekly',
+    frequency_monthly: 'Monthly',
+    frequency_none: 'No Reminder',
+    name_required: 'Please enter the issue name',
+    save_failed: 'Issue could not be saved: {error}',
+    payload_labels: {
+      name: 'Issue name',
+      category: 'Category',
+      first_noticed: 'First noticed',
+      description: 'Description',
+      frequency: 'Tracking frequency'
+    }
+  },
   freeRecordList: {
     no_score: 'No score',
     no_reaction: 'No reaction',
@@ -2100,6 +2133,47 @@ Return JSON:
     invalid_value: 'Please enter a valid value',
     saved: 'Measurement saved',
     save_failed: 'Measurement could not be saved: {error}'
+  },
+  measurementTask: {
+    fallback_title: 'Measurement',
+    method_label: 'Measurement Method',
+    rectal_recommended: 'Rectal (Recommended)',
+    note_label: 'Note (Optional)',
+    note_placeholder: 'Is there any detail you want to add?',
+    invalid_value: 'Please enter a valid value.',
+    ai_note: 'AI check measurement: {title}',
+    archive_failed: 'Measurement could not be written to the archive: {error}'
+  },
+  physicalExam: {
+    fallback_title: 'Physical Exam',
+    crt_title: 'Capillary Refill Time (CRT)',
+    crt_desc: 'Press your pet’s gum with your finger until it turns pale. After you lift your finger, how many seconds did it take for the pink color to return?',
+    crt_label: 'Color Return Time',
+    crt_instant: 'Instant (less than 1 second)',
+    crt_normal: '1-2 seconds (Normal)',
+    crt_slow: 'Longer than 2 seconds (May be urgent)',
+    skin_title: 'Skin Elasticity (Dehydration Test)',
+    skin_desc: 'Gently lift the skin around your pet’s neck/scruff and release it. How quickly did the skin return to normal?',
+    skin_label: 'Skin Return Speed',
+    skin_instant: 'Bounced back instantly (Normal)',
+    skin_slow: 'Returned a little slowly',
+    skin_stays: 'Stayed tented (Severe dehydration)',
+    pain_title: 'Pain Scale',
+    pain_desc: 'Please assess your pet’s facial expression and overall posture.',
+    pain_label: 'Posture and Expression',
+    pain_none: 'Relaxed, ears up, eyes open (No pain)',
+    pain_mild: 'Slightly tense, eyes partly narrowed',
+    pain_severe: 'Hunched posture, ears low, eyes narrowed/closed (Severe pain)',
+    required: 'Please select an option.'
+  },
+  basicKit: {
+    title: 'Basic Kit Device',
+    connecting: 'Connecting to device...',
+    required: 'Basic Kit Required',
+    connecting_desc: 'Please turn on your Basic Kit device and confirm the Bluetooth connection. Move the camera close to the ear canal or skin.',
+    required_desc: 'This task requires the Pati Health Basic Kit hardware. If you have the device, you can activate it from settings.',
+    device_settings: 'Go to Device Settings',
+    searching: 'Searching for device...'
   },
   taskGuides: {
     photo_title: 'Photo Capture Tips',
@@ -2170,6 +2244,40 @@ Return JSON:
     test_note: 'Plan switching on this screen is for testing; real payment and subscription validation will be completed in the production service.',
     load_failed: 'Plan information could not be loaded: {error}'
   },
+  billingPlans: {
+    free: 'Free',
+    credit: 'Credit Package',
+    monthly: 'Monthly Pro',
+    yearly: 'Yearly Pro'
+  },
+  notificationService: {
+    test_body: 'Reminder notifications are active on this device.',
+    reminder_title: 'Pati Health Reminder',
+    reminder_fallback: 'Reminder',
+    reminder_due_soon: '{title} is coming up.',
+    reminder_due_now: '{title} is due now.'
+  },
+  devicesScreen: {
+    not_tested: 'Not tested yet',
+    kit_active_desc: 'Basic Kit connection is active. Ear camera and measurement tasks are enabled.',
+    phone_desc: 'Manual measurements and phone sensors (camera/microphone) are used without a device.',
+    last_test: 'Last test: {value}',
+    ear_skin_camera: 'Ear and Skin Camera',
+    ear_skin_camera_desc: 'Take clear macro shots in narrow areas.',
+    digital_thermometer: 'Precise Digital Thermometer',
+    digital_thermometer_desc: 'Measurements are transferred to the app instantly.',
+    urine_strip_reader: 'Urine Strip Reader',
+    urine_strip_reader_desc: 'Analyze color changes automatically with the camera.',
+    buy_kit: 'Buy Basic Kit',
+    last_test_ready: 'Last test: {value} · Native pairing ready'
+  },
+  petProfiles: {
+    open_map: 'Open Map',
+    share_location: 'Share Location',
+    share_title: 'Pati Health Location Share',
+    location_copied: 'Location link copied.',
+    location_copy_failed: 'Location link could not be copied. You can open the map link and share it.'
+  },
   sitterInvite: {
     accepted: 'Accepted',
     declined: 'Declined',
@@ -2191,6 +2299,47 @@ Return JSON:
     boncuk_history: 'When she was younger, she was hit by a car and had a pelvic bone crack. Her immunity also seems to drop sometimes.',
     good_status: 'General condition looks good',
     watch_status: 'There is a record that needs follow-up'
+  },
+  petsService: {
+    age_years: '{count} years',
+    profile_ready: 'Profile record is ready'
+  },
+  userDefaults: {
+    country: 'Türkiye',
+    name: 'User',
+    seed_name: 'Ayşe Yılmaz'
+  },
+  vetReadyDefaults: {
+    urgency_green: 'Green',
+    home_monitoring: 'Controlled home monitoring'
+  },
+  main: {
+    screen_load_failed: 'Screen could not be loaded'
+  },
+  sessionDetail: {
+    title: 'Legacy Check Record',
+    kicker: 'Live Archive Compatibility',
+    heading: 'This link belongs to the old check screen',
+    desc: 'Old AI check sessions are no longer shown with mock data in the free health archive. You can follow your records from the timeline or health records screen.',
+    health_records: 'Health Records'
+  },
+  audioPreview: {
+    title: 'Recording Preview',
+    note_label: 'Your note about this audio recording (Optional)',
+    note_placeholder: 'Example: Only heard while lying down...'
+  },
+  audioRecord: {
+    title: 'Audio Recording',
+    tap_to_record: 'Tap to record',
+    recording: 'Recording...'
+  },
+  photoCapture: {
+    frame_hint: 'Place the area inside the frame',
+    shoot: 'Capture',
+    flip_camera: 'Flip Camera'
+  },
+  photoPreview: {
+    title: 'Photo preview'
   },
   common: {
     save: 'Save', saving: 'Saving...', cancel: 'Cancel', back: 'Back', next: 'Continue', done: 'Done',

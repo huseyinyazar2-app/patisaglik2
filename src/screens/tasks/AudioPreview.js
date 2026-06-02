@@ -11,7 +11,7 @@ export function render(params = {}, query = {}) {
         <div class="header-left">
           <button class="header-icon text-white" id="btnBack">${window.__icons?.back}</button>
         </div>
-        <div class="header-title">Kayıt Önizleme</div>
+        <div class="header-title">${t('audioPreview.title')}</div>
         <div class="header-right"></div>
       </div>
       
@@ -24,8 +24,8 @@ export function render(params = {}, query = {}) {
         </div>
         
         <div class="w-full mt-6">
-          <label class="text-white opacity-80 text-sm mb-2 block">Bu ses kaydı ile ilgili notunuz (Opsiyonel)</label>
-          <textarea id="noteInput" class="complaint-textarea w-full text-white" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);" placeholder="Örn: Sadece yatarken duyuluyor..."></textarea>
+          <label class="text-white opacity-80 text-sm mb-2 block">${t('audioPreview.note_label')}</label>
+          <textarea id="noteInput" class="complaint-textarea w-full text-white" style="background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2);" placeholder="${t('audioPreview.note_placeholder')}"></textarea>
         </div>
       </div>
       

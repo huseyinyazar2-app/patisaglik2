@@ -13,7 +13,7 @@ export function render(params = {}, query = {}) {
         <div class="header-left">
           <button class="header-icon" id="btnBack">${window.__icons?.back}</button>
         </div>
-        <div class="header-title">Basic Kit Cihazı</div>
+        <div class="header-title">${t('basicKit.title')}</div>
         <div class="header-right"></div>
       </div>
       
@@ -24,22 +24,22 @@ export function render(params = {}, query = {}) {
         </div>
         
         <h2 class="text-xl font-bold mb-3">
-          ${hasKit ? 'Cihaza Bağlanılıyor...' : 'Basic Kit Gerekli'}
+          ${hasKit ? t('basicKit.connecting') : t('basicKit.required')}
         </h2>
         
         <p class="text-secondary text-sm px-4 mb-8">
           ${hasKit 
-            ? 'Lütfen Basic Kit cihazınızı açın ve Bluetooth bağlantısını onaylayın. Kamerayı kulak içine veya deriye yaklaştırın.' 
-            : 'Bu görev için Pati Sağlık Basic Kit donanımı gerekmektedir. Cihazınız varsa ayarlardan aktifleştirebilirsiniz.'}
+            ? t('basicKit.connecting_desc')
+            : t('basicKit.required_desc')}
         </p>
         
         ${!hasKit ? `
-          <button class="btn btn-outline btn-full mb-6" id="btnSettings">Cihaz Ayarlarına Git</button>
+          <button class="btn btn-outline btn-full mb-6" id="btnSettings">${t('basicKit.device_settings')}</button>
         ` : `
           <div class="card bg-white w-full border border-primary p-4 mb-6">
             <div class="flex items-center gap-3">
               <div class="recording-pulse"></div>
-              <div class="font-bold text-primary">Cihaz Aranıyor...</div>
+              <div class="font-bold text-primary">${t('basicKit.searching')}</div>
             </div>
           </div>
         `}
@@ -47,7 +47,7 @@ export function render(params = {}, query = {}) {
       </div>
       
       <div class="card bg-white" style="position: fixed; bottom: 0; left: 0; right: 0; border-radius: 24px 24px 0 0; padding: 20px 24px; box-shadow: 0 -4px 20px rgba(0,0,0,0.05); z-index: 10;">
-        <button class="btn btn-ghost btn-full text-secondary" id="btnSkip">${hasKit ? 'İptal Et' : t('tasks.skip')}</button>
+        <button class="btn btn-ghost btn-full text-secondary" id="btnSkip">${hasKit ? t('common.cancel') : t('tasks.skip')}</button>
       </div>
     </div>
   `;

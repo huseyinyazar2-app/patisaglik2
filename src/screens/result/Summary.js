@@ -31,7 +31,7 @@ export function render(params = {}, query = {}) {
         <div class="header-left">
           <button class="header-icon" id="btnBack">${window.__icons?.back}</button>
         </div>
-        <div class="header-title" style="font-weight: 700;">Adım 4/5</div>
+        <div class="header-title" style="font-weight: 700;">${t('summary.step_title')}</div>
         <div class="header-right"></div>
       </div>
       
@@ -47,10 +47,10 @@ export function render(params = {}, query = {}) {
           <div class="summary-section-title" style="font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; font-size: 11px; margin-bottom: 12px; letter-spacing: 0.05em;">
             <span>${t('summary.complaint')}</span>
           </div>
-          <p class="text-sm text-primary-dark font-semibold" style="font-size: 15px; line-height: 1.5;">"${session.complaintText || 'Belirtilmedi'}"</p>
+          <p class="text-sm text-primary-dark font-semibold" style="font-size: 15px; line-height: 1.5;">"${session.complaintText || t('common.not_specified')}"</p>
           <div class="mt-2 text-xs text-secondary" style="font-weight: 600;">
-            ${session.duration ? `Süre: ${session.duration} • ` : ''} 
-            ${session.severity ? `Şiddet: ${session.severity}` : ''}
+            ${session.duration ? `${t('summary.duration')}: ${session.duration} • ` : ''} 
+            ${session.severity ? `${t('summary.severity')}: ${session.severity}` : ''}
           </div>
           <div class="mt-3 flex flex-wrap gap-2">
             ${(session.selectedChips || []).map(c => `<span class="chip-status primary text-xs" style="font-weight: 700; font-size: 10px; border-radius: var(--radius-full); padding: 3px 10px;">${c}</span>`).join('')}
@@ -60,7 +60,7 @@ export function render(params = {}, query = {}) {
         <!-- Category Summary Card -->
         <div class="card mb-4" style="padding: 20px;">
           <div class="summary-section-title" style="font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; font-size: 11px; margin-bottom: 8px; letter-spacing: 0.05em;">${t('summary.categories')}</div>
-          <p class="text-sm font-semibold" style="color: var(--text-primary); font-size: 15px;">${cats || 'Genel'}</p>
+          <p class="text-sm font-semibold" style="color: var(--text-primary); font-size: 15px;">${cats || t('summary.general')}</p>
         </div>
         
         <!-- Red Flags Summary Card -->
@@ -77,7 +77,7 @@ export function render(params = {}, query = {}) {
           <div class="summary-section-title" style="font-weight: 700; color: var(--text-tertiary); text-transform: uppercase; font-size: 11px; margin-bottom: 8px; letter-spacing: 0.05em;">
             <span>${t('summary.answers')}</span>
           </div>
-          <p class="text-sm text-secondary" style="font-weight: 600; font-size: 14px;">${Object.keys(session.questionAnswers || {}).length} soru yanıtlandı.</p>
+          <p class="text-sm text-secondary" style="font-weight: 600; font-size: 14px;">${t('summary.answers_count', { count: Object.keys(session.questionAnswers || {}).length })}</p>
         </div>
         
         <!-- Media / Tasks Records Card -->
@@ -90,7 +90,7 @@ export function render(params = {}, query = {}) {
                <div style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-secondary); background: rgba(0,0,0,0.03); border-radius: 8px; padding: 6px; margin: 0 auto 6px;">
                  ${window.__icons?.camera}
                </div>
-               <div class="text-xs font-extrabold mt-1" style="color: var(--text-primary);">${(session.tasks || []).filter(t => t.type === 'photo' && t.status === 'completed').length} Görsel</div>
+               <div class="text-xs font-extrabold mt-1" style="color: var(--text-primary);">${(session.tasks || []).filter(t => t.type === 'photo' && t.status === 'completed').length} ${t('summary.visual')}</div>
              </div>
              <div class="text-center" style="min-width: 50px;">
                <div style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-secondary); background: rgba(0,0,0,0.03); border-radius: 8px; padding: 6px; margin: 0 auto 6px;">
@@ -102,12 +102,12 @@ export function render(params = {}, query = {}) {
                <div style="width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; color: var(--text-secondary); background: rgba(0,0,0,0.03); border-radius: 8px; padding: 6px; margin: 0 auto 6px;">
                  ${window.__icons?.measurement}
                </div>
-               <div class="text-xs font-extrabold mt-1" style="color: var(--text-primary);">${(session.measurements || []).length} Ölçüm</div>
+               <div class="text-xs font-extrabold mt-1" style="color: var(--text-primary);">${(session.measurements || []).length} ${t('summary.measurement')}</div>
              </div>
           </div>
           ${pendingTasks.length > 0 ? `
             <div class="info-box warning mt-3 py-2 px-3" style="background: rgba(245, 158, 11, 0.05); border: 1px solid rgba(245, 158, 11, 0.15); border-radius: 8px;">
-              <span class="text-xs font-semibold" style="color: #92400E;">${pendingTasks.length} ${t('tasks.recommended')} görev atlandı.</span>
+              <span class="text-xs font-semibold" style="color: #92400E;">${t('summary.tasks_skipped', { count: pendingTasks.length, label: t('tasks.recommended') })}</span>
             </div>
           ` : ''}
         </div>
