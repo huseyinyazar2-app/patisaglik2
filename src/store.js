@@ -1,4 +1,4 @@
-import { getPetById } from './mock/pets.js';
+import { getPetById } from './services/pets.js';
 import { translateForLocale } from './i18n/tr.js';
 
 function readUserProfile() {
@@ -29,8 +29,8 @@ const state = {
   version: 'v3.0',
   user: {
     id: storedUser.id || 'user-1',
-    name: storedUser.name || translateForLocale('tr', 'userDefaults.seed_name'),
-    email: storedUser.email || 'ayse@email.com',
+    name: storedUser.name || '',
+    email: storedUser.email || '',
     phone: storedUser.phone || '',
     locale: storedUser.locale || 'tr',
     timezone: storedUser.timezone || 'Europe/Istanbul',

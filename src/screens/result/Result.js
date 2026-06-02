@@ -1,7 +1,7 @@
 import { navigate } from '../../router.js';
 import { getState, resetSession } from '../../store.js';
-import { questionSets, categoryLabels } from '../../mock/questions.js';
-import { getActivePet } from '../../mock/pets.js';
+import { questionSets, categoryLabels } from '../../data/questions.js';
+import { getActivePet } from '../../services/pets.js';
 import { t } from '../../i18n/tr.js';
 import { showToast } from '../../ui/toast.js';
 import { saveVetReadyReport } from '../../services/vetReadyReports.js';

@@ -1,6 +1,6 @@
 import { goBack, navigate } from '../../router.js';
 import { getState } from '../../store.js';
-import { getActivePet } from '../../mock/pets.js';
+import { getActivePet } from '../../services/pets.js';
 import { submitFeatureForm } from '../../services/formSubmissions.js';
 import { isDocumentOcrConfigured, runDocumentOcr } from '../../services/documentOcr.js';
 import { uploadMediaFile } from '../../services/apiClient.js';

@@ -1,6 +1,6 @@
 import { navigate, goBack } from '../../router.js';
 import { getState, setState, resetSession } from '../../store.js';
-import { getActivePet } from '../../mock/pets.js';
+import { getActivePet } from '../../services/pets.js';
 import { showToast } from '../../ui/toast.js';
 import { t } from '../../i18n/tr.js';
 

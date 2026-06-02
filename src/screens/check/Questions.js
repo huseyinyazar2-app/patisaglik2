@@ -1,7 +1,7 @@
 import { navigate, goBack } from '../../router.js';
 import { getState, setState, resetSession } from '../../store.js';
 import { t } from '../../i18n/tr.js';
-import { questionSets, taskDefinitions } from '../../mock/questions.js';
+import { questionSets, taskDefinitions } from '../../data/questions.js';
 import { showConfirmDialog } from '../../ui/toast.js';
 
 let currentQuestionIndex = 0;

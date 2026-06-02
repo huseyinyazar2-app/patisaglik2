@@ -1,6 +1,6 @@
 import { goBack } from '../../router.js';
 import { getLocale, t } from '../../i18n/tr.js';
-import { getActivePet } from '../../mock/pets.js';
+import { getActivePet } from '../../services/pets.js';
 import { getClinicExportDocumentById } from '../../services/documents.js';
 import { getFreeRecords } from '../../services/freeRecords.js';
 import { getMeasurements } from '../../services/measurements.js';

@@ -58,17 +58,16 @@ function ageLabel(birthDate) {
   const adjusted = now < new Date(now.getFullYear(), birth.getMonth(), birth.getDate()) ? years - 1 : years;
   if (adjusted > 0) return translateForLocale('tr', 'petsService.age_years', { count: adjusted });
   const months = Math.max(1, (now.getFullYear() - birth.getFullYear()) * 12 + now.getMonth() - birth.getMonth());
-  return `${months} ay`;
+  return translateForLocale('tr', 'petsService.age_months', { count: months });
 }
 
 function normalize(row) {
   const metadata = typeof row.metadata === 'string' ? parseJson(row.metadata) : row.metadata || {};
-  const seedBreed = row.id === 'pet-1' ? 'Golden Retriever' : row.id === 'pet-2' ? 'British Shorthair' : '';
   const pet = {
     id: row.id,
     name: row.name,
     type: row.species_code || row.type || metadata.type || 'cat',
-    breed: metadata.breed || row.breed || seedBreed,
+    breed: metadata.breed || row.breed || '',
     birthDate: row.birth_date || row.birthDate || '',
     age: row.approximate_age_label || row.age || ageLabel(row.birth_date || row.birthDate),
     gender: row.sex || row.gender || 'unknown',
@@ -101,6 +100,44 @@ function normalize(row) {
 
 export function getLocalPets() {
   return readLocal().map(normalize);
+}
+
+export function getPetById(id) {
+  if (!id) return null;
+  return getLocalPets().find((pet) => pet.id === id) || null;
+}
+
+export function getActivePet(activePetId) {
+  const pet = getPetById(activePetId) || getLocalPets()[0] || null;
+  if (pet) return pet;
+  const fallback = {
+    id: null,
+    name: translateForLocale('tr', 'petsService.pet_fallback'),
+    type: 'pet',
+    breed: '',
+    birthDate: '',
+    age: '',
+    gender: 'unknown',
+    neutered: 'unknown',
+    weight: 0,
+    ownership: 'owned',
+    location: '',
+    volunteerNote: '',
+    rawHistory: '',
+    chronicDiseases: [],
+    allergies: [],
+    medications: [],
+    statusText: '',
+    overallStatus: 'good',
+    photo: null,
+    extractedTags: []
+  };
+  return {
+    ...fallback,
+    riskContext: buildPetRiskContext(fallback),
+    riskTags: [],
+    lifeStage: ''
+  };
 }
 
 export async function getPets({ userId = 'user-1' } = {}) {

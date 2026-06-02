@@ -1,6 +1,6 @@
 import { navigate, goBack } from '../../router.js';
 import { getState } from '../../store.js';
-import { getActivePet } from '../../mock/pets.js';
+import { getActivePet } from '../../services/pets.js';
 import { getFreeRecords, updateReminderStatus } from '../../services/freeRecords.js';
 import { showToast } from '../../ui/toast.js';
 import { getLocale, t, translateForLocale } from '../../i18n/tr.js';

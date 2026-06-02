@@ -1,7 +1,7 @@
 import { navigate, goBack } from '../../router.js';
 import { getState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
-import { categoryLabels } from '../../mock/questions.js';
+import { categoryLabels } from '../../data/questions.js';
 import { submitFeatureForm } from '../../services/formSubmissions.js';
 
 export function render(params = {}, query = {}) {

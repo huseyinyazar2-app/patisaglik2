@@ -1,7 +1,7 @@
 import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
-import { redFlagQuestions } from '../../mock/questions.js';
+import { redFlagQuestions } from '../../data/questions.js';
 import { showToast } from '../../ui/toast.js';
 
 export function render() {

@@ -249,6 +249,7 @@ const tr = {
     use: 'Kullan', retake: 'Tekrar Çek', rerecord: 'Tekrar Kaydet',
     photo_quality: 'Fotoğraf net mi?', video_quality: 'Pet net görünüyor mu?',
     add_note: 'Bu kayıtla ilgili not ekleyin',
+    optional_note: 'Opsiyonel not...',
     save: 'Kaydet', skip: 'Atla'
   },
   summary: {
@@ -2067,6 +2068,8 @@ JSON döndür:
     save_failed: 'Sonuç kaydedilemedi: {error}'
   },
   landing: {
+    admin: 'Admin',
+    admin_panel: 'Admin Paneli',
     open_app: 'Uygulamayı Aç',
     kicker: 'Pet sağlık yönetimi',
     hero_title: 'Panik anında doğru veriyi topla, veterinere eksiksiz dosyayla git.',
@@ -2075,6 +2078,13 @@ JSON döndür:
     visual_label: 'Pati Sağlık ürün özeti',
     free_health_area: 'Ücretsiz sağlık alanı',
     pre_check: 'Ön kontrol',
+    preview_subject: 'Pet sağlık dosyası',
+    preview_meta: 'Kayıtlar · AI ön triyaj · takip',
+    preview_passport: 'Pasaport',
+    preview_weight: 'Kilo',
+    preview_followup: 'Takip',
+    preview_model: 'Güvenli AI',
+    risk_signal: 'Risk sinyali',
     vet_guidance_ready: 'Veteriner yönlendirme hazır',
     features: [
       { title: 'AI ön triyaj', desc: 'Şikayeti, pet geçmişini ve kırmızı bayrakları veterinere hazır özetler.' },
@@ -2451,22 +2461,15 @@ JSON döndür:
     decline: 'Reddet',
     link_copied: 'Davet bağlantısı kopyalandı.'
   },
-  mockPets: {
-    milo_age: '4 yaş',
-    boncuk_age: '3 yaş',
-    milo_history: 'Geçen sene parkta oynarken yabancı bir cisim yutmuştu, ameliyat olmak zorunda kaldı.',
-    boncuk_history: 'Küçükken araba çarpmıştı, kalça kemiğinde çatlak vardı. Bir de bağışıklığı bazen düşüyor.',
-    good_status: 'Genel durum iyi görünüyor',
-    watch_status: 'Takip gereken kayıt var'
-  },
   petsService: {
     age_years: '{count} yaş',
+    age_months: '{count} ay',
+    pet_fallback: 'Pet',
     profile_ready: 'Profil kaydı hazır'
   },
   userDefaults: {
     country: 'Türkiye',
-    name: 'Kullanıcı',
-    seed_name: 'Ayşe Yılmaz'
+    name: 'Kullanıcı'
   },
   vetReadyDefaults: {
     urgency_green: 'Yeşil',
@@ -2479,7 +2482,7 @@ JSON döndür:
     title: 'Eski Kontrol Kaydı',
     kicker: 'Canlı Arşiv Uyumluluğu',
     heading: 'Bu bağlantı eski kontrol ekranına ait',
-    desc: 'Eski AI kontrol oturumları artık ücretsiz sağlık arşivinde sahte veriyle gösterilmiyor. Kayıtlarınızı zaman çizelgesi veya sağlık kayıtları ekranından takip edebilirsiniz.',
+    desc: 'Eski AI kontrol oturumları artık ücretsiz sağlık arşivinde gösterilmiyor. Kayıtlarınızı zaman çizelgesi veya sağlık kayıtları ekranından takip edebilirsiniz.',
     health_records: 'Sağlık Kayıtları'
   },
   audioPreview: {
@@ -2496,6 +2499,9 @@ JSON döndür:
     frame_hint: 'Alanı çerçeve içine alın',
     shoot: 'Çek',
     flip_camera: 'Kamerayı Çevir'
+  },
+  videoCapture: {
+    pick_video: 'Kayıt almak veya galeriden video seçmek için butonu kullanın.'
   },
   photoPreview: {
     title: 'Fotoğraf önizlemesi'

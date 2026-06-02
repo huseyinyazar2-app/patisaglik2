@@ -1,7 +1,7 @@
 import { navigate, goBack } from '../../router.js';
 import { getState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
-import { categoryLabels, redFlagQuestions } from '../../mock/questions.js';
+import { categoryLabels, redFlagQuestions } from '../../data/questions.js';
 
 export function render(params = {}, query = {}) {
   const state = getState();

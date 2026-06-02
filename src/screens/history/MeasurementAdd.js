@@ -1,7 +1,7 @@
 import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
-import { getActivePet } from '../../mock/pets.js';
+import { getActivePet } from '../../services/pets.js';
 import { saveMeasurement } from '../../services/measurements.js';
 
 const MEASUREMENT_TYPES = [

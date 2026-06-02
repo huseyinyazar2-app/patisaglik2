@@ -1,14 +1,14 @@
 import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
-import { getActivePet } from '../../mock/pets.js';
+import { getActivePet } from '../../services/pets.js';
 import {
   getSymptomChips,
   classifyComplaint,
   getCompatibleComplaintLabels,
   getComplaintTypeByLabel,
   getIncompatibleComplaintLabels
-} from '../../mock/questions.js';
+} from '../../data/questions.js';
 import { showToast } from '../../ui/toast.js';
 
 export function render() {

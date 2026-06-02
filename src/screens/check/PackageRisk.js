@@ -1,6 +1,6 @@
 import { navigate, goBack } from '../../router.js';
 import { getState } from '../../store.js';
-import { getActivePet } from '../../mock/pets.js';
+import { getActivePet } from '../../services/pets.js';
 import { submitFeatureForm } from '../../services/formSubmissions.js';
 import { showToast } from '../../ui/toast.js';
 import { buildPetRiskContext } from '../../services/petContext.js';

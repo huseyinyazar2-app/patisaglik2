@@ -1,7 +1,7 @@
 import { navigate } from '../../router.js';
 import { getState, resetSession } from '../../store.js';
 import { t } from '../../i18n/tr.js';
-import { redFlagQuestions } from '../../mock/questions.js';
+import { redFlagQuestions } from '../../data/questions.js';
 
 export function render(params = {}, query = {}) {
   const state = getState();
@@ -85,7 +85,7 @@ export function afterRender() {
   });
   
   document.getElementById('btnCreateSummary')?.addEventListener('click', () => {
-    // Usually would generate a PDF, for mock navigate to report preview
+    // Opens the live pre-visit summary flow.
     navigate('/check/new/summary');
   });
   

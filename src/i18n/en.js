@@ -220,6 +220,7 @@ const en = {
     use: 'Use', retake: 'Retake', rerecord: 'Record Again',
     photo_quality: 'Is the photo clear?', video_quality: 'Is your pet clearly visible?',
     add_note: 'Add a note for this record',
+    optional_note: 'Optional note...',
     save: 'Save', skip: 'Skip'
   },
   summary: {
@@ -2038,6 +2039,8 @@ Return JSON:
     save_failed: 'Outcome could not be saved: {error}'
   },
   landing: {
+    admin: 'Admin',
+    admin_panel: 'Admin Panel',
     open_app: 'Open App',
     kicker: 'Pet health management',
     hero_title: 'Collect the right data in a stressful moment and go to the vet with a complete file.',
@@ -2046,6 +2049,13 @@ Return JSON:
     visual_label: 'Pati Health product summary',
     free_health_area: 'Free health area',
     pre_check: 'Pre-check',
+    preview_subject: 'Pet health file',
+    preview_meta: 'Records · AI pre-triage · follow-up',
+    preview_passport: 'Passport',
+    preview_weight: 'Weight',
+    preview_followup: 'Follow-up',
+    preview_model: 'Safe AI',
+    risk_signal: 'Risk signal',
     vet_guidance_ready: 'Vet guidance ready',
     features: [
       { title: 'AI pre-triage', desc: 'Summarizes the complaint, pet history and red flags into a vet-ready brief.' },
@@ -2422,22 +2432,15 @@ Return JSON:
     decline: 'Decline',
     link_copied: 'Invite link copied.'
   },
-  mockPets: {
-    milo_age: '4 years',
-    boncuk_age: '3 years',
-    milo_history: 'Last year, while playing in the park, he swallowed a foreign object and needed surgery.',
-    boncuk_history: 'When she was younger, she was hit by a car and had a pelvic bone crack. Her immunity also seems to drop sometimes.',
-    good_status: 'General condition looks good',
-    watch_status: 'There is a record that needs follow-up'
-  },
   petsService: {
     age_years: '{count} years',
+    age_months: '{count} months',
+    pet_fallback: 'Pet',
     profile_ready: 'Profile record is ready'
   },
   userDefaults: {
     country: 'Türkiye',
-    name: 'User',
-    seed_name: 'Ayşe Yılmaz'
+    name: 'User'
   },
   vetReadyDefaults: {
     urgency_green: 'Green',
@@ -2450,7 +2453,7 @@ Return JSON:
     title: 'Legacy Check Record',
     kicker: 'Live Archive Compatibility',
     heading: 'This link belongs to the old check screen',
-    desc: 'Old AI check sessions are no longer shown with mock data in the free health archive. You can follow your records from the timeline or health records screen.',
+    desc: 'Old AI check sessions are no longer shown in the free health archive. You can follow your records from the timeline or health records screen.',
     health_records: 'Health Records'
   },
   audioPreview: {
@@ -2467,6 +2470,9 @@ Return JSON:
     frame_hint: 'Place the area inside the frame',
     shoot: 'Capture',
     flip_camera: 'Flip Camera'
+  },
+  videoCapture: {
+    pick_video: 'Use the button to record a video or choose one from your gallery.'
   },
   photoPreview: {
     title: 'Photo preview'

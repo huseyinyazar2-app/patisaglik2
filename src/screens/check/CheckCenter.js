@@ -1,6 +1,6 @@
 import { navigate } from '../../router.js';
 import { getState, resetSession } from '../../store.js';
-import { getActivePet } from '../../mock/pets.js';
+import { getActivePet } from '../../services/pets.js';
 import { t } from '../../i18n/tr.js';
 
 const premiumAssistants = [

@@ -1,8 +1,7 @@
 import { navigate } from '../../router.js';
 import { getState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
-import { getActivePet as getMockActivePet } from '../../mock/pets.js';
-import { getLocalPets, updatePetPhoto } from '../../services/pets.js';
+import { getActivePet, getLocalPets, updatePetPhoto } from '../../services/pets.js';
 import { getFreeRecords, mergeRecentRecords } from '../../services/freeRecords.js';
 import { showToast } from '../../ui/toast.js';
 
@@ -21,7 +20,7 @@ function tx(key, vars = {}) {
 }
 
 function getHomePet(activePetId) {
-  return getLocalPets().find((pet) => pet.id === activePetId) || getMockActivePet(activePetId);
+  return getLocalPets().find((pet) => pet.id === activePetId) || getActivePet(activePetId);
 }
 
 function renderPetVisual(pet, className = 'home-hero-photo') {

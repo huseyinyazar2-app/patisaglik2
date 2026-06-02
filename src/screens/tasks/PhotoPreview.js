@@ -2,19 +2,23 @@ import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
 
-export function render(params = {}, query = {}) {
+export function render(params = {}) {
   const state = getState();
   const taskId = params.taskId || '';
   const session = state.session || {};
   const task = (session.tasks || []).find(tk => tk.id === taskId);
   const taskTitle = task ? task.title : t('tasks.take_photo');
+  const media = (session.media || []).filter(item => item.taskId === taskId && item.type === 'photo');
+  const lastMedia = media[media.length - 1] || null;
+  const previewHtml = lastMedia?.dataUrl
+    ? `<img src="${lastMedia.dataUrl}" alt="${taskTitle}" style="width: 100%; height: 100%; object-fit: cover;" />`
+    : `<div style="text-align: center;"><div style="width: 64px; margin: 0 auto var(--space-2);">${window.__icons?.camera || ''}</div><div style="font-size: var(--font-size-sm); color: var(--text-tertiary);">${t('photoPreview.title')}</div></div>`;
 
   return `
     <div class="screen">
-      <!-- Header -->
       <div class="header">
         <div class="header-left">
-          <button class="header-back" id="backBtn">←</button>
+          <button class="header-back" id="backBtn">${window.__icons?.back || '<'}</button>
         </div>
         <div class="header-title">${taskTitle}</div>
         <div class="header-right">
@@ -23,71 +27,44 @@ export function render(params = {}, query = {}) {
       </div>
 
       <div style="padding: var(--space-4); padding-bottom: var(--space-32);">
-        <!-- Preview Image -->
-        <div class="preview-image" style="background: linear-gradient(135deg, var(--gray-100), var(--gray-200));">
-          <div style="text-align: center;">
-            <div style="font-size: 64px; margin-bottom: var(--space-2);">📸</div>
-            <div style="font-size: var(--font-size-sm); color: var(--text-tertiary);">${t('photoPreview.title')}</div>
-          </div>
+        <div class="preview-image" style="background: linear-gradient(135deg, var(--gray-100), var(--gray-200)); overflow: hidden;">
+          ${previewHtml}
         </div>
 
-        <!-- Quality Check -->
         <div class="card card-bordered" style="margin-bottom: var(--space-4);">
           <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3);">
-            <span style="font-size: 20px;">🔍</span>
+            <span style="width: 20px;">${window.__icons?.search || ''}</span>
             <span style="font-weight: 700; font-size: var(--font-size-base);">${t('tasks.photo_quality')}</span>
           </div>
           <div style="display: flex; gap: var(--space-2);">
-            <button class="chip quality-chip selected" data-quality="yes" id="qualityYes">
-              ✅ ${t('common.yes')}
-            </button>
-            <button class="chip quality-chip" data-quality="no" id="qualityNo">
-              ❌ ${t('common.no')}
-            </button>
-            <button class="chip quality-chip" data-quality="unsure" id="qualityUnsure">
-              🤔 ${t('redflags.unsure')}
-            </button>
+            <button class="chip quality-chip selected" data-quality="yes" id="qualityYes">${t('common.yes')}</button>
+            <button class="chip quality-chip" data-quality="no" id="qualityNo">${t('common.no')}</button>
+            <button class="chip quality-chip" data-quality="unsure" id="qualityUnsure">${t('redflags.unsure')}</button>
           </div>
         </div>
 
-        <!-- Note Textarea -->
         <div class="form-group" style="margin-bottom: var(--space-6);">
           <label style="font-size: var(--font-size-sm); font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: var(--space-2);">
-            📝 ${t('tasks.add_note')}
+            ${t('tasks.add_note')}
           </label>
-          <textarea
-            id="noteTextarea"
-            class="complaint-textarea"
-            placeholder="Opsiyonel not..."
-            style="width: 100%; box-sizing: border-box; min-height: 80px;"
-          ></textarea>
+          <textarea id="noteTextarea" class="complaint-textarea" placeholder="${t('tasks.optional_note')}" style="width: 100%; box-sizing: border-box; min-height: 80px;"></textarea>
         </div>
 
-        <!-- Actions -->
         <div style="display: flex; flex-direction: column; gap: var(--space-3);">
-          <button class="btn btn-primary btn-full btn-lg" id="useBtn">
-            ✅ ${t('tasks.use')}
-          </button>
-          <button class="btn btn-outline btn-full" id="retakeBtn">
-            🔄 ${t('tasks.retake')}
-          </button>
-          <button class="btn btn-ghost btn-full" id="cancelBtn">
-            ❌ ${t('common.cancel')}
-          </button>
+          <button class="btn btn-primary btn-full btn-lg" id="useBtn">${t('tasks.use')}</button>
+          <button class="btn btn-outline btn-full" id="retakeBtn">${t('tasks.retake')}</button>
+          <button class="btn btn-ghost btn-full" id="cancelBtn">${t('common.cancel')}</button>
         </div>
       </div>
     </div>
   `;
 }
 
-export function afterRender(params = {}, query = {}) {
+export function afterRender(params = {}) {
   const taskId = params.taskId || '';
 
-  document.getElementById('backBtn')?.addEventListener('click', () => {
-    goBack();
-  });
+  document.getElementById('backBtn')?.addEventListener('click', () => goBack());
 
-  // Quality chip selection
   document.querySelectorAll('.quality-chip').forEach(chip => {
     chip.addEventListener('click', () => {
       document.querySelectorAll('.quality-chip').forEach(c => c.classList.remove('selected'));
@@ -99,36 +76,33 @@ export function afterRender(params = {}, query = {}) {
     const note = document.getElementById('noteTextarea')?.value || '';
     const quality = document.querySelector('.quality-chip.selected')?.dataset.quality || 'yes';
     setState(s => {
-      // Mark task as completed
       const task = (s.session.tasks || []).find(tk => tk.id === taskId);
       if (task) {
         task.status = 'completed';
         task.note = note;
         task.quality = quality;
       }
-      if (!s.session.media) s.session.media = [];
-      s.session.media.push({ taskId, type: 'photo', quality, note });
-      // Update media count
+      const media = (s.session.media || []).slice().reverse().find(item => item.taskId === taskId && item.type === 'photo');
+      if (media) {
+        media.quality = quality;
+        media.note = note;
+      }
       if (!s.session.mediaCount) s.session.mediaCount = { photo: 0, video: 0, audio: 0 };
-      s.session.mediaCount.photo = (s.session.mediaCount.photo || 0) + 1;
+      s.session.mediaCount.photo = (s.session.media || []).filter(item => item.type === 'photo').length;
     });
     navigate('/check/new/task-plan');
   });
 
   document.getElementById('retakeBtn')?.addEventListener('click', () => {
-    // Remove last media entry and go back to capture
     setState(s => {
-      if (s.session.media && s.session.media.length > 0) {
-        s.session.media.pop();
-      }
+      if (s.session.media && s.session.media.length > 0) s.session.media.pop();
     });
     navigate(`/check/new/photo/${taskId}/capture`);
   });
 
   document.getElementById('cancelBtn')?.addEventListener('click', () => {
-    // Remove media and go back to task plan
     setState(s => {
-      s.session.media = (s.session.media || []).filter(m => m.taskId !== taskId);
+      s.session.media = (s.session.media || []).filter(item => item.taskId !== taskId);
     });
     navigate('/check/new/task-plan');
   });

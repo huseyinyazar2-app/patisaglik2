@@ -11,7 +11,7 @@ export function render() {
           <strong>${t('app.name')}</strong>
         </button>
         <nav>
-          <button type="button" id="btnAdmin">Admin</button>
+          <button type="button" id="btnAdmin">${t('landing.admin')}</button>
           <button type="button" id="btnOpenApp">${t('landing.open_app')}</button>
         </nav>
       </header>
@@ -22,7 +22,7 @@ export function render() {
           <h1>${t('landing.hero_title')}</h1>
           <p>${t('landing.hero_desc')}</p>
           <div class="web-hero-actions">
-            <button class="btn btn-primary" id="btnStart">Admin Paneli</button>
+            <button class="btn btn-primary" id="btnStart">${t('landing.admin_panel')}</button>
             <button class="btn btn-secondary" id="btnDemo">${t('landing.mobile_preview')}</button>
           </div>
         </section>
@@ -32,17 +32,17 @@ export function render() {
             <div class="web-phone-top"></div>
             <div class="web-phone-card hero">
               <span>${t('landing.free_health_area')}</span>
-              <strong>Boncuk</strong>
-              <small>Kedi · British · 4.2 kg</small>
+              <strong>${t('landing.preview_subject')}</strong>
+              <small>${t('landing.preview_meta')}</small>
             </div>
             <div class="web-phone-grid">
               <div><b>AI</b><small>${t('landing.pre_check')}</small></div>
-              <div><b>4.4</b><small>kg</small></div>
-              <div><b>1</b><small>takip</small></div>
-              <div><b>3.5</b><small>kritik model</small></div>
+              <div><b>PDF</b><small>${t('landing.preview_passport')}</small></div>
+              <div><b>KG</b><small>${t('landing.preview_weight')}</small></div>
+              <div><b>24</b><small>${t('landing.preview_followup')}</small></div>
             </div>
             <div class="web-phone-card alert">
-              <span>Risk sinyali</span>
+              <span>${t('landing.risk_signal')}</span>
               <strong>${t('landing.vet_guidance_ready')}</strong>
             </div>
           </div>
