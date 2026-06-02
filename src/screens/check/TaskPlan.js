@@ -21,9 +21,9 @@ export function render() {
 
   const getPriorityBadge = (priority) => {
     switch (priority) {
-      case 'required': return '<span class="chip-status required text-xs" style="padding: 2px 10px; border-radius: var(--radius-full); font-weight: 700; font-size: 10px;">Zorunlu</span>';
-      case 'recommended': return '<span class="chip-status recommended text-xs" style="padding: 2px 10px; border-radius: var(--radius-full); font-weight: 700; font-size: 10px;">Önerilir</span>';
-      default: return '<span class="chip-status optional text-xs" style="padding: 2px 10px; border-radius: var(--radius-full); font-weight: 700; font-size: 10px;">Opsiyonel</span>';
+      case 'required': return `<span class="chip-status required text-xs" style="padding: 2px 10px; border-radius: var(--radius-full); font-weight: 700; font-size: 10px;">${t('tasks.required')}</span>`;
+      case 'recommended': return `<span class="chip-status recommended text-xs" style="padding: 2px 10px; border-radius: var(--radius-full); font-weight: 700; font-size: 10px;">${t('tasks.recommended')}</span>`;
+      default: return `<span class="chip-status optional text-xs" style="padding: 2px 10px; border-radius: var(--radius-full); font-weight: 700; font-size: 10px;">${t('tasks.optional')}</span>`;
     }
   };
 
@@ -46,7 +46,7 @@ export function render() {
           ${task.status === 'pending' ? getPriorityBadge(task.priority) : ''}
         </div>
         <div class="task-card-desc" style="font-size: 11px; font-weight: 500; color: var(--text-tertiary);">
-          ${task.status === 'completed' ? 'Kayıt eklendi' : task.status === 'skipped' ? 'Atlandı' : 'Tıklayıp kaydı başlatın'}
+          ${task.status === 'completed' ? t('taskPlan.record_added') : task.status === 'skipped' ? t('tasks.skipped') : t('taskPlan.tap_to_start')}
         </div>
       </div>
       <div class="flex items-center ml-2">
@@ -61,7 +61,7 @@ export function render() {
         <div class="header-left">
           <button class="header-icon" id="btnBack">${window.__icons?.back}</button>
         </div>
-        <div class="header-title" style="font-weight: 700;">Adım 3/5</div>
+        <div class="header-title" style="font-weight: 700;">${t('taskPlan.step_title')}</div>
         <div class="header-right"></div>
       </div>
 
@@ -70,12 +70,12 @@ export function render() {
       </div>
 
       <div class="section pt-6" style="padding-bottom: 140px;">
-        <div class="premium-screen-kicker mb-2">Kanıt Toplama</div>
+        <div class="premium-screen-kicker mb-2">${t('taskPlan.kicker')}</div>
         <h2 class="text-xl font-bold mb-2">${t('tasks.title')}</h2>
         <p class="text-sm text-secondary mb-6">${t('tasks.desc')}</p>
 
         <div class="task-list flex flex-col mb-6">
-          ${taskCardsHtml || '<div class="empty-state">Önerilen görev bulunmuyor.</div>'}
+          ${taskCardsHtml || `<div class="empty-state">${t('taskPlan.no_tasks')}</div>`}
         </div>
 
         <button class="btn btn-outline btn-full flex items-center justify-center gap-2" id="btnAddCustomTask" style="padding: 12px; border-radius: var(--radius-lg); font-weight: 700; background: rgba(255,255,255,0.62);">
@@ -100,7 +100,7 @@ export function afterRender() {
       const taskType = card.dataset.taskType;
 
       if (taskType === 'note') {
-        const note = prompt('Bu görev için kısa gözlem notunuzu yazın:');
+        const note = prompt(t('taskPlan.note_prompt'));
         if (note === null) return;
         setState(state => {
           const task = (state.session.tasks || []).find(t => t.id === taskId);
@@ -124,7 +124,7 @@ export function afterRender() {
     const state = getState();
     const pendingRequired = (state.session.tasks || []).filter(t => t.status === 'pending' && t.priority === 'required');
     if (pendingRequired.length > 0) {
-      showToast(`${pendingRequired.length} zorunlu görev henüz tamamlanmadı. Lütfen önce zorunlu görevleri tamamlayın.`);
+      showToast(t('taskPlan.required_missing', { count: pendingRequired.length }));
       return;
     }
     navigate('/check/new/summary');
@@ -133,7 +133,7 @@ export function afterRender() {
     const state = getState();
     const pendingRequired = (state.session.tasks || []).filter(t => t.status === 'pending' && t.priority === 'required');
     if (pendingRequired.length > 0) {
-      showToast(`${pendingRequired.length} zorunlu görev henüz tamamlanmadı. Bu kontrol için zorunlu kanıtları atlayamazsınız.`);
+      showToast(t('taskPlan.required_skip_blocked', { count: pendingRequired.length }));
       return;
     }
     setState(current => {

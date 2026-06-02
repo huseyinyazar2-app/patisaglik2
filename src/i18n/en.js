@@ -158,7 +158,15 @@ const en = {
     create_summary: 'Create Vet Summary',
     go_home: 'Back to Home'
   },
-  questions: { skip: 'Not sure / Skip', next: 'Continue', back: 'Back' },
+  questions: {
+    skip: 'Not sure / Skip', next: 'Continue', back: 'Back',
+    short_placeholder: 'Briefly describe it...',
+    step_title: 'Step 2/5 (Question {current}/{total})',
+    cancel_test: 'Cancel Test',
+    cancel_title: 'Cancel check',
+    cancel_message: 'All progress will be deleted.',
+    cancel_confirm: 'Cancel'
+  },
   tasks: {
     title: 'Suggested records for this check',
     desc: 'These records can make the result and vet report clearer. You may skip non-essential tasks.',
@@ -2138,6 +2146,51 @@ Return JSON:
     repeat: 'Repeat',
     health_record: 'Health record',
     diet_note: 'Diet note'
+  },
+  taskPlan: {
+    record_added: 'Record added',
+    tap_to_start: 'Tap to start the record',
+    step_title: 'Step 3/5',
+    kicker: 'Evidence Collection',
+    no_tasks: 'No recommended task found.',
+    note_prompt: 'Write a short observation note for this task:',
+    required_missing: '{count} required tasks are not completed yet. Please complete required tasks first.',
+    required_skip_blocked: '{count} required tasks are not completed yet. Required evidence cannot be skipped for this check.'
+  },
+  planScreen: {
+    no_test_price: 'No test price',
+    subscription: 'Subscription',
+    credit: 'Credit',
+    loading: 'Loading plan information...',
+    active: 'Active',
+    apply_test: 'Apply in Test',
+    title: 'Plan and Credits',
+    desc: 'Pet limit, credit balance and premium/credit separation are read from the database plan infrastructure.',
+    packages: 'Packages',
+    test_note: 'Plan switching on this screen is for testing; real payment and subscription validation will be completed in the production service.',
+    load_failed: 'Plan information could not be loaded: {error}'
+  },
+  sitterInvite: {
+    accepted: 'Accepted',
+    declined: 'Declined',
+    pending: 'Waiting for acceptance',
+    kicker: 'Sitter invite',
+    subtitle: 'Limited-access invitation link',
+    ready_title: 'Invite link is ready.',
+    ready_desc: 'Accept/decline state is kept on this device. When production auth is ready, the same flow will connect to the user account.',
+    invite_code: 'Invite code',
+    status: 'Status',
+    accept: 'Accept Invite',
+    decline: 'Decline',
+    link_copied: 'Invite link copied.'
+  },
+  mockPets: {
+    milo_age: '4 years',
+    boncuk_age: '3 years',
+    milo_history: 'Last year, while playing in the park, he swallowed a foreign object and needed surgery.',
+    boncuk_history: 'When she was younger, she was hit by a car and had a pelvic bone crack. Her immunity also seems to drop sometimes.',
+    good_status: 'General condition looks good',
+    watch_status: 'There is a record that needs follow-up'
   },
   common: {
     save: 'Save', saving: 'Saving...', cancel: 'Cancel', back: 'Back', next: 'Continue', done: 'Done',

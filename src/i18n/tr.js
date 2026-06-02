@@ -187,7 +187,15 @@ const tr = {
     create_summary: 'Veterinerle Paylaşılacak Özet Oluştur',
     go_home: 'Ana Sayfaya Dön'
   },
-  questions: { skip: 'Bilmiyorum / Atla', next: 'Devam', back: 'Geri' },
+  questions: {
+    skip: 'Bilmiyorum / Atla', next: 'Devam', back: 'Geri',
+    short_placeholder: 'Kısaca açıklayın...',
+    step_title: 'Adım 2/5 (Soru {current}/{total})',
+    cancel_test: 'Testi İptal Et',
+    cancel_title: 'Kontrolü iptal et',
+    cancel_message: 'Tüm ilerleme silinecek.',
+    cancel_confirm: 'İptal Et'
+  },
   tasks: {
     title: 'Bu kontrol için önerilen kayıtlar',
     desc: 'Aşağıdaki görevler sonucu ve veteriner raporunu daha anlaşılır hale getirir. Zorunlu olmayanları atlayabilirsiniz.',
@@ -2167,6 +2175,51 @@ JSON döndür:
     default_goal: 'Klinik özeti',
     general_summary: 'genel özet',
     user_prompt: 'Belge türü: {documentKind}\nOkuma hedefi: {readGoal}\nİstenen alanlar: {extractionOptions}\nKullanıcı notu: {note}\n\nJSON şeması:\n'
+  },
+  taskPlan: {
+    record_added: 'Kayıt eklendi',
+    tap_to_start: 'Tıklayıp kaydı başlatın',
+    step_title: 'Adım 3/5',
+    kicker: 'Kanıt Toplama',
+    no_tasks: 'Önerilen görev bulunmuyor.',
+    note_prompt: 'Bu görev için kısa gözlem notunuzu yazın:',
+    required_missing: '{count} zorunlu görev henüz tamamlanmadı. Lütfen önce zorunlu görevleri tamamlayın.',
+    required_skip_blocked: '{count} zorunlu görev henüz tamamlanmadı. Bu kontrol için zorunlu kanıtları atlayamazsınız.'
+  },
+  planScreen: {
+    no_test_price: 'Test fiyatı yok',
+    subscription: 'Abonelik',
+    credit: 'Kredi',
+    loading: 'Plan bilgileri yükleniyor...',
+    active: 'Aktif',
+    apply_test: 'Testte Uygula',
+    title: 'Plan ve Krediler',
+    desc: 'Pet limiti, kredi bakiyesi ve premium/kredi ayrımı veritabanı plan altyapısından okunur.',
+    packages: 'Paketler',
+    test_note: 'Bu ekrandaki plan değiştirme test içindir; gerçek ödeme ve abonelik doğrulaması production servisinde tamamlanacak.',
+    load_failed: 'Plan bilgisi alınamadı: {error}'
+  },
+  sitterInvite: {
+    accepted: 'Kabul edildi',
+    declined: 'Reddedildi',
+    pending: 'Kabul bekliyor',
+    kicker: 'Bakıcı daveti',
+    subtitle: 'Sınırlı erişim davet bağlantısı',
+    ready_title: 'Davet bağlantısı hazır.',
+    ready_desc: 'Bu ekranda kabul/ret durumu cihazda tutulur. Production auth geldiğinde aynı akış kullanıcı hesabına bağlanacak.',
+    invite_code: 'Davet kodu',
+    status: 'Durum',
+    accept: 'Daveti Kabul Et',
+    decline: 'Reddet',
+    link_copied: 'Davet bağlantısı kopyalandı.'
+  },
+  mockPets: {
+    milo_age: '4 yaş',
+    boncuk_age: '3 yaş',
+    milo_history: 'Geçen sene parkta oynarken yabancı bir cisim yutmuştu, ameliyat olmak zorunda kaldı.',
+    boncuk_history: 'Küçükken araba çarpmıştı, kalça kemiğinde çatlak vardı. Bir de bağışıklığı bazen düşüyor.',
+    good_status: 'Genel durum iyi görünüyor',
+    watch_status: 'Takip gereken kayıt var'
   },
   common: {
     save: 'Kaydet', saving: 'Kaydediliyor...', cancel: 'İptal', back: 'Geri', next: 'Devam', done: 'Tamam',

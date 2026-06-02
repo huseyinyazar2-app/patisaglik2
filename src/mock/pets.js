@@ -1,5 +1,5 @@
-// Pati Sağlık — Mock Pet Data
 import { buildPetRiskContext } from '../services/petContext.js';
+import { translateForLocale } from '../i18n/tr.js';
 const seedPets = [
   {
     id: 'pet-1',
@@ -7,7 +7,7 @@ const seedPets = [
     type: 'dog',
     breed: 'Golden Retriever',
     birthDate: '2021-03-15',
-    age: '4 yaş',
+    age: translateForLocale('tr', 'mockPets.milo_age'),
     gender: 'male',
     neutered: true,
     isBrachycephalic: false,
@@ -17,13 +17,13 @@ const seedPets = [
     chronicDiseases: [],
     allergies: [],
     medications: [],
-    rawHistory: 'Geçen sene parkta oynarken yabancı bir cisim yutmuştu, ameliyat olmak zorunda kaldı.',
+    rawHistory: translateForLocale('tr', 'mockPets.milo_history'),
     extractedTags: ['pika_sendromu', 'gecirilmis_mide_ameliyati'],
     notes: '',
     deviceMode: 'phone_only',
     lastCheckDate: '2026-05-28',
     overallStatus: 'good', // good | watch | urgent
-    statusText: 'Genel durum iyi görünüyor'
+    statusText: translateForLocale('tr', 'mockPets.good_status')
   },
   {
     id: 'pet-2',
@@ -31,7 +31,7 @@ const seedPets = [
     type: 'cat',
     breed: 'British Shorthair',
     birthDate: '2022-08-10',
-    age: '3 yaş',
+    age: translateForLocale('tr', 'mockPets.boncuk_age'),
     gender: 'female',
     neutered: false,
     isBrachycephalic: true,
@@ -41,13 +41,13 @@ const seedPets = [
     chronicDiseases: ['Diyabet'],
     allergies: ['Tavuk proteini'],
     medications: [],
-    rawHistory: 'Küçükken araba çarpmıştı, kalça kemiğinde çatlak vardı. Bir de bağışıklığı bazen düşüyor.',
+    rawHistory: translateForLocale('tr', 'mockPets.boncuk_history'),
     extractedTags: ['gecirilmis_travma', 'bagisiklik_sorunu'],
     notes: '',
     deviceMode: 'phone_only',
     lastCheckDate: '2026-05-25',
     overallStatus: 'watch',
-    statusText: 'Takip gereken kayıt var'
+    statusText: translateForLocale('tr', 'mockPets.watch_status')
   }
 ];
 

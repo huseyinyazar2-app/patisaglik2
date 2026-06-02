@@ -53,7 +53,7 @@ function getQuestionInputHtml(question) {
 
   if (!question.options?.length) {
     return `
-      <textarea id="q_${question.id}" class="complaint-textarea w-full" placeholder="Kısaca açıklayın..." style="background: rgba(255, 255, 255, 0.45); border: 1.5px solid rgba(226, 232, 240, 0.65); padding: 16px; border-radius: var(--radius-lg);"></textarea>
+      <textarea id="q_${question.id}" class="complaint-textarea w-full" placeholder="${t('questions.short_placeholder')}" style="background: rgba(255, 255, 255, 0.45); border: 1.5px solid rgba(226, 232, 240, 0.65); padding: 16px; border-radius: var(--radius-lg);"></textarea>
     `;
   }
 
@@ -88,7 +88,7 @@ export function render() {
 
   if (allQuestions.length === 0) {
     setTimeout(() => navigate('/check/new/complaint'), 0);
-    return '<div class="screen screen-padded" style="display:flex;justify-content:center;align-items:center;">Yükleniyor...</div>';
+    return `<div class="screen screen-padded" style="display:flex;justify-content:center;align-items:center;">${t('common.loading')}</div>`;
   }
 
   if (currentQuestionIndex >= allQuestions.length) currentQuestionIndex = allQuestions.length - 1;
@@ -102,7 +102,7 @@ export function render() {
         <div class="header-left">
           <button class="header-icon" id="btnBack">${window.__icons?.back}</button>
         </div>
-        <div class="header-title" style="font-weight: 700;">Adım 2/5 (Soru ${currentQuestionIndex + 1}/${allQuestions.length})</div>
+        <div class="header-title" style="font-weight: 700;">${t('questions.step_title', { current: currentQuestionIndex + 1, total: allQuestions.length })}</div>
         <div class="header-right">
           <button class="btn btn-ghost btn-sm text-primary" id="btnSkip" style="font-weight: 700;">${t('questions.skip')}</button>
         </div>
@@ -125,7 +125,7 @@ export function render() {
       <div class="card" style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: var(--max-width); border-radius: 24px 24px 0 0; padding: 20px 24px; box-shadow: var(--shadow-xl); z-index: 10; border-top: 1px solid rgba(229, 222, 209, 0.8); background: rgba(255, 254, 251, 0.86); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); display: flex; flex-direction: column; gap: 8px;">
         <button class="btn btn-primary btn-full btn-lg" id="btnNext" disabled style="padding: 14px; font-size: var(--font-size-md); border-radius: var(--radius-lg);">${t('questions.next')}</button>
         <button class="btn btn-ghost btn-full text-secondary" id="btnPause" style="padding: 10px; font-size: 14px; font-weight: 600;">Teste Sonra Devam Et</button>
-        <button class="btn btn-ghost btn-full text-danger" id="btnCancel" style="padding: 8px; font-size: 13px;">Testi İptal Et</button>
+        <button class="btn btn-ghost btn-full text-danger" id="btnCancel" style="padding: 8px; font-size: 13px;">${t('questions.cancel_test')}</button>
       </div>
     </div>
   `;
@@ -270,9 +270,9 @@ export function afterRender() {
   document.getElementById('btnPause')?.addEventListener('click', () => navigate('/home'));
   document.getElementById('btnCancel')?.addEventListener('click', async () => {
     const ok = await showConfirmDialog({
-      title: 'Kontrolü iptal et',
-      message: 'Tüm ilerleme silinecek.',
-      confirmText: 'İptal Et',
+      title: t('questions.cancel_title'),
+      message: t('questions.cancel_message'),
+      confirmText: t('questions.cancel_confirm'),
       danger: true
     });
     if (!ok) return;

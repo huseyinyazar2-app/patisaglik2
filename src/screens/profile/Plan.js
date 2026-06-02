@@ -1,9 +1,10 @@
 import { goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { getAccountBilling, saveLocalPlanCode } from '../../services/billing.js';
+import { t } from '../../i18n/tr.js';
 
 function money(plan) {
-  if (!plan.priceCents) return plan.billingType === 'free' ? 'Ücretsiz' : 'Test fiyatı yok';
+  if (!plan.priceCents) return plan.billingType === 'free' ? t('common.free') : t('planScreen.no_test_price');
   return new Intl.NumberFormat('tr-TR', {
     style: 'currency',
     currency: plan.currency || 'TRY'
@@ -11,14 +12,14 @@ function money(plan) {
 }
 
 function planBadge(plan) {
-  if (plan.billingType === 'subscription') return 'Abonelik';
-  if (plan.billingType === 'credit') return 'Kredi';
-  return 'Ücretsiz';
+  if (plan.billingType === 'subscription') return t('planScreen.subscription');
+  if (plan.billingType === 'credit') return t('planScreen.credit');
+  return t('common.free');
 }
 
 function renderPlans(plans = [], activeCode = 'free') {
   if (!plans.length) {
-    return `<div class="free-record-panel"><p>Plan bilgileri yükleniyor...</p></div>`;
+    return `<div class="free-record-panel"><p>${t('planScreen.loading')}</p></div>`;
   }
 
   return plans.map((plan) => `
@@ -29,7 +30,7 @@ function renderPlans(plans = [], activeCode = 'free') {
         <p>${money(plan)} · ${plan.maxPets} pet · ${plan.monthlyCredits} kredi/ay</p>
       </div>
       <button class="btn btn-sm ${plan.code === activeCode ? 'btn-primary' : 'btn-outline'}" data-plan-code="${plan.code}">
-        ${plan.code === activeCode ? 'Aktif' : 'Testte Uygula'}
+        ${plan.code === activeCode ? t('planScreen.active') : t('planScreen.apply_test')}
       </button>
       <span>${planBadge(plan)}</span>
     </div>
@@ -45,7 +46,7 @@ export function render() {
         <div class="header-left">
           <button class="header-back" id="btnBack">${window.__icons?.back}</button>
         </div>
-        <div class="header-title">Plan ve Krediler</div>
+        <div class="header-title">${t('planScreen.title')}</div>
         <div class="header-right">
           <span class="premium-header-shield">${window.__icons?.spark}</span>
         </div>
@@ -54,8 +55,8 @@ export function render() {
       <div class="section pt-4">
         <div class="profile-plan-card">
           <div>
-            <strong>${sub.planName || 'Ücretsiz'}</strong>
-            <p>Pet limiti, kredi bakiyesi ve premium/kredi ayrımı veritabanı plan altyapısından okunur.</p>
+            <strong>${sub.planName || t('common.free')}</strong>
+            <p>${t('planScreen.desc')}</p>
           </div>
           <span class="plan-pill" id="currentPlanPill">${sub.planCode || 'free'}</span>
         </div>
@@ -75,9 +76,9 @@ export function render() {
       </div>
 
       <div class="section pt-0 pb-24">
-        <h3 class="section-title mb-3">Paketler</h3>
+        <h3 class="section-title mb-3">${t('planScreen.packages')}</h3>
         <div class="feature-menu-list" id="planList">${renderPlans()}</div>
-        <p class="text-xs text-tertiary mt-3">Bu ekrandaki plan değiştirme test içindir; gerçek ödeme ve abonelik doğrulaması production servisinde tamamlanacak.</p>
+        <p class="text-xs text-tertiary mt-3">${t('planScreen.test_note')}</p>
       </div>
     </div>
   `;
@@ -113,6 +114,6 @@ export function afterRender() {
 
   getAccountBilling({ userId: state.user?.id || 'user-1' }).then(applyBilling).catch((err) => {
     const list = document.getElementById('planList');
-    if (list) list.innerHTML = `<div class="free-record-panel"><p>Plan bilgisi alınamadı: ${err.message}</p></div>`;
+    if (list) list.innerHTML = `<div class="free-record-panel"><p>${t('planScreen.load_failed', { error: err.message })}</p></div>`;
   });
 }

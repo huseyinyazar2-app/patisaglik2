@@ -1,5 +1,6 @@
 import { navigate } from '../../router.js';
 import { showToast } from '../../ui/toast.js';
+import { t } from '../../i18n/tr.js';
 
 const INVITE_STATE_KEY = 'pati_sitter_invite_acceptance';
 
@@ -25,9 +26,9 @@ function inviteState(inviteId) {
 }
 
 function stateLabel(status) {
-  if (status === 'accepted') return 'Kabul edildi';
-  if (status === 'declined') return 'Reddedildi';
-  return 'Kabul bekliyor';
+  if (status === 'accepted') return t('sitterInvite.accepted');
+  if (status === 'declined') return t('sitterInvite.declined');
+  return t('sitterInvite.pending');
 }
 
 export function render(params = {}) {
@@ -38,40 +39,40 @@ export function render(params = {}) {
       <div class="public-card-shell">
         <div class="public-card-hero">
           <div>
-            <div class="premium-screen-kicker">Bakıcı daveti</div>
-            <h1>Pati Sağlık</h1>
-            <p>Sınırlı erişim davet bağlantısı</p>
+            <div class="premium-screen-kicker">${t('sitterInvite.kicker')}</div>
+            <h1>${t('app.name')}</h1>
+            <p>${t('sitterInvite.subtitle')}</p>
           </div>
           <span class="public-card-badge">${window.__icons?.profile || window.__icons?.shield}</span>
         </div>
 
         <div class="public-card-notice">
-          <strong>Davet bağlantısı hazır.</strong>
-          <span>Bu ekranda kabul/ret durumu cihazda tutulur. Production auth geldiğinde aynı akış kullanıcı hesabına bağlanacak.</span>
+          <strong>${t('sitterInvite.ready_title')}</strong>
+          <span>${t('sitterInvite.ready_desc')}</span>
         </div>
 
         <div class="public-card-panel">
           <div class="public-card-row">
             <span class="public-card-icon">${window.__icons?.lock || window.__icons?.shield}</span>
             <div>
-              <small>Davet kodu</small>
+              <small>${t('sitterInvite.invite_code')}</small>
               <strong>${escapeHtml(inviteId)}</strong>
             </div>
           </div>
           <div class="public-card-row">
             <span class="public-card-icon">${window.__icons?.clipboard || window.__icons?.note}</span>
             <div>
-              <small>Durum</small>
+              <small>${t('sitterInvite.status')}</small>
               <strong id="inviteStatusText">${stateLabel(currentState.status)}</strong>
             </div>
           </div>
         </div>
 
         <div class="public-card-actions">
-          <button class="btn btn-primary btn-full" id="btnAcceptInvite">Daveti Kabul Et</button>
-          <button class="btn btn-outline btn-full" id="btnDeclineInvite">Reddet</button>
-          <button class="btn btn-primary btn-full" id="btnOpenApp">Uygulamaya Dön</button>
-          <button class="btn btn-outline btn-full" id="btnCopyInvite">Bağlantıyı Kopyala</button>
+          <button class="btn btn-primary btn-full" id="btnAcceptInvite">${t('sitterInvite.accept')}</button>
+          <button class="btn btn-outline btn-full" id="btnDeclineInvite">${t('sitterInvite.decline')}</button>
+          <button class="btn btn-primary btn-full" id="btnOpenApp">${t('publicPetCard.open_app')}</button>
+          <button class="btn btn-outline btn-full" id="btnCopyInvite">${t('publicPetCard.copy_link')}</button>
         </div>
         <input id="inviteUrl" value="${escapeHtml(`${window.location.origin}${window.location.pathname}#/invite/sitter/${inviteId}`)}" readonly />
       </div>
@@ -96,10 +97,10 @@ export function afterRender(params = {}) {
     const input = document.getElementById('inviteUrl');
     try {
       await navigator.clipboard.writeText(input.value);
-      showToast('Davet bağlantısı kopyalandı.');
+      showToast(t('sitterInvite.link_copied'));
     } catch {
       input.select();
-      showToast('Bağlantı alanı seçili bırakıldı.');
+      showToast(t('publicPetCard.link_selected'));
     }
   });
 }
