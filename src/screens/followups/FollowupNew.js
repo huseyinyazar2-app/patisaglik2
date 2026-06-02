@@ -2,6 +2,7 @@ import { navigate, goBack } from '../../router.js';
 import { getState, setState, resetSession } from '../../store.js';
 import { getActivePet } from '../../mock/pets.js';
 import { showToast } from '../../ui/toast.js';
+import { t } from '../../i18n/tr.js';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -33,7 +34,7 @@ export function render() {
   const state = getState();
   const session = state.session || {};
   const pet = getActivePet(state.activePetId) || { name: 'Pet' };
-  const complaint = session.complaintText || 'Veteriner sonrası takip';
+  const complaint = session.complaintText || t('followupNew.default_complaint');
 
   return `
     <div class="screen premium-check treatment-followup-screen">
@@ -41,7 +42,7 @@ export function render() {
         <div class="header-left">
           <button class="header-icon" id="btnBack">${window.__icons?.back || ''}</button>
         </div>
-        <div class="header-title">Tedavi Takibi</div>
+        <div class="header-title">${t('followupNew.title')}</div>
         <div class="header-right">
           <span class="premium-header-shield">${window.__icons?.calendar || ''}</span>
         </div>
@@ -51,42 +52,42 @@ export function render() {
         <div class="feature-form-hero teal">
           <div class="premium-icon-box">${window.__icons?.stethoscope || ''}</div>
           <div>
-            <div class="premium-screen-kicker">Tedavi sonrası asistan</div>
-            <h1>${escapeHtml(pet.name)} için takip dosyası</h1>
-            <p>Reçete, ilaç saati, yan etki, yara/foto ve kontrol randevusunu tek takip planına bağla. Uygulama ilaç veya doz önermez.</p>
+            <div class="premium-screen-kicker">${t('followupNew.kicker')}</div>
+            <h1>${t('followupNew.heading').replace('{name}', escapeHtml(pet.name))}</h1>
+            <p>${t('followupNew.hero_desc')}</p>
           </div>
         </div>
 
         <div class="feature-form-card">
           <label class="feature-field">
-            <span>Takip başlığı</span>
-            <input id="followupTitle" value="${escapeHtml(complaint)}" placeholder="Örn. kusma sonrası tedavi, operasyon sonrası yara" />
+            <span>${t('followupNew.followup_title')}</span>
+            <input id="followupTitle" value="${escapeHtml(complaint)}" placeholder="${t('followupNew.title_placeholder')}" />
           </label>
 
           <div class="feature-field">
-            <span>Reçete / epikriz fotoğrafı</span>
+            <span>${t('followupNew.prescription_photo')}</span>
             <input id="prescriptionFile" type="file" class="feature-upload-input hidden" accept="image/*,.pdf" />
             <button class="feature-upload" type="button" id="btnPrescriptionUpload">
               ${window.__icons?.upload || ''}
-              <strong>Belge seç</strong>
-              <small>Reçete, epikriz veya kontrol kağıdı</small>
+              <strong>${t('followupNew.choose_document')}</strong>
+              <small>${t('followupNew.document_hint')}</small>
             </button>
           </div>
 
           <label class="feature-field">
-            <span>Veterinerin verdiği plan</span>
-            <textarea id="vetPlan" placeholder="İlaç adları, doz saatleri, yara bakımı, beslenme veya kontrol notu. Doz önerisini uygulama değil veteriner belirler."></textarea>
+            <span>${t('followupNew.vet_plan')}</span>
+            <textarea id="vetPlan" placeholder="${t('followupNew.vet_plan_placeholder')}"></textarea>
           </label>
 
           <label class="feature-field">
-            <span>İlaç / uygulama saatleri</span>
-            <input id="medSchedule" placeholder="Örn. 09:00 antibiyotik, 21:00 ağrı kesici, 3 gün sonra kontrol" />
+            <span>${t('followupNew.med_schedule')}</span>
+            <input id="medSchedule" placeholder="${t('followupNew.med_schedule_placeholder')}" />
           </label>
 
           <div class="feature-field">
-            <span>Günlük sorulacaklar</span>
+            <span>${t('followupNew.daily_questions')}</span>
             <div class="feature-check-grid">
-              ${['İlaç verildi mi?', 'Kusma/ishal oldu mu?', 'İştah nasıl?', 'Yan etki var mı?', 'Yara fotoğrafı çekilecek', 'Kontrol randevusu hatırlatılacak'].map((item, index) => `
+              ${t('followupNew.daily_question_options').map((item, index) => `
                 <label>
                   <input type="checkbox" value="${item}" ${index < 4 ? 'checked' : ''} />
                   <b>${item}</b>
@@ -96,26 +97,26 @@ export function render() {
           </div>
 
           <label class="feature-field">
-            <span>Kontrol randevusu</span>
+            <span>${t('followupNew.control_appointment')}</span>
             <input id="controlDate" type="date" />
           </label>
 
           <div class="feature-field">
-            <span>İlk kontrol zamanı</span>
+            <span>${t('followupNew.first_check_time')}</span>
             <div class="feature-chip-row" id="intervalChips">
-              ${['6 saat', '12 saat', '24 saat', '48 saat'].map((item, index) => `<button type="button" class="${index === 2 ? 'selected' : ''}" data-hours="${parseInt(item, 10)}">${item}</button>`).join('')}
+              ${t('followupNew.interval_options').map((item, index) => `<button type="button" class="${index === 2 ? 'selected' : ''}" data-hours="${parseInt(item, 10)}">${item}</button>`).join('')}
             </div>
           </div>
         </div>
 
         <div class="info-box warning mt-4">
           <span class="info-box-icon">${window.__icons?.shield || ''}</span>
-          <span>Bu asistan tedaviyi takip eder; yeni ilaç, doz veya tıbbi müdahale önermez. Kötüleşme veya ciddi belirti varsa veterinerle görüşülmelidir.</span>
+          <span>${t('followupNew.safety_note')}</span>
         </div>
 
         <div class="feature-bottom-actions">
-          <button class="btn btn-primary btn-full" id="btnStartFollowup">Takibi Başlat</button>
-          <button class="btn btn-ghost btn-full" id="btnCancel">İptal</button>
+          <button class="btn btn-primary btn-full" id="btnStartFollowup">${t('followupNew.start')}</button>
+          <button class="btn btn-ghost btn-full" id="btnCancel">${t('common.cancel')}</button>
         </div>
       </div>
     </div>
@@ -135,7 +136,7 @@ export function afterRender() {
     const button = document.getElementById('btnPrescriptionUpload');
     if (!file || !button) return;
     button.querySelector('strong').textContent = file.name;
-    button.querySelector('small').textContent = `${file.type || 'Belge'} · ${Math.ceil(file.size / 1024)} KB`;
+    button.querySelector('small').textContent = `${file.type || t('documents.document')} ${t('featureForm.separator')} ${Math.ceil(file.size / 1024)} KB`;
   });
 
   document.querySelectorAll('#intervalChips button').forEach(button => {
@@ -148,12 +149,12 @@ export function afterRender() {
   document.getElementById('btnStartFollowup')?.addEventListener('click', (event) => {
     const state = getState();
     const button = event.currentTarget;
-    const title = value('followupTitle') || 'Tedavi sonrası takip';
+    const title = value('followupTitle') || t('followupDetail.default_title');
     const selectedInterval = document.querySelector('#intervalChips button.selected');
     const hours = Number(selectedInterval?.dataset.hours || 24);
 
     button.disabled = true;
-    button.textContent = 'Takip oluşturuluyor...';
+    button.textContent = t('followupNew.creating');
 
     const caseId = `case-${Date.now()}`;
     const caseRecord = {
@@ -177,7 +178,7 @@ export function afterRender() {
       current.followups.unshift(caseRecord);
     });
 
-    showToast('Tedavi takip dosyası oluşturuldu.');
+    showToast(t('followupNew.created'));
     resetSession();
     navigate(`/followups/${caseId}`);
   });

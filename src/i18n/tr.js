@@ -849,6 +849,31 @@ const tr = {
     note_placeholder: 'Örn. ilaçtan 1 saat sonra kustu, iştahı biraz daha iyi, yara aynı...',
     evaluate: 'Değerlendir'
   },
+  followupNew: {
+    title: 'Tedavi Takibi',
+    default_complaint: 'Veteriner sonrası takip',
+    kicker: 'Tedavi sonrası asistan',
+    heading: '{name} için takip dosyası',
+    hero_desc: 'Reçete, ilaç saati, yan etki, yara/foto ve kontrol randevusunu tek takip planına bağla. Uygulama ilaç veya doz önermez.',
+    followup_title: 'Takip başlığı',
+    title_placeholder: 'Örn. kusma sonrası tedavi, operasyon sonrası yara',
+    prescription_photo: 'Reçete / epikriz fotoğrafı',
+    choose_document: 'Belge seç',
+    document_hint: 'Reçete, epikriz veya kontrol kağıdı',
+    vet_plan: 'Veterinerin verdiği plan',
+    vet_plan_placeholder: 'İlaç adları, doz saatleri, yara bakımı, beslenme veya kontrol notu. Doz önerisini uygulama değil veteriner belirler.',
+    med_schedule: 'İlaç / uygulama saatleri',
+    med_schedule_placeholder: 'Örn. 09:00 antibiyotik, 21:00 ağrı kesici, 3 gün sonra kontrol',
+    daily_questions: 'Günlük sorulacaklar',
+    daily_question_options: ['İlaç verildi mi?', 'Kusma/ishal oldu mu?', 'İştah nasıl?', 'Yan etki var mı?', 'Yara fotoğrafı çekilecek', 'Kontrol randevusu hatırlatılacak'],
+    control_appointment: 'Kontrol randevusu',
+    first_check_time: 'İlk kontrol zamanı',
+    interval_options: ['6 saat', '12 saat', '24 saat', '48 saat'],
+    safety_note: 'Bu asistan tedaviyi takip eder; yeni ilaç, doz veya tıbbi müdahale önermez. Kötüleşme veya ciddi belirti varsa veterinerle görüşülmelidir.',
+    start: 'Takibi Başlat',
+    creating: 'Takip oluşturuluyor...',
+    created: 'Tedavi takip dosyası oluşturuldu.'
+  },
   featureForms: {
   configs: {
   'photo-followup': {
@@ -1689,6 +1714,22 @@ JSON döndür:
   "prepare": ["en fazla 4 veteriner için hazırlanacak bilgi"],
   "askVet": ["en fazla 3 veteriner sorusu"]
 }`
+  },
+  checkCenter: {
+    kicker: 'Kredi / Premium Alanı',
+    heading: 'Veteriner öncesi AI triyaj',
+    hero_desc: '{name} için semptom analizi, belge okuma ve klinik hazırlık modülleri burada çalışır.',
+    plan: 'Plan',
+    free_note: 'Ücretsiz takip, takvim, masraf, dışkı skoru ve günlük kayıtlar Ana Sayfa ile Geçmiş sekmelerinde kalır.',
+    modules_title: 'Premium AI Modülleri',
+    assistants: {
+      smart: { title: 'Akıllı Şikayet Kontrolü', desc: 'Semptomları analiz eder, aciliyet riskini ve kanıt görevlerini çıkarır.', action: 'Başlat' },
+      knowledge: { title: 'Acil Bilgi Bankası', desc: 'Tedavi önerisi vermeden; neyi yapmamak, neyi hazırlamak ve ne zaman acile gitmek gerektiğini gösterir.', action: 'Aç' },
+      toxic: { title: 'Ambalaj Risk Kontrolü', desc: 'Ambalaj fotoğrafı, ürün adı ve içerik metniyle kontrollü toksik/yabancı cisim risk taraması yapar.', action: 'Kontrol et' },
+      safety: { title: 'Ürün Güvenlik Radarı', desc: 'Mama, takviye, ilaç veya bakım ürününde recall/lot güvenlik sinyali arar; toksik yutma akışından ayrıdır.', action: 'Tara' },
+      document: { title: 'Belge OCR / AI Okuma', desc: 'Ham belge arşivi Raporlar sekmesinde hazır; otomatik okuma sonraki AI fazında bağlanacak.', action: 'Sonraki faz' },
+      vetprep: { title: 'Kliniğe Hazırlık Ön Dosyası', desc: 'Ziyaret öncesi soruları toparlar, veteriner için net özet üretir.', action: 'Hazırla' }
+    }
   },
   common: {
     save: 'Kaydet', saving: 'Kaydediliyor...', cancel: 'İptal', back: 'Geri', next: 'Devam', done: 'Tamam',

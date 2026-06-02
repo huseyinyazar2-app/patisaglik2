@@ -1,54 +1,55 @@
 import { navigate } from '../../router.js';
 import { getState, resetSession } from '../../store.js';
 import { getActivePet } from '../../mock/pets.js';
+import { t } from '../../i18n/tr.js';
 
 const premiumAssistants = [
   {
     id: 'smart',
     icon: 'spark',
-    title: 'Akıllı Şikayet Kontrolü',
-    desc: 'Semptomları analiz eder, aciliyet riskini ve kanıt görevlerini çıkarır.',
-    action: 'Başlat',
+    titleKey: 'checkCenter.assistants.smart.title',
+    descKey: 'checkCenter.assistants.smart.desc',
+    actionKey: 'checkCenter.assistants.smart.action',
     featured: true
   },
   {
     id: 'knowledge',
     icon: 'shield',
-    title: 'Acil Bilgi Bankası',
-    desc: 'Tedavi önerisi vermeden; neyi yapmamak, neyi hazırlamak ve ne zaman acile gitmek gerektiğini gösterir.',
-    action: 'Aç',
+    titleKey: 'checkCenter.assistants.knowledge.title',
+    descKey: 'checkCenter.assistants.knowledge.desc',
+    actionKey: 'checkCenter.assistants.knowledge.action',
     free: true
   },
   {
     id: 'toxic',
     icon: 'alert',
-    title: 'Ambalaj Risk Kontrolü',
-    desc: 'Ambalaj fotoğrafı, ürün adı ve içerik metniyle kontrollü toksik/yabancı cisim risk taraması yapar.',
-    action: 'Kontrol et',
+    titleKey: 'checkCenter.assistants.toxic.title',
+    descKey: 'checkCenter.assistants.toxic.desc',
+    actionKey: 'checkCenter.assistants.toxic.action',
     danger: true
   },
   {
     id: 'safety',
     icon: 'shield',
-    title: 'Ürün Güvenlik Radarı',
-    desc: 'Mama, takviye, ilaç veya bakım ürününde recall/lot güvenlik sinyali arar; toksik yutma akışından ayrıdır.',
-    action: 'Tara',
+    titleKey: 'checkCenter.assistants.safety.title',
+    descKey: 'checkCenter.assistants.safety.desc',
+    actionKey: 'checkCenter.assistants.safety.action',
     free: true
   },
   {
     id: 'document',
     icon: 'upload',
-    title: 'Belge OCR / AI Okuma',
-    desc: 'Ham belge arşivi Raporlar sekmesinde hazır; otomatik okuma sonraki AI fazında bağlanacak.',
-    action: 'Sonraki faz',
+    titleKey: 'checkCenter.assistants.document.title',
+    descKey: 'checkCenter.assistants.document.desc',
+    actionKey: 'checkCenter.assistants.document.action',
     disabled: true
   },
   {
     id: 'vetprep',
     icon: 'clipboard',
-    title: 'Kliniğe Hazırlık Ön Dosyası',
-    desc: 'Ziyaret öncesi soruları toparlar, veteriner için net özet üretir.',
-    action: 'Hazırla'
+    titleKey: 'checkCenter.assistants.vetprep.title',
+    descKey: 'checkCenter.assistants.vetprep.desc',
+    actionKey: 'checkCenter.assistants.vetprep.action'
   }
 ];
 
@@ -69,13 +70,13 @@ export function render() {
       <div class="section pt-4">
         <div class="ai-premium-hero">
           <div>
-            <div class="premium-screen-kicker">Kredi / Premium Alanı</div>
-            <h1>Veteriner öncesi AI triyaj</h1>
-            <p>${pet.name} için semptom analizi, belge okuma ve klinik hazırlık modülleri burada çalışır.</p>
+            <div class="premium-screen-kicker">${t('checkCenter.kicker')}</div>
+            <h1>${t('checkCenter.heading')}</h1>
+            <p>${t('checkCenter.hero_desc').replace('{name}', pet.name)}</p>
           </div>
           <div class="ai-credit-pill">
             <strong>${state.subscription?.tier === 'pro' ? 'PRO' : 'FREE'}</strong>
-            <span>Plan</span>
+            <span>${t('checkCenter.plan')}</span>
           </div>
         </div>
       </div>
@@ -83,20 +84,20 @@ export function render() {
       <div class="section pt-0">
         <div class="ai-free-note">
           <span>${window.__icons?.lock}</span>
-          <p>Ücretsiz takip, takvim, masraf, dışkı skoru ve günlük kayıtlar Ana Sayfa ile Geçmiş sekmelerinde kalır.</p>
+          <p>${t('checkCenter.free_note')}</p>
         </div>
       </div>
 
       <div class="section pt-0">
-        <h3 class="section-title mb-3">Premium AI Modülleri</h3>
+        <h3 class="section-title mb-3">${t('checkCenter.modules_title')}</h3>
         <div class="ai-assistant-list">
           ${premiumAssistants.map(item => `
             <button class="ai-assistant-card ${item.featured ? 'featured' : ''} ${item.danger ? 'danger' : ''} ${item.free ? 'free' : ''}" data-assistant="${item.id}" ${item.disabled ? 'disabled aria-disabled="true"' : ''}>
               <div class="premium-icon-box">${window.__icons?.[item.icon]}</div>
               <div>
-                <strong>${item.title}</strong>
-                <p>${item.desc}</p>
-                <span>${item.action}</span>
+                <strong>${t(item.titleKey)}</strong>
+                <p>${t(item.descKey)}</p>
+                <span>${t(item.actionKey)}</span>
               </div>
             </button>
           `).join('')}

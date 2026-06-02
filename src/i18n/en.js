@@ -820,6 +820,31 @@ const en = {
     note_placeholder: 'Example: vomited 1 hour after medicine, appetite is a little better, wound looks the same...',
     evaluate: 'Evaluate'
   },
+  followupNew: {
+    title: 'Treatment Follow-up',
+    default_complaint: 'Post-veterinary follow-up',
+    kicker: 'Post-treatment assistant',
+    heading: 'Follow-up file for {name}',
+    hero_desc: 'Connect prescription, medication times, side effects, wound/photo checks and control appointment into one tracking plan. The app does not suggest medication or dose.',
+    followup_title: 'Follow-up title',
+    title_placeholder: 'Example: treatment after vomiting, post-op wound',
+    prescription_photo: 'Prescription / discharge photo',
+    choose_document: 'Choose document',
+    document_hint: 'Prescription, discharge note or control paper',
+    vet_plan: 'Plan given by the veterinarian',
+    vet_plan_placeholder: 'Medication names, dose times, wound care, nutrition or control note. The veterinarian, not the app, determines the dose.',
+    med_schedule: 'Medication / application times',
+    med_schedule_placeholder: 'Example: 09:00 antibiotic, 21:00 pain medication, control in 3 days',
+    daily_questions: 'Daily questions',
+    daily_question_options: ['Was medication given?', 'Any vomiting/diarrhea?', 'How is appetite?', 'Any side effect?', 'Wound photo to take', 'Control appointment reminder'],
+    control_appointment: 'Control appointment',
+    first_check_time: 'First check time',
+    interval_options: ['6 hours', '12 hours', '24 hours', '48 hours'],
+    safety_note: 'This assistant tracks treatment; it does not suggest new medication, dose or medical intervention. Contact a veterinarian if there is worsening or a serious sign.',
+    start: 'Start Follow-up',
+    creating: 'Creating follow-up...',
+    created: 'Treatment follow-up file created.'
+  },
   featureForms: {
     configs: {
   'photo-followup': {
@@ -1660,6 +1685,22 @@ Return JSON:
   "prepare": ["up to 4 pieces of information to prepare for the veterinarian"],
   "askVet": ["up to 3 veterinarian questions"]
 }`
+  },
+  checkCenter: {
+    kicker: 'Credit / Premium Area',
+    heading: 'Pre-vet AI triage',
+    hero_desc: 'Symptom analysis, document reading and clinic prep modules run here for {name}.',
+    plan: 'Plan',
+    free_note: 'Free tracking, calendar, expenses, stool score and daily records stay in Home and History.',
+    modules_title: 'Premium AI Modules',
+    assistants: {
+      smart: { title: 'Smart Complaint Check', desc: 'Analyzes symptoms and extracts urgency risk plus evidence tasks.', action: 'Start' },
+      knowledge: { title: 'Emergency Knowledge Base', desc: 'Without giving treatment advice, shows what not to do, what to prepare and when to seek urgent care.', action: 'Open' },
+      toxic: { title: 'Package Risk Check', desc: 'Runs controlled toxic/foreign-body risk screening with package photo, product name and ingredient text.', action: 'Check' },
+      safety: { title: 'Product Safety Radar', desc: 'Looks for recall/lot safety signals in food, supplements, medication or care products; separate from toxic ingestion flow.', action: 'Scan' },
+      document: { title: 'Document OCR / AI Reading', desc: 'Raw document archive is ready in Reports; automatic reading will connect in the next AI phase.', action: 'Next phase' },
+      vetprep: { title: 'Clinic Prep Pre-file', desc: 'Collects pre-visit questions and produces a clear summary for the veterinarian.', action: 'Prepare' }
+    }
   },
   common: {
     save: 'Save', saving: 'Saving...', cancel: 'Cancel', back: 'Back', next: 'Continue', done: 'Done',
