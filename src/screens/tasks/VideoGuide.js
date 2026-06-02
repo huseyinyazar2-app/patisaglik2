@@ -1,4 +1,3 @@
-// Pati Sağlık — Video Guide Screen
 import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
@@ -13,14 +12,7 @@ export function render(params = {}, query = {}) {
   const taskTitle = task ? task.title : t('tasks.record_video');
   const priorityLabel = task ? t(`tasks.${task.priority}`) : '';
 
-  const tips = [
-    { icon: '📱', text: 'Telefonu yatay (landscape) tutmayı tercih edin.' },
-    { icon: '⏱️', text: '15-30 saniye arası kayıt yeterlidir.' },
-    { icon: '🔇', text: 'Sessiz ortamda çekin, arka plan gürültüsünü azaltın.' },
-    { icon: '🐾', text: `${pet.name} doğal hareket ederken çekin.` },
-    { icon: '💡', text: 'İyi aydınlatılmış ortam tercih edin.' },
-    { icon: '🎯', text: 'Kameraya çok yaklaşmayın, tüm vücudu gösterin.' }
-  ];
+  const tips = t('taskGuides.video_tips').map(tip => ({ ...tip, text: tip.text.replace('{name}', pet.name) }));
 
   return `
     <div class="screen">
@@ -49,7 +41,7 @@ export function render(params = {}, query = {}) {
 
         <!-- Tips Card -->
         <div class="info-box info" style="flex-direction: column; gap: var(--space-3); margin-bottom: var(--space-6);">
-          <div style="font-weight: 700; font-size: var(--font-size-base);">🎬 Video Çekim İpuçları</div>
+          <div style="font-weight: 700; font-size: var(--font-size-base);">🎬 ${t('taskGuides.video_title')}</div>
           ${tips.map(tip => `
             <div style="display: flex; align-items: flex-start; gap: var(--space-2);">
               <span style="flex-shrink: 0;">${tip.icon}</span>

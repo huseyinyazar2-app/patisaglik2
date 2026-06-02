@@ -2103,6 +2103,16 @@ JSON döndür:
     no_calendar: 'Takvim yok',
     emergency_record: 'Acil kayıt'
   },
+  freeRecords: {
+    expense: 'Masraf',
+    amount: 'Tutar',
+    date: 'Tarih',
+    note: 'Not',
+    reminder: 'Hatırlatıcı',
+    repeat: 'Tekrar',
+    health_record: 'Sağlık kaydı',
+    diet_note: 'Beslenme notu'
+  },
   petContext: {
     brachy_warning: 'Kısa burunlu/solunum hassasiyeti olan ırklarda nefes belirtileri daha temkinli değerlendirilir.',
     large_breed_warning: 'Büyük ırk/kilo bağlamında karın şişliği, öğürme ve ani halsizlik daha ciddi ele alınır.',
@@ -2112,11 +2122,57 @@ JSON döndür:
     kidney_warning: 'Böbrek öyküsünde su tüketimi, idrar ve iştah değişiklikleri daha kritik olabilir.',
     cardiac_warning: 'Kalp öyküsünde öksürük, solunum sayısı ve efor intoleransı daha yüksek risklidir.'
   },
+  measurementAdd: {
+    type: 'Ölçüm Türü',
+    valid_range: 'Geçerli aralık: {min} - {max} {unit}',
+    date: 'Ölçüm Tarihi',
+    note_placeholder: 'Bu ölçümle ilgili not ekleyebilirsiniz...',
+    info: 'Ölçüm değerleri sağlık geçmişinize kaydedilir ve rapor oluşturulurken kullanılır.',
+    invalid_value: 'Lütfen geçerli bir değer girin',
+    saved: 'Ölçüm kaydedildi',
+    save_failed: 'Ölçüm kaydedilemedi: {error}'
+  },
+  taskGuides: {
+    photo_title: 'Fotoğraf Çekim İpuçları',
+    photo_tips: [
+      { icon: '💡', text: 'Doğal ışıkta çekin, flaş kullanmamaya çalışın.' },
+      { icon: '📐', text: 'Yakın çekim yapın, alanı net gösterin.' },
+      { icon: '🐾', text: '{name} sakin olduğunda çekin.' },
+      { icon: '🔍', text: 'Odak noktasının net olduğundan emin olun.' },
+      { icon: '📏', text: 'Mümkünse boyut referansı (bozuk para vb.) koyun.' }
+    ],
+    video_title: 'Video Çekim İpuçları',
+    video_tips: [
+      { icon: '📱', text: 'Telefonu yatay (landscape) tutmayı tercih edin.' },
+      { icon: '⏱️', text: '15-30 saniye arası kayıt yeterlidir.' },
+      { icon: '🔇', text: 'Sessiz ortamda çekin, arka plan gürültüsünü azaltın.' },
+      { icon: '🐾', text: '{name} doğal hareket ederken çekin.' },
+      { icon: '💡', text: 'İyi aydınlatılmış ortam tercih edin.' },
+      { icon: '🎯', text: 'Kameraya çok yaklaşmayın, tüm vücudu gösterin.' }
+    ],
+    audio_default_title: 'Ses Kayıt',
+    audio_title: 'Ses Kayıt İpuçları',
+    audio_tips: [
+      { icon: '🤫', text: 'Sessiz bir ortamda kaydedin.' },
+      { icon: '📱', text: 'Telefonu {name}\'e yakın tutun.' },
+      { icon: '⏱️', text: '10-30 saniyelik kayıt genellikle yeterlidir.' },
+      { icon: '🔊', text: 'Öksürük/hırıltı anını yakalamaya çalışın.' },
+      { icon: '🚫', text: 'Kayıt sırasında konuşmamaya özen gösterin.' },
+      { icon: '🔁', text: 'Gerekirse birden fazla kayıt yapabilirsiniz.' }
+    ]
+  },
+  documentOcr: {
+    file_read_error: 'Dosya okunamadı.',
+    system_prompt: 'Sen veteriner belgeleri için güvenli OCR ve veri ayrıştırma yardımcısısın. Yalnızca belgede görünen metni ve net çıkarımları yaz. Tahmin uydurma. Teşhis, ilaç dozu önerisi veya tedavi talimatı verme. Belirsiz alanları boş bırak, warnings içine kısa not düş. Yanıtı yalnızca geçerli JSON olarak döndür.',
+    default_goal: 'Klinik özeti',
+    general_summary: 'genel özet',
+    user_prompt: 'Belge türü: {documentKind}\nOkuma hedefi: {readGoal}\nİstenen alanlar: {extractionOptions}\nKullanıcı notu: {note}\n\nJSON şeması:\n'
+  },
   common: {
     save: 'Kaydet', saving: 'Kaydediliyor...', cancel: 'İptal', back: 'Geri', next: 'Devam', done: 'Tamam',
     delete: 'Sil', edit: 'Düzenle', share: 'Paylaş', close: 'Kapat',
     loading: 'Yükleniyor...', error: 'Bir hata oluştu', retry: 'Tekrar Dene',
-    confirm: 'Onayla', yes: 'Evet', no: 'Hayır', free: 'Ücretsiz',
+    confirm: 'Onayla', yes: 'Evet', no: 'Hayır', free: 'Ücretsiz', unknown: 'Bilinmiyor', none: 'Yok',
     no_date: 'Tarih yok', record_date: 'Kayıt tarihi', not_specified: 'Belirtilmedi',
     count_records: '{count} kayıt',
     photos: 'fotoğraf', videos: 'video', audio: 'ses kaydı', measurements: 'ölçüm'

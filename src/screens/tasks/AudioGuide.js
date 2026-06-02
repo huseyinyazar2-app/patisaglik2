@@ -1,4 +1,3 @@
-// Pati Sağlık — Audio Guide Screen
 import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
@@ -10,17 +9,10 @@ export function render(params = {}, query = {}) {
   const taskId = params.taskId || '';
   const session = state.session || {};
   const task = (session.tasks || []).find(tk => tk.id === taskId);
-  const taskTitle = task ? task.title : 'Ses Kayıt';
+  const taskTitle = task ? task.title : t('taskGuides.audio_default_title');
   const priorityLabel = task ? t(`tasks.${task.priority}`) : '';
 
-  const tips = [
-    { icon: '🤫', text: 'Sessiz bir ortamda kaydedin.' },
-    { icon: '📱', text: `Telefonu ${pet.name}\'e yakın tutun.` },
-    { icon: '⏱️', text: '10-30 saniyelik kayıt genellikle yeterlidir.' },
-    { icon: '🔊', text: 'Öksürük/hırıltı anını yakalamaya çalışın.' },
-    { icon: '🚫', text: 'Kayıt sırasında konuşmamaya özen gösterin.' },
-    { icon: '🔁', text: 'Gerekirse birden fazla kayıt yapabilirsiniz.' }
-  ];
+  const tips = t('taskGuides.audio_tips').map(tip => ({ ...tip, text: tip.text.replace('{name}', pet.name) }));
 
   return `
     <div class="screen">
@@ -49,7 +41,7 @@ export function render(params = {}, query = {}) {
 
         <!-- Tips Card -->
         <div class="info-box info" style="flex-direction: column; gap: var(--space-3); margin-bottom: var(--space-6);">
-          <div style="font-weight: 700; font-size: var(--font-size-base);">🎙️ Ses Kayıt İpuçları</div>
+          <div style="font-weight: 700; font-size: var(--font-size-base);">🎙️ ${t('taskGuides.audio_title')}</div>
           ${tips.map(tip => `
             <div style="display: flex; align-items: flex-start; gap: var(--space-2);">
               <span style="flex-shrink: 0;">${tip.icon}</span>

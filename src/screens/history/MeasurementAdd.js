@@ -1,4 +1,3 @@
-// Pati Sağlık — Add Measurement Screen
 import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
@@ -9,8 +8,8 @@ const MEASUREMENT_TYPES = [
   { id: 'weight', label: t('history.weight'), iconKey: 'weight', unit: 'kg', placeholder: '28.5', min: 0, max: 200, step: 0.1 },
   { id: 'temperature', label: t('history.temperature'), iconKey: 'thermometer', unit: '°C', placeholder: '38.5', min: 35, max: 42, step: 0.1 },
   { id: 'respiratory', label: t('history.respiratory'), iconKey: 'lungs', unit: '/dk', placeholder: '20', min: 0, max: 100, step: 1 },
-  { id: 'heart_rate', label: 'Nabız', iconKey: 'heartPulse', unit: 'bpm', placeholder: '80', min: 0, max: 300, step: 1 },
-  { id: 'urine_ph', label: 'İdrar pH', iconKey: 'activity', unit: 'pH', placeholder: '6.5', min: 0, max: 14, step: 0.1 },
+  { id: 'heart_rate', label: t('measurements.heart_rate'), iconKey: 'heartPulse', unit: 'bpm', placeholder: '80', min: 0, max: 300, step: 1 },
+  { id: 'urine_ph', label: t('history.urine'), iconKey: 'activity', unit: 'pH', placeholder: '6.5', min: 0, max: 14, step: 0.1 },
   { id: 'other', label: t('history.other'), iconKey: 'measurement', unit: '', placeholder: '0', min: 0, max: 9999, step: 0.1 }
 ];
 
@@ -48,7 +47,7 @@ export function render(params = {}, query = {}) {
 
         <!-- Type Selection -->
         <div class="section" style="animation: slideUp 0.3s ease;">
-          <label>Ölçüm Türü</label>
+          <label>${t('measurementAdd.type')}</label>
           <div class="chip-group">
             ${MEASUREMENT_TYPES.map(type => `
               <button class="chip ${selectedType === type.id ? 'selected' : ''}" data-mtype="${type.id}">
@@ -75,13 +74,13 @@ export function render(params = {}, query = {}) {
             <span class="measurement-unit" style="font-size: var(--font-size-xl);">${typeInfo.unit}</span>
           </div>
           <div class="text-xs text-tertiary mt-2">
-            Geçerli aralık: ${typeInfo.min} - ${typeInfo.max} ${typeInfo.unit}
+            ${t('measurementAdd.valid_range', { min: typeInfo.min, max: typeInfo.max, unit: typeInfo.unit })}
           </div>
         </div>
 
         <!-- Date Field -->
         <div class="form-group" style="animation: slideUp 0.5s ease;">
-          <label class="modern-title-icon">${window.__icons?.calendar} Ölçüm Tarihi</label>
+          <label class="modern-title-icon">${window.__icons?.calendar} ${t('measurementAdd.date')}</label>
           <input type="date" id="dateInput" value="${today}" />
         </div>
 
@@ -94,13 +93,13 @@ export function render(params = {}, query = {}) {
         <!-- Note Field -->
         <div class="form-group" style="animation: slideUp 0.6s ease;">
           <label class="modern-title-icon">${window.__icons?.note} Not (Opsiyonel)</label>
-          <textarea id="noteInput" placeholder="Bu ölçümle ilgili not ekleyebilirsiniz..." rows="3" style="min-height: 80px;"></textarea>
+          <textarea id="noteInput" placeholder="${t('measurementAdd.note_placeholder')}" rows="3" style="min-height: 80px;"></textarea>
         </div>
 
         <!-- Info Box -->
         <div class="info-box info mb-4" style="animation: slideUp 0.65s ease;">
           <span class="info-box-icon">${window.__icons?.checkCircle}</span>
-          <span>Ölçüm değerleri sağlık geçmişinize kaydedilir ve rapor oluşturulurken kullanılır.</span>
+          <span>${t('measurementAdd.info')}</span>
         </div>
 
         <!-- Action Buttons -->
@@ -158,12 +157,12 @@ export function afterRender(params = {}, query = {}) {
     const note = document.getElementById('noteInput')?.value;
 
     if (!value || isNaN(parseFloat(value))) {
-      showMeasurementToast(`${window.__icons?.alert || ''} Lütfen geçerli bir değer girin`);
+      showMeasurementToast(`${window.__icons?.alert || ''} ${t('measurementAdd.invalid_value')}`);
       return;
     }
 
     btn.disabled = true;
-    btn.textContent = 'Kaydediliyor...';
+    btn.textContent = t('common.saving');
 
     try {
       await saveMeasurement({
@@ -176,14 +175,14 @@ export function afterRender(params = {}, query = {}) {
         note
       });
 
-      showMeasurementToast('Ölçüm kaydedildi');
+      showMeasurementToast(t('measurementAdd.saved'));
       setTimeout(() => {
         navigate(`/history/measurements?type=${selectedType}`);
       }, 900);
     } catch (err) {
       btn.disabled = false;
       btn.innerHTML = `${window.__icons?.checkCircle} ${t('common.save')}`;
-      showMeasurementToast(`${window.__icons?.alert || ''} Ölçüm kaydedilemedi: ${err.message}`);
+      showMeasurementToast(`${window.__icons?.alert || ''} ${t('measurementAdd.save_failed', { error: err.message })}`);
     }
   });
 

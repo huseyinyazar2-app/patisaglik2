@@ -1,5 +1,6 @@
 import { generateGeminiJsonWithParts, isGeminiConfigured } from './geminiClient.js';
 import { postApiJson } from './apiClient.js';
+import { translateForLocale } from '../i18n/tr.js';
 
 const MAX_INLINE_FILE_BYTES = 8 * 1024 * 1024;
 
@@ -7,7 +8,7 @@ function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(String(reader.result || '').split(',')[1] || '');
-    reader.onerror = () => reject(new Error('Dosya okunamadı.'));
+    reader.onerror = () => reject(new Error(translateForLocale('tr', 'documentOcr.file_read_error')));
     reader.readAsDataURL(file);
   });
 }
@@ -57,20 +58,13 @@ export async function runDocumentOcr({ file, documentKind, readGoal, extractionO
   }
 
   if (!isGeminiConfigured()) return { ok: false, reason: 'missing_key' };
-  const system = [
-    'Sen veteriner belgeleri için güvenli OCR ve veri ayrıştırma yardımcısısın.',
-    'Yalnızca belgede görünen metni ve net çıkarımları yaz. Tahmin uydurma.',
-    'Teşhis, ilaç dozu önerisi veya tedavi talimatı verme.',
-    'Belirsiz alanları boş bırak, warnings içine kısa not düş.',
-    'Yanıtı yalnızca geçerli JSON olarak döndür.'
-  ].join(' ');
-  const prompt = `
-Belge türü: ${documentKind || 'Bilinmiyor'}
-Okuma hedefi: ${readGoal || 'Klinik özeti'}
-İstenen alanlar: ${(extractionOptions || []).join(', ') || 'genel özet'}
-Kullanıcı notu: ${note || 'Yok'}
-
-JSON şeması:
+  const system = translateForLocale('tr', 'documentOcr.system_prompt');
+  const prompt = translateForLocale('tr', 'documentOcr.user_prompt', {
+    documentKind: documentKind || translateForLocale('tr', 'common.unknown'),
+    readGoal: readGoal || translateForLocale('tr', 'documentOcr.default_goal'),
+    extractionOptions: (extractionOptions || []).join(', ') || translateForLocale('tr', 'documentOcr.general_summary'),
+    note: note || translateForLocale('tr', 'common.none')
+  }) + `
 {
   "status": "processed|needs_review",
   "documentDate": "",

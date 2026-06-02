@@ -1,4 +1,5 @@
 import { getDbClient } from './dbClient.js';
+import { translateForLocale } from '../i18n/tr.js';
 
 function parseJson(value, fallback = {}) {
   try {
@@ -46,15 +47,15 @@ function fromLocalStorage(petId) {
   const payloadOf = (item) => parseJson(item.payload);
   const expenses = records.filter((item) => item.feature_code === 'expense').map((item) => {
     const payload = payloadOf(item);
-    const category = first(payload.Kategori) || 'Masraf';
+    const category = first(payload[translateForLocale('tr', 'formLabels.category')]) || translateForLocale('tr', 'freeRecords.expense');
     return {
       id: item.id,
       category,
       title: category,
-      amount_cents: centsFromMoney(payload.Tutar),
+      amount_cents: centsFromMoney(payload[translateForLocale('tr', 'freeRecords.amount')]),
       currency: 'TRY',
-      spent_at: dateOrNow(payload.Tarih || item.created_at),
-      note: payload.Not || '',
+      spent_at: dateOrNow(payload[translateForLocale('tr', 'freeRecords.date')] || item.created_at),
+      note: payload[translateForLocale('tr', 'freeRecords.note')] || '',
       metadata: { form_submission_id: item.id },
       mediaFiles: Array.isArray(payload.__media_files) ? payload.__media_files.map((file, index) => ({
         id: `${item.id}-media-${index}`,
@@ -71,12 +72,12 @@ function fromLocalStorage(petId) {
     const payload = payloadOf(item);
     return {
       id: item.id,
-      reminder_type: first(payload['Hatırlatıcı türü']) || 'Hatırlatıcı',
-      title: payload.Başlık || first(payload['Hatırlatıcı türü']) || 'Hatırlatıcı',
-      due_at: dateOrNow(payload.__due_at || payload.Tarih || item.created_at),
-      repeat_rule: first(payload.Tekrar),
+      reminder_type: first(payload[translateForLocale('tr', 'formLabels.reminder_type')]) || translateForLocale('tr', 'freeRecords.reminder'),
+      title: payload[translateForLocale('tr', 'formLabels.title')] || first(payload[translateForLocale('tr', 'formLabels.reminder_type')]) || translateForLocale('tr', 'freeRecords.reminder'),
+      due_at: dateOrNow(payload.__due_at || payload[translateForLocale('tr', 'freeRecords.date')] || item.created_at),
+      repeat_rule: first(payload[translateForLocale('tr', 'freeRecords.repeat')]),
       status: payload.__status || item.status || 'scheduled',
-      note: payload.Not || '',
+      note: payload[translateForLocale('tr', 'freeRecords.note')] || '',
       metadata: { form_submission_id: item.id },
       created_at: item.created_at
     };
@@ -88,9 +89,9 @@ function fromLocalStorage(petId) {
       return {
         id: item.id,
         record_type: localHealthType(item.feature_code),
-        title: payload['Takip konusu'] || first(payload.Skor) || payload['Yeni mama / öğün'] || first(payload.Şablon) || 'Sağlık kaydı',
+        title: payload[translateForLocale('tr', 'formLabels.followup_subject')] || first(payload[translateForLocale('tr', 'formLabels.score')]) || payload[translateForLocale('tr', 'formLabels.new_food_meal')] || first(payload[translateForLocale('tr', 'formLabels.template')]) || translateForLocale('tr', 'freeRecords.health_record'),
         occurred_at: item.created_at,
-        summary: payload.Not || payload['Kısa not'] || payload['Beslenme notu'] || payload['Takip notu'] || '',
+        summary: payload[translateForLocale('tr', 'freeRecords.note')] || payload[translateForLocale('tr', 'formLabels.short_note')] || payload[translateForLocale('tr', 'freeRecords.diet_note')] || payload[translateForLocale('tr', 'formLabels.followup_note')] || '',
         payload,
         mediaFiles: Array.isArray(payload.__media_files) ? payload.__media_files.map((file, index) => ({
           id: `${item.id}-media-${index}`,

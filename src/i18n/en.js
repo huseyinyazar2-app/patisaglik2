@@ -2083,11 +2083,67 @@ Return JSON:
     kidney_warning: 'With a kidney history, water intake, urination and appetite changes may be more critical.',
     cardiac_warning: 'With a heart history, cough, respiratory rate and exercise intolerance are higher-risk signs.'
   },
+  measurementAdd: {
+    type: 'Measurement Type',
+    valid_range: 'Valid range: {min} - {max} {unit}',
+    date: 'Measurement Date',
+    note_placeholder: 'You can add a note about this measurement...',
+    info: 'Measurement values are saved to the health history and used while creating reports.',
+    invalid_value: 'Please enter a valid value',
+    saved: 'Measurement saved',
+    save_failed: 'Measurement could not be saved: {error}'
+  },
+  taskGuides: {
+    photo_title: 'Photo Capture Tips',
+    photo_tips: [
+      { icon: '💡', text: 'Use natural light and try not to use flash.' },
+      { icon: '📐', text: 'Take a close shot and show the area clearly.' },
+      { icon: '🐾', text: 'Take it when {name} is calm.' },
+      { icon: '🔍', text: 'Make sure the focus point is sharp.' },
+      { icon: '📏', text: 'If possible, include a size reference such as a coin.' }
+    ],
+    video_title: 'Video Capture Tips',
+    video_tips: [
+      { icon: '📱', text: 'Prefer holding the phone horizontally.' },
+      { icon: '⏱️', text: 'A 15-30 second recording is usually enough.' },
+      { icon: '🔇', text: 'Record in a quiet place and reduce background noise.' },
+      { icon: '🐾', text: 'Record while {name} moves naturally.' },
+      { icon: '💡', text: 'Choose a well-lit place.' },
+      { icon: '🎯', text: 'Do not get too close; show the whole body.' }
+    ],
+    audio_default_title: 'Audio Record',
+    audio_title: 'Audio Recording Tips',
+    audio_tips: [
+      { icon: '🤫', text: 'Record in a quiet environment.' },
+      { icon: '📱', text: 'Hold the phone close to {name}.' },
+      { icon: '⏱️', text: 'A 10-30 second recording is usually enough.' },
+      { icon: '🔊', text: 'Try to capture the cough/wheeze moment.' },
+      { icon: '🚫', text: 'Avoid talking during the recording.' },
+      { icon: '🔁', text: 'You can make more than one recording if needed.' }
+    ]
+  },
+  documentOcr: {
+    file_read_error: 'File could not be read.',
+    system_prompt: 'You are a safe OCR and data extraction assistant for veterinary documents. Only write text visible in the document and clear extractions. Do not invent guesses. Do not provide diagnosis, medication dose advice or treatment instructions. Leave unclear fields empty and add short notes into warnings. Return only valid JSON.',
+    default_goal: 'Clinic summary',
+    general_summary: 'general summary',
+    user_prompt: 'Document type: {documentKind}\nReading goal: {readGoal}\nRequested fields: {extractionOptions}\nUser note: {note}\n\nJSON schema:\n'
+  },
+  freeRecords: {
+    expense: 'Expense',
+    amount: 'Amount',
+    date: 'Date',
+    note: 'Note',
+    reminder: 'Reminder',
+    repeat: 'Repeat',
+    health_record: 'Health record',
+    diet_note: 'Diet note'
+  },
   common: {
     save: 'Save', saving: 'Saving...', cancel: 'Cancel', back: 'Back', next: 'Continue', done: 'Done',
     delete: 'Delete', edit: 'Edit', share: 'Share', close: 'Close',
     loading: 'Loading...', error: 'Something went wrong', retry: 'Try Again',
-    confirm: 'Confirm', yes: 'Yes', no: 'No', free: 'Free',
+    confirm: 'Confirm', yes: 'Yes', no: 'No', free: 'Free', unknown: 'Unknown', none: 'None',
     no_date: 'No date', record_date: 'Record date', not_specified: 'Not specified',
     count_records: '{count} records',
     photos: 'photo', videos: 'video', audio: 'audio recording', measurements: 'measurement'

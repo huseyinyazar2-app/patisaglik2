@@ -1,4 +1,3 @@
-// Pati Sağlık — Photo Guide Screen
 import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
@@ -13,13 +12,7 @@ export function render(params = {}, query = {}) {
   const taskTitle = task ? task.title : t('tasks.take_photo');
   const priorityLabel = task ? t(`tasks.${task.priority}`) : '';
 
-  const tips = [
-    { icon: '💡', text: 'Doğal ışıkta çekin, flaş kullanmamaya çalışın.' },
-    { icon: '📐', text: 'Yakın çekim yapın, alanı net gösterin.' },
-    { icon: '🐾', text: `${pet.name} sakin olduğunda çekin.` },
-    { icon: '🔍', text: 'Odak noktasının net olduğundan emin olun.' },
-    { icon: '📏', text: 'Mümkünse boyut referansı (bozuk para vb.) koyun.' }
-  ];
+  const tips = t('taskGuides.photo_tips').map(tip => ({ ...tip, text: tip.text.replace('{name}', pet.name) }));
 
   return `
     <div class="screen">
@@ -48,7 +41,7 @@ export function render(params = {}, query = {}) {
 
         <!-- Tips Card -->
         <div class="info-box info" style="flex-direction: column; gap: var(--space-3); margin-bottom: var(--space-6);">
-          <div style="font-weight: 700; font-size: var(--font-size-base);">📋 Fotoğraf Çekim İpuçları</div>
+          <div style="font-weight: 700; font-size: var(--font-size-base);">📋 ${t('taskGuides.photo_title')}</div>
           ${tips.map(tip => `
             <div style="display: flex; align-items: flex-start; gap: var(--space-2);">
               <span style="flex-shrink: 0;">${tip.icon}</span>

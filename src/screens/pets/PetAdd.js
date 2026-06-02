@@ -17,10 +17,10 @@ const petTypes = [
 function extractTags(text) {
   const lower = String(text || '').toLocaleLowerCase('tr-TR');
   const tags = [];
-  if (lower.includes('yuttu') || lower.includes('çorap') || lower.includes('yabancı')) tags.push('pika_sendromu');
+  if (lower.includes('yuttu') || lower.includes('\u00e7orap') || lower.includes('yabanc\u0131')) tags.push('pika_sendromu');
   if (lower.includes('ameliyat') || lower.includes('operasyon')) tags.push('gecirilmis_ameliyat');
-  if (lower.includes('araba') || lower.includes('çarp') || lower.includes('kırık') || lower.includes('düştü')) tags.push('gecirilmis_travma');
-  if (lower.includes('bağışıklık') || lower.includes('zayıf')) tags.push('bagisiklik_sorunu');
+  if (lower.includes('araba') || lower.includes('\u00e7arp') || lower.includes('k\u0131r\u0131k') || lower.includes('d\u00fc\u015ft\u00fc')) tags.push('gecirilmis_travma');
+  if (lower.includes('ba\u011f\u0131\u015f\u0131kl\u0131k') || lower.includes('zay\u0131f')) tags.push('bagisiklik_sorunu');
   return tags;
 }
 
