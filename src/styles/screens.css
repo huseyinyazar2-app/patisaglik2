@@ -4068,6 +4068,11 @@
   color: var(--text-primary);
 }
 
+.feature-field > span em {
+  font-style: normal;
+  color: var(--danger-color);
+}
+
 .feature-field input,
 .feature-field textarea,
 .feature-field select {

@@ -28,8 +28,11 @@ function pick(payload, labels, fallback = '') {
 }
 
 function centsFromMoney(value) {
-  const raw = String(value || '').replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
-  const amount = Number.parseFloat(raw);
+  const raw = String(value || '').replace(/[^\d,.-]/g, '');
+  const normalized = raw.includes(',')
+    ? raw.replace(/\./g, '').replace(',', '.')
+    : raw.replace(/,/g, '');
+  const amount = Number.parseFloat(normalized);
   if (!Number.isFinite(amount)) return 0;
   return Math.round(amount * 100);
 }
@@ -58,6 +61,15 @@ function text(record, key, vars = {}) {
 
 function label(key) {
   return translateForLocale('tr', `formLabels.${key}`);
+}
+
+function fieldLabels(key) {
+  return [
+    translateForLocale('tr', `formLabels.${key}`),
+    translateForLocale('en', `formLabels.${key}`),
+    translateForLocale('tr', `featureForm.labels.${key}`),
+    translateForLocale('en', `featureForm.labels.${key}`)
+  ].filter((value, index, list) => value && list.indexOf(value) === index);
 }
 
 function checkedLabels(value) {
@@ -122,10 +134,10 @@ function saveLocalQrCard(record, payload) {
 }
 
 async function insertExpense(db, record, payload) {
-  const amountCents = centsFromMoney(pick(payload, ['Tutar']));
-  const category = first(pick(payload, [label('category')], [text(record, 'freeRecords.submissions.expense_other')])) || text(record, 'freeRecords.submissions.expense_other');
-  const spentAt = isoDateOrToday(pick(payload, ['Tarih']));
-  const note = pick(payload, ['Not'], '');
+  const amountCents = centsFromMoney(pick(payload, fieldLabels('amount')));
+  const category = first(pick(payload, fieldLabels('category'), [text(record, 'freeRecords.submissions.expense_other')])) || text(record, 'freeRecords.submissions.expense_other');
+  const spentAt = isoDateOrToday(pick(payload, fieldLabels('date')));
+  const note = pick(payload, fieldLabels('note'), '');
 
   await db.execute({
     sql: `INSERT INTO expenses
@@ -149,11 +161,11 @@ async function insertExpense(db, record, payload) {
 }
 
 async function insertReminder(db, record, payload) {
-  const reminderType = first(pick(payload, [label('reminder_type')], [text(record, 'freeRecords.submissions.reminder_general')])) || text(record, 'freeRecords.submissions.reminder_general');
-  const title = titleFromPayload(payload, [label('title')], reminderType);
-  const dueAt = isoDateOrToday(pick(payload, ['Tarih']));
-  const repeatRule = first(pick(payload, ['Tekrar'], [text(record, 'freeRecords.submissions.reminder_once')])) || text(record, 'freeRecords.submissions.reminder_once');
-  const note = pick(payload, ['Not'], '');
+  const reminderType = first(pick(payload, fieldLabels('reminder_type'), [text(record, 'freeRecords.submissions.reminder_general')])) || text(record, 'freeRecords.submissions.reminder_general');
+  const title = titleFromPayload(payload, fieldLabels('title'), reminderType);
+  const dueAt = isoDateOrToday(pick(payload, fieldLabels('date')));
+  const repeatRule = first(pick(payload, fieldLabels('repeat'), [text(record, 'freeRecords.submissions.reminder_once')])) || text(record, 'freeRecords.submissions.reminder_once');
+  const note = pick(payload, fieldLabels('note'), '');
 
   await db.execute({
     sql: `INSERT INTO reminders
@@ -184,9 +196,9 @@ function automaticReminderPayload(record, payload) {
     return {
       [label('reminder_type')]: [label('medication')],
       [label('title')]: text(record, 'freeRecords.submissions.postop_reminder_title'),
-      'Tarih': nextDate,
-      'Tekrar': [medStatus === label('done') ? label('once') : label('daily')],
-      'Not': text(record, 'freeRecords.submissions.postop_reminder_note', { status: medStatus })
+      [label('date')]: nextDate,
+      [label('repeat')]: [medStatus === label('done') ? label('once') : label('daily')],
+      [label('note')]: text(record, 'freeRecords.submissions.postop_reminder_note', { status: medStatus })
     };
   }
 
@@ -198,9 +210,9 @@ function automaticReminderPayload(record, payload) {
     return {
       [label('reminder_type')]: [label('appointment')],
       [label('title')]: text(record, 'freeRecords.submissions.reproduction_reminder_title', { type: followType }),
-      'Tarih': controlDate,
-      'Tekrar': [label('once')],
-      'Not': text(record, 'freeRecords.submissions.reproduction_reminder_note')
+      [label('date')]: controlDate,
+      [label('repeat')]: [label('once')],
+      [label('note')]: text(record, 'freeRecords.submissions.reproduction_reminder_note')
     };
   }
 

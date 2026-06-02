@@ -33,12 +33,21 @@ function presetForField(field, preset = {}) {
 function renderField(field, preset = {}) {
   const presetValue = presetForField(field, preset);
 
-  if (field.type === 'text' || field.type === 'money' || field.type === 'date') {
-    const inputType = field.type === 'date' ? 'date' : 'text';
+  if (field.type === 'text' || field.type === 'money' || field.type === 'date' || field.type === 'datetime') {
+    const inputType = field.type === 'date' ? 'date' : field.type === 'datetime' ? 'datetime-local' : field.type === 'money' ? 'number' : 'text';
+    const inputMode = field.type === 'money' ? 'decimal' : '';
+    const step = field.type === 'money' ? '0.01' : '';
     return `
       <label class="feature-field">
-        <span>${field.label}</span>
-        <input type="${inputType}" placeholder="${field.placeholder || ''}" value="${escapeHtml(presetValue)}" />
+        <span>${field.label}${field.required ? `<em>${t('featureForm.required_marker')}</em>` : ''}</span>
+        <input
+          type="${inputType}"
+          placeholder="${field.placeholder || ''}"
+          value="${escapeHtml(presetValue)}"
+          ${inputMode ? `inputmode="${inputMode}"` : ''}
+          ${step ? `step="${step}" min="0"` : ''}
+          ${field.required ? 'data-required="true"' : ''}
+        />
       </label>
     `;
   }
@@ -53,10 +62,11 @@ function renderField(field, preset = {}) {
   }
 
   if (field.type === 'chips' || field.type === 'score') {
+    const mode = field.type === 'score' || field.selection === 'single' ? 'single' : 'multi';
     return `
       <div class="feature-field">
-        <span>${field.label}</span>
-        <div class="${field.type === 'score' ? 'feature-score-row' : 'feature-chip-row'}">
+        <span>${field.label}${field.required ? `<em>${t('featureForm.required_marker')}</em>` : ''}</span>
+        <div class="${field.type === 'score' ? 'feature-score-row' : 'feature-chip-row'}" data-choice-mode="${mode}" ${field.required ? 'data-required-choice="true"' : ''}>
           ${field.options.map((option, index) => `
             <button class="${(presetValue ? option === presetValue : index === 0) ? 'selected' : ''}" type="button">${option}</button>
           `).join('')}
@@ -279,15 +289,22 @@ export function afterRender() {
     notice.className = `feature-form-notice ${tone}`;
   }
 
+  function normalizeFieldLabel(value) {
+    return String(value || '')
+      .replace(t('featureForm.required_marker'), '')
+      .replace(/\s+\*$/, '')
+      .trim();
+  }
+
   function firstSelected(label) {
     const field = [...document.querySelectorAll('.feature-field')]
-      .find((item) => item.querySelector(':scope > span')?.textContent?.trim() === label);
+      .find((item) => normalizeFieldLabel(item.querySelector(':scope > span')?.textContent) === label);
     return field?.querySelector('button.selected')?.textContent?.trim() || '';
   }
 
   function checkedValues(label) {
     const field = [...document.querySelectorAll('.feature-field')]
-      .find((item) => item.querySelector(':scope > span')?.textContent?.trim() === label);
+      .find((item) => normalizeFieldLabel(item.querySelector(':scope > span')?.textContent) === label);
     return [...(field?.querySelectorAll('input[type="checkbox"]') || [])]
       .filter((input) => input.checked)
       .map((input) => input.parentElement?.textContent?.trim() || '')
@@ -296,7 +313,7 @@ export function afterRender() {
 
   function textareaValue(label) {
     const field = [...document.querySelectorAll('.feature-field')]
-      .find((item) => item.querySelector(':scope > span')?.textContent?.trim() === label);
+      .find((item) => normalizeFieldLabel(item.querySelector(':scope > span')?.textContent) === label);
     return field?.querySelector('textarea')?.value || '';
   }
 
@@ -349,10 +366,10 @@ export function afterRender() {
   function collectPayload() {
     const fields = {};
     document.querySelectorAll('.feature-field').forEach((field) => {
-      const label = field.querySelector(':scope > span')?.textContent?.trim();
+      const label = normalizeFieldLabel(field.querySelector(':scope > span')?.textContent);
       if (!label) return;
 
-      const textInput = field.querySelector('input[type="text"], input[type="date"], textarea');
+      const textInput = field.querySelector('input[type="text"], input[type="number"], input[type="date"], input[type="datetime-local"], textarea');
       if (textInput) {
         fields[label] = textInput.value || '';
         return;
@@ -392,6 +409,19 @@ export function afterRender() {
     if (currentDocumentOcrResult) fields.__ai_ocr_result = currentDocumentOcrResult;
 
     return fields;
+  }
+
+  function validateRequiredFields() {
+    const missingText = [...document.querySelectorAll('[data-required="true"]')]
+      .filter((input) => !input.value?.trim());
+    const missingChoice = [...document.querySelectorAll('[data-required-choice="true"]')]
+      .filter((group) => !group.querySelector('button.selected'));
+    if (!missingText.length && !missingChoice.length) return true;
+    const target = missingText[0] || missingChoice[0]?.closest('.feature-field');
+    target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    missingText[0]?.focus?.();
+    showNotice(t('featureForm.required_error'), 'error');
+    return false;
   }
 
   document.getElementById('btnRunDocumentOcr')?.addEventListener('click', async (event) => {
@@ -437,6 +467,12 @@ export function afterRender() {
 
   document.querySelectorAll('.feature-chip-row button').forEach((btn) => {
     btn.addEventListener('click', () => {
+      const group = btn.parentElement;
+      if (group?.dataset.choiceMode === 'single') {
+        group.querySelectorAll('button').forEach((item) => item.classList.remove('selected'));
+        btn.classList.add('selected');
+        return;
+      }
       btn.classList.toggle('selected');
     });
   });
@@ -471,6 +507,7 @@ export function afterRender() {
   document.getElementById('btnPlan')?.addEventListener('click', () => navigate('/profile/plan'));
   document.getElementById('btnCancel')?.addEventListener('click', () => goBack());
   document.getElementById('btnSaveFeature')?.addEventListener('click', async (event) => {
+    if (!validateRequiredFields()) return;
     const btn = event.currentTarget;
     const originalText = btn.textContent;
     btn.textContent = t('common.saving');
@@ -485,7 +522,7 @@ export function afterRender() {
           try {
             const uploaded = await uploadMediaFile({
               userId: state.user?.id || 'user-1',
-              petId: state.activePetId || 'pet-1',
+              petId: state.activePetId || '',
               category: 'documents',
               file,
               relatedEntityType: 'document'
@@ -503,7 +540,7 @@ export function afterRender() {
       }
       const result = await submitFeatureForm({
         userId: state.user?.id || 'user-1',
-        petId: state.activePetId || 'pet-1',
+        petId: state.activePetId || '',
         featureCode,
         locale: state.user?.locale || 'tr',
         payload: featurePayload
@@ -525,7 +562,12 @@ export function afterRender() {
           else await navigator.clipboard.writeText(`${shareText}\n${inviteUrl}`);
         } catch {}
       }
-      const nextRoute = ['clinic-export', 'document-ai', 'vet-prep'].includes(featureCode) ? '/reports' : featureCode === 'sitter' && result.invitePath ? result.invitePath : featureCode === 'qr' && result.publicPath ? result.publicPath : '/home';
+      const nextRoute = featureCode === 'expense' ? '/history/expenses'
+        : featureCode === 'reminders' ? '/history/reminders'
+        : ['clinic-export', 'document-ai', 'vet-prep'].includes(featureCode) ? '/reports'
+        : featureCode === 'sitter' && result.invitePath ? result.invitePath
+        : featureCode === 'qr' && result.publicPath ? result.publicPath
+        : '/home';
       navigate(nextRoute);
     } catch (err) {
       showNotice(`${t('featureForm.save_failed')}: ${err.message}`, 'error');

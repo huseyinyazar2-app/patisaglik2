@@ -810,6 +810,8 @@ const tr = {
     sitter_invite_ready: 'Pati Sağlık bakıcı daveti hazır.',
     sitter_invite_title: 'Pati Sağlık Bakıcı Daveti',
     save_failed: 'Kayıt başarısız',
+    required_marker: ' *',
+    required_error: 'Zorunlu alanları doldurmalısın.',
     labels: {
       reminder_type: 'Hatırlatıcı türü',
       title: 'Başlık',
@@ -985,9 +987,9 @@ const tr = {
   desc: 'Mama, veteriner, aşı, ilaç ve bakım harcamalarını kategorize etmek için form.',
   tone: 'teal',
   fields: [
-    { type: 'chips', label: 'Kategori', options: ['Veteriner', 'Mama', 'Aşı', 'İlaç', 'Bakım'] },
-    { type: 'money', label: 'Tutar', placeholder: '0,00 TL' },
-    { type: 'date', label: 'Tarih' },
+    { type: 'chips', label: 'Kategori', options: ['Veteriner', 'Mama', 'Aşı', 'İlaç', 'Bakım'], selection: 'single', required: true },
+    { type: 'money', label: 'Tutar', placeholder: '0,00 TL', required: true },
+    { type: 'date', label: 'Tarih', required: true },
     { type: 'upload', label: 'Fatura / belge ekle' },
     { type: 'textarea', label: 'Not', placeholder: 'Klinik adı, işlem veya ürün detayı...' }
   ]
@@ -999,10 +1001,10 @@ const tr = {
   desc: 'Gelecek sağlık işlerini planlamak için görsel hatırlatıcı formu.',
   tone: 'teal',
   fields: [
-    { type: 'chips', label: 'Hatırlatıcı türü', options: ['Aşı', 'İlaç', 'Randevu', 'Pire/Parazit'] },
-    { type: 'text', label: 'Başlık', placeholder: 'Örn. karma aşı kontrolü' },
-    { type: 'date', label: 'Tarih' },
-    { type: 'chips', label: 'Tekrar', options: ['Tek sefer', 'Günlük', 'Haftalık', 'Aylık', 'Yıllık'] },
+    { type: 'chips', label: 'Hatırlatıcı türü', options: ['Aşı', 'İlaç', 'Randevu', 'Pire/Parazit'], selection: 'single', required: true },
+    { type: 'text', label: 'Başlık', placeholder: 'Örn. karma aşı kontrolü', required: true },
+    { type: 'datetime', label: 'Tarih', required: true },
+    { type: 'chips', label: 'Tekrar', options: ['Tek sefer', 'Günlük', 'Haftalık', 'Aylık', 'Yıllık'], selection: 'single', required: true },
     { type: 'textarea', label: 'Not', placeholder: 'Doz, klinik, veteriner veya hazırlık notu...' }
   ]
   },
@@ -1511,6 +1513,10 @@ const tr = {
     category: 'Kategori',
     reminder_type: 'Hatırlatıcı türü',
     title: 'Başlık',
+    amount: 'Tutar',
+    date: 'Tarih',
+    repeat: 'Tekrar',
+    note: 'Not',
     medication_use: 'İlaç kullanımı',
     next_dose_check: 'Sonraki doz / kontrol',
     start_date: 'Başlangıç tarihi',
