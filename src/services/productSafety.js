@@ -1,3 +1,5 @@
+import { translateForLocale } from '../i18n/tr.js';
+
 const LOCAL_KEY = 'pati_product_safety_checks';
 
 function makeId() {
@@ -28,14 +30,14 @@ function compact(value) {
 function localWarnings({ productName, brand, lot }) {
   const text = compact([productName, brand, lot].join(' '));
   const warnings = [];
-  if (text.includes('çiğ') || text.includes('raw')) {
-    warnings.push('Çiğ/yarı pişmiş ürünlerde mikrobiyal kontaminasyon geri çağırmaları daha sık kontrol edilmelidir.');
+  if (text.includes('\u00e7i\u011f') || text.includes('raw')) {
+    warnings.push(translateForLocale('tr', 'productSafetyService.raw_warning'));
   }
-  if (text.includes('grain free') || text.includes('tahılsız')) {
-    warnings.push('Tahılsız ürünlerde kardiyak hassasiyeti olan petlerde veterinerle beslenme planı konuşulmalıdır.');
+  if (text.includes('grain free') || text.includes('tah\u0131ls\u0131z')) {
+    warnings.push(translateForLocale('tr', 'productSafetyService.grain_free_warning'));
   }
   if (text.includes('son kullanma') || text.includes('SKT')) {
-    warnings.push('Son kullanma tarihi ve lot/seri numarası üretici duyurusuyla birebir karşılaştırılmalıdır.');
+    warnings.push(translateForLocale('tr', 'productSafetyService.expiry_warning'));
   }
   return warnings;
 }
@@ -53,7 +55,7 @@ async function searchFoodRecalls({ productName, brand }) {
 
   return (data.results || []).map((item) => ({
     source: 'openFDA Food Enforcement',
-    product: item.product_description || 'Ürün açıklaması yok',
+    product: item.product_description || translateForLocale('tr', 'productSafetyService.no_description'),
     firm: item.recalling_firm || '',
     reason: item.reason_for_recall || '',
     status: item.status || '',
@@ -86,9 +88,9 @@ export async function runProductSafetyCheck(input) {
     recalls,
     warnings,
     nextSteps: [
-      'Lot/seri numarasını üretici duyurusu ve ambalaj üzerindeki bilgiyle birebir karşılaştır.',
-      'Kesin eşleşme varsa ürünü kullanmayı durdurup veteriner/üretici ile görüş.',
-      'Belirti varsa bu ekran yerine acil kayıt veya veteriner görüşmesi önceliklidir.'
+      translateForLocale('tr', 'productSafetyService.next_lot'),
+      translateForLocale('tr', 'productSafetyService.next_stop'),
+      translateForLocale('tr', 'productSafetyService.next_symptoms')
     ]
   };
 

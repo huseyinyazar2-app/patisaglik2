@@ -1,61 +1,56 @@
 import { navigate } from '../../router.js';
-
-const features = [
-  ['AI ön triyaj', 'Şikayeti, pet geçmişini ve kırmızı bayrakları veterinere hazır özetler.'],
-  ['Sağlık pasaportu', 'Aşı, parazit, ölçüm, belge, masraf ve takip kayıtlarını tek dosyada toplar.'],
-  ['Güvenli risk akışı', 'Zehirlenme ve yabancı cisim şüphesinde evde tedavi değil, güvenli aciliyet yönlendirmesi yapar.'],
-  ['Takip asistanı', 'Tedavi sonrası ilaç uyumu, belirti değişimi, yara/foto kontrolü ve randevu takibini düzenler.']
-];
+import { t } from '../../i18n/tr.js';
 
 export function render() {
+  const features = t('landing.features');
   return `
     <div class="web-page">
       <header class="web-nav">
         <button class="web-brand" id="brandHome" type="button">
           <span>${window.__icons?.paw || ''}</span>
-          <strong>Pati Sağlık</strong>
+          <strong>${t('app.name')}</strong>
         </button>
         <nav>
           <button type="button" id="btnAdmin">Admin</button>
-          <button type="button" id="btnOpenApp">Uygulamayı Aç</button>
+          <button type="button" id="btnOpenApp">${t('landing.open_app')}</button>
         </nav>
       </header>
 
       <main class="web-hero">
         <section class="web-hero-copy">
-          <div class="premium-screen-kicker">Pet sağlık yönetimi</div>
-          <h1>Panik anında doğru veriyi topla, veterinere eksiksiz dosyayla git.</h1>
-          <p>Pet sahibi için sağlık pasaportu, AI ön şikayet dosyası, güvenli aciliyet yönlendirmesi ve tedavi sonrası takip aynı deneyimde birleşir.</p>
+          <div class="premium-screen-kicker">${t('landing.kicker')}</div>
+          <h1>${t('landing.hero_title')}</h1>
+          <p>${t('landing.hero_desc')}</p>
           <div class="web-hero-actions">
             <button class="btn btn-primary" id="btnStart">Admin Paneli</button>
-            <button class="btn btn-secondary" id="btnDemo">Mobil Önizleme</button>
+            <button class="btn btn-secondary" id="btnDemo">${t('landing.mobile_preview')}</button>
           </div>
         </section>
 
-        <section class="web-product-visual" aria-label="Pati Sağlık ürün özeti">
+        <section class="web-product-visual" aria-label="${t('landing.visual_label')}">
           <div class="web-phone-frame">
             <div class="web-phone-top"></div>
             <div class="web-phone-card hero">
-              <span>Ücretsiz sağlık alanı</span>
+              <span>${t('landing.free_health_area')}</span>
               <strong>Boncuk</strong>
               <small>Kedi · British · 4.2 kg</small>
             </div>
             <div class="web-phone-grid">
-              <div><b>AI</b><small>Ön kontrol</small></div>
+              <div><b>AI</b><small>${t('landing.pre_check')}</small></div>
               <div><b>4.4</b><small>kg</small></div>
               <div><b>1</b><small>takip</small></div>
               <div><b>3.5</b><small>kritik model</small></div>
             </div>
             <div class="web-phone-card alert">
               <span>Risk sinyali</span>
-              <strong>Veteriner yönlendirme hazır</strong>
+              <strong>${t('landing.vet_guidance_ready')}</strong>
             </div>
           </div>
         </section>
       </main>
 
       <section class="web-feature-band">
-        ${features.map(([title, desc]) => `
+        ${features.map(({ title, desc }) => `
           <article class="web-feature-card">
             <span>${window.__icons?.checkCircle || ''}</span>
             <h3>${title}</h3>
@@ -66,10 +61,10 @@ export function render() {
 
       <section class="web-section-split">
         <div>
-          <div class="premium-screen-kicker">Hibrit AI modeli</div>
-          <h2>Önemsiz işte 3 Flash, kritik sağlık analizinde 3.5 Flash.</h2>
+          <div class="premium-screen-kicker">${t('landing.hybrid_kicker')}</div>
+          <h2>${t('landing.hybrid_title')}</h2>
         </div>
-        <p>Standart belge/özet akışları maliyet kontrollü çalışır. Zehirlenme, kırmızı bayrak ve kritik yönlendirme gibi hassas alanlarda daha güçlü model devreye girer; server filtresi evde müdahale önerilerini temizler.</p>
+        <p>${t('landing.hybrid_desc')}</p>
       </section>
     </div>
   `;

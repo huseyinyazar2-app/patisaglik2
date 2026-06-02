@@ -82,13 +82,13 @@ export function render(params = {}, query = {}) {
       
       <div class="section pt-6 pb-24">
         
-        <h3 class="section-title text-xs uppercase tracking-wider pl-2 mb-3">Veri İzinleri</h3>
+        <h3 class="section-title text-xs uppercase tracking-wider pl-2 mb-3">${t('privacyScreen.permissions_title')}</h3>
         <div class="bg-white rounded-xl shadow-sm border border-border-color mb-8">
           
           <div class="flex items-center justify-between p-4 border-b border-border-color">
             <div class="flex-1 pr-4">
               <div class="font-semibold text-sm mb-1">${t('profile.privacy_health')}</div>
-              <div class="text-xs text-secondary">Geçmiş kontroller ve ölçümler sunucularda şifreli saklansın.</div>
+              <div class="text-xs text-secondary">${t('privacyScreen.health_desc')}</div>
             </div>
             <label class="toggle flex-shrink-0">
               <input type="checkbox" checked class="hidden">
@@ -101,7 +101,7 @@ export function render(params = {}, query = {}) {
           <div class="flex items-center justify-between p-4 border-b border-border-color">
             <div class="flex-1 pr-4">
               <div class="font-semibold text-sm mb-1">${t('profile.privacy_media')}</div>
-              <div class="text-xs text-secondary">Fotoğraf, video ve ses kayıtları buluta yedeklensin. Kapatılırsa sadece bu cihazda saklanır.</div>
+              <div class="text-xs text-secondary">${t('privacyScreen.media_desc')}</div>
             </div>
             <label class="toggle flex-shrink-0">
               <input type="checkbox" checked class="hidden">
@@ -114,7 +114,7 @@ export function render(params = {}, query = {}) {
           <div class="flex items-center justify-between p-4 border-b border-border-color">
             <div class="flex-1 pr-4">
               <div class="font-semibold text-sm mb-1">${t('profile.privacy_ai')}</div>
-              <div class="text-xs text-secondary">Belirtiler ve kayıtlar yapay zeka analizine gönderilsin.</div>
+              <div class="text-xs text-secondary">${t('privacyScreen.ai_desc')}</div>
             </div>
             <label class="toggle flex-shrink-0">
               <input type="checkbox" checked class="hidden">
@@ -127,7 +127,7 @@ export function render(params = {}, query = {}) {
           <div class="flex items-center justify-between p-4">
             <div class="flex-1 pr-4">
               <div class="font-semibold text-sm mb-1">${t('profile.privacy_anon')}</div>
-              <div class="text-xs text-secondary">Veriler anonimleştirilerek ürün geliştirmede kullanılsın.</div>
+              <div class="text-xs text-secondary">${t('privacyScreen.anon_desc')}</div>
             </div>
             <label class="toggle flex-shrink-0">
               <input type="checkbox" class="hidden">
@@ -138,7 +138,7 @@ export function render(params = {}, query = {}) {
           </div>
         </div>
         
-        <h3 class="section-title text-xs uppercase tracking-wider pl-2 mb-3">Veri Yönetimi</h3>
+        <h3 class="section-title text-xs uppercase tracking-wider pl-2 mb-3">${t('privacyScreen.management_title')}</h3>
         <div class="bg-white rounded-xl shadow-sm border border-border-color overflow-hidden">
           <button class="w-full flex items-center justify-between p-4 text-left border-b border-border-color hover:bg-gray-50 active:bg-gray-100" id="btnExport">
             <span class="font-medium text-sm text-gray-800" id="exportLabel">${t('profile.export_data')}</span>
@@ -195,7 +195,7 @@ export function afterRender() {
   });
   
   document.getElementById('btnSave')?.addEventListener('click', () => {
-    showToast('Ayarlar kaydedildi.');
+    showToast(t('privacyScreen.settings_saved'));
     goBack();
   });
   
@@ -203,11 +203,11 @@ export function afterRender() {
     const button = event.currentTarget;
     const label = document.getElementById('exportLabel');
     button.disabled = true;
-    if (label) label.textContent = 'Veriler hazırlanıyor...';
+    if (label) label.textContent = t('privacyScreen.preparing_export');
     try {
       downloadJsonFile(await buildDataExport());
     } catch (err) {
-      showToast(`Veri dışa aktarımı başarısız: ${err.message}`);
+      showToast(t('privacyScreen.export_failed', { error: err.message }));
     } finally {
       button.disabled = false;
       if (label) label.textContent = t('profile.export_data');
@@ -216,22 +216,22 @@ export function afterRender() {
   
   document.getElementById('btnDeleteData')?.addEventListener('click', async () => {
     const ok = await showConfirmDialog({
-      title: 'Sağlık verilerini sil',
-      message: 'Tüm sağlık verileriniz ve geçmişiniz bu cihazdan kalıcı olarak silinecek.',
-      confirmText: 'Verileri Sil',
+      title: t('privacyScreen.delete_data_title'),
+      message: t('privacyScreen.delete_data_message'),
+      confirmText: t('privacyScreen.delete_data_confirm'),
       danger: true
     });
     if (!ok) return;
     HEALTH_DATA_KEYS.forEach((key) => localStorage.removeItem(key));
-    showToast('Bu cihazdaki sağlık verileri silindi.');
+    showToast(t('privacyScreen.data_deleted'));
     navigate('/pets/select');
   });
 
   document.getElementById('btnDeleteAccount')?.addEventListener('click', async () => {
     const ok = await showConfirmDialog({
-      title: 'Hesabı bu cihazdan kaldır',
-      message: 'Hesap oturumu ve bu cihazdaki tüm Pati Sağlık verileri silinecek.',
-      confirmText: 'Hesabı Kaldır',
+      title: t('privacyScreen.remove_account_title'),
+      message: t('privacyScreen.remove_account_message'),
+      confirmText: t('privacyScreen.remove_account_confirm'),
       danger: true
     });
     if (!ok) return;
@@ -241,7 +241,7 @@ export function afterRender() {
       activePetId: null,
       subscription: { tier: 'free', maxPets: 1 }
     });
-    showToast('Bu cihazdaki hesap oturumu ve yerel veriler silindi.');
+    showToast(t('privacyScreen.account_removed'));
     navigate('/auth/splash');
   });
 }

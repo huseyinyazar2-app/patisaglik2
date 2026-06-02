@@ -2,9 +2,10 @@ import { navigate } from '../../router.js';
 import { getState, resetSession } from '../../store.js';
 import { submitFeatureForm } from '../../services/formSubmissions.js';
 import { showToast } from '../../ui/toast.js';
+import { t, translateForLocale } from '../../i18n/tr.js';
 
 function selected(id) {
-  return document.querySelector(`#${id} button.selected`)?.textContent?.trim() || '';
+  return document.querySelector(`#${id} button.selected`)?.dataset.value || '';
 }
 
 function value(id) {
@@ -21,7 +22,7 @@ export function render() {
         <div class="header-left">
           <button class="header-icon" id="btnBack">${window.__icons?.back}</button>
         </div>
-        <div class="header-title">Veteriner Sonucu</div>
+        <div class="header-title">${t('vetOutcome.title')}</div>
         <div class="header-right">
           <span class="premium-header-shield">${window.__icons?.stethoscope}</span>
         </div>
@@ -31,51 +32,51 @@ export function render() {
         <div class="feature-form-hero gold">
           <div class="premium-icon-box">${window.__icons?.stethoscope}</div>
           <div>
-            <div class="premium-screen-kicker">Geri bildirim</div>
-            <h1>Yönlendirme ne kadar doğruydu?</h1>
-            <p>Bu bilgi tanı koymaz; ürün doğruluğunu ve takip kalitesini ölçmek için saklanır.</p>
+            <div class="premium-screen-kicker">${t('vetOutcome.kicker')}</div>
+            <h1>${t('vetOutcome.hero_title')}</h1>
+            <p>${t('vetOutcome.hero_desc')}</p>
           </div>
         </div>
 
         <div class="feature-form-card">
           <div class="feature-field">
-            <span>Veterinere gidildi mi?</span>
+            <span>${t('vetOutcome.visited')}</span>
             <div class="feature-chip-row" id="vetVisited">
-              ${['Evet', 'Hayır', 'Randevu alındı'].map((item, index) => `<button type="button" class="${index === 0 ? 'selected' : ''}">${item}</button>`).join('')}
+              ${t('vetOutcome.visited_options').map((item, index) => `<button type="button" data-value="${item.value}" class="${index === 0 ? 'selected' : ''}">${item.label}</button>`).join('')}
             </div>
           </div>
           <label class="feature-field">
-            <span>Veteriner tanısı / değerlendirmesi</span>
-            <input id="vetDiagnosis" placeholder="Örn. gastrit, konjonktivit, yumuşak doku travması..." />
+            <span>${t('vetOutcome.diagnosis')}</span>
+            <input id="vetDiagnosis" placeholder="${t('vetOutcome.diagnosis_placeholder')}" />
           </label>
           <label class="feature-field">
-            <span>Tedavi / öneri</span>
-            <textarea id="vetTreatment" placeholder="İlaç, diyet, kontrol, tahlil veya izlem notu..."></textarea>
+            <span>${t('vetOutcome.treatment')}</span>
+            <textarea id="vetTreatment" placeholder="${t('vetOutcome.treatment_placeholder')}"></textarea>
           </label>
           <div class="feature-field">
-            <span>Uygulama yönlendirmesi</span>
+            <span>${t('vetOutcome.triage_accuracy')}</span>
             <div class="feature-chip-row" id="triageAccuracy">
-              ${['Doğruydu', 'Fazla temkinliydi', 'Yetersiz kaldı', 'Emin değilim'].map(item => `<button type="button">${item}</button>`).join('')}
+              ${t('vetOutcome.accuracy_options').map(item => `<button type="button" data-value="${item.value}">${item.label}</button>`).join('')}
             </div>
           </div>
           <div class="feature-field">
-            <span>Şu anki durum</span>
+            <span>${t('vetOutcome.current_status')}</span>
             <div class="feature-chip-row" id="currentStatus">
-              ${['Düzeldi', 'Daha iyi', 'Aynı', 'Kötüleşti'].map(item => `<button type="button">${item}</button>`).join('')}
+              ${t('vetOutcome.status_options').map(item => `<button type="button" data-value="${item.value}">${item.label}</button>`).join('')}
             </div>
           </div>
           <label class="feature-field">
             <span>Ek not</span>
-            <textarea id="vetNote" placeholder="Tahlil sonucu, klinik adı veya hatırlamak istediğiniz detay..."></textarea>
+            <textarea id="vetNote" placeholder="${t('vetOutcome.note_placeholder')}"></textarea>
           </label>
         </div>
 
-        ${session.primaryComplaintLabel ? `<div class="info-box info mt-3"><span class="info-box-icon">${window.__icons?.clipboard}</span><span>Bu geri bildirim “${session.primaryComplaintLabel}” kontrolüyle eşleştirilecek.</span></div>` : ''}
+        ${session.primaryComplaintLabel ? `<div class="info-box info mt-3"><span class="info-box-icon">${window.__icons?.clipboard}</span><span>${t('vetOutcome.feedback_match', { label: session.primaryComplaintLabel })}</span></div>` : ''}
       </div>
 
       <div class="card" style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: var(--max-width); border-radius: 24px 24px 0 0; padding: 20px 24px; box-shadow: var(--shadow-xl); z-index: 10; border-top: 1px solid rgba(229, 222, 209, 0.8); background: rgba(255, 254, 251, 0.9); backdrop-filter: blur(20px);">
-        <button class="btn btn-primary btn-full mb-3" id="btnSaveOutcome">Sonucu Kaydet</button>
-        <button class="btn btn-ghost btn-full text-secondary" id="btnSkipOutcome">Şimdilik Atla</button>
+        <button class="btn btn-primary btn-full mb-3" id="btnSaveOutcome">${t('vetOutcome.save')}</button>
+        <button class="btn btn-ghost btn-full text-secondary" id="btnSkipOutcome">${t('vetOutcome.skip')}</button>
       </div>
     </div>
   `;
@@ -100,7 +101,7 @@ export function afterRender() {
   document.getElementById('btnSaveOutcome')?.addEventListener('click', async (event) => {
     const button = event.currentTarget;
     button.disabled = true;
-    button.textContent = 'Kaydediliyor...';
+    button.textContent = t('common.saving');
     try {
       await submitFeatureForm({
         userId: state.user?.id || 'user-1',
@@ -108,12 +109,12 @@ export function afterRender() {
         featureCode: 'ai-vet-outcome',
         locale: state.user?.locale || 'tr',
         payload: {
-          'Veterinere gidildi mi?': selected('vetVisited'),
-          'Veteriner tanısı': value('vetDiagnosis'),
-          'Tedavi / öneri': value('vetTreatment'),
-          'Uygulama yönlendirmesi': selected('triageAccuracy'),
-          'Şu anki durum': selected('currentStatus'),
-          'Ek not': value('vetNote'),
+          [translateForLocale('tr', 'vetOutcome.visited')]: selected('vetVisited'),
+          [translateForLocale('tr', 'vetOutcome.diagnosis_payload')]: value('vetDiagnosis'),
+          [translateForLocale('tr', 'vetOutcome.treatment')]: value('vetTreatment'),
+          [translateForLocale('tr', 'vetOutcome.triage_accuracy')]: selected('triageAccuracy'),
+          [translateForLocale('tr', 'vetOutcome.current_status')]: selected('currentStatus'),
+          [translateForLocale('tr', 'vetOutcome.extra_note')]: value('vetNote'),
           triage_session_id: state.session?.id || '',
           primary_complaint: state.session?.primaryComplaintLabel || '',
           matched_complaints: state.session?.matchedComplaintIds || [],
@@ -121,13 +122,13 @@ export function afterRender() {
           history_snapshot: state.session?.historySnapshot || {}
         }
       });
-      showToast('Veteriner sonucu kaydedildi.');
+      showToast(t('vetOutcome.saved'));
       resetSession();
       navigate('/home');
     } catch (err) {
-      showToast(`Sonuç kaydedilemedi: ${err.message}`);
+      showToast(t('vetOutcome.save_failed', { error: err.message }));
       button.disabled = false;
-      button.textContent = 'Sonucu Kaydet';
+      button.textContent = t('vetOutcome.save');
     }
   });
 }

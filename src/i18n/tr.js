@@ -1954,6 +1954,103 @@ JSON döndür:
     share_title: 'Pati Sağlık vaka raporu',
     link_ready: 'Rapor linki hazır.'
   },
+  vetOutcome: {
+    title: 'Veteriner Sonucu',
+    kicker: 'Geri bildirim',
+    hero_title: 'Yönlendirme ne kadar doğruydu?',
+    hero_desc: 'Bu bilgi tanı koymaz; ürün doğruluğunu ve takip kalitesini ölçmek için saklanır.',
+    visited: 'Veterinere gidildi mi?',
+    visited_options: [
+      { value: 'yes', label: 'Evet' },
+      { value: 'no', label: 'Hayır' },
+      { value: 'appointment_booked', label: 'Randevu alındı' }
+    ],
+    diagnosis: 'Veteriner tanısı / değerlendirmesi',
+    diagnosis_payload: 'Veteriner tanısı',
+    diagnosis_placeholder: 'Örn. gastrit, konjonktivit, yumuşak doku travması...',
+    treatment: 'Tedavi / öneri',
+    treatment_placeholder: 'İlaç, diyet, kontrol, tahlil veya izlem notu...',
+    triage_accuracy: 'Uygulama yönlendirmesi',
+    accuracy_options: [
+      { value: 'accurate', label: 'Doğruydu' },
+      { value: 'too_cautious', label: 'Fazla temkinliydi' },
+      { value: 'insufficient', label: 'Yetersiz kaldı' },
+      { value: 'unsure', label: 'Emin değilim' }
+    ],
+    current_status: 'Şu anki durum',
+    extra_note: 'Ek not',
+    status_options: [
+      { value: 'resolved', label: 'Düzeldi' },
+      { value: 'better', label: 'Daha iyi' },
+      { value: 'same', label: 'Aynı' },
+      { value: 'worse', label: 'Kötüleşti' }
+    ],
+    note_placeholder: 'Tahlil sonucu, klinik adı veya hatırlamak istediğiniz detay...',
+    feedback_match: 'Bu geri bildirim “{label}” kontrolüyle eşleştirilecek.',
+    save: 'Sonucu Kaydet',
+    skip: 'Şimdilik Atla',
+    saved: 'Veteriner sonucu kaydedildi.',
+    save_failed: 'Sonuç kaydedilemedi: {error}'
+  },
+  landing: {
+    open_app: 'Uygulamayı Aç',
+    kicker: 'Pet sağlık yönetimi',
+    hero_title: 'Panik anında doğru veriyi topla, veterinere eksiksiz dosyayla git.',
+    hero_desc: 'Pet sahibi için sağlık pasaportu, AI ön şikayet dosyası, güvenli aciliyet yönlendirmesi ve tedavi sonrası takip aynı deneyimde birleşir.',
+    mobile_preview: 'Mobil Önizleme',
+    visual_label: 'Pati Sağlık ürün özeti',
+    free_health_area: 'Ücretsiz sağlık alanı',
+    pre_check: 'Ön kontrol',
+    vet_guidance_ready: 'Veteriner yönlendirme hazır',
+    features: [
+      { title: 'AI ön triyaj', desc: 'Şikayeti, pet geçmişini ve kırmızı bayrakları veterinere hazır özetler.' },
+      { title: 'Sağlık pasaportu', desc: 'Aşı, parazit, ölçüm, belge, masraf ve takip kayıtlarını tek dosyada toplar.' },
+      { title: 'Güvenli risk akışı', desc: 'Zehirlenme ve yabancı cisim şüphesinde evde tedavi değil, güvenli aciliyet yönlendirmesi yapar.' },
+      { title: 'Takip asistanı', desc: 'Tedavi sonrası ilaç uyumu, belirti değişimi, yara/foto kontrolü ve randevu takibini düzenler.' }
+    ],
+    hybrid_kicker: 'Hibrit AI modeli',
+    hybrid_title: 'Önemsiz işte 3 Flash, kritik sağlık analizinde 3.5 Flash.',
+    hybrid_desc: 'Standart belge/özet akışları maliyet kontrollü çalışır. Zehirlenme, kırmızı bayrak ve kritik yönlendirme gibi hassas alanlarda daha güçlü model devreye girer; server filtresi evde müdahale önerilerini temizler.'
+  },
+  reportCreate: {
+    clinic_title: 'Klinik / sigorta dosyası',
+    clinic_desc: 'Pet profili, sağlık kayıtları, masraflar ve ölçümleri tek indirilebilir dosyada toparla.',
+    vet_prep_title: 'Veteriner ziyaret hazırlığı',
+    vet_prep_desc: 'Ziyaret nedeni, sorular ve yanında götürülecekleri canlı belge arşivine kaydet.',
+    document_title: 'Belge / tahlil / fatura AI okuma',
+    document_desc: 'Belgeyi kaydet, OCR/AI ayrıştırma için hedef alanları ve görünen kritik değerleri işaretle.',
+    ai_ready: 'AI hazır',
+    choose_type: 'Dosya türünü seç',
+    choose_desc: 'Ücretsiz kayıtlar canlı arşive yazılır; rapor paylaşımı linktir, AI/OCR ise server katmanı hazır olunca belgeyi işleyecek.'
+  },
+  productSafetyService: {
+    raw_warning: 'Çiğ/yarı pişmiş ürünlerde mikrobiyal kontaminasyon geri çağırmaları daha sık kontrol edilmelidir.',
+    grain_free_warning: 'Tahılsız ürünlerde kardiyak hassasiyeti olan petlerde veterinerle beslenme planı konuşulmalıdır.',
+    expiry_warning: 'Son kullanma tarihi ve lot/seri numarası üretici duyurusuyla birebir karşılaştırılmalıdır.',
+    no_description: 'Ürün açıklaması yok',
+    next_lot: 'Lot/seri numarasını üretici duyurusu ve ambalaj üzerindeki bilgiyle birebir karşılaştır.',
+    next_stop: 'Kesin eşleşme varsa ürünü kullanmayı durdurup veteriner/üretici ile görüş.',
+    next_symptoms: 'Belirti varsa bu ekran yerine acil kayıt veya veteriner görüşmesi önceliklidir.'
+  },
+  privacyScreen: {
+    permissions_title: 'Veri İzinleri',
+    health_desc: 'Geçmiş kontroller ve ölçümler sunucularda şifreli saklansın.',
+    media_desc: 'Fotoğraf, video ve ses kayıtları buluta yedeklensin. Kapatılırsa sadece bu cihazda saklanır.',
+    ai_desc: 'Belirtiler ve kayıtlar yapay zeka analizine gönderilsin.',
+    anon_desc: 'Veriler anonimleştirilerek ürün geliştirmede kullanılsın.',
+    management_title: 'Veri Yönetimi',
+    settings_saved: 'Ayarlar kaydedildi.',
+    preparing_export: 'Veriler hazırlanıyor...',
+    export_failed: 'Veri dışa aktarımı başarısız: {error}',
+    delete_data_title: 'Sağlık verilerini sil',
+    delete_data_message: 'Tüm sağlık verileriniz ve geçmişiniz bu cihazdan kalıcı olarak silinecek.',
+    delete_data_confirm: 'Verileri Sil',
+    data_deleted: 'Bu cihazdaki sağlık verileri silindi.',
+    remove_account_title: 'Hesabı bu cihazdan kaldır',
+    remove_account_message: 'Hesap oturumu ve bu cihazdaki tüm Pati Sağlık verileri silinecek.',
+    remove_account_confirm: 'Hesabı Kaldır',
+    account_removed: 'Bu cihazdaki hesap oturumu ve yerel veriler silindi.'
+  },
   common: {
     save: 'Kaydet', saving: 'Kaydediliyor...', cancel: 'İptal', back: 'Geri', next: 'Devam', done: 'Tamam',
     delete: 'Sil', edit: 'Düzenle', share: 'Paylaş', close: 'Kapat',

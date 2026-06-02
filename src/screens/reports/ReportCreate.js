@@ -5,26 +5,26 @@ const reportActions = [
   {
     id: 'clinic-export',
     icon: 'briefcase',
-    title: 'Klinik / sigorta dosyası',
-    desc: 'Pet profili, sağlık kayıtları, masraflar ve ölçümleri tek indirilebilir dosyada toparla.',
+    titleKey: 'reportCreate.clinic_title',
+    descKey: 'reportCreate.clinic_desc',
     route: '/feature/clinic-export',
-    badge: 'Ücretsiz'
+    badgeKey: 'common.free'
   },
   {
     id: 'vet-prep',
     icon: 'stethoscope',
-    title: 'Veteriner ziyaret hazırlığı',
-    desc: 'Ziyaret nedeni, sorular ve yanında götürülecekleri canlı belge arşivine kaydet.',
+    titleKey: 'reportCreate.vet_prep_title',
+    descKey: 'reportCreate.vet_prep_desc',
     route: '/feature/vet-prep',
-    badge: 'Ücretsiz'
+    badgeKey: 'common.free'
   },
   {
     id: 'document-ai',
     icon: 'upload',
-    title: 'Belge / tahlil / fatura AI okuma',
-    desc: 'Belgeyi kaydet, OCR/AI ayrıştırma için hedef alanları ve görünen kritik değerleri işaretle.',
+    titleKey: 'reportCreate.document_title',
+    descKey: 'reportCreate.document_desc',
     route: '/feature/document-ai',
-    badge: 'AI hazır'
+    badgeKey: 'reportCreate.ai_ready'
   }
 ];
 
@@ -44,8 +44,8 @@ export function render() {
       <div class="section pt-4">
         <div class="profile-plan-card">
           <div>
-            <strong>Dosya türünü seç</strong>
-            <p>Ücretsiz kayıtlar canlı arşive yazılır; rapor paylaşımı linktir, AI/OCR ise server katmanı hazır olunca belgeyi işleyecek.</p>
+            <strong>${t('reportCreate.choose_type')}</strong>
+            <p>${t('reportCreate.choose_desc')}</p>
           </div>
           <span class="plan-pill">Raporlar</span>
         </div>
@@ -57,10 +57,10 @@ export function render() {
             <button class="feature-menu-card" data-route="${item.route}">
               <div class="premium-icon-box">${window.__icons?.[item.icon]}</div>
               <div>
-                <strong>${item.title}</strong>
-                <p>${item.desc}</p>
+                <strong>${t(item.titleKey)}</strong>
+                <p>${t(item.descKey)}</p>
               </div>
-              <span>${item.badge}</span>
+              <span>${t(item.badgeKey)}</span>
             </button>
           `).join('')}
         </div>

@@ -1925,6 +1925,103 @@ Return JSON:
     share_title: 'Pati Health case report',
     link_ready: 'Report link is ready.'
   },
+  vetOutcome: {
+    title: 'Vet Outcome',
+    kicker: 'Feedback',
+    hero_title: 'How accurate was the guidance?',
+    hero_desc: 'This does not diagnose; it is saved to measure product accuracy and follow-up quality.',
+    visited: 'Was a veterinarian seen?',
+    visited_options: [
+      { value: 'yes', label: 'Yes' },
+      { value: 'no', label: 'No' },
+      { value: 'appointment_booked', label: 'Appointment booked' }
+    ],
+    diagnosis: 'Vet diagnosis / assessment',
+    diagnosis_payload: 'Vet diagnosis',
+    diagnosis_placeholder: 'E.g. gastritis, conjunctivitis, soft tissue trauma...',
+    treatment: 'Treatment / recommendation',
+    treatment_placeholder: 'Medication, diet, check-up, lab test or monitoring note...',
+    triage_accuracy: 'App guidance',
+    accuracy_options: [
+      { value: 'accurate', label: 'It was accurate' },
+      { value: 'too_cautious', label: 'Too cautious' },
+      { value: 'insufficient', label: 'Not enough' },
+      { value: 'unsure', label: 'Not sure' }
+    ],
+    current_status: 'Current status',
+    extra_note: 'Extra note',
+    status_options: [
+      { value: 'resolved', label: 'Resolved' },
+      { value: 'better', label: 'Better' },
+      { value: 'same', label: 'Same' },
+      { value: 'worse', label: 'Worse' }
+    ],
+    note_placeholder: 'Lab result, clinic name or anything you want to remember...',
+    feedback_match: 'This feedback will be linked to the “{label}” check.',
+    save: 'Save Outcome',
+    skip: 'Skip for Now',
+    saved: 'Vet outcome saved.',
+    save_failed: 'Outcome could not be saved: {error}'
+  },
+  landing: {
+    open_app: 'Open App',
+    kicker: 'Pet health management',
+    hero_title: 'Collect the right data in a stressful moment and go to the vet with a complete file.',
+    hero_desc: 'Health passport, AI pre-complaint file, safe urgency guidance and post-treatment follow-up come together in one experience for pet owners.',
+    mobile_preview: 'Mobile Preview',
+    visual_label: 'Pati Health product summary',
+    free_health_area: 'Free health area',
+    pre_check: 'Pre-check',
+    vet_guidance_ready: 'Vet guidance ready',
+    features: [
+      { title: 'AI pre-triage', desc: 'Summarizes the complaint, pet history and red flags into a vet-ready brief.' },
+      { title: 'Health passport', desc: 'Keeps vaccines, parasite care, measurements, documents, expenses and follow-up records in one file.' },
+      { title: 'Safe risk flow', desc: 'For poisoning or foreign-body suspicion, it gives safe urgency guidance rather than home treatment advice.' },
+      { title: 'Follow-up assistant', desc: 'Organizes medication adherence, sign changes, wound/photo checks and appointment follow-up after treatment.' }
+    ],
+    hybrid_kicker: 'Hybrid AI model',
+    hybrid_title: '3 Flash for routine work, 3.5 Flash for critical health analysis.',
+    hybrid_desc: 'Standard document and summary flows run cost-consciously. Stronger models activate for sensitive areas such as poisoning, red flags and critical guidance, while server filters remove home-treatment advice.'
+  },
+  reportCreate: {
+    clinic_title: 'Clinic / insurance file',
+    clinic_desc: 'Bundle pet profile, health records, expenses and measurements into one downloadable file.',
+    vet_prep_title: 'Vet visit preparation',
+    vet_prep_desc: 'Save the visit reason, questions and items to bring into the live document archive.',
+    document_title: 'Document / lab / invoice AI reading',
+    document_desc: 'Save the document and mark target sections plus visible critical values for OCR/AI extraction.',
+    ai_ready: 'AI ready',
+    choose_type: 'Choose file type',
+    choose_desc: 'Free records are written to the live archive; report sharing is link-based, and AI/OCR will process the document when the server layer is ready.'
+  },
+  productSafetyService: {
+    raw_warning: 'Raw or partly cooked products should be checked more often for microbial-contamination recalls.',
+    grain_free_warning: 'For grain-free products, nutrition planning should be discussed with a veterinarian for pets with cardiac sensitivity.',
+    expiry_warning: 'Expiration date and lot/serial number should be checked exactly against the manufacturer notice.',
+    no_description: 'No product description',
+    next_lot: 'Compare the lot/serial number exactly with the manufacturer notice and package information.',
+    next_stop: 'If there is a definite match, stop using the product and contact a veterinarian or the manufacturer.',
+    next_symptoms: 'If signs are present, emergency record or veterinary consultation takes priority over this screen.'
+  },
+  privacyScreen: {
+    permissions_title: 'Data Permissions',
+    health_desc: 'Store past checks and measurements encrypted on servers.',
+    media_desc: 'Back up photos, videos and audio records to the cloud. If turned off, they stay only on this device.',
+    ai_desc: 'Send signs and records for AI analysis.',
+    anon_desc: 'Use anonymized data for product improvement.',
+    management_title: 'Data Management',
+    settings_saved: 'Settings saved.',
+    preparing_export: 'Preparing data...',
+    export_failed: 'Data export failed: {error}',
+    delete_data_title: 'Delete health data',
+    delete_data_message: 'All health data and history on this device will be permanently deleted.',
+    delete_data_confirm: 'Delete Data',
+    data_deleted: 'Health data on this device was deleted.',
+    remove_account_title: 'Remove account from this device',
+    remove_account_message: 'Account session and all Pati Health data on this device will be deleted.',
+    remove_account_confirm: 'Remove Account',
+    account_removed: 'Account session and local data on this device were deleted.'
+  },
   common: {
     save: 'Save', saving: 'Saving...', cancel: 'Cancel', back: 'Back', next: 'Continue', done: 'Done',
     delete: 'Delete', edit: 'Edit', share: 'Share', close: 'Close',
