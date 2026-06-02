@@ -1,6 +1,7 @@
 import { goBack } from '../../router.js';
 import { getVetReadyReport } from '../../services/vetReadyReports.js';
 import { showToast } from '../../ui/toast.js';
+import { t } from '../../i18n/tr.js';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -12,7 +13,7 @@ function escapeHtml(value) {
 }
 
 function formatDate(date) {
-  if (!date || Number.isNaN(Date.parse(date))) return 'Tarih yok';
+  if (!date || Number.isNaN(Date.parse(date))) return t('common.no_date');
   return new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(date));
 }
 
@@ -22,7 +23,7 @@ function formatAnswer(value) {
   return String(value || '-');
 }
 
-function renderList(items = [], emptyText = 'Kayıt yok') {
+function renderList(items = [], emptyText = t('publicVetReport.no_record')) {
   if (!items.length) return `<p class="text-sm text-secondary">${escapeHtml(emptyText)}</p>`;
   return `<ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`;
 }
@@ -35,59 +36,59 @@ function renderReport(report) {
     <div class="report-public-card">
       <div class="report-public-hero ${escapeHtml(report.urgency.level)}">
         <div>
-          <div class="premium-screen-kicker">Veterinere Hazır Link</div>
-          <h1>${escapeHtml(report.pet.name)} vaka özeti</h1>
-          <p>${formatDate(report.createdAt)} tarihinde oluşturuldu.</p>
+          <div class="premium-screen-kicker">${t('publicVetReport.kicker')}</div>
+          <h1>${t('publicVetReport.case_summary', { name: escapeHtml(report.pet.name) })}</h1>
+          <p>${t('publicVetReport.created_at', { date: formatDate(report.createdAt) })}</p>
         </div>
         <div class="report-public-urgency">
           <span>${escapeHtml(report.urgency.title)}</span>
           <strong>${escapeHtml(report.urgency.action)}</strong>
-          <small>Skor ${Number(report.urgency.score || 0)} | Güven ${Number(report.urgency.confidence || 0)}%</small>
+          <small>${t('publicVetReport.score_confidence', { score: Number(report.urgency.score || 0), confidence: Number(report.urgency.confidence || 0) })}</small>
         </div>
       </div>
 
       <section>
-        <h2>Pet ve Şikayet</h2>
+        <h2>${t('publicVetReport.pet_complaint')}</h2>
         <div class="report-public-grid">
-          <p><b>Pet</b><span>${escapeHtml([report.pet.breed, report.pet.age, report.pet.weight ? `${report.pet.weight} kg` : ''].filter(Boolean).join(' | ') || 'Profil bilgisi yok')}</span></p>
-          <p><b>Şikayet</b><span>${escapeHtml(report.complaint.text || 'Belirtilmedi')}</span></p>
-          <p><b>Süre</b><span>${escapeHtml(report.complaint.duration || 'Belirtilmedi')}</span></p>
-          <p><b>Şiddet</b><span>${escapeHtml(report.complaint.severity || 'Belirtilmedi')}</span></p>
+          <p><b>Pet</b><span>${escapeHtml([report.pet.breed, report.pet.age, report.pet.weight ? `${report.pet.weight} kg` : ''].filter(Boolean).join(' | ') || t('publicVetReport.no_profile'))}</span></p>
+          <p><b>${t('publicVetReport.complaint')}</b><span>${escapeHtml(report.complaint.text || t('common.not_specified'))}</span></p>
+          <p><b>${t('publicVetReport.duration')}</b><span>${escapeHtml(report.complaint.duration || t('common.not_specified'))}</span></p>
+          <p><b>${t('publicVetReport.severity')}</b><span>${escapeHtml(report.complaint.severity || t('common.not_specified'))}</span></p>
         </div>
       </section>
 
       <section>
-        <h2>Kırmızı Bayraklar</h2>
+        <h2>${t('publicVetReport.red_flags')}</h2>
         ${Object.keys(report.redFlags || {}).length
           ? `<div class="report-public-rows">${Object.entries(report.redFlags).map(([key, value]) => `<p><b>${escapeHtml(key)}</b><span>${escapeHtml(value)}</span></p>`).join('')}</div>`
-          : '<p class="text-sm text-secondary">Acil belirti yanıtı yok.</p>'}
+          : `<p class="text-sm text-secondary">${t('publicVetReport.no_red_flags')}</p>`}
       </section>
 
       <section>
-        <h2>Yanıtlar</h2>
+        <h2>${t('publicVetReport.answers')}</h2>
         ${answerRows.length
           ? `<div class="report-public-rows">${answerRows.map(([key, value]) => `<p><b>${escapeHtml(key)}</b><span>${escapeHtml(formatAnswer(value))}</span></p>`).join('')}</div>`
-          : '<p class="text-sm text-secondary">Soru yanıtı yok.</p>'}
+          : `<p class="text-sm text-secondary">${t('publicVetReport.no_answers')}</p>`}
       </section>
 
       <section>
-        <h2>Kanıt ve Görevler</h2>
+        <h2>${t('publicVetReport.evidence_tasks')}</h2>
         ${taskRows.length
           ? `<div class="report-public-rows">${taskRows.map((task) => `<p><b>${escapeHtml(task.title || task.key)}</b><span>${escapeHtml(task.status || 'pending')}</span></p>`).join('')}</div>`
-          : '<p class="text-sm text-secondary">Medya veya ölçüm görevi eklenmedi.</p>'}
+          : `<p class="text-sm text-secondary">${t('publicVetReport.no_tasks')}</p>`}
       </section>
 
       <section>
-        <h2>Güvenli Takip</h2>
-        ${renderList(report.steps, 'Takip adımı yok.')}
+        <h2>${t('publicVetReport.safe_followup')}</h2>
+        ${renderList(report.steps, t('publicVetReport.no_steps'))}
       </section>
 
       <section>
-        <h2>Dikkat Edilecekler</h2>
-        ${renderList([...(report.warnings || []), ...(report.contextWarnings || [])], 'Ek uyarı yok.')}
+        <h2>${t('publicVetReport.watch_items')}</h2>
+        ${renderList([...(report.warnings || []), ...(report.contextWarnings || [])], t('publicVetReport.no_warnings'))}
       </section>
 
-      <div class="premium-privacy-note">${window.__icons?.lock || ''} Bu link veteriner muayenesinin yerine geçmez; klinik görüşmeye hazırlık içindir.</div>
+      <div class="premium-privacy-note">${window.__icons?.lock || ''} ${t('publicVetReport.disclaimer')}</div>
     </div>
   `;
 }
@@ -101,7 +102,7 @@ export function render(params = {}) {
         <div class="header-left">
           <button class="header-icon" id="btnBack">${window.__icons?.back || ''}</button>
         </div>
-        <div class="header-title">Vaka Raporu</div>
+        <div class="header-title">${t('publicVetReport.title')}</div>
         <div class="header-right">
           <button class="header-icon" id="btnShare">${window.__icons?.upload || ''}</button>
         </div>
@@ -111,8 +112,8 @@ export function render(params = {}) {
         ${report ? renderReport(report) : `
           <div class="empty-state">
             <div class="premium-icon-box" style="margin: 0 auto 16px;">${window.__icons?.clipboard || ''}</div>
-            <div class="font-bold mb-2">Rapor bulunamadı</div>
-            <div class="text-sm text-secondary px-4">Bu link cihazda kayıtlı değil veya temizlenmiş olabilir.</div>
+            <div class="font-bold mb-2">${t('publicVetReport.not_found_title')}</div>
+            <div class="text-sm text-secondary px-4">${t('publicVetReport.not_found_desc')}</div>
           </div>
         `}
       </div>
@@ -125,9 +126,9 @@ export function afterRender(params = {}) {
   document.getElementById('btnShare')?.addEventListener('click', async () => {
     const url = `${window.location.origin}${window.location.pathname}#/public/report/${params.reportId}`;
     try {
-      if (navigator.share) await navigator.share({ title: 'Pati Sağlık vaka raporu', url });
+      if (navigator.share) await navigator.share({ title: t('publicVetReport.share_title'), url });
       else await navigator.clipboard.writeText(url);
-      showToast('Rapor linki hazir.');
+      showToast(t('publicVetReport.link_ready'));
     } catch {}
   });
 }

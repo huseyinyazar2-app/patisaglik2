@@ -7,20 +7,20 @@ const MEASUREMENT_TABS = [
   { id: 'weight', label: t('history.weight'), iconKey: 'weight', unit: 'kg' },
   { id: 'temperature', label: t('history.temperature'), iconKey: 'thermometer', unit: '°C' },
   { id: 'respiratory', label: t('history.respiratory'), iconKey: 'lungs', unit: '/dk' },
-  { id: 'heart_rate', label: 'Nabız', iconKey: 'heartPulse', unit: 'bpm' },
+  { id: 'heart_rate', label: t('measurements.heart_rate'), iconKey: 'heartPulse', unit: 'bpm' },
   { id: 'urine_ph', label: t('history.urine'), iconKey: 'activity', unit: 'pH' },
   { id: 'other', label: t('history.other'), iconKey: 'measurement', unit: '' }
 ];
 
 const TIME_RANGES = [
-  { id: '7d', label: '7 gün' },
-  { id: '30d', label: '30 gün' },
-  { id: '90d', label: '90 gün' },
-  { id: '1y', label: '1 yıl' }
+  { id: '7d', label: t('measurements.range_7d') },
+  { id: '30d', label: t('measurements.range_30d') },
+  { id: '90d', label: t('measurements.range_90d') },
+  { id: '1y', label: t('measurements.range_1y') }
 ];
 
 function formatMeasurementDate(date) {
-  if (!date) return 'Tarih yok';
+  if (!date) return t('common.no_date');
   return new Intl.DateTimeFormat('tr-TR', {
     day: 'numeric',
     month: 'long',
@@ -45,8 +45,8 @@ function renderLiveMeasurements(records = null, activeTabInfo = MEASUREMENT_TABS
     return `
       <div class="record-summary-panel">
         <div class="record-summary-grid">
-          <div><span>Kayıt</span><strong>Yükleniyor</strong><small>Ölçümler getiriliyor</small></div>
-          <div><span>Tür</span><strong>${activeTabInfo.label}</strong><small>${activeTabInfo.unit || 'Özel ölçüm'}</small></div>
+          <div><span>${t('measurements.record')}</span><strong>${t('common.loading')}</strong><small>${t('measurements.loading_desc')}</small></div>
+          <div><span>${t('measurements.type')}</span><strong>${activeTabInfo.label}</strong><small>${activeTabInfo.unit || t('measurements.custom_measurement')}</small></div>
         </div>
       </div>
     `;
@@ -56,8 +56,8 @@ function renderLiveMeasurements(records = null, activeTabInfo = MEASUREMENT_TABS
     return `
       <div class="record-summary-panel">
         <div class="record-summary-grid">
-          <div><span>Kayıt</span><strong>0</strong><small>Bu türde ölçüm yok</small></div>
-          <div><span>Tür</span><strong>${activeTabInfo.label}</strong><small>Yeni ölçüm ekleyebilirsin</small></div>
+          <div><span>${t('measurements.record')}</span><strong>0</strong><small>${t('measurements.no_type_record')}</small></div>
+          <div><span>${t('measurements.type')}</span><strong>${activeTabInfo.label}</strong><small>${t('measurements.can_add_new')}</small></div>
         </div>
       </div>
     `;
@@ -70,8 +70,8 @@ function renderLiveMeasurements(records = null, activeTabInfo = MEASUREMENT_TABS
   return `
     <div class="record-summary-panel">
       <div class="record-summary-grid">
-        <div><span>Son ölçüm</span><strong>${latest.value} ${latest.unit || ''}</strong><small>${formatMeasurementDate(latest.measured_at)}</small></div>
-        <div><span>Ortalama</span><strong>${avg} ${latest.unit || activeTabInfo.unit}</strong><small>${records.length} ölçüm kaydı</small></div>
+        <div><span>${t('measurements.latest')}</span><strong>${latest.value} ${latest.unit || ''}</strong><small>${formatMeasurementDate(latest.measured_at)}</small></div>
+        <div><span>${t('measurements.average')}</span><strong>${avg} ${latest.unit || activeTabInfo.unit}</strong><small>${t('measurements.record_count', { count: records.length })}</small></div>
       </div>
     </div>
   `;
@@ -79,7 +79,7 @@ function renderLiveMeasurements(records = null, activeTabInfo = MEASUREMENT_TABS
 
 function renderMeasurementBody(records = null, activeTabInfo = MEASUREMENT_TABS[0], activeRange = '90d') {
   if (!records) {
-    return `<div class="free-record-panel"><p>Ölçüm kayıtları yükleniyor...</p></div>`;
+    return `<div class="free-record-panel"><p>${t('measurements.records_loading')}</p></div>`;
   }
 
   const filtered = filterByRange(records, activeRange);
@@ -87,8 +87,8 @@ function renderMeasurementBody(records = null, activeTabInfo = MEASUREMENT_TABS[
     return `
       <div class="empty-state">
         <div class="empty-state-icon">${measureIcon(activeTabInfo.iconKey)}</div>
-        <div class="empty-state-title">${activeTabInfo.label} verisi yok</div>
-        <div class="empty-state-desc">Henüz ${activeTabInfo.label.toLowerCase()} ölçümü kaydedilmemiş.</div>
+        <div class="empty-state-title">${t('measurements.no_data_title', { label: activeTabInfo.label })}</div>
+        <div class="empty-state-desc">${t('measurements.no_data_desc', { label: activeTabInfo.label.toLowerCase() })}</div>
         <button class="btn btn-primary" id="emptyAddBtn">${window.__icons?.plus} ${t('history.add_new')}</button>
       </div>
       <button class="btn btn-primary btn-full btn-lg mb-4" id="addMeasurementBtn">
@@ -110,14 +110,14 @@ function renderMeasurementBody(records = null, activeTabInfo = MEASUREMENT_TABS[
 
   return `
     <div class="card card-gradient text-center mb-4" style="animation: slideUp 0.3s ease;">
-      <div class="text-xs text-tertiary mb-1">Son Ölçüm</div>
+      <div class="text-xs text-tertiary mb-1">${t('measurements.latest')}</div>
       <div style="font-size: var(--font-size-4xl); font-weight: 800; color: var(--primary);">${latest.value}</div>
       <div class="measurement-unit" style="font-size: var(--font-size-lg);">${latest.unit || activeTabInfo.unit}</div>
       <div class="text-xs text-tertiary mt-2">${measureIcon('calendar')} ${formatMeasurementDate(latest.measured_at)}</div>
     </div>
 
     <div class="card card-bordered mb-4" style="animation: slideUp 0.4s ease;">
-      <div class="text-xs font-semibold text-tertiary mb-3 modern-title-icon" style="text-transform: uppercase; letter-spacing: 0.05em;">${window.__icons?.activity} Kayıt Trendi</div>
+      <div class="text-xs font-semibold text-tertiary mb-3 modern-title-icon" style="text-transform: uppercase; letter-spacing: 0.05em;">${window.__icons?.activity} ${t('measurements.trend')}</div>
       <div class="chart-placeholder">
         ${barHeights.map((h, i) => `
           <div class="chart-bar" style="height: ${h}%; animation: slideUp ${0.3 + i * 0.1}s ease; opacity: ${i === barHeights.length - 1 ? 1 : 0.7};"></div>
@@ -133,7 +133,7 @@ function renderMeasurementBody(records = null, activeTabInfo = MEASUREMENT_TABS[
     </div>
 
     <div class="card card-bordered mb-4" style="animation: slideUp 0.5s ease;">
-      <div class="text-xs font-semibold text-tertiary mb-3 modern-title-icon" style="text-transform: uppercase; letter-spacing: 0.05em;">${window.__icons?.measurement} İstatistikler</div>
+      <div class="text-xs font-semibold text-tertiary mb-3 modern-title-icon" style="text-transform: uppercase; letter-spacing: 0.05em;">${window.__icons?.measurement} ${t('measurements.stats')}</div>
       <div class="flex justify-between">
         <div class="text-center" style="flex: 1;">
           <div class="text-xs text-tertiary">Min</div>
@@ -157,8 +157,8 @@ function renderMeasurementBody(records = null, activeTabInfo = MEASUREMENT_TABS[
 
     <div class="section" style="animation: slideUp 0.6s ease;">
       <div class="section-header">
-        <div class="section-title">Geçmiş Ölçümler</div>
-        <span class="text-xs text-tertiary">${filtered.length} kayıt</span>
+        <div class="section-title">${t('measurements.past_measurements')}</div>
+        <span class="text-xs text-tertiary">${t('common.count_records', { count: filtered.length })}</span>
       </div>
       <div class="card card-bordered" style="padding: 0; overflow: hidden;">
         ${filtered.map((item, i) => `

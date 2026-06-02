@@ -13,22 +13,22 @@ function escapeHtml(value) {
 }
 
 function formatDate(date) {
-  if (!date || Number.isNaN(Date.parse(date))) return 'Tarih yok';
+  if (!date || Number.isNaN(Date.parse(date))) return t('common.no_date');
   return new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(date));
 }
 
 function typeMeta(doc) {
-  if (doc.document_type === 'health_document') return { label: 'Belge arşivi', icon: 'upload' };
-  if (doc.document_type === 'vet_prep') return { label: 'Veteriner hazırlığı', icon: 'stethoscope' };
-  return { label: 'Klinik dosyası', icon: 'briefcase' };
+  if (doc.document_type === 'health_document') return { label: t('reportsScreen.document_archive'), icon: 'upload' };
+  if (doc.document_type === 'vet_prep') return { label: t('reportsScreen.vet_prep'), icon: 'stethoscope' };
+  return { label: t('reportsScreen.clinic_file'), icon: 'briefcase' };
 }
 
 function statusText(status) {
-  if (status === 'draft') return 'Taslak';
-  if (status === 'uploaded') return 'Yüklendi';
-  if (status === 'ai_pending') return 'AI okuma bekliyor';
-  if (status === 'processed') return 'Hazır';
-  return status || 'Hazır';
+  if (status === 'draft') return t('reportsScreen.status_draft');
+  if (status === 'uploaded') return t('reportsScreen.status_uploaded');
+  if (status === 'ai_pending') return t('reportsScreen.status_ai_pending');
+  if (status === 'processed') return t('reportsScreen.status_ready');
+  return status || t('reportsScreen.status_ready');
 }
 
 function renderSummary(documents = []) {
@@ -39,8 +39,8 @@ function renderSummary(documents = []) {
   return `
     <div class="record-summary-panel">
       <div class="record-summary-grid">
-        <div><span>Toplam dosya</span><strong>${documents.length}</strong><small>Klinik ve belge arşivi</small></div>
-        <div><span>Hazırlık</span><strong>${clinic + vetPrep}</strong><small>${uploaded} yüklenmiş belge</small></div>
+        <div><span>${t('reportsScreen.total_files')}</span><strong>${documents.length}</strong><small>${t('reportsScreen.summary_archive')}</small></div>
+        <div><span>${t('reportsScreen.prep')}</span><strong>${clinic + vetPrep}</strong><small>${t('reportsScreen.uploaded_count', { count: uploaded })}</small></div>
       </div>
     </div>
   `;
@@ -52,8 +52,8 @@ function renderDocuments(documents = null) {
       <div class="report-card">
         <div class="report-card-header">
           <div>
-            <div class="report-card-title">Dosyalar yükleniyor</div>
-            <div class="report-card-date">Kayıtlar hazırlanıyor</div>
+            <div class="report-card-title">${t('reportsScreen.files_loading')}</div>
+            <div class="report-card-date">${t('reportsScreen.records_preparing')}</div>
           </div>
           <div class="premium-icon-box">${window.__icons?.clock || ''}</div>
         </div>
@@ -65,8 +65,8 @@ function renderDocuments(documents = null) {
     return `
       <div class="empty-state">
         <div class="premium-icon-box" style="margin: 0 auto 16px;">${window.__icons?.clipboard || ''}</div>
-        <div class="font-bold mb-2">Henüz dosya yok</div>
-        <div class="text-sm text-secondary px-4">Klinik hazırlık, veteriner ziyareti veya belge arşivi formlarından kayıt oluşturabilirsin.</div>
+        <div class="font-bold mb-2">${t('reportsScreen.empty_title')}</div>
+        <div class="text-sm text-secondary px-4">${t('reportsScreen.empty_desc')}</div>
       </div>
     `;
   }
@@ -74,7 +74,7 @@ function renderDocuments(documents = null) {
   return documents.map((doc) => {
     const meta = typeMeta(doc);
     const included = doc.included?.length || 0;
-    const note = doc.note || `${doc.purpose || meta.label} için ${included} bölüm seçildi.`;
+    const note = doc.note || t('reportsScreen.included_note', { purpose: doc.purpose || meta.label, count: included });
 
     return `
       <button class="report-card mb-4" data-document-id="${escapeHtml(doc.id)}">
@@ -88,7 +88,7 @@ function renderDocuments(documents = null) {
         <div class="report-card-summary">${escapeHtml(note)}</div>
         <div class="report-card-footer">
           <div class="text-xs font-semibold text-primary-color">${escapeHtml(meta.label)}</div>
-          <div class="text-xs text-secondary">${included} bölüm</div>
+          <div class="text-xs text-secondary">${t('reportsScreen.section_count', { count: included })}</div>
         </div>
       </button>
     `;
@@ -110,11 +110,11 @@ export function render() {
         <div class="report-export-card">
           <div class="premium-icon-box">${window.__icons?.briefcase || ''}</div>
           <div>
-            <div class="premium-screen-kicker">Ücretsiz klinik dosyası</div>
-            <h2>Tüm geçmişi tek dosyada hazırla</h2>
-            <p>Profil, aşı-ilaç takvimi, ölçümler, takipler ve klinik notları indirilebilir dosya olarak paketlenir.</p>
+            <div class="premium-screen-kicker">${t('reportsScreen.hero_kicker')}</div>
+            <h2>${t('reportsScreen.hero_title')}</h2>
+            <p>${t('reportsScreen.hero_desc')}</p>
           </div>
-          <button class="btn btn-primary btn-sm" id="btnExportAll">Hazırla</button>
+          <button class="btn btn-primary btn-sm" id="btnExportAll">${t('reportsScreen.prepare')}</button>
         </div>
       </div>
 
@@ -124,8 +124,8 @@ export function render() {
         </div>
 
         <div class="flex justify-between items-center mb-3">
-          <h3 class="section-title mb-0">Klinik Dosyaları ve Belgeler</h3>
-          <button class="btn-ghost text-primary text-sm font-semibold" id="btnDocumentArchive">Belge Ekle</button>
+          <h3 class="section-title mb-0">${t('reportsScreen.documents_title')}</h3>
+          <button class="btn-ghost text-primary text-sm font-semibold" id="btnDocumentArchive">${t('reportsScreen.add_document')}</button>
         </div>
 
         <div class="reports-list" id="clinicDocumentsList">
@@ -160,7 +160,7 @@ export function afterRender() {
       target.innerHTML = `
         <div class="empty-state">
           <div class="empty-state-icon">${window.__icons?.alert || ''}</div>
-          <div class="empty-state-title">Dosyalar alınamadı</div>
+          <div class="empty-state-title">${t('reportsScreen.load_failed')}</div>
           <div class="empty-state-desc">${escapeHtml(err.message)}</div>
         </div>
       `;
