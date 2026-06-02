@@ -1,6 +1,6 @@
 import { navigate, goBack } from '../../router.js';
 import { getState } from '../../store.js';
-import { getActivePet } from '../../mock/pets.js';
+import { getLocalPets } from '../../services/pets.js';
 import { getFreeRecords } from '../../services/freeRecords.js';
 import { getLocale, t, translateForLocale } from '../../i18n/tr.js';
 
@@ -24,6 +24,10 @@ function configFor(type) {
     ...(staticConfig[type] || staticConfig.health),
     ...(typeof localized === 'object' ? localized : fallback)
   };
+}
+
+function activePetName(activePetId) {
+  return getLocalPets().find((pet) => pet.id === activePetId)?.name || t('reports.detail.active_pet');
 }
 
 function formatShortDate(date) {
@@ -390,7 +394,7 @@ export function render(params = {}, query = {}) {
   const config = configFor(type);
   const addAction = addActionFor(type, query.filter || 'all');
   const state = getState();
-  const pet = getActivePet(state.activePetId);
+  const petName = activePetName(state.activePetId);
 
   return `
     <div class="screen premium-check record-list-screen">
@@ -410,7 +414,7 @@ export function render(params = {}, query = {}) {
           <div>
             <div class="premium-screen-kicker">${config.eyebrow}</div>
             <h1>${config.title}</h1>
-            <p>${t('freeRecords.list.pet_desc').replace('{name}', pet.name).replace('{desc}', config.desc)}</p>
+            <p>${t('freeRecords.list.pet_desc').replace('{name}', petName).replace('{desc}', config.desc)}</p>
           </div>
         </div>
 

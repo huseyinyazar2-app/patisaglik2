@@ -44,6 +44,12 @@ function speciesId(type) {
   return map[type] || 'species-cat';
 }
 
+function normalizeYesNoUnknown(value) {
+  if (value === true) return 'yes';
+  if (value === false) return 'no';
+  return value || 'unknown';
+}
+
 function ageLabel(birthDate) {
   if (!birthDate || Number.isNaN(Date.parse(birthDate))) return '';
   const birth = new Date(birthDate);
@@ -66,7 +72,7 @@ function normalize(row) {
     birthDate: row.birth_date || row.birthDate || '',
     age: row.approximate_age_label || row.age || ageLabel(row.birth_date || row.birthDate),
     gender: row.sex || row.gender || 'unknown',
-    neutered: row.neutered_status || row.neutered || 'unknown',
+    neutered: normalizeYesNoUnknown(row.neutered_status ?? row.neutered),
     weight: Number(row.weight_kg ?? row.weight ?? 0),
     ownership: row.ownership_type || row.ownership || 'owned',
     location: metadata.location || row.location || '',
@@ -77,7 +83,7 @@ function normalize(row) {
     medications: metadata.medications ? [metadata.medications] : row.medications || [],
     statusText: row.medical_summary || row.statusText || translateForLocale('tr', 'petsService.profile_ready'),
     overallStatus: metadata.overallStatus || 'good',
-    photo: row.avatar_url || null,
+    photo: row.avatar_url || metadata.photo || row.photo || null,
     publicProfileToken: row.public_profile_token || metadata.publicProfileToken || '',
     qrHealthCard: metadata.qr_health_card || null,
     ownerName: row.owner_name || metadata.ownerName || '',
@@ -180,6 +186,79 @@ export async function savePet({ userId = 'user-1', pet }) {
 
   writeLocal([normalize({ ...record, type: pet.type }), ...readLocal().filter((item) => item.id !== record.id)]);
   return { ok: true, storage: 'turso', id: record.id };
+}
+
+export async function updatePet({ userId = 'user-1', petId, pet }) {
+  const now = new Date().toISOString();
+  const currentRaw = readLocal();
+  const current = currentRaw.find((item) => item.id === petId);
+  const metadata = parseJson(current?.metadata);
+  const nextMetadata = {
+    ...metadata,
+    breed: pet.breed ?? metadata.breed ?? '',
+    chronic: pet.chronic ?? metadata.chronic ?? '',
+    allergies: pet.allergies ?? metadata.allergies ?? '',
+    medications: pet.medications ?? metadata.medications ?? '',
+    location: pet.location ?? metadata.location ?? '',
+    volunteerNote: pet.volunteerNote ?? metadata.volunteerNote ?? '',
+    photo: pet.photo ?? metadata.photo ?? current?.photo ?? '',
+    extractedTags: pet.extractedTags ?? metadata.extractedTags ?? [],
+    riskContext: buildPetRiskContext({
+      ...(current ? normalize(current) : {}),
+      ...pet,
+      id: petId
+    })
+  };
+  const record = {
+    ...(current || {}),
+    id: petId,
+    primary_owner_user_id: userId,
+    species_id: current?.species_id || speciesId(pet.type || current?.type),
+    name: pet.name ?? current?.name ?? '',
+    sex: pet.gender ?? current?.sex ?? 'unknown',
+    birth_date: pet.birthDate ?? current?.birth_date ?? null,
+    approximate_age_label: ageLabel(pet.birthDate ?? current?.birth_date),
+    weight_kg: Number(pet.weight ?? current?.weight_kg ?? 0),
+    neutered_status: pet.neutered ?? current?.neutered_status ?? 'unknown',
+    ownership_type: pet.ownership ?? current?.ownership_type ?? 'owned',
+    medical_summary: pet.rawHistory ?? current?.medical_summary ?? '',
+    avatar_url: pet.photo ?? current?.avatar_url ?? null,
+    metadata: JSON.stringify(nextMetadata),
+    updated_at: now
+  };
+
+  writeLocal([record, ...currentRaw.filter((item) => item.id !== petId)]);
+
+  const db = getDbClient();
+  if (!db) return { ok: true, storage: 'local-fallback', id: petId };
+
+  await db.execute({
+    sql: `UPDATE pets
+          SET name = ?, sex = ?, birth_date = ?, approximate_age_label = ?, weight_kg = ?,
+              neutered_status = ?, ownership_type = ?, medical_summary = ?, avatar_url = ?, metadata = ?, updated_at = ?
+          WHERE id = ? AND primary_owner_user_id = ?`,
+    args: [
+      record.name,
+      record.sex,
+      record.birth_date,
+      record.approximate_age_label,
+      record.weight_kg,
+      record.neutered_status,
+      record.ownership_type,
+      record.medical_summary,
+      record.avatar_url,
+      record.metadata,
+      record.updated_at,
+      petId,
+      userId
+    ]
+  });
+
+  return { ok: true, storage: 'turso', id: petId };
+}
+
+export async function updatePetPhoto({ userId = 'user-1', petId, photo }) {
+  return updatePet({ userId, petId, pet: { photo } });
 }
 
 export async function getPetByPublicToken(token) {

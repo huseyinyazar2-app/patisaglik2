@@ -51,6 +51,7 @@ const tr = {
   },
   pets: {
     add_title: 'Pet Ekle', photo_add: 'Fotoğraf Ekle',
+    edit_title: 'Pet Profilini Düzenle',
     name: 'İsim', type: 'Tür', breed: 'Cins', birth_date: 'Doğum Tarihi', gender: 'Cinsiyet',
     neutered: 'Kısır mı?', weight: 'Kilo (kg)', chronic: 'Kronik Hastalıklar', allergies: 'Alerjiler',
     medications: 'Kullanılan İlaçlar', notes: 'Özel Not',
@@ -60,6 +61,8 @@ const tr = {
     yes: 'Evet', no: 'Hayır', unknown: 'Bilmiyorum',
     profile_kicker: 'Pet profili', new_profile_title: 'Yeni profil oluştur',
     new_profile_desc: 'Kedi, köpek, kuş, akvaryum, sürüngen ve diğer evcil türler için temel sağlık profili.',
+    edit_profile_title: 'Profil bilgilerini güncelle',
+    edit_profile_desc: 'Tür sabit kalır; kimlik, bakım durumu, sağlık öyküsü ve takip bilgilerini güncelleyebilirsiniz.',
     ownership: 'Sahiplik / Bakım Durumu', owned: 'Evcil', stray: 'Sokak / gönüllü', foster: 'Geçici yuva',
     location: 'Konum / Bölge', location_placeholder: 'Örn. Kadıköy, park, geçici yuva adresi',
     volunteer_note: 'Gönüllü / bakım notu', volunteer_note_placeholder: 'Sokak hayvanı, geçici yuva veya bakım paylaşımı için kısa not...',
@@ -98,7 +101,11 @@ const tr = {
     allergies_placeholder: 'Varsa alerjiler', medications_placeholder: 'Varsa düzenli ilaçlar',
     medical_history: 'Tıbbi Geçmiş ve Öykü',
     medical_history_placeholder: 'Geçirdiği kazalar, ameliyatlar, genel huyu veya dikkat edilmesi gereken notlar...',
-    save_profile: 'Profili Kaydet', saving: 'Kaydediliyor...', save_error: 'Pet kaydedilemedi',
+    save_profile: 'Profili Kaydet', update_profile: 'Profili Güncelle', saving: 'Kaydediliyor...', save_error: 'Pet kaydedilemedi',
+    active_pet: 'Aktif',
+    make_active: 'Aktif Yap',
+    photo_saved: 'Profil fotoğrafı kaydedildi.',
+    photo_save_failed: 'Profil fotoğrafı kaydedilemedi: {error}',
     loading_profiles: 'Pet profilleri getiriliyor...', no_profiles: 'Henüz pet profili yok',
     no_profiles_desc: 'İlk pet profilini ekleyerek ücretsiz kayıtları ona bağlayabilirsin.',
     profiles_error: 'Pet profilleri getirilemedi', profiles_error_desc: 'Bağlantıyı kontrol edip tekrar deneyin.',
@@ -2183,7 +2190,99 @@ JSON döndür:
     reminder: 'Hatırlatıcı',
     repeat: 'Tekrar',
     health_record: 'Sağlık kaydı',
-    diet_note: 'Beslenme notu'
+    diet_note: 'Beslenme notu',
+    common: {
+      no_date: 'Tarih yok',
+      no_records_yet: 'Henüz kayıt yok',
+      none_yet: 'Henüz yok',
+      record: 'Kayıt',
+      other: 'Diğer',
+      expense: 'Masraf',
+      general_expense: 'Genel masraf',
+      reminder: 'Hatırlatıcı',
+      once: 'Tek sefer',
+      scheduled: 'Planlandı',
+      completed: 'Tamamlandı',
+      health_record: 'Sağlık kaydı',
+      form_record: 'Form kaydı'
+    },
+    types: {
+      photo_followup: 'Foto takip',
+      poop_score: 'Dışkı skoru',
+      diet_log: 'Beslenme',
+      chronic_followup: 'Kronik takip',
+      postop_followup: 'Operasyon sonrası',
+      reproduction_followup: 'Üreme takibi',
+      senior_followup: 'Yaşlı pet izleme',
+      toxin_foreign_body: 'Toksik / yabancı cisim',
+      issue: 'Takip sorunu'
+    },
+    list: {
+      pet_desc: '{name} için {desc}',
+      filter: 'Filtre',
+      sort: 'Sıralama',
+      summary: 'Özet',
+      records_preparing: 'Kayıtlar hazırlanıyor',
+      distribution: 'Dağılım',
+      waiting_data: 'Veri bekleniyor',
+      total: 'Toplam',
+      expense_count: '{count} masraf kaydı',
+      top: 'Öne çıkan',
+      record_count: '{count} kayıt',
+      seven_days: '7 gün',
+      upcoming_task: 'Yaklaşan görev',
+      next: 'Sıradaki',
+      no_plan: 'Plan yok',
+      health_count: 'Sağlık arşivi',
+      last_record: 'Son kayıt',
+      records_loading: 'Kayıtlar yükleniyor...',
+      empty_filter: 'Bu filtrede kayıt yok',
+      empty_filter_desc: 'Filtreyi değiştirerek diğer kayıtları görebilirsin.',
+      empty_desc: 'İlk kaydı eklediğinde burada görünecek.',
+      no_distribution: 'Dağılım için kayıt bekleniyor.',
+      programs_title: 'Takip programları',
+      programs_summary: 'Son kayıt durumları',
+      last_7_days: 'Son 7 gün',
+      tabs: {
+        expenses: 'Masraflar',
+        reminders: 'Hatırlatıcılar',
+        health: 'Sağlık kayıtları'
+      },
+      configs: {
+        expenses: { title: 'Masraf Takibi', eyebrow: 'Ücretsiz kayıtlar', desc: 'mama, veteriner ve bakım masraflarını izle.', button: 'Masraf ekle', empty: 'Masraf kaydı yok' },
+        reminders: { title: 'Hatırlatıcılar', eyebrow: 'Takvim', desc: 'aşı, ilaç ve bakım hatırlatıcılarını yönet.', button: 'Hatırlatıcı ekle', empty: 'Hatırlatıcı yok' },
+        health: { title: 'Sağlık Kayıtları', eyebrow: 'Bakım arşivi', desc: 'foto, dışkı, beslenme ve takip formlarını sakla.', button: 'Sağlık kaydı ekle', empty: 'Sağlık kaydı yok' }
+      },
+      filters: {
+        expenses: [['all', 'Tümü'], ['mama', 'Mama'], ['veteriner', 'Veteriner'], ['aşı', 'Aşı'], ['ilaç', 'İlaç'], ['bakım', 'Bakım'], ['diğer', 'Diğer']],
+        reminders: [['all', 'Tümü'], ['scheduled', 'Planlı'], ['vaccine', 'Aşı'], ['parasite', 'Parazit'], ['medicine', 'İlaç'], ['checkup', 'Kontrol']],
+        health: [['all', 'Tümü'], ['photo_followup', 'Foto takip'], ['poop_score', 'Dışkı skoru'], ['diet_log', 'Beslenme'], ['chronic_followup', 'Kronik'], ['postop_followup', 'Operasyon'], ['reproduction_followup', 'Üreme'], ['senior_followup', 'Yaşlı'], ['toxin_foreign_body', 'Acil']]
+      },
+      sorts: {
+        expenses: [['newest', 'Yeni'], ['oldest', 'Eski'], ['amount_desc', 'Tutar yüksek'], ['amount_asc', 'Tutar düşük']],
+        reminders: [['due_asc', 'Yakın tarih'], ['due_desc', 'Uzak tarih'], ['newest', 'Yeni']],
+        health: [['newest', 'Yeni'], ['oldest', 'Eski'], ['type', 'Türe göre']]
+      },
+      healthActions: {
+        poop_score: 'Dışkı skoru ekle',
+        photo_followup: 'Foto takip ekle',
+        diet_log: 'Beslenme kaydı ekle',
+        issue: 'Takip sorunu ekle',
+        chronic_followup: 'Kronik takip ekle',
+        postop_followup: 'Operasyon takibi ekle',
+        reproduction_followup: 'Üreme takibi ekle',
+        senior_followup: 'Yaşlı pet kaydı ekle',
+        toxin_foreign_body: 'Acil kayıt ekle'
+      },
+      programs: {
+        chronic_followup: { title: 'Kronik takip', cadence: 'Rutin' },
+        postop_followup: { title: 'Operasyon sonrası', cadence: 'Kontrol' },
+        diet_log: { title: 'Beslenme', cadence: 'Geçiş' },
+        poop_score: { title: 'Dışkı skoru', cadence: 'Günlük' },
+        reproduction_followup: { title: 'Üreme takibi', cadence: 'Takvim' },
+        senior_followup: { title: 'Yaşlı pet izleme', cadence: 'Haftalık' }
+      }
+    }
   },
   petContext: {
     brachy_warning: 'Kısa burunlu/solunum hassasiyeti olan ırklarda nefes belirtileri daha temkinli değerlendirilir.',
@@ -2413,7 +2512,7 @@ JSON döndür:
   tabs: {
     home: 'Ana Sayfa',
     check: 'Pati AI',
-    history: 'Geçmiş',
+    history: 'Kayıtlar',
     reports: 'Raporlar',
     profile: 'Profil'
   }

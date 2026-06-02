@@ -2,7 +2,7 @@
 import { navigate, goBack } from '../../router.js';
 import { getState } from '../../store.js';
 import { getLocale, t } from '../../i18n/tr.js';
-import { getActivePet } from '../../mock/pets.js';
+import { getLocalPets } from '../../services/pets.js';
 import { getFreeRecords, mergeRecentRecords } from '../../services/freeRecords.js';
 
 const menuItems = [
@@ -67,7 +67,7 @@ function renderHistoryPreview(records = null) {
 
 export function render() {
   const state = getState();
-  const pet = getActivePet(state.activePetId);
+  const pet = getLocalPets().find((item) => item.id === state.activePetId) || {};
 
   return `
     <div class="screen premium-check">
@@ -86,8 +86,8 @@ export function render() {
           <div class="avatar">${window.__icons?.paw}</div>
           <div>
             <div class="premium-screen-kicker">${t('history.free_archive')}</div>
-            <h2>${pet.name}</h2>
-            <p>${pet.breed} · ${pet.age} · ${pet.statusText}</p>
+            <h2>${pet.name || t('reports.detail.active_pet')}</h2>
+            <p>${[pet.breed, pet.age, pet.statusText].filter(Boolean).join(t('history.separator')) || t('healthPassport.profile_info')}</p>
           </div>
         </div>
       </div>

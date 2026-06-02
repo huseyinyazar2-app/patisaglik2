@@ -22,6 +22,7 @@ const en = {
   },
   pets: {
     add_title: 'Add Pet', photo_add: 'Add Photo',
+    edit_title: 'Edit Pet Profile',
     name: 'Name', type: 'Species', breed: 'Breed', birth_date: 'Date of Birth', gender: 'Sex',
     neutered: 'Neutered?', weight: 'Weight (kg)', chronic: 'Chronic Conditions', allergies: 'Allergies',
     medications: 'Current Medications', notes: 'Special Note',
@@ -31,6 +32,8 @@ const en = {
     yes: 'Yes', no: 'No', unknown: 'Not sure',
     profile_kicker: 'Pet profile', new_profile_title: 'Create a new profile',
     new_profile_desc: 'A basic health profile for cats, dogs, birds, aquariums, reptiles and other companion animals.',
+    edit_profile_title: 'Update profile details',
+    edit_profile_desc: 'Species stays fixed; you can update identity, care status, health history and follow-up details.',
     ownership: 'Ownership / Care Status', owned: 'Owned pet', stray: 'Street animal / volunteer care', foster: 'Foster care',
     location: 'Location / Area', location_placeholder: 'e.g. Kadıköy, park, foster address',
     volunteer_note: 'Volunteer / care note', volunteer_note_placeholder: 'Short note for street animal, foster or shared care...',
@@ -69,7 +72,11 @@ const en = {
     allergies_placeholder: 'Known allergies', medications_placeholder: 'Regular medications',
     medical_history: 'Medical History',
     medical_history_placeholder: 'Previous accidents, surgeries, temperament notes or anything important to know...',
-    save_profile: 'Save Profile', saving: 'Saving...', save_error: 'Pet could not be saved',
+    save_profile: 'Save Profile', update_profile: 'Update Profile', saving: 'Saving...', save_error: 'Pet could not be saved',
+    active_pet: 'Active',
+    make_active: 'Make Active',
+    photo_saved: 'Profile photo saved.',
+    photo_save_failed: 'Profile photo could not be saved: {error}',
     loading_profiles: 'Loading pet profiles...', no_profiles: 'No pet profiles yet',
     no_profiles_desc: 'Add your first pet profile to connect free records to it.',
     profiles_error: 'Pet profiles could not be loaded', profiles_error_desc: 'Check your connection and try again.',
@@ -2250,7 +2257,99 @@ Return JSON:
     reminder: 'Reminder',
     repeat: 'Repeat',
     health_record: 'Health record',
-    diet_note: 'Diet note'
+    diet_note: 'Diet note',
+    common: {
+      no_date: 'No date',
+      no_records_yet: 'No records yet',
+      none_yet: 'None yet',
+      record: 'Record',
+      other: 'Other',
+      expense: 'Expense',
+      general_expense: 'General expense',
+      reminder: 'Reminder',
+      once: 'Once',
+      scheduled: 'Scheduled',
+      completed: 'Completed',
+      health_record: 'Health record',
+      form_record: 'Form record'
+    },
+    types: {
+      photo_followup: 'Photo follow-up',
+      poop_score: 'Poop score',
+      diet_log: 'Nutrition',
+      chronic_followup: 'Chronic follow-up',
+      postop_followup: 'Post-op',
+      reproduction_followup: 'Reproduction',
+      senior_followup: 'Senior pet tracking',
+      toxin_foreign_body: 'Toxic / foreign body',
+      issue: 'Tracking issue'
+    },
+    list: {
+      pet_desc: 'For {name}, {desc}',
+      filter: 'Filter',
+      sort: 'Sort',
+      summary: 'Summary',
+      records_preparing: 'Preparing records',
+      distribution: 'Distribution',
+      waiting_data: 'Waiting for data',
+      total: 'Total',
+      expense_count: '{count} expense records',
+      top: 'Top item',
+      record_count: '{count} records',
+      seven_days: '7 days',
+      upcoming_task: 'Upcoming task',
+      next: 'Next',
+      no_plan: 'No plan',
+      health_count: 'Health archive',
+      last_record: 'Last record',
+      records_loading: 'Loading records...',
+      empty_filter: 'No records for this filter',
+      empty_filter_desc: 'Change the filter to see other records.',
+      empty_desc: 'Your first record will appear here.',
+      no_distribution: 'Waiting for records to show distribution.',
+      programs_title: 'Tracking programs',
+      programs_summary: 'Latest record status',
+      last_7_days: 'Last 7 days',
+      tabs: {
+        expenses: 'Expenses',
+        reminders: 'Reminders',
+        health: 'Health records'
+      },
+      configs: {
+        expenses: { title: 'Expense Tracking', eyebrow: 'Free records', desc: 'track food, vet and care expenses.', button: 'Add expense', empty: 'No expense records' },
+        reminders: { title: 'Reminders', eyebrow: 'Calendar', desc: 'manage vaccine, medication and care reminders.', button: 'Add reminder', empty: 'No reminders' },
+        health: { title: 'Health Records', eyebrow: 'Care archive', desc: 'keep photo, poop, nutrition and follow-up forms.', button: 'Add health record', empty: 'No health records' }
+      },
+      filters: {
+        expenses: [['all', 'All'], ['mama', 'Food'], ['veteriner', 'Veterinary'], ['aşı', 'Vaccine'], ['ilaç', 'Medication'], ['bakım', 'Care'], ['diğer', 'Other']],
+        reminders: [['all', 'All'], ['scheduled', 'Scheduled'], ['vaccine', 'Vaccine'], ['parasite', 'Parasite'], ['medicine', 'Medication'], ['checkup', 'Check-up']],
+        health: [['all', 'All'], ['photo_followup', 'Photo'], ['poop_score', 'Poop score'], ['diet_log', 'Nutrition'], ['chronic_followup', 'Chronic'], ['postop_followup', 'Post-op'], ['reproduction_followup', 'Reproduction'], ['senior_followup', 'Senior'], ['toxin_foreign_body', 'Urgent']]
+      },
+      sorts: {
+        expenses: [['newest', 'Newest'], ['oldest', 'Oldest'], ['amount_desc', 'Highest amount'], ['amount_asc', 'Lowest amount']],
+        reminders: [['due_asc', 'Soonest'], ['due_desc', 'Latest'], ['newest', 'Newest']],
+        health: [['newest', 'Newest'], ['oldest', 'Oldest'], ['type', 'By type']]
+      },
+      healthActions: {
+        poop_score: 'Add poop score',
+        photo_followup: 'Add photo follow-up',
+        diet_log: 'Add nutrition record',
+        issue: 'Add tracking issue',
+        chronic_followup: 'Add chronic follow-up',
+        postop_followup: 'Add post-op follow-up',
+        reproduction_followup: 'Add reproduction follow-up',
+        senior_followup: 'Add senior pet record',
+        toxin_foreign_body: 'Add urgent record'
+      },
+      programs: {
+        chronic_followup: { title: 'Chronic follow-up', cadence: 'Routine' },
+        postop_followup: { title: 'Post-op', cadence: 'Check' },
+        diet_log: { title: 'Nutrition', cadence: 'Transition' },
+        poop_score: { title: 'Poop score', cadence: 'Daily' },
+        reproduction_followup: { title: 'Reproduction', cadence: 'Calendar' },
+        senior_followup: { title: 'Senior pet tracking', cadence: 'Weekly' }
+      }
+    }
   },
   taskPlan: {
     record_added: 'Record added',
@@ -2384,7 +2483,7 @@ Return JSON:
   tabs: {
     home: 'Home',
     check: 'Pati AI',
-    history: 'History',
+    history: 'Records',
     reports: 'Reports',
     profile: 'Profile'
   }

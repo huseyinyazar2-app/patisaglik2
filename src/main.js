@@ -183,6 +183,7 @@ function setupRoutes() {
 
   // Pets
   registerRoute('/pets/new', (p, q) => loadScreen('./screens/pets/PetAdd.js', p, q));
+  registerRoute('/pets/:petId/edit', (p, q) => loadScreen('./screens/pets/PetAdd.js', p, q));
   registerRoute('/pets/select', (p, q) => loadScreen('./screens/profile/PetProfiles.js', p, q));
   registerRoute('/pets/device-mode', (p, q) => loadScreen('./screens/pets/DeviceMode.js', p, q));
 
@@ -275,7 +276,7 @@ async function init() {
   setBeforeNavigate((path) => {
     const state = getState();
     // Allow auth routes and pet creation/selection
-    if (path.startsWith('/auth') || path.startsWith('/public') || path.startsWith('/invite') || path.startsWith('/web') || path.startsWith('/admin') || path.startsWith('/pets/select') || path.startsWith('/pets/new')) {
+    if (path.startsWith('/auth') || path.startsWith('/public') || path.startsWith('/invite') || path.startsWith('/web') || path.startsWith('/admin') || path.startsWith('/pets')) {
       return true;
     }
     // If user is logged in but hasn't selected a pet

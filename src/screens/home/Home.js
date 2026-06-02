@@ -2,8 +2,9 @@ import { navigate } from '../../router.js';
 import { getState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
 import { getActivePet as getMockActivePet } from '../../mock/pets.js';
-import { getLocalPets } from '../../services/pets.js';
+import { getLocalPets, updatePetPhoto } from '../../services/pets.js';
 import { getFreeRecords, mergeRecentRecords } from '../../services/freeRecords.js';
+import { showToast } from '../../ui/toast.js';
 
 const petIllustrations = {
   cat: '🐈',
@@ -110,7 +111,7 @@ function getInsightCards(pet, activeFollowups, records = null) {
 
 function renderInsightCards(cards) {
   return cards.map(card => `
-    <button class="home-insight-card" data-route="${card.route}" data-insight="${card.title}">
+    <button class="home-insight-card" data-insight-route="${card.route}" data-insight="${card.title}">
       <div class="premium-icon-box">${window.__icons?.[card.icon]}</div>
       <div>
         <span>${card.title}</span>
@@ -287,6 +288,7 @@ export function render() {
       </div>
 
       <div style="height: 86px;"></div>
+      <input type="file" id="petPhotoInput" accept="image/*" hidden />
     </div>
   `;
 }
@@ -295,7 +297,26 @@ export function afterRender() {
   const state = getState();
   document.getElementById('btnProfile')?.addEventListener('click', () => navigate('/profile'));
   document.getElementById('btnPetSelectHeader')?.addEventListener('click', () => navigate('/pets/select'));
-  document.getElementById('btnPetImage')?.addEventListener('click', () => navigate('/profile/passport'));
+  document.getElementById('btnPetImage')?.addEventListener('click', () => document.getElementById('petPhotoInput')?.click());
+  document.getElementById('petPhotoInput')?.addEventListener('change', async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        await updatePetPhoto({
+          userId: state.user?.id || 'user-1',
+          petId: state.activePetId,
+          photo: reader.result
+        });
+        showToast(t('pets.photo_saved'));
+        navigate('/home?ts=' + Date.now());
+      } catch (err) {
+        showToast(t('pets.photo_save_failed', { error: err.message }));
+      }
+    };
+    reader.readAsDataURL(file);
+  });
   document.getElementById('btnStartCheck')?.addEventListener('click', () => navigate('/check'));
   document.getElementById('btnTimeline')?.addEventListener('click', () => navigate('/history'));
   document.getElementById('btnReports')?.addEventListener('click', () => navigate('/reports'));
@@ -304,7 +325,13 @@ export function afterRender() {
       btn.addEventListener('click', () => navigate(btn.dataset.route));
     });
   }
+  function bindInsightCards(root = document) {
+    root.querySelectorAll('[data-insight-route]').forEach(btn => {
+      btn.addEventListener('click', () => navigate(btn.dataset.insightRoute));
+    });
+  }
   bindRouteButtons();
+  bindInsightCards();
   document.querySelectorAll('.btn-followup').forEach(btn => {
     btn.addEventListener('click', e => navigate(`/followups/${e.currentTarget.dataset.id}`));
   });
@@ -332,7 +359,7 @@ export function afterRender() {
         btn.addEventListener('click', e => navigate(`/followups/${e.currentTarget.dataset.id}`));
       });
     }
-    if (insight) bindRouteButtons(insight);
+    if (insight) bindInsightCards(insight);
     if (count) count.textContent = activeFollowups.length ? tx('home.file_count', { count: activeFollowups.length }) : tx('home.record_count', { count: records.healthRecords.length });
   }).catch(() => {});
 }

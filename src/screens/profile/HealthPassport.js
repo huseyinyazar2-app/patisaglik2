@@ -1,6 +1,6 @@
 import { goBack, navigate } from '../../router.js';
 import { getState } from '../../store.js';
-import { getActivePet } from '../../mock/pets.js';
+import { getLocalPets } from '../../services/pets.js';
 import { getFreeRecords, mergeRecentRecords } from '../../services/freeRecords.js';
 import { getClinicExportDocuments } from '../../services/documents.js';
 import { getMeasurements } from '../../services/measurements.js';
@@ -53,7 +53,7 @@ function renderTimeline(items = []) {
 }
 
 export function render() {
-  const pet = getActivePet(getState().activePetId);
+  const pet = getLocalPets().find((item) => item.id === getState().activePetId) || {};
 
   return `
     <div class="screen premium-check">

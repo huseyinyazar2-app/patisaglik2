@@ -1985,6 +1985,10 @@
   color: var(--primary-dark);
 }
 
+.pet-care-extra[hidden] {
+  display: none !important;
+}
+
 .home-hero-panel h1,
 .profile-premium-header h1,
 .ai-premium-hero h1 {

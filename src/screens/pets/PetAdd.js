@@ -1,7 +1,7 @@
 import { navigate, goBack } from '../../router.js';
 import { getState, setActivePet } from '../../store.js';
 import { t } from '../../i18n/tr.js';
-import { savePet } from '../../services/pets.js';
+import { getLocalPets, savePet, updatePet } from '../../services/pets.js';
 import { showToast } from '../../ui/toast.js';
 
 const petTypes = [
@@ -35,8 +35,26 @@ function fieldValue(id) {
   return document.getElementById(id)?.value?.trim() || '';
 }
 
-export function render() {
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function selectedClass(value, selected) {
+  return value === selected ? 'selected' : '';
+}
+
+export function render(params = {}) {
   const state = getState();
+  const editPet = params.petId ? getLocalPets().find((pet) => pet.id === params.petId) : null;
+  const selectedType = editPet?.type || 'cat';
+  const selectedOwnership = editPet?.ownership || 'owned';
+  const selectedGender = editPet?.gender || 'unknown';
+  const selectedNeutered = editPet?.neutered || 'unknown';
 
   return `
     <div class="screen premium-check">
@@ -44,7 +62,7 @@ export function render() {
         <div class="header-left">
           <button class="header-back" id="pet-add-back">${window.__icons?.back}</button>
         </div>
-        <div class="header-title">${t('pets.add_title')}</div>
+        <div class="header-title">${editPet ? t('pets.edit_title') : t('pets.add_title')}</div>
         <div class="header-right">
           <span class="premium-header-shield">${window.__icons?.paw}</span>
         </div>
@@ -55,8 +73,8 @@ export function render() {
           <div class="premium-icon-box">${window.__icons?.paw}</div>
           <div>
             <div class="premium-screen-kicker">${t('pets.profile_kicker')}</div>
-            <h1>${t('pets.new_profile_title')}</h1>
-            <p>${t('pets.new_profile_desc')}</p>
+            <h1>${editPet ? t('pets.edit_profile_title') : t('pets.new_profile_title')}</h1>
+            <p>${editPet ? t('pets.edit_profile_desc') : t('pets.new_profile_desc')}</p>
           </div>
         </div>
 
@@ -64,93 +82,93 @@ export function render() {
           <div class="feature-field">
             <span>${t('pets.type')}</span>
             <div class="feature-chip-row" id="pet-type-group">
-              ${petTypes.map(([type, key], index) => `<button class="${index === 0 ? 'selected' : ''}" type="button" data-type="${type}">${t(key)}</button>`).join('')}
+              ${petTypes.map(([type, key]) => `<button class="${selectedClass(type, selectedType)}" type="button" data-type="${type}" ${editPet ? 'disabled' : ''}>${t(key)}</button>`).join('')}
             </div>
           </div>
 
           <label class="feature-field">
             <span>${t('pets.name')}</span>
-            <input type="text" id="pet-name" placeholder="${t('pets.name')}" />
+            <input type="text" id="pet-name" placeholder="${t('pets.name')}" value="${escapeHtml(editPet?.name || '')}" />
           </label>
 
           <label class="feature-field">
             <span>${t('pets.birth_date')}</span>
-            <input type="date" id="pet-birthdate" />
+            <input type="date" id="pet-birthdate" value="${escapeHtml(editPet?.birthDate || '')}" />
           </label>
 
           <div class="feature-field">
             <span>${t('pets.ownership')}</span>
             <div class="feature-chip-row" id="pet-ownership-group">
-              <button class="selected" type="button" data-ownership="owned">${t('pets.owned')}</button>
-              <button type="button" data-ownership="stray">${t('pets.stray')}</button>
-              <button type="button" data-ownership="foster">${t('pets.foster')}</button>
+              <button class="${selectedClass('owned', selectedOwnership)}" type="button" data-ownership="owned">${t('pets.owned')}</button>
+              <button class="${selectedClass('stray', selectedOwnership)}" type="button" data-ownership="stray">${t('pets.stray')}</button>
+              <button class="${selectedClass('foster', selectedOwnership)}" type="button" data-ownership="foster">${t('pets.foster')}</button>
             </div>
           </div>
 
           <label class="feature-field pet-care-extra" hidden>
             <span>${t('pets.location')}</span>
-            <input type="text" id="pet-location" placeholder="${t('pets.location_placeholder')}" />
+            <input type="text" id="pet-location" placeholder="${t('pets.location_placeholder')}" value="${escapeHtml(editPet?.location || '')}" />
           </label>
 
           <label class="feature-field pet-care-extra" hidden>
             <span>${t('pets.volunteer_note')}</span>
-            <textarea id="pet-volunteer-note" placeholder="${t('pets.volunteer_note_placeholder')}"></textarea>
+            <textarea id="pet-volunteer-note" placeholder="${t('pets.volunteer_note_placeholder')}">${escapeHtml(editPet?.volunteerNote || '')}</textarea>
           </label>
 
           <div class="feature-field">
             <span>${t('pets.gender')}</span>
             <div class="feature-chip-row" id="pet-gender-group">
-              <button type="button" data-gender="male">${t('pets.male')}</button>
-              <button type="button" data-gender="female">${t('pets.female')}</button>
-              <button class="selected" type="button" data-gender="unknown">${t('pets.unknown')}</button>
+              <button class="${selectedClass('male', selectedGender)}" type="button" data-gender="male">${t('pets.male')}</button>
+              <button class="${selectedClass('female', selectedGender)}" type="button" data-gender="female">${t('pets.female')}</button>
+              <button class="${selectedClass('unknown', selectedGender)}" type="button" data-gender="unknown">${t('pets.unknown')}</button>
             </div>
           </div>
 
           <label class="feature-field">
             <span id="pet-breed-label">${t('pets.breed')}</span>
-            <input type="text" id="pet-breed" list="pet-breed-options" placeholder="${t('pets.breed_placeholder')}" />
-            <datalist id="pet-breed-options">${breedOptionsHtml('cat')}</datalist>
+            <input type="text" id="pet-breed" list="pet-breed-options" placeholder="${t('pets.breed_placeholder')}" value="${escapeHtml(editPet?.breed || '')}" />
+            <datalist id="pet-breed-options">${breedOptionsHtml(selectedType)}</datalist>
             <small class="text-xs text-tertiary mt-1">${t('pets.breed_free_entry')}</small>
           </label>
 
           <label class="feature-field">
             <span>${t('pets.weight')}</span>
-            <input type="number" id="pet-weight" placeholder="0.0" step="0.1" min="0" />
+            <input type="number" id="pet-weight" placeholder="0.0" step="0.1" min="0" value="${escapeHtml(editPet?.weight || '')}" />
           </label>
 
           <div class="feature-field">
             <span>${t('pets.neutered')}</span>
             <div class="feature-chip-row" id="pet-neutered-group">
-              <button type="button" data-neutered="yes">${t('pets.yes')}</button>
-              <button type="button" data-neutered="no">${t('pets.no')}</button>
-              <button class="selected" type="button" data-neutered="unknown">${t('pets.unknown')}</button>
+              <button class="${selectedClass('yes', selectedNeutered)}" type="button" data-neutered="yes">${t('pets.yes')}</button>
+              <button class="${selectedClass('no', selectedNeutered)}" type="button" data-neutered="no">${t('pets.no')}</button>
+              <button class="${selectedClass('unknown', selectedNeutered)}" type="button" data-neutered="unknown">${t('pets.unknown')}</button>
             </div>
           </div>
 
           <label class="feature-field">
             <span>${t('pets.chronic')}</span>
-            <input type="text" id="pet-chronic" placeholder="${t('pets.chronic_placeholder')}" />
+            <input type="text" id="pet-chronic" placeholder="${t('pets.chronic_placeholder')}" value="${escapeHtml((editPet?.chronicDiseases || []).join(', '))}" />
           </label>
 
           <label class="feature-field">
             <span>${t('pets.allergies')}</span>
-            <input type="text" id="pet-allergies" placeholder="${t('pets.allergies_placeholder')}" />
+            <input type="text" id="pet-allergies" placeholder="${t('pets.allergies_placeholder')}" value="${escapeHtml((editPet?.allergies || []).join(', '))}" />
           </label>
 
           <label class="feature-field">
             <span>${t('pets.medications')}</span>
-            <input type="text" id="pet-medications" placeholder="${t('pets.medications_placeholder')}" />
+            <input type="text" id="pet-medications" placeholder="${t('pets.medications_placeholder')}" value="${escapeHtml((editPet?.medications || []).join(', '))}" />
           </label>
 
           <label class="feature-field">
             <span>${t('pets.medical_history')}</span>
-            <textarea id="pet-history" placeholder="${t('pets.medical_history_placeholder')}"></textarea>
+            <textarea id="pet-history" placeholder="${t('pets.medical_history_placeholder')}">${escapeHtml(editPet?.rawHistory || '')}</textarea>
           </label>
         </div>
 
         <div class="feature-bottom-actions">
-          <button id="pet-save-btn" class="btn btn-primary btn-full">${t('pets.save_profile')}</button>
-          <button id="pet-later-btn" class="btn btn-ghost btn-full">${t('pets.later')}</button>
+          <button id="pet-save-btn" class="btn btn-primary btn-full">${editPet ? t('pets.update_profile') : t('pets.save_profile')}</button>
+          <button id="pet-later-btn" class="btn btn-ghost btn-full">${editPet ? t('common.cancel') : t('pets.later')}</button>
         </div>
       </div>
 
@@ -159,11 +177,13 @@ export function render() {
   `;
 }
 
-export function afterRender() {
+export function afterRender(params = {}) {
   const state = getState();
+  const editPetId = params.petId || '';
+  const editPet = editPetId ? getLocalPets().find((pet) => pet.id === editPetId) : null;
 
   document.getElementById('pet-add-back')?.addEventListener('click', () => goBack());
-  document.getElementById('pet-later-btn')?.addEventListener('click', () => navigate('/pets/select'));
+  document.getElementById('pet-later-btn')?.addEventListener('click', () => editPet ? goBack() : navigate('/pets/select'));
 
   document.querySelectorAll('.feature-chip-row button').forEach((button) => {
     button.addEventListener('click', () => {
@@ -195,7 +215,8 @@ export function afterRender() {
   }
 
   updateOwnershipFields();
-  updateBreedField('cat');
+  updateBreedField(editPet?.type || 'cat');
+  if (editPet?.breed) document.getElementById('pet-breed').value = editPet.breed;
 
   document.getElementById('pet-save-btn')?.addEventListener('click', async (event) => {
     const btn = event.currentTarget;
@@ -214,28 +235,34 @@ export function afterRender() {
 
     const rawHistory = fieldValue('pet-history');
     try {
-      const result = await savePet({
+      const payload = {
+        name,
+        type: document.querySelector('#pet-type-group button.selected')?.dataset.type || editPet?.type || 'cat',
+        ownership: document.querySelector('#pet-ownership-group button.selected')?.dataset.ownership || 'owned',
+        location: fieldValue('pet-location'),
+        volunteerNote: fieldValue('pet-volunteer-note'),
+        gender: document.querySelector('#pet-gender-group button.selected')?.dataset.gender || 'unknown',
+        breed: fieldValue('pet-breed'),
+        birthDate: fieldValue('pet-birthdate'),
+        weight: fieldValue('pet-weight'),
+        neutered: document.querySelector('#pet-neutered-group button.selected')?.dataset.neutered || 'unknown',
+        chronic: fieldValue('pet-chronic'),
+        allergies: fieldValue('pet-allergies'),
+        medications: fieldValue('pet-medications'),
+        rawHistory,
+        extractedTags: extractTags(rawHistory)
+      };
+
+      const result = editPetId ? await updatePet({
         userId: state.user?.id || 'user-1',
-        pet: {
-          name,
-          type: document.querySelector('#pet-type-group button.selected')?.dataset.type || 'cat',
-          ownership: document.querySelector('#pet-ownership-group button.selected')?.dataset.ownership || 'owned',
-          location: fieldValue('pet-location'),
-          volunteerNote: fieldValue('pet-volunteer-note'),
-          gender: document.querySelector('#pet-gender-group button.selected')?.dataset.gender || 'unknown',
-          breed: fieldValue('pet-breed'),
-          birthDate: fieldValue('pet-birthdate'),
-          weight: fieldValue('pet-weight'),
-          neutered: document.querySelector('#pet-neutered-group button.selected')?.dataset.neutered || 'unknown',
-          chronic: fieldValue('pet-chronic'),
-          allergies: fieldValue('pet-allergies'),
-          medications: fieldValue('pet-medications'),
-          rawHistory,
-          extractedTags: extractTags(rawHistory)
-        }
+        petId: editPetId,
+        pet: payload
+      }) : await savePet({
+        userId: state.user?.id || 'user-1',
+        pet: payload
       });
       setActivePet(result.id);
-      navigate('/pets/device-mode');
+      navigate(editPetId ? '/pets/select' : '/pets/device-mode');
     } catch (err) {
       btn.textContent = originalText;
       btn.disabled = false;

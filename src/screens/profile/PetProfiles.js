@@ -64,7 +64,9 @@ function renderPetList(pets = null, activeId = null) {
         </div>
       </div>
       <div class="pet-status">
-        ${pet.id === activeId ? `<div style="width: 24px; height: 24px; color: var(--primary);">${window.__icons?.checkCircle}</div>` : ''}
+        <button type="button" class="pet-map-action secondary" data-activate-pet="${escapeHtml(pet.id)}">
+          ${pet.id === activeId ? t('pets.active_pet') : t('pets.make_active')}
+        </button>
       </div>
     </div>
   `;
@@ -117,15 +119,21 @@ export function afterRender() {
   function bindPetCards() {
     document.querySelectorAll('.pet-card').forEach((card) => {
       card.addEventListener('click', () => {
-        setActivePet(card.dataset.id);
-        setTimeout(() => navigate('/home'), 150);
+        navigate(`/pets/${card.dataset.id}/edit`);
       });
       card.addEventListener('keydown', (event) => {
-        if (event.target.closest('[data-map-location], [data-share-location]')) return;
+        if (event.target.closest('[data-map-location], [data-share-location], [data-activate-pet]')) return;
         if (event.key !== 'Enter' && event.key !== ' ') return;
         event.preventDefault();
-        setActivePet(card.dataset.id);
-        setTimeout(() => navigate('/home'), 150);
+        navigate(`/pets/${card.dataset.id}/edit`);
+      });
+    });
+
+    document.querySelectorAll('[data-activate-pet]').forEach((button) => {
+      button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        setActivePet(button.dataset.activatePet);
+        setTimeout(() => navigate('/home'), 120);
       });
     });
 
