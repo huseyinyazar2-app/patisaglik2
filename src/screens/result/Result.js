@@ -2,8 +2,15 @@ import { navigate } from '../../router.js';
 import { getState, resetSession } from '../../store.js';
 import { questionSets, categoryLabels } from '../../mock/questions.js';
 import { getActivePet } from '../../mock/pets.js';
+import { t } from '../../i18n/tr.js';
 import { showToast } from '../../ui/toast.js';
 import { saveVetReadyReport } from '../../services/vetReadyReports.js';
+
+function tr(key, vars = {}) {
+  const value = t(key);
+  if (Array.isArray(value)) return value;
+  return String(value).replace(/\{(\w+)\}/g, (_, name) => vars[name] ?? '');
+}
 
 function answerValues(value) {
   if (Array.isArray(value)) return value;
@@ -101,67 +108,42 @@ function categoryGuidance(categories = []) {
   const warnings = [];
 
   if (categories.includes('appetite_digestive')) {
-    steps.push('Kusma/dışkı sayısını, saatini ve görünümünü kaydedin.', 'İştah ve su içme durumunu takip edin.');
-    warnings.push('Kanlı kusma/dışkı görülürse', 'Sürekli kusma veya suyu tutamama olursa');
+    steps.push(...tr('result.guidance.appetite_digestive.steps'));
+    warnings.push(...tr('result.guidance.appetite_digestive.warnings'));
   }
   if (categories.includes('respiratory_cough')) {
-    steps.push('Dinlenirken solunum sayısını ölçün.', 'Öksürük veya hırıltı sesini kaydedin.');
-    warnings.push('Nefes darlığı, morarma veya bayılma olursa');
+    steps.push(...tr('result.guidance.respiratory_cough.steps'));
+    warnings.push(...tr('result.guidance.respiratory_cough.warnings'));
   }
   if (categories.includes('movement_gait')) {
-    steps.push('Yürüyüş videosunu aynı açıdan tekrar edilebilir şekilde alın.', 'Aktiviteyi kısıtlayın ve zorlamayın.');
-    warnings.push('Bacağını hiç basamaz hale gelirse', 'Şişlik veya ağrı hızla artarsa');
+    steps.push(...tr('result.guidance.movement_gait.steps'));
+    warnings.push(...tr('result.guidance.movement_gait.warnings'));
   }
   if (categories.includes('skin_fur')) {
-    steps.push('Bölge fotoğrafını aynı ışık ve açıyla takip edin.', 'Yalama/kaşıma davranışını not edin.');
-    warnings.push('Akıntı, kötü koku veya hızlı yayılma olursa');
+    steps.push(...tr('result.guidance.skin_fur.steps'));
+    warnings.push(...tr('result.guidance.skin_fur.warnings'));
   }
   if (categories.includes('eye')) {
-    steps.push('Etkilenen gözü net ve yakın fotoğraflayın.', 'Gözünü ovmasını engellemeye çalışın.');
-    warnings.push('Göz kapanır, şişer veya bulanıklık artarsa');
+    steps.push(...tr('result.guidance.eye.steps'));
+    warnings.push(...tr('result.guidance.eye.warnings'));
   }
   if (categories.includes('ear')) {
-    steps.push('Kulak dışını ve görünür akıntıyı fotoğraflayın.', 'Baş sallama ve kaşıma sıklığını izleyin.');
-    warnings.push('Denge kaybı veya baş eğik tutma olursa');
+    steps.push(...tr('result.guidance.ear.steps'));
+    warnings.push(...tr('result.guidance.ear.warnings'));
   }
   if (categories.includes('urine_stool')) {
-    steps.push('İdrar/dışkı sıklığını ve görünümünü kaydedin.', 'Varsa renk fotoğrafı veya strip sonucunu ekleyin.');
-    warnings.push('Hiç idrar yapamazsa', 'İdrarda kan veya belirgin ağrı olursa');
+    steps.push(...tr('result.guidance.urine_stool.steps'));
+    warnings.push(...tr('result.guidance.urine_stool.warnings'));
   }
 
-  if (steps.length === 0) steps.push('Genel durum, iştah, su tüketimi ve aktivite değişimini not edin.');
-  if (warnings.length === 0) warnings.push('Nefes darlığı, bayılma, kanama veya hızlı kötüleşme olursa');
+  if (steps.length === 0) steps.push(...tr('result.guidance.default_steps'));
+  if (warnings.length === 0) warnings.push(...tr('result.guidance.default_warnings'));
 
   return { steps: [...new Set(steps)].slice(0, 4), warnings: [...new Set(warnings)].slice(0, 4) };
 }
 
 function urgencyMeta(level) {
-  const map = {
-    low: {
-      label: 'Yeşil',
-      title: 'Yeşil - Evde takip',
-      action: 'Evde kontrollü izlem',
-      desc: 'Acil belirti yoksa kayıt tutarak takip edilebilir.'
-    },
-    medium: {
-      label: 'Sarı',
-      title: 'Sarı - Veterinerle görüş',
-      action: '24-48 saat içinde danış',
-      desc: 'Belirti sürerse veya artarsa veterinerle görüşülmelidir.'
-    },
-    high: {
-      label: 'Turuncu',
-      title: 'Turuncu - Bugün randevu',
-      action: 'Bugün veteriner randevusu al',
-      desc: 'Evde beklemek yerine aynı gün klinik görüşü daha güvenlidir.'
-    },
-    critical: {
-      label: 'Kırmızı',
-      title: 'Kırmızı - Acil',
-      action: 'Beklemeden acil klinik',
-      desc: 'Acil veteriner değerlendirmesi geciktirilmemelidir.'
-    }
-  };
+  const map = t('result.urgency');
   return map[level] || map.low;
 }
 
@@ -173,10 +155,10 @@ export function render() {
   const guidance = categoryGuidance(session.categories || []);
   const urgency = urgencyMeta(assessment.level);
   const urgent = assessment.level === 'critical' || assessment.level === 'high';
-  const categoryText = (session.categories || []).map(c => categoryLabels[c] || c).join(', ') || 'Genel durum';
+  const categoryText = (session.categories || []).map(c => categoryLabels[c] || c).join(', ') || t('result.category_general');
   const completedEvidenceText = assessment.completedEvidence.length > 0
-    ? `${assessment.completedEvidence.length} kanıt kaydı değerlendirildi.`
-    : 'Medya/ölçüm kanıtı eklenmedi; değerlendirme beyanlara dayalıdır.';
+    ? tr('result.evidence_done', { count: assessment.completedEvidence.length })
+    : t('result.evidence_missing');
   const contextWarnings = session.petRiskContext?.warnings || [];
 
   return `
@@ -185,7 +167,7 @@ export function render() {
         <div class="header-left">
           <button class="header-icon" id="btnHomeIcon">${window.__icons?.back}</button>
         </div>
-        <div class="header-title">Sonuç ve Takip</div>
+        <div class="header-title">${t('result.screen_title')}</div>
         <div class="header-right">
           <button class="header-icon" id="btnPreviewReport">${window.__icons?.upload}</button>
         </div>
@@ -194,10 +176,10 @@ export function render() {
       <div class="section pt-4 pb-24">
         <div class="premium-risk-card ${assessment.level}">
           <div>
-            <div class="premium-screen-kicker">Aciliyet Trafik Işığı</div>
+            <div class="premium-screen-kicker">${t('result.traffic_kicker')}</div>
             <h1>${urgency.title}</h1>
             <p>${urgency.desc}</p>
-            <small>Risk skoru ${assessment.score} · Güven ${assessment.confidence}% · ${completedEvidenceText}</small>
+            <small>${tr('result.score_line', { score: assessment.score, confidence: assessment.confidence, evidence: completedEvidenceText })}</small>
           </div>
           <div class="premium-risk-icon">${urgent ? window.__icons?.alert : window.__icons?.checkCircle}</div>
         </div>
@@ -216,8 +198,8 @@ export function render() {
           <div class="premium-result-section danger">
             <div class="premium-icon-box">${window.__icons?.alert}</div>
             <div>
-              <h3>Güven Düşük</h3>
-              <p>Bu sonuç eksik veya belirsiz cevaplar nedeniyle temkinli yorumlanmalıdır. Eksik kanıtları tamamlamadan kesin çıkarım yapılmamalıdır.</p>
+              <h3>${t('result.low_confidence_title')}</h3>
+              <p>${t('result.low_confidence_desc')}</p>
             </div>
           </div>
         ` : ''}
@@ -225,9 +207,9 @@ export function render() {
         <div class="premium-result-section">
           <div class="premium-icon-box">${window.__icons?.clipboard}</div>
           <div>
-            <h3>Klinik Özet</h3>
-            <p>${pet?.name || 'Petiniz'} için bildirilen şikayet: “${session.complaintText || 'Belirtilmedi'}”. Eşleşen alan: ${categoryText}.</p>
-            <p>${completedEvidenceText} ${assessment.uncertainCount > 0 ? `${assessment.uncertainCount} acil belirti sorusunda kullanıcı emin değildi.` : ''}</p>
+            <h3>${t('result.clinical_summary')}</h3>
+            <p>${tr('result.complaint_summary', { pet: pet?.name || t('result.pet_fallback'), complaint: session.complaintText || t('result.complaint_missing'), category: categoryText })}</p>
+            <p>${completedEvidenceText} ${assessment.uncertainCount > 0 ? tr('result.uncertain_sentence', { count: assessment.uncertainCount }) : ''}</p>
           </div>
         </div>
 
@@ -235,7 +217,7 @@ export function render() {
           <div class="premium-result-section warning">
             <div class="premium-icon-box">${window.__icons?.shield}</div>
             <div>
-              <h3>Profil Bağlamı</h3>
+              <h3>${t('result.profile_context')}</h3>
               <ul>${contextWarnings.slice(0, 4).map(item => `<li>${item}</li>`).join('')}</ul>
             </div>
           </div>
@@ -244,16 +226,16 @@ export function render() {
         <div class="premium-result-section danger">
           <div class="premium-icon-box">${window.__icons?.alert}</div>
           <div>
-            <h3>Dikkat Edilmesi Gerekenler</h3>
+            <h3>${t('result.watch_title')}</h3>
             <ul>${guidance.warnings.map(item => `<li>${item}</li>`).join('')}</ul>
-            <p class="danger-text">${urgent ? 'Bu risk seviyesinde evde izlem tek başına yeterli değildir.' : 'Bu belirtilerden biri gelişirse veteriner hekiminize başvurunuz.'}</p>
+            <p class="danger-text">${urgent ? t('result.urgent_home_warning') : t('result.watch_home_warning')}</p>
           </div>
         </div>
 
         <div class="premium-result-section">
           <div class="premium-icon-box">${window.__icons?.checkCircle}</div>
           <div>
-            <h3>Güvenli Takip Adımları</h3>
+            <h3>${t('result.safe_steps_title')}</h3>
             <ul>${guidance.steps.map(step => `<li>${step}</li>`).join('')}</ul>
           </div>
         </div>
@@ -261,37 +243,33 @@ export function render() {
         <div class="premium-result-section">
           <div class="premium-icon-box">${window.__icons?.xCircle}</div>
           <div>
-            <h3>Yapılmaması Gerekenler</h3>
-            <ul>
-              <li>Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.</li>
-              <li>Belirti kötüleşirse evde beklemeyin.</li>
-              <li>Eksik kanıtla sonucu kesin teşhis gibi yorumlamayın.</li>
-            </ul>
+            <h3>${t('result.dont_title')}</h3>
+            <ul>${t('result.dont_items').map(item => `<li>${item}</li>`).join('')}</ul>
           </div>
         </div>
 
         <div class="premium-followup-plan">
           <div class="premium-icon-box">${window.__icons?.calendar}</div>
           <div>
-            <h3>${urgent ? 'Sonraki Adım' : 'Takip Planı'}</h3>
-            <div class="premium-plan-row"><span>Öneri</span><strong>${urgency.action}</strong></div>
-            <div class="premium-plan-row"><span>Hatırlatma</span><strong>${urgent ? 'Klinik sonrası' : 'Açık'}</strong></div>
-            <div class="premium-plan-row"><span>İzlem süresi</span><strong>${urgent ? 'Beklemeden' : assessment.level === 'medium' ? '24 saat' : '48 saat'}</strong></div>
+            <h3>${urgent ? t('result.next_step_title') : t('result.followup_plan_title')}</h3>
+            <div class="premium-plan-row"><span>${t('result.recommendation')}</span><strong>${urgency.action}</strong></div>
+            <div class="premium-plan-row"><span>${t('result.reminder')}</span><strong>${urgent ? t('result.after_clinic') : t('result.open')}</strong></div>
+            <div class="premium-plan-row"><span>${t('result.watch_duration')}</span><strong>${urgent ? t('result.immediately') : assessment.level === 'medium' ? '24 saat' : '48 saat'}</strong></div>
           </div>
         </div>
 
         <button class="btn btn-primary btn-full btn-lg mt-4" id="btnCreateFollowup">
-          ${window.__icons?.clipboard} ${urgent ? 'Veteriner İçin Özet Oluştur' : 'Takip Planı Oluştur'}
+          ${window.__icons?.clipboard} ${urgent ? t('result.create_vet_summary') : t('result.create_followup_plan')}
         </button>
         <button class="btn premium-gold-button btn-full btn-lg mt-3" id="btnPreviewReportBottom">
-          ${window.__icons?.upload} Veteriner Linki Oluştur
+          ${window.__icons?.upload} ${t('result.create_vet_link')}
         </button>
         <button class="btn btn-secondary btn-full mt-3" id="btnVetOutcome">
-          ${window.__icons?.stethoscope} Veteriner Sonucunu Ekle
+          ${window.__icons?.stethoscope} ${t('result.add_vet_outcome')}
         </button>
-        <button class="btn btn-ghost btn-full text-secondary mt-2" id="btnSaveHistoryOnly">Sadece Geçmişe Kaydet</button>
+        <button class="btn btn-ghost btn-full text-secondary mt-2" id="btnSaveHistoryOnly">${t('result.save_history_only')}</button>
 
-        <div class="premium-privacy-note">${window.__icons?.lock} Bu değerlendirme veteriner muayenesinin yerine geçmez.</div>
+        <div class="premium-privacy-note">${window.__icons?.lock} ${t('result.disclaimer')}</div>
       </div>
     </div>
   `;
@@ -319,9 +297,9 @@ export function afterRender() {
     const url = `${window.location.origin}${window.location.pathname}#${report.publicPath}`;
     try {
       await navigator.clipboard?.writeText(url);
-      showToast('Veteriner rapor linki kopyalandı.');
+      showToast(t('result.report_link_copied'));
     } catch {
-      showToast('Veteriner rapor linki hazır.');
+      showToast(t('result.report_link_ready'));
     }
     navigate(report.publicPath);
   };

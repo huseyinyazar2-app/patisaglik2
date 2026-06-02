@@ -34,17 +34,16 @@ Ozet:
 
 - Desteklenen locale: `24`
 - Tam ceviri sozlugu: `tr`, `en`
-- Dictionary key sayisi: `tr=705`, `en=705`
+- Dictionary key sayisi: `tr=772`, `en=772`
 - `missingInEn`: `0`
 - `extraInEn`: `0`
-- Kalan hardcoded Turkce string literal: `835`
+- Kalan hardcoded Turkce string literal: `787`
 - Etkilenen dosya: `73`
 
 En yogun dosyalar:
 
 | Dosya | Kalan |
 | --- | ---: |
-| `src/screens/result/Result.js` | 56 |
 | `src/screens/history/FreeRecordDetail.js` | 47 |
 | `src/screens/home/Home.js` | 45 |
 | `src/screens/web/Admin.js` | 41 |
@@ -65,7 +64,7 @@ UI metinleri icin dosya bazli sozluk hizli ve dusuk riskli kalmali. DB ceviri ta
 
 ## Siradaki Sira
 
-1. `Result`, `Home`, `Admin` dosyalarini i18n'e tasi.
+1. `Home`, `Admin`, `ReportDetail` dosyalarini i18n'e tasi.
 2. `questions` icinde kalan Turkce keyword listelerini cok dilli NLP/keyword stratejisiyle ayri ele al.
 3. `formSubmissions` icinde kalan payload/form label anahtarlarini guvenli alias yapisina tasidiktan sonra i18n'e al.
 4. Tarih, para ve sayi formatlarini sabit `tr-TR` yerine aktif locale ile uret.
