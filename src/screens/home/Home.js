@@ -9,31 +9,18 @@ const petPhotos = {
   cat: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&auto=format&fit=crop&w=240&q=80'
 };
 
-const freeTools = [
-  { id: 'photo', icon: 'camera', title: 'Foto Takip', desc: 'Yara ve deri karşılaştırma', route: '/feature/photo-followup' },
-  { id: 'poop', icon: 'activity', title: 'Dışkı Skoru', desc: 'Günlük kalite skalası', route: '/feature/poop-score' },
-  { id: 'diet', icon: 'heartPulse', title: 'Beslenme', desc: 'Mama geçiş günlüğü', route: '/feature/diet-log' },
-  { id: 'expense', icon: 'briefcase', title: 'Masraf', desc: 'Mama, aşı, klinik', route: '/feature/expense' },
-  { id: 'vaccine', icon: 'calendar', title: 'Aşı / İlaç', desc: 'Hatırlatıcı takvim', route: '/feature/reminders' },
-  { id: 'vet', icon: 'stethoscope', title: 'Randevu', desc: 'Veteriner ziyareti', route: '/feature/reminders' },
-  { id: 'toxic', icon: 'alert', title: 'Acil Kayıt', desc: 'Toksik madde / yabancı cisim', route: '/feature/toxic' }
-];
-
-const carePrograms = [
-  { id: 'chronic', title: 'Kronik Takip', desc: 'Böbrek, diyabet ve uzun dönem izlem', badge: 'Ücretsiz', route: '/feature/chronic' },
-  { id: 'postop', title: 'Operasyon Sonrası', desc: 'Yara, iştah, ağrı ve ilaç kontrolü', badge: 'Ücretsiz', route: '/feature/postop' },
-  { id: 'repro', title: 'Kızgınlık / Gebelik', desc: 'Doğum süreci ve takvim notları', badge: 'Ücretsiz', route: '/feature/reproduction' },
-  { id: 'senior', title: 'Yaşlı Pet Modu', desc: 'Su, kilo, ağrı ve hareket hassasiyeti', badge: 'Profilde', route: '/feature/senior' }
-];
+function tx(key, vars = {}) {
+  return String(t(key)).replace(/\{(\w+)\}/g, (_, name) => vars[name] ?? '');
+}
 
 function healthStatus(pet) {
-  if (pet.overallStatus === 'urgent') return { label: 'Acil kayıt var', cls: 'danger' };
-  if (pet.overallStatus === 'watch') return { label: 'Takip gerekli', cls: 'warning' };
-  return { label: 'İyi durumda', cls: 'success' };
+  if (pet.overallStatus === 'urgent') return { label: t('home.status_urgent'), cls: 'danger' };
+  if (pet.overallStatus === 'watch') return { label: t('home.status_watch'), cls: 'warning' };
+  return { label: t('home.status_ok'), cls: 'success' };
 }
 
 function formatShortDate(date) {
-  if (!date) return 'Kayıt yok';
+  if (!date) return t('home.no_record');
   return new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long' }).format(new Date(date));
 }
 
@@ -47,9 +34,9 @@ function formatMoney(amountCents, currency = 'TRY') {
 
 function getRecordTitle(record) {
   if (!record) return '';
-  if (record.kind === 'expense') return record.title || record.category || 'Masraf kaydı';
-  if (record.kind === 'reminder') return record.title || record.reminder_type || 'Hatırlatıcı';
-  return record.title || record.record_type || 'Sağlık kaydı';
+  if (record.kind === 'expense') return record.title || record.category || t('home.expense_record');
+  if (record.kind === 'reminder') return record.title || record.reminder_type || t('home.reminder_record');
+  return record.title || record.record_type || t('home.health_record');
 }
 
 function getInsightCards(pet, activeFollowups, records = null) {
@@ -67,27 +54,27 @@ function getInsightCards(pet, activeFollowups, records = null) {
   return [
     {
       icon: 'clipboard',
-      title: 'Son kayıt',
+      title: t('home.insights.last_record'),
       value: lastRecord ? formatShortDate(lastRecord.date) : formatShortDate(pet.lastCheckDate),
-      desc: lastRecord ? getRecordTitle(lastRecord) : 'Sağlık geçmişinden'
+      desc: lastRecord ? getRecordTitle(lastRecord) : t('home.history_source')
     },
     {
       icon: 'briefcase',
-      title: 'Masraf',
+      title: t('home.insights.expense'),
       value: expenseTotal ? formatMoney(expenseTotal) : '0 TL',
-      desc: records?.expenses?.length ? `${records.expenses.length} kayıt işlendi` : 'Henüz masraf yok'
+      desc: records?.expenses?.length ? tx('home.processed_record_count', { count: records.expenses.length }) : t('home.no_expense')
     },
     {
       icon: 'bell',
-      title: 'Sıradaki iş',
-      value: nextReminder ? formatShortDate(nextReminder.due_at) : 'Plan yok',
-      desc: nextReminder ? nextReminder.title : 'Hatırlatıcı eklenmedi'
+      title: t('home.insights.next_task'),
+      value: nextReminder ? formatShortDate(nextReminder.due_at) : t('home.no_plan'),
+      desc: nextReminder ? nextReminder.title : t('home.no_reminder')
     },
     {
       icon: 'shield',
-      title: 'Takip notu',
-      value: healthCount ? `${healthCount} kayıt` : (profileNotes.length ? `${profileNotes.length} kayıt` : 'Temiz'),
-      desc: healthCount ? 'Sağlık arşivinden' : (profileNotes.length ? 'Öyküde işaretli bilgi var' : 'Ek risk notu yok')
+      title: t('home.insights.followup_note'),
+      value: healthCount ? tx('home.record_count', { count: healthCount }) : (profileNotes.length ? tx('home.record_count', { count: profileNotes.length }) : t('home.clean')),
+      desc: healthCount ? t('home.health_archive_source') : (profileNotes.length ? t('home.profile_note_flagged') : t('home.no_risk_note'))
     }
   ];
 }
@@ -110,7 +97,7 @@ function renderUpcomingReminders(reminders = []) {
     return `
       <div class="upcoming-card">
         <div class="icon">${window.__icons?.calendar}</div>
-        <div class="details"><strong>Plan yok</strong><span>Yeni hatırlatıcı ekle</span></div>
+        <div class="details"><strong>${t('home.no_plan')}</strong><span>${t('home.add_reminder')}</span></div>
       </div>
     `;
   }
@@ -130,10 +117,10 @@ function renderFollowups(activeFollowups, healthRecords = []) {
         <div class="premium-icon-box">${window.__icons?.calendar}</div>
         <div style="flex: 1; min-width: 0;">
           <div class="font-bold text-sm">${f.title}</div>
-          <div class="text-xs text-secondary mt-1">Sonraki kontrol: ${formatShortDate(f.nextCheck)}</div>
-          <div class="text-xs text-tertiary mt-1">${f.medSchedule || 'Tedavi sonrası günlük check-in açık.'}</div>
+          <div class="text-xs text-secondary mt-1">${tx('home.next_check', { date: formatShortDate(f.nextCheck) })}</div>
+          <div class="text-xs text-tertiary mt-1">${f.medSchedule || t('home.postop_checkin_open')}</div>
         </div>
-        <div class="chip-status completed">${f.lastRiskLevel === 'critical' ? 'Acil' : f.lastRiskLevel === 'high' ? 'Bugün' : 'Aktif'}</div>
+        <div class="chip-status completed">${f.lastRiskLevel === 'critical' ? t('home.status_critical') : f.lastRiskLevel === 'high' ? t('home.status_today') : t('home.status_active')}</div>
       </div>
     `).join('');
   }
@@ -143,11 +130,11 @@ function renderFollowups(activeFollowups, healthRecords = []) {
       <div class="premium-followup">
         <div class="premium-icon-box">${window.__icons?.heartPulse}</div>
         <div style="flex: 1; min-width: 0;">
-          <div class="font-bold text-sm">${record.title || 'Sağlık kaydı'}</div>
+          <div class="font-bold text-sm">${record.title || t('home.health_record')}</div>
           <div class="text-xs text-secondary mt-1">${formatShortDate(record.occurred_at || record.created_at)}</div>
-          <div class="text-xs text-tertiary mt-1">${record.summary || 'Form kaydı sağlık arşivine işlendi.'}</div>
+          <div class="text-xs text-tertiary mt-1">${record.summary || t('home.form_record_saved')}</div>
         </div>
-        <div class="chip-status completed">Kayıt</div>
+        <div class="chip-status completed">${t('home.status_record')}</div>
       </div>
     `).join('');
   }
@@ -156,8 +143,8 @@ function renderFollowups(activeFollowups, healthRecords = []) {
     <div class="premium-followup">
       <div class="premium-icon-box">${window.__icons?.shield}</div>
       <div>
-        <div class="font-bold text-sm">Aktif takip yok</div>
-        <div class="text-xs text-secondary mt-1">Yeni bir kontrol başlatarak takip dosyası oluşturabilirsiniz.</div>
+        <div class="font-bold text-sm">${t('home.no_active_followup')}</div>
+        <div class="text-xs text-secondary mt-1">${t('home.no_active_followup_desc')}</div>
       </div>
     </div>
   `;
@@ -170,6 +157,8 @@ export function render() {
   const status = healthStatus(pet);
   const activeFollowups = (state.followups || []).filter(f => f.status === 'active' && f.petId === state.activePetId);
   const insightCards = getInsightCards(pet, activeFollowups);
+  const freeTools = t('home.free_tools');
+  const carePrograms = t('home.care_program_items');
 
   return `
     <div class="screen premium-home">
@@ -188,23 +177,23 @@ export function render() {
           <div class="home-hero-top">
             <img class="home-hero-photo" src="${petPhoto}" alt="${pet.name}" />
             <div>
-              <div class="premium-screen-kicker">Ücretsiz Sağlık Alanı</div>
+              <div class="premium-screen-kicker">${t('home.free_area')}</div>
               <h1>${pet.name}</h1>
-              <p>${t(`pets.${pet.type}`)} · ${pet.breed} · ${pet.age || '4 yaş'} · ${pet.weight} kg</p>
+              <p>${t(`pets.${pet.type}`)} · ${pet.breed} · ${pet.age || tx('home.age_years', { age: 4 })} · ${pet.weight} kg</p>
               <span class="premium-status ${status.cls}">${status.label} ${window.__icons?.checkCircle}</span>
             </div>
           </div>
           <div class="home-hero-actions">
-            <button class="btn btn-primary btn-full" id="btnStartCheck">${window.__icons?.spark} AI Kontrol Başlat</button>
-            <button class="btn btn-secondary btn-full" id="btnTimeline">${window.__icons?.clipboard} Geçmiş</button>
+            <button class="btn btn-primary btn-full" id="btnStartCheck">${window.__icons?.spark} ${t('home.start_ai_check')}</button>
+            <button class="btn btn-secondary btn-full" id="btnTimeline">${window.__icons?.clipboard} ${t('tabs.history')}</button>
           </div>
         </div>
       </div>
 
       <div class="section pt-0">
         <div class="section-header">
-          <h3 class="section-title">Yaklaşanlar</h3>
-          <span class="text-xs font-bold text-primary-color">Ücretsiz</span>
+          <h3 class="section-title">${t('home.upcoming')}</h3>
+          <span class="text-xs font-bold text-primary-color">${t('home.free')}</span>
         </div>
         <div class="upcoming-reminders-scroll" id="homeUpcoming">
           ${renderUpcomingReminders()}
@@ -213,8 +202,8 @@ export function render() {
 
       <div class="section pt-0">
         <div class="section-header">
-          <h3 class="section-title">Kayıt Özeti</h3>
-          <span class="text-xs text-tertiary">Son kayıtlar</span>
+          <h3 class="section-title">${t('home.record_summary')}</h3>
+          <span class="text-xs text-tertiary">${t('home.recent_records')}</span>
         </div>
         <div class="home-insight-grid" id="homeInsightGrid">
           ${renderInsightCards(insightCards)}
@@ -223,8 +212,8 @@ export function render() {
 
       <div class="section pt-0">
         <div class="section-header">
-          <h3 class="section-title">Ücretsiz Takip Araçları</h3>
-          <span class="text-xs text-tertiary">Kredi harcamaz</span>
+          <h3 class="section-title">${t('home.free_tools_title')}</h3>
+          <span class="text-xs text-tertiary">${t('home.no_credit')}</span>
         </div>
         <div class="premium-action-grid home-tool-grid">
           ${freeTools.map(tool => `
@@ -239,8 +228,8 @@ export function render() {
 
       <div class="section pt-0">
         <div class="section-header">
-          <h3 class="section-title">Takip Programları</h3>
-          <span class="text-xs text-tertiary">Şablonlar</span>
+          <h3 class="section-title">${t('home.care_programs')}</h3>
+          <span class="text-xs text-tertiary">${t('home.templates')}</span>
         </div>
         <div class="care-program-grid">
           ${carePrograms.map(program => `
@@ -257,13 +246,13 @@ export function render() {
 
       <div class="section pt-0">
         <div class="flex items-center justify-between mb-3">
-          <h3 class="section-title">Aktif Takipler</h3>
-          <span class="text-xs font-bold text-primary-color" id="homeRecentCount">${activeFollowups.length} dosya</span>
+          <h3 class="section-title">${t('home.active_followups')}</h3>
+          <span class="text-xs font-bold text-primary-color" id="homeRecentCount">${tx('home.file_count', { count: activeFollowups.length })}</span>
         </div>
         <div class="premium-followup-stack" id="homeRecentRecords">
           ${renderFollowups(activeFollowups)}
           <button class="premium-list-button" id="btnReports">
-            Tüm takiplerimi gör
+            ${t('home.view_all_followups')}
             <span>${window.__icons?.chevronRight}</span>
           </button>
         </div>
@@ -302,7 +291,7 @@ export function afterRender() {
       recent.innerHTML = `
         ${renderFollowups(activeFollowups, records.healthRecords)}
         <button class="premium-list-button" id="btnReportsLive">
-          Tüm takiplerimi gör
+          ${t('home.view_all_followups')}
           <span>${window.__icons?.chevronRight}</span>
         </button>
       `;
@@ -311,6 +300,6 @@ export function afterRender() {
         btn.addEventListener('click', e => navigate(`/followups/${e.currentTarget.dataset.id}`));
       });
     }
-    if (count) count.textContent = activeFollowups.length ? `${activeFollowups.length} dosya` : `${records.healthRecords.length} kayıt`;
+    if (count) count.textContent = activeFollowups.length ? tx('home.file_count', { count: activeFollowups.length }) : tx('home.record_count', { count: records.healthRecords.length });
   }).catch(() => {});
 }
