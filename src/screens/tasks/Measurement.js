@@ -134,7 +134,7 @@ export function afterRender(params = {}) {
     try {
       await saveMeasurement({
         userId: state.user?.id || 'user-1',
-        petId: state.activePetId || 'pet-1',
+        petId: state.activePetId,
         type: measurementMeta[task.key]?.type || 'temperature',
         value: val,
         unit: measurementMeta[task.key]?.unit || unit,

@@ -66,7 +66,7 @@ export function render() {
             </div>
           </div>
           <label class="feature-field">
-            <span>Ek not</span>
+            <span>${t('vetOutcome.extra_note')}</span>
             <textarea id="vetNote" placeholder="${t('vetOutcome.note_placeholder')}"></textarea>
           </label>
         </div>
@@ -99,13 +99,17 @@ export function afterRender() {
   });
 
   document.getElementById('btnSaveOutcome')?.addEventListener('click', async (event) => {
+    if (!state.activePetId) {
+      showToast(t('petsService.pet_required'));
+      return;
+    }
     const button = event.currentTarget;
     button.disabled = true;
     button.textContent = t('common.saving');
     try {
       await submitFeatureForm({
         userId: state.user?.id || 'user-1',
-        petId: state.activePetId || 'pet-1',
+        petId: state.activePetId || '',
         featureCode: 'ai-vet-outcome',
         locale: state.user?.locale || 'tr',
         payload: {

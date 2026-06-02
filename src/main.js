@@ -281,7 +281,7 @@ async function init() {
     }
     // If user is logged in but hasn't selected a pet
     if (state.user.isLoggedIn && !state.activePetId) {
-      setTimeout(() => navigate('/pets/select'), 0);
+      navigate('/pets/select');
       return false;
     }
     return true;

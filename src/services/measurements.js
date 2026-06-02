@@ -1,4 +1,5 @@
 import { getDbClient } from './dbClient.js';
+import { translateForLocale } from '../i18n/tr.js';
 
 const LOCAL_KEY = 'pati_measurements';
 
@@ -20,9 +21,13 @@ function rowToObject(row) {
 }
 
 export async function saveMeasurement({ userId, petId, type, value, unit, measuredAt, note, metadata = {} }) {
+  if (!petId) {
+    throw new Error(translateForLocale('tr', 'petsService.pet_required'));
+  }
+
   const record = {
     id: makeId(),
-    pet_id: petId || 'pet-1',
+    pet_id: petId,
     created_by_user_id: userId || 'user-1',
     measurement_type: type,
     value: Number(value),

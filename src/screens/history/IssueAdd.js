@@ -75,6 +75,10 @@ export function afterRender() {
   document.getElementById('btnSave')?.addEventListener('click', async (event) => {
     const btn = event.currentTarget;
     const name = document.getElementById('inputName').value;
+    if (!state.activePetId) {
+      showNotice(t('petsService.pet_required'));
+      return;
+    }
     if (!name.trim()) {
       showNotice(t('issueAdd.name_required'));
       return;
@@ -87,7 +91,7 @@ export function afterRender() {
       const payloadLabels = t('issueAdd.payload_labels');
       await submitFeatureForm({
         userId: state.user?.id || 'user-1',
-        petId: state.activePetId || 'pet-1',
+        petId: state.activePetId || '',
         featureCode: 'issue',
         locale: state.user?.locale || 'tr',
         payload: {

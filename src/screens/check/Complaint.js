@@ -126,23 +126,7 @@ export function afterRender() {
   });
 
   document.getElementById('btnVoice')?.addEventListener('click', () => {
-    const input = document.getElementById('complaintInput');
-    const original = input.value;
-    input.value = original + (original ? ' ' : '') + t('complaintScreen.listening');
-    setTimeout(() => {
-      input.value = original + (original ? ' ' : '') + t('complaintScreen.voice_demo');
-      const demoChips = t('complaintScreen.voice_demo_chips');
-      setState(current => {
-        current.session.primaryComplaintLabel = demoChips[0];
-        current.session.primaryComplaintId = getComplaintTypeByLabel(demoChips[0])?.id || null;
-        current.session.selectedChips = demoChips;
-      });
-      document.querySelectorAll('.chip').forEach(c => {
-        if (demoChips.includes(c.dataset.primaryComplaint || c.dataset.secondaryComplaint)) {
-          c.classList.add('selected');
-        }
-      });
-    }, 900);
+    showToast(t('complaintScreen.voice_not_ready'));
   });
 
   document.getElementById('btnContinue')?.addEventListener('click', () => {

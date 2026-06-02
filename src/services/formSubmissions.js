@@ -89,9 +89,9 @@ function slug(value) {
 }
 
 function sitterInviteDraft({ record, payload, memberId = '' }) {
-  const displayName = titleFromPayload(payload, [label('invited_person')], text(record, 'freeRecords.submissions.sitter_default_name'));
-  const duration = first(pick(payload, [label('access_duration')], [label('one_week')])) || label('one_week');
-  const selected = checkedLabels(pick(payload, [label('permissions')], []));
+  const displayName = titleFromPayload(payload, fieldLabels('invited_person'), text(record, 'freeRecords.submissions.sitter_default_name'));
+  const duration = first(pick(payload, fieldLabels('access_duration'), [label('one_week')])) || label('one_week');
+  const selected = checkedLabels(pick(payload, fieldLabels('permissions'), []));
   const inviteId = memberId || `invite-${record.pet_id || 'pet'}-${slug(displayName)}-${Math.random().toString(36).slice(2, 8)}`;
   const permissions = selected.join(', ') || text(record, 'freeRecords.submissions.invite_no_permissions');
   return {
@@ -119,12 +119,12 @@ function saveLocalQrCard(record, payload) {
     species_code: 'cat',
     public_profile_token: token,
     metadata: JSON.stringify({
-      qr_health_card: {
-        form_submission_id: record.id,
-        public_token: token,
-        public_path: `/public/pet/${token}`,
-        shared_fields: checkedLabels(pick(payload, [label('shared_fields')], [])),
-        access_duration: first(pick(payload, [label('access_duration')], [label('one_day')])) || label('one_day'),
+        qr_health_card: {
+          form_submission_id: record.id,
+          public_token: token,
+          public_path: `/public/pet/${token}`,
+        shared_fields: checkedLabels(pick(payload, fieldLabels('shared_fields'), [])),
+        access_duration: first(pick(payload, fieldLabels('access_duration'), [label('one_day')])) || label('one_day'),
         updated_at: new Date().toISOString()
       }
     })
@@ -190,9 +190,9 @@ async function insertReminder(db, record, payload) {
 
 function automaticReminderPayload(record, payload) {
   if (record.feature_code === 'postop') {
-    const nextDate = first(pick(payload, [label('next_dose_check')], ''));
+    const nextDate = first(pick(payload, fieldLabels('next_dose_check'), ''));
     if (!nextDate || Number.isNaN(Date.parse(nextDate))) return null;
-    const medStatus = first(pick(payload, [label('medication_use')], [label('given')])) || label('given');
+    const medStatus = first(pick(payload, fieldLabels('medication_use'), [label('given')])) || label('given');
     return {
       [label('reminder_type')]: [label('medication')],
       [label('title')]: text(record, 'freeRecords.submissions.postop_reminder_title'),
@@ -203,10 +203,10 @@ function automaticReminderPayload(record, payload) {
   }
 
   if (record.feature_code === 'reproduction') {
-    const startDate = first(pick(payload, [label('start_date')], ''));
+    const startDate = first(pick(payload, fieldLabels('start_date'), ''));
     const controlDate = isoDatePlusDays(startDate, 7);
     if (!controlDate) return null;
-    const followType = first(pick(payload, [label('followup_type')], [text(record, 'freeRecords.submissions.reproduction_default_followup')])) || text(record, 'freeRecords.submissions.reproduction_default_followup');
+    const followType = first(pick(payload, fieldLabels('followup_type'), [text(record, 'freeRecords.submissions.reproduction_default_followup')])) || text(record, 'freeRecords.submissions.reproduction_default_followup');
     return {
       [label('reminder_type')]: [label('appointment')],
       [label('title')]: text(record, 'freeRecords.submissions.reproduction_reminder_title', { type: followType }),
@@ -245,51 +245,51 @@ function saveLocalAutomaticReminder(record, payload) {
 const healthRecordConfig = {
   'photo-followup': {
     type: 'photo_followup',
-    titleLabels: [label('followup_subject')],
+    titleLabels: fieldLabels('followup_subject'),
     fallbackKey: 'freeRecords.submissions.fallbacks.photo_followup',
-    summaryLabels: [label('short_note')]
+    summaryLabels: fieldLabels('short_note')
   },
   'poop-score': {
     type: 'poop_score',
-    titleLabels: ['Skor'],
+    titleLabels: fieldLabels('score'),
     fallbackKey: 'freeRecords.submissions.fallbacks.poop_score',
-    summaryLabels: ['Not']
+    summaryLabels: fieldLabels('note')
   },
   'diet-log': {
     type: 'diet_log',
-    titleLabels: [label('new_food_meal')],
+    titleLabels: fieldLabels('new_food_meal'),
     fallbackKey: 'freeRecords.submissions.fallbacks.diet_log',
-    summaryLabels: ['Beslenme notu']
+    summaryLabels: fieldLabels('diet_note')
   },
   chronic: {
     type: 'chronic_followup',
-    titleLabels: [label('template')],
+    titleLabels: fieldLabels('template'),
     fallbackKey: 'freeRecords.submissions.fallbacks.chronic',
-    summaryLabels: ['Takip notu']
+    summaryLabels: fieldLabels('followup_note')
   },
   postop: {
     type: 'postop_followup',
-    titleLabels: [label('surgery_day')],
+    titleLabels: fieldLabels('surgery_day'),
     fallbackKey: 'freeRecords.submissions.fallbacks.postop',
-    summaryLabels: ['Genel durum']
+    summaryLabels: fieldLabels('general_status')
   },
   reproduction: {
     type: 'reproduction_followup',
-    titleLabels: [label('followup_type')],
+    titleLabels: fieldLabels('followup_type'),
     fallbackKey: 'freeRecords.submissions.fallbacks.reproduction',
-    summaryLabels: ['Not']
+    summaryLabels: fieldLabels('note')
   },
   senior: {
     type: 'senior_followup',
-    titleLabels: [label('daily_status')],
+    titleLabels: fieldLabels('daily_status'),
     fallbackKey: 'freeRecords.submissions.fallbacks.senior',
-    summaryLabels: ['Not']
+    summaryLabels: fieldLabels('note')
   },
   toxic: {
     type: 'toxin_foreign_body',
-    titleLabels: ['Ne yuttu / temas etti?'],
+    titleLabels: fieldLabels('what_ingested'),
     fallbackKey: 'freeRecords.submissions.fallbacks.toxic',
-    summaryLabels: ['Detay']
+    summaryLabels: fieldLabels('detail')
   },
   issue: {
     type: 'issue',
@@ -324,9 +324,9 @@ async function insertHealthRecord(db, record, payload, config) {
 }
 
 async function insertClinicExportDocument(db, record, payload) {
-  const purpose = first(pick(payload, [label('file_purpose')], [text(record, 'freeRecords.submissions.clinic_visit')])) || text(record, 'freeRecords.submissions.clinic_visit');
-  const note = pick(payload, ['Veterinere not'], '');
-  const included = checkedLabels(pick(payload, ['Dahil edilecekler'], []));
+  const purpose = first(pick(payload, fieldLabels('file_purpose'), [text(record, 'freeRecords.submissions.clinic_visit')])) || text(record, 'freeRecords.submissions.clinic_visit');
+  const note = pick(payload, ['Veterinere not', 'Veterinarian note'], '');
+  const included = checkedLabels(pick(payload, fieldLabels('included_sections'), []));
 
   await db.execute({
     sql: `INSERT INTO documents
@@ -348,11 +348,11 @@ async function insertClinicExportDocument(db, record, payload) {
 }
 
 async function insertUploadedDocument(db, record, payload) {
-  const documentKind = first(pick(payload, [label('document_type')], [text(record, 'freeRecords.submissions.document_default_kind')])) || text(record, 'freeRecords.submissions.document_default_kind');
-  const note = pick(payload, ['Ek not'], '');
-  const readGoal = first(pick(payload, [label('read_goal')], [text(record, 'freeRecords.submissions.document_default_goal')])) || text(record, 'freeRecords.submissions.document_default_goal');
-  const visibleValues = pick(payload, [label('visible_important_values')], '');
-  const extractionOptions = checkedLabels(pick(payload, [label('extraction_options'), label('ai_extraction')], []));
+  const documentKind = first(pick(payload, fieldLabels('document_type'), [text(record, 'freeRecords.submissions.document_default_kind')])) || text(record, 'freeRecords.submissions.document_default_kind');
+  const note = pick(payload, fieldLabels('extra_note'), '');
+  const readGoal = first(pick(payload, fieldLabels('read_goal'), [text(record, 'freeRecords.submissions.document_default_goal')])) || text(record, 'freeRecords.submissions.document_default_goal');
+  const visibleValues = pick(payload, fieldLabels('visible_important_values'), '');
+  const extractionOptions = checkedLabels(pick(payload, [...fieldLabels('extraction_options'), ...fieldLabels('ai_extraction')], []));
   const files = Array.isArray(payload.__media_files) ? payload.__media_files : [];
   const aiOcr = payload.__ai_ocr_result || null;
   const extractedText = [
@@ -395,10 +395,10 @@ async function insertUploadedDocument(db, record, payload) {
 }
 
 async function insertVetPrepDocument(db, record, payload) {
-  const reason = pick(payload, ['Ziyaret nedeni'], '');
-  const urgency = first(pick(payload, ['Aciliyet'], [text(record, 'freeRecords.submissions.vet_prep_default_urgency')])) || text(record, 'freeRecords.submissions.vet_prep_default_urgency');
-  const checklist = checkedLabels(pick(payload, [label('bring_checklist')], []));
-  const questions = pick(payload, [label('my_questions')], '');
+  const reason = pick(payload, fieldLabels('visit_reason'), '');
+  const urgency = first(pick(payload, fieldLabels('urgency'), [text(record, 'freeRecords.submissions.vet_prep_default_urgency')])) || text(record, 'freeRecords.submissions.vet_prep_default_urgency');
+  const checklist = checkedLabels(pick(payload, fieldLabels('bring_checklist'), []));
+  const questions = pick(payload, fieldLabels('my_questions'), '');
 
   await db.execute({
     sql: `INSERT INTO documents
@@ -451,8 +451,8 @@ async function updateQrHealthCard(db, record, payload) {
           form_submission_id: record.id,
           public_token: publicToken,
           public_path: `/public/pet/${publicToken}`,
-          shared_fields: checkedLabels(pick(payload, [label('shared_fields')], [])),
-          access_duration: first(pick(payload, [label('access_duration')], [label('one_day')])) || label('one_day'),
+          shared_fields: checkedLabels(pick(payload, fieldLabels('shared_fields'), [])),
+          access_duration: first(pick(payload, fieldLabels('access_duration'), [label('one_day')])) || label('one_day'),
           updated_at: new Date().toISOString()
         }
       }),
@@ -490,10 +490,10 @@ async function insertMediaFiles(db, record, payload) {
 }
 
 async function insertSitterInvite(db, record, payload) {
-  const displayName = titleFromPayload(payload, [label('invited_person')], text(record, 'freeRecords.submissions.sitter_default_name'));
-  const contact = titleFromPayload(payload, [label('phone_email')], `${slug(displayName)}@invite.local`);
+  const displayName = titleFromPayload(payload, fieldLabels('invited_person'), text(record, 'freeRecords.submissions.sitter_default_name'));
+  const contact = titleFromPayload(payload, fieldLabels('phone_email'), `${slug(displayName)}@invite.local`);
   const email = contact.includes('@') ? contact : `${slug(contact)}@phone.local`;
-  const duration = first(pick(payload, [label('access_duration')], [label('one_week')])) || label('one_week');
+  const duration = first(pick(payload, fieldLabels('access_duration'), [label('one_week')])) || label('one_week');
   const ends = new Date();
   if (duration.includes(label('day_suffix'))) ends.setDate(ends.getDate() + Number.parseInt(duration, 10));
   else if (duration.includes(label('month_suffix'))) ends.setMonth(ends.getMonth() + Number.parseInt(duration, 10));
@@ -535,12 +535,16 @@ async function insertSitterInvite(db, record, payload) {
       ]
   });
 
-  const selected = checkedLabels(pick(payload, [label('permissions')], []));
+  const selected = checkedLabels(pick(payload, fieldLabels('permissions'), []));
   const permissionMap = {
     [label('add_daily_note')]: 'perm-add-health',
+    [translateForLocale('en', 'formLabels.add_daily_note')]: 'perm-add-health',
     [label('view_reminder')]: 'perm-view-health',
+    [translateForLocale('en', 'formLabels.view_reminder')]: 'perm-view-health',
     [label('view_emergency_card')]: 'perm-view-pet',
-    [label('view_reports')]: 'perm-view-reports'
+    [translateForLocale('en', 'formLabels.view_emergency_card')]: 'perm-view-pet',
+    [label('view_reports')]: 'perm-view-reports',
+    [translateForLocale('en', 'formLabels.view_reports')]: 'perm-view-reports'
   };
 
   await Promise.all(Object.entries(permissionMap).map(([label, permissionId]) => db.execute({

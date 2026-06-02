@@ -117,7 +117,7 @@ export function render() {
 
           <label class="feature-field">
             <span>Barkod</span>
-            <input id="barcode" placeholder="Varsa barkod" inputmode="numeric" />
+            <input id="barcode" placeholder="${t('productSafetyRadar.barcode_placeholder')}" inputmode="numeric" />
           </label>
 
           <label class="feature-field">

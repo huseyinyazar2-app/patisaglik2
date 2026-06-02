@@ -369,6 +369,10 @@ export function afterRender() {
   });
 
   document.getElementById('btnSaveToxicRecord')?.addEventListener('click', async (event) => {
+    if (!state.activePetId) {
+      showToast(t('petsService.pet_required'));
+      return;
+    }
     const button = event.currentTarget;
     const original = button.textContent;
     button.disabled = true;
@@ -392,7 +396,7 @@ export function afterRender() {
 
       await submitFeatureForm({
         userId: state.user?.id || 'user-1',
-        petId: state.activePetId || 'pet-1',
+        petId: state.activePetId || '',
         featureCode: 'toxic',
         locale: state.user?.locale || 'tr',
         payload

@@ -86,13 +86,13 @@ export function render(params = {}, query = {}) {
 
         <!-- Time Field -->
         <div class="form-group" style="animation: slideUp 0.55s ease;">
-          <label class="modern-title-icon">${window.__icons?.clock} Saat</label>
+          <label class="modern-title-icon">${window.__icons?.clock} ${t('measurementAdd.time')}</label>
           <input type="time" id="timeInput" value="${new Date().toTimeString().slice(0, 5)}" />
         </div>
 
         <!-- Note Field -->
         <div class="form-group" style="animation: slideUp 0.6s ease;">
-          <label class="modern-title-icon">${window.__icons?.note} Not (Opsiyonel)</label>
+          <label class="modern-title-icon">${window.__icons?.note} ${t('measurementAdd.note_label')}</label>
           <textarea id="noteInput" placeholder="${t('measurementAdd.note_placeholder')}" rows="3" style="min-height: 80px;"></textarea>
         </div>
 
@@ -167,7 +167,7 @@ export function afterRender(params = {}, query = {}) {
     try {
       await saveMeasurement({
         userId: getState().user?.id || 'user-1',
-        petId: getState().activePetId || 'pet-1',
+        petId: getState().activePetId,
         type: selectedType,
         value,
         unit: typeInfo.unit,

@@ -508,6 +508,10 @@ export function afterRender() {
   document.getElementById('btnCancel')?.addEventListener('click', () => goBack());
   document.getElementById('btnSaveFeature')?.addEventListener('click', async (event) => {
     if (!validateRequiredFields()) return;
+    if (!state.activePetId) {
+      showNotice(t('petsService.pet_required'), 'error');
+      return;
+    }
     const btn = event.currentTarget;
     const originalText = btn.textContent;
     btn.textContent = t('common.saving');
