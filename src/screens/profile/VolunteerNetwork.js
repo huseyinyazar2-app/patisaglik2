@@ -3,6 +3,7 @@ import { getState } from '../../store.js';
 import { getPets } from '../../services/pets.js';
 import { submitFeatureForm } from '../../services/formSubmissions.js';
 import { showToast } from '../../ui/toast.js';
+import { t, translateForLocale } from '../../i18n/tr.js';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -19,7 +20,7 @@ function mapUrl(location) {
 
 function renderList(pets = null) {
   if (!pets) {
-    return `<div class="free-record-panel"><p>Gönüllü ağı yükleniyor...</p></div>`;
+    return `<div class="free-record-panel"><p>${t('volunteerNetwork.loading')}</p></div>`;
   }
 
   const volunteers = pets.filter((pet) => ['stray', 'foster'].includes(pet.ownership));
@@ -27,8 +28,8 @@ function renderList(pets = null) {
     return `
       <div class="empty-state">
         <div class="modern-empty-icon">${window.__icons?.paw}</div>
-        <div class="empty-state-title">Gönüllü profili yok</div>
-        <div class="empty-state-desc">Sokak veya geçici yuva profili eklediğinde burada konum ve bakım notlarıyla listelenir.</div>
+        <div class="empty-state-title">${t('volunteerNetwork.empty_title')}</div>
+        <div class="empty-state-desc">${t('volunteerNetwork.empty_desc')}</div>
       </div>
     `;
   }
@@ -39,18 +40,18 @@ function renderList(pets = null) {
         <div class="premium-icon-box">${window.__icons?.paw}</div>
         <div>
           <strong>${escapeHtml(pet.name)}</strong>
-          <small>${pet.ownership === 'foster' ? 'Geçici yuva' : 'Sokak / gönüllü'} · ${escapeHtml(pet.breed || pet.type || 'Pet')}</small>
+          <small>${pet.ownership === 'foster' ? t('volunteerNetwork.foster') : t('volunteerNetwork.stray_volunteer')} · ${escapeHtml(pet.breed || pet.type || 'Pet')}</small>
         </div>
       </div>
-      <p>${escapeHtml(pet.volunteerNote || 'Bakım notu eklenmedi.')}</p>
+      <p>${escapeHtml(pet.volunteerNote || t('volunteerNetwork.no_note'))}</p>
       <div class="volunteer-location">
         <span>${window.__icons?.search}</span>
-        <strong>${escapeHtml(pet.location || 'Konum girilmedi')}</strong>
+        <strong>${escapeHtml(pet.location || t('volunteerNetwork.no_location'))}</strong>
       </div>
       <div class="pet-card-map-actions">
-        ${pet.location ? `<button type="button" class="pet-map-action" data-map-location="${escapeHtml(pet.location)}">${window.__icons?.search} Haritada Aç</button>` : ''}
-        ${pet.location ? `<button type="button" class="pet-map-action secondary" data-share-location="${escapeHtml(pet.location)}" data-pet-name="${escapeHtml(pet.name)}">${window.__icons?.upload} Konumu Paylaş</button>` : ''}
-        <button type="button" class="pet-map-action accent" data-volunteer-request="${escapeHtml(pet.id)}" data-pet-name="${escapeHtml(pet.name)}">${window.__icons?.heartPulse} Destek Talebi</button>
+        ${pet.location ? `<button type="button" class="pet-map-action" data-map-location="${escapeHtml(pet.location)}">${window.__icons?.search} ${t('volunteerNetwork.open_map')}</button>` : ''}
+        ${pet.location ? `<button type="button" class="pet-map-action secondary" data-share-location="${escapeHtml(pet.location)}" data-pet-name="${escapeHtml(pet.name)}">${window.__icons?.upload} ${t('volunteerNetwork.share_location')}</button>` : ''}
+        <button type="button" class="pet-map-action accent" data-volunteer-request="${escapeHtml(pet.id)}" data-pet-name="${escapeHtml(pet.name)}">${window.__icons?.heartPulse} ${t('volunteerNetwork.support_request')}</button>
       </div>
     </div>
   `).join('');
@@ -63,7 +64,7 @@ export function render() {
         <div class="header-left">
           <button class="header-back" id="btnBack">${window.__icons?.back}</button>
         </div>
-        <div class="header-title">Gönüllü Ağı</div>
+        <div class="header-title">${t('volunteerNetwork.title')}</div>
         <div class="header-right">
           <span class="premium-header-shield">${window.__icons?.paw}</span>
         </div>
@@ -72,10 +73,10 @@ export function render() {
       <div class="section pt-4">
         <div class="profile-plan-card">
           <div>
-            <strong>Sokak ve geçici yuva profilleri</strong>
-            <p>Konum, bakım notu ve paylaşım aksiyonları tek yerde görünür.</p>
+            <strong>${t('volunteerNetwork.hero_title')}</strong>
+            <p>${t('volunteerNetwork.hero_desc')}</p>
           </div>
-          <span class="plan-pill">Ücretsiz</span>
+          <span class="plan-pill">${t('common.free')}</span>
         </div>
       </div>
 
@@ -86,24 +87,24 @@ export function render() {
       <div class="modal-backdrop volunteer-request-modal" id="volunteerRequestModal" hidden>
         <div class="modal">
           <div class="modal-handle"></div>
-          <div class="modal-title">Gönüllü destek talebi</div>
-          <p class="modal-text" id="volunteerRequestPet">Bu profil için yardım, takip veya sahiplenme iletişimi bırak.</p>
+          <div class="modal-title">${t('volunteerNetwork.modal_title')}</div>
+          <p class="modal-text" id="volunteerRequestPet">${t('volunteerNetwork.modal_desc')}</p>
           <div class="feature-field">
-            <span>İletişim</span>
-            <input id="volunteerContact" placeholder="Telefon veya e-posta" />
+            <span>${t('volunteerNetwork.contact')}</span>
+            <input id="volunteerContact" placeholder="${t('volunteerNetwork.contact_placeholder')}" />
           </div>
           <div class="feature-field mt-3">
-            <span>Talep türü</span>
-            <input id="volunteerNeed" placeholder="Mama, veteriner, geçici yuva, sahiplenme..." />
+            <span>${t('volunteerNetwork.need_type')}</span>
+            <input id="volunteerNeed" placeholder="${t('volunteerNetwork.need_placeholder')}" />
           </div>
           <div class="feature-field mt-3">
             <span>Not</span>
-            <textarea id="volunteerNote" placeholder="Kısa bir not ekle"></textarea>
+            <textarea id="volunteerNote" placeholder="${t('volunteerNetwork.note_placeholder')}"></textarea>
           </div>
           <p class="volunteer-request-status" id="volunteerRequestStatus"></p>
           <div class="modal-actions">
-            <button class="btn btn-primary btn-full" id="btnVolunteerSubmit">Talebi Kaydet</button>
-            <button class="btn btn-secondary btn-full" id="btnVolunteerCancel">Vazgeç</button>
+            <button class="btn btn-primary btn-full" id="btnVolunteerSubmit">${t('volunteerNetwork.save_request')}</button>
+            <button class="btn btn-secondary btn-full" id="btnVolunteerCancel">${t('common.cancel')}</button>
           </div>
         </div>
       </div>
@@ -120,7 +121,7 @@ export function afterRender() {
   function openRequestModal(button) {
     if (!modal) return;
     modal.dataset.petId = button.dataset.volunteerRequest || '';
-    document.getElementById('volunteerRequestPet').textContent = `${button.dataset.petName || 'Bu profil'} için yardım, takip veya sahiplenme iletişimi bırak.`;
+    document.getElementById('volunteerRequestPet').textContent = t('volunteerNetwork.modal_pet_desc', { pet: button.dataset.petName || t('volunteerNetwork.this_profile') });
     document.getElementById('volunteerContact').value = '';
     document.getElementById('volunteerNeed').value = '';
     document.getElementById('volunteerNote').value = '';
@@ -138,19 +139,19 @@ export function afterRender() {
     });
     document.querySelectorAll('[data-share-location]').forEach((button) => {
       button.addEventListener('click', async () => {
-        const text = `${button.dataset.petName || 'Pet'} konumu: ${button.dataset.shareLocation}`;
+        const text = t('volunteerNetwork.share_text', { pet: button.dataset.petName || 'Pet', location: button.dataset.shareLocation });
         const url = mapUrl(button.dataset.shareLocation);
         if (navigator.share) {
           try {
-            await navigator.share({ title: 'Pati Sağlık Gönüllü Konumu', text, url });
+            await navigator.share({ title: t('volunteerNetwork.share_title'), text, url });
             return;
           } catch {}
         }
         try {
           await navigator.clipboard.writeText(`${text}\n${url}`);
-          showToast('Konum bağlantısı kopyalandı.');
+          showToast(t('volunteerNetwork.location_copied'));
         } catch {
-          showToast('Konum bağlantısı kopyalanamadı. Harita bağlantısını açarak paylaşabilirsiniz.');
+          showToast(t('volunteerNetwork.location_copy_failed'));
         }
       });
     });
@@ -171,11 +172,11 @@ export function afterRender() {
     const need = document.getElementById('volunteerNeed')?.value.trim();
     const note = document.getElementById('volunteerNote')?.value.trim();
     if (!contact || !need) {
-      if (status) status.textContent = 'İletişim ve talep türü zorunlu.';
+      if (status) status.textContent = t('volunteerNetwork.required_error');
       return;
     }
     button.disabled = true;
-    button.textContent = 'Kaydediliyor...';
+    button.textContent = t('common.saving');
     try {
       await submitFeatureForm({
         userId: state.user?.id || 'user-1',
@@ -183,18 +184,18 @@ export function afterRender() {
         featureCode: 'volunteer-help',
         locale: state.locale || 'tr',
         payload: {
-          'İletişim': contact,
-          'Talep türü': need,
+          [translateForLocale('tr', 'volunteerNetwork.contact')]: contact,
+          [translateForLocale('tr', 'volunteerNetwork.need_type')]: need,
           Not: note
         }
       });
-      if (status) status.textContent = 'Talep kaydedildi. Profil sahibi bu kaydı görebilecek.';
+      if (status) status.textContent = t('volunteerNetwork.saved');
       setTimeout(closeRequestModal, 700);
     } catch (err) {
-      if (status) status.textContent = `Talep kaydedilemedi: ${err.message}`;
+      if (status) status.textContent = t('volunteerNetwork.save_failed', { error: err.message });
     } finally {
       button.disabled = false;
-      button.textContent = 'Talebi Kaydet';
+      button.textContent = t('volunteerNetwork.save_request');
     }
   });
 
@@ -204,6 +205,6 @@ export function afterRender() {
     bindActions();
   }).catch((err) => {
     const target = document.getElementById('volunteerList');
-    if (target) target.innerHTML = `<div class="free-record-panel"><p>Gönüllü ağı açılamadı: ${escapeHtml(err.message)}</p></div>`;
+    if (target) target.innerHTML = `<div class="free-record-panel"><p>${t('volunteerNetwork.open_failed', { error: escapeHtml(err.message) })}</p></div>`;
   });
 }

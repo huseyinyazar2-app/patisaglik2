@@ -1731,11 +1731,129 @@ JSON döndür:
       vetprep: { title: 'Kliniğe Hazırlık Ön Dosyası', desc: 'Ziyaret öncesi soruları toparlar, veteriner için net özet üretir.', action: 'Hazırla' }
     }
   },
+  volunteerNetwork: {
+    loading: 'Gönüllü ağı yükleniyor...',
+    empty_title: 'Gönüllü profili yok',
+    empty_desc: 'Sokak veya geçici yuva profili eklediğinde burada konum ve bakım notlarıyla listelenir.',
+    foster: 'Geçici yuva',
+    stray_volunteer: 'Sokak / gönüllü',
+    no_note: 'Bakım notu eklenmedi.',
+    no_location: 'Konum girilmedi',
+    open_map: 'Haritada Aç',
+    share_location: 'Konumu Paylaş',
+    support_request: 'Destek Talebi',
+    title: 'Gönüllü Ağı',
+    hero_title: 'Sokak ve geçici yuva profilleri',
+    hero_desc: 'Konum, bakım notu ve paylaşım aksiyonları tek yerde görünür.',
+    modal_title: 'Gönüllü destek talebi',
+    modal_desc: 'Bu profil için yardım, takip veya sahiplenme iletişimi bırak.',
+    modal_pet_desc: '{pet} için yardım, takip veya sahiplenme iletişimi bırak.',
+    this_profile: 'Bu profil',
+    contact: 'İletişim',
+    contact_placeholder: 'Telefon veya e-posta',
+    need_type: 'Talep türü',
+    need_placeholder: 'Mama, veteriner, geçici yuva, sahiplenme...',
+    note_placeholder: 'Kısa bir not ekle',
+    save_request: 'Talebi Kaydet',
+    share_text: '{pet} konumu: {location}',
+    share_title: 'Pati Sağlık Gönüllü Konumu',
+    location_copied: 'Konum bağlantısı kopyalandı.',
+    location_copy_failed: 'Konum bağlantısı kopyalanamadı. Harita bağlantısını açarak paylaşabilirsiniz.',
+    required_error: 'İletişim ve talep türü zorunlu.',
+    saved: 'Talep kaydedildi. Profil sahibi bu kaydı görebilecek.',
+    save_failed: 'Talep kaydedilemedi: {error}',
+    open_failed: 'Gönüllü ağı açılamadı: {error}'
+  },
+  productSafetyRadar: {
+    level_high: 'Yüksek güvenlik sinyali',
+    level_watch: 'Kontrol gerektiren sinyal',
+    level_clear: 'Açık eşleşme bulunmadı',
+    signal: 'sinyal',
+    kicker: 'Güvenlik radarı',
+    source_status: 'Kaynak durumu: {status}. Bu ekran kesin hüküm değil, ürün/lot kontrol asistanıdır.',
+    no_recall: 'openFDA recall eşleşmesi bulunmadı',
+    no_recall_desc: 'Lot/seri kontrolü yine de üretici duyurusuyla doğrulanmalıdır.',
+    local_notes: 'Yerel kontrol notları',
+    next_steps: 'Sonraki güvenli adımlar',
+    title: 'Güvenlik Radarı',
+    hero_kicker: 'Mama / ilaç / ürün',
+    hero_title: 'Ürün güvenlik radarı',
+    hero_desc: 'Geri çağırma ve güvenlik sinyali kontrolü yapar. Toksik ambalaj yutma şüphesiyle karıştırılmaz.',
+    warning: 'İlk fazda ücretsiz openFDA Food Enforcement recall araması kullanılır. Sonuçlar kesin sebep-sonuç veya tıbbi karar değildir.',
+    product_type: 'Ürün türü',
+    product_types: [
+      { value: 'food', label: 'Mama' },
+      { value: 'supplement', label: 'Takviye' },
+      { value: 'medicine', label: 'İlaç' },
+      { value: 'care', label: 'Oyuncak / bakım ürünü' }
+    ],
+    product_name: 'Ürün adı',
+    product_placeholder: 'Örn. somonlu kuru mama, probiyotik, kulak solüsyonu',
+    brand_placeholder: 'Marka / üretici adı',
+    lot_placeholder: 'Örn. LOT A123, SKT 12/2026',
+    run: 'Güvenlik Kontrolü Yap',
+    package_risk: 'Toksik Ambalaj Şüphesine Git',
+    name_required: 'Ürün adı veya marka girin.',
+    checking: 'Kontrol ediliyor...'
+  },
+  issueDetail: {
+    default_title: 'Sağlık sorunu',
+    no_detail: 'Detay eklenmemiş.',
+    first_noticed_payload: 'İlk fark edilme',
+    loading: 'Sorun detayı getiriliyor...',
+    frequency_missing: 'Takip sıklığı belirtilmedi',
+    record_type: 'Sağlık sorunu',
+    disclaimer: 'Bu alan veteriner teşhisi değildir; takip notlarını düzenli tutmak için kullanılır.',
+    general_tracking: 'Genel takip',
+    title: 'Sorun Detayı',
+    kicker: 'Ücretsiz takip kaydı',
+    hero_title: 'Sağlık Sorunu',
+    hero_desc: 'Belirti, kategori ve takip notlarının canlı kayıt detayı.',
+    new_followup: 'Yeni Takip Ekle',
+    create_report: 'Rapor Hazırla',
+    back_to_list: 'Listeye Dön',
+    not_found_title: 'Sorun kaydı bulunamadı',
+    not_found_desc: 'Kayıt silinmiş veya farklı bir pete ait olabilir.',
+    load_failed: 'Detay alınamadı'
+  },
+  publicPetCard: {
+    not_shared: 'Kayıt paylaşılmadı',
+    field_name_type: 'İsim ve tür',
+    field_chronic: 'Kronik hastalıklar',
+    field_allergies: 'Alerjiler',
+    field_medications: 'İlaçlar',
+    field_owner_contact: 'Sahip iletişimi',
+    weight: 'Kilo',
+    care_location: 'Bakım konumu',
+    chronic: 'Kronik hastalıklar',
+    allergies: 'Alerjiler',
+    medications: 'Kullanılan ilaçlar',
+    short_note: 'Kısa sağlık notu',
+    owner_contact: 'Sahip iletişimi',
+    owner: 'Sahip',
+    kicker: 'Acil sağlık kartı',
+    not_vet: 'Veteriner yerine geçmez.',
+    notice: 'Acil durumda petin temel kayıtlarını hızlı göstermek için hazırlanmıştır.',
+    no_rows: 'Bu kartta paylaşılacak kayıt bulunamadı.',
+    access: 'Erişim: {value}',
+    updated: 'Güncelleme: {value}',
+    open_map: 'Konumu Haritada Aç',
+    copy_link: 'Bağlantıyı Kopyala',
+    open_app: 'Uygulamaya Dön',
+    not_found_title: 'Kart bulunamadı',
+    not_found_desc: 'Bu bağlantı pasif olabilir veya henüz oluşturulmamış olabilir.',
+    link_copied: 'Bağlantı kopyalandı.',
+    link_selected: 'Bağlantı alanı seçili bırakıldı.',
+    share_title: 'Pati Sağlık Acil Kart',
+    share_unsupported: 'Paylaşım desteklenmiyor. Bağlantıyı kopyalayabilirsiniz.',
+    open_failed: 'Kart açılamadı'
+  },
   common: {
     save: 'Kaydet', saving: 'Kaydediliyor...', cancel: 'İptal', back: 'Geri', next: 'Devam', done: 'Tamam',
     delete: 'Sil', edit: 'Düzenle', share: 'Paylaş', close: 'Kapat',
     loading: 'Yükleniyor...', error: 'Bir hata oluştu', retry: 'Tekrar Dene',
-    confirm: 'Onayla', yes: 'Evet', no: 'Hayır',
+    confirm: 'Onayla', yes: 'Evet', no: 'Hayır', free: 'Ücretsiz',
+    no_date: 'Tarih yok', record_date: 'Kayıt tarihi', not_specified: 'Belirtilmedi',
     photos: 'fotoğraf', videos: 'video', audio: 'ses kaydı', measurements: 'ölçüm'
   },
   tabs: {
@@ -1786,14 +1904,19 @@ function readValue(dictionary, key) {
   return val;
 }
 
-export function t(key) {
-  const locale = getLocale();
-  return readValue(dictionaries[locale], key) ?? readValue(en, key) ?? readValue(tr, key) ?? key;
+function interpolate(value, params = {}) {
+  if (typeof value !== 'string') return value;
+  return value.replace(/\{(\w+)\}/g, (_, name) => params[name] ?? `{${name}}`);
 }
 
-export function translateForLocale(locale, key) {
+export function t(key, params = {}) {
+  const locale = getLocale();
+  return interpolate(readValue(dictionaries[locale], key) ?? readValue(en, key) ?? readValue(tr, key) ?? key, params);
+}
+
+export function translateForLocale(locale, key, params = {}) {
   const normalized = normalizeLocale(locale);
-  return readValue(dictionaries[normalized], key) ?? readValue(en, key) ?? readValue(tr, key) ?? key;
+  return interpolate(readValue(dictionaries[normalized], key) ?? readValue(en, key) ?? readValue(tr, key) ?? key, params);
 }
 
 export default tr;

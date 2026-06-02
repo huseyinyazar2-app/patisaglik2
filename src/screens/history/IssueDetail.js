@@ -1,6 +1,7 @@
 import { navigate, goBack } from '../../router.js';
 import { getState } from '../../store.js';
 import { getFreeRecords } from '../../services/freeRecords.js';
+import { t, translateForLocale } from '../../i18n/tr.js';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -12,7 +13,7 @@ function escapeHtml(value) {
 }
 
 function formatDate(date) {
-  if (!date || Number.isNaN(Date.parse(date))) return 'Tarih yok';
+  if (!date || Number.isNaN(Date.parse(date))) return t('common.no_date');
   return new Intl.DateTimeFormat('tr-TR', {
     day: 'numeric',
     month: 'long',
@@ -36,11 +37,11 @@ function field(payload = {}, labels = [], fallback = '') {
 }
 
 function issueTitle(item) {
-  return item.title || field(item.payload, ['Sorun adı', 'issue_name'], 'Sağlık sorunu');
+  return item.title || field(item.payload, [translateForLocale('tr', 'formLabels.issue_name'), 'issue_name'], t('issueDetail.default_title'));
 }
 
 function issueDescription(item) {
-  return item.summary || field(item.payload, ['Açıklama', 'description', 'Takip notu'], 'Detay eklenmemiş.');
+  return item.summary || field(item.payload, [translateForLocale('tr', 'formLabels.description'), 'description', translateForLocale('tr', 'formLabels.followup_note')], t('issueDetail.no_detail'));
 }
 
 function renderField(label, value) {
@@ -56,15 +57,15 @@ function renderField(label, value) {
 
 function payloadFields(payload = {}) {
   const renderedKeys = [
-    'Sorun adı',
+    translateForLocale('tr', 'formLabels.issue_name'),
     'issue_name',
-    'Kategori',
+    translateForLocale('tr', 'formLabels.issue_category'),
     'category',
-    'İlk fark edilme',
+    translateForLocale('tr', 'issueDetail.first_noticed_payload'),
     'first_noticed',
-    'Açıklama',
+    translateForLocale('tr', 'formLabels.description'),
     'description',
-    'Takip sıklığı',
+    translateForLocale('tr', 'formLabels.tracking_freq'),
     'tracking_frequency'
   ];
   return Object.entries(payload)
@@ -75,18 +76,18 @@ function payloadFields(payload = {}) {
 
 function renderDetail(issue = null) {
   if (!issue) {
-    return '<div class="free-record-panel"><p>Sorun detayı getiriliyor...</p></div>';
+    return `<div class="free-record-panel"><p>${t('issueDetail.loading')}</p></div>`;
   }
 
   const payload = issue.payload || {};
-  const frequency = field(payload, ['Takip sıklığı', 'tracking_frequency'], 'Takip sıklığı belirtilmedi');
+  const frequency = field(payload, [translateForLocale('tr', 'formLabels.tracking_freq'), 'tracking_frequency'], t('issueDetail.frequency_missing'));
 
   return `
     <div class="record-detail-card">
       <div class="record-detail-main">
         <div class="premium-icon-box">${window.__icons?.heartPulse || ''}</div>
         <div>
-          <span>Sağlık sorunu</span>
+          <span>${t('issueDetail.record_type')}</span>
           <h2>${escapeHtml(issueTitle(issue))}</h2>
           <p>${formatDate(issue.occurred_at || issue.created_at)}</p>
         </div>
@@ -97,16 +98,16 @@ function renderDetail(issue = null) {
         <div>
           <strong>${escapeHtml(frequency)}</strong>
           <small>${escapeHtml(issueDescription(issue))}</small>
-          <em>Bu alan veteriner teşhisi değildir; takip notlarını düzenli tutmak için kullanılır.</em>
+          <em>${t('issueDetail.disclaimer')}</em>
         </div>
       </div>
 
       <div class="record-detail-grid">
-        ${renderField('Kategori', field(payload, ['Kategori', 'category'], 'Genel takip'))}
-        ${renderField('İlk fark edilme', field(payload, ['İlk fark edilme', 'first_noticed']))}
-        ${renderField('Açıklama', issueDescription(issue))}
+        ${renderField(t('formLabels.issue_category'), field(payload, [translateForLocale('tr', 'formLabels.issue_category'), 'category'], t('issueDetail.general_tracking')))}
+        ${renderField(t('issueDetail.first_noticed_payload'), field(payload, [translateForLocale('tr', 'issueDetail.first_noticed_payload'), 'first_noticed']))}
+        ${renderField(t('formLabels.description'), issueDescription(issue))}
         ${payloadFields(payload)}
-        ${renderField('Kayıt tarihi', formatDate(issue.created_at))}
+        ${renderField(t('common.record_date'), formatDate(issue.created_at))}
       </div>
     </div>
   `;
@@ -119,7 +120,7 @@ export function render() {
         <div class="header-left">
           <button class="header-back" id="btnBack">${window.__icons?.back || ''}</button>
         </div>
-        <div class="header-title">Sorun Detayı</div>
+        <div class="header-title">${t('issueDetail.title')}</div>
         <div class="header-right">
           <span class="premium-header-shield">${window.__icons?.heartPulse || ''}</span>
         </div>
@@ -129,9 +130,9 @@ export function render() {
         <div class="feature-form-hero teal">
           <div class="premium-icon-box">${window.__icons?.search || ''}</div>
           <div>
-            <div class="premium-screen-kicker">Ücretsiz takip kaydı</div>
-            <h1>Sağlık Sorunu</h1>
-            <p>Belirti, kategori ve takip notlarının canlı kayıt detayı.</p>
+            <div class="premium-screen-kicker">${t('issueDetail.kicker')}</div>
+            <h1>${t('issueDetail.hero_title')}</h1>
+            <p>${t('issueDetail.hero_desc')}</p>
           </div>
         </div>
 
@@ -140,9 +141,9 @@ export function render() {
         </div>
 
         <div class="record-detail-actions">
-          <button class="btn btn-primary btn-full" id="btnNewCheck">Yeni Takip Ekle</button>
-          <button class="btn btn-secondary btn-full" id="btnCreateReport">Rapor Hazırla</button>
-          <button class="btn btn-ghost btn-full" id="btnList">Listeye Dön</button>
+          <button class="btn btn-primary btn-full" id="btnNewCheck">${t('issueDetail.new_followup')}</button>
+          <button class="btn btn-secondary btn-full" id="btnCreateReport">${t('issueDetail.create_report')}</button>
+          <button class="btn btn-ghost btn-full" id="btnList">${t('issueDetail.back_to_list')}</button>
         </div>
       </div>
     </div>
@@ -164,8 +165,8 @@ export function afterRender(params = {}) {
       target.innerHTML = issue ? renderDetail(issue) : `
         <div class="empty-state">
           <div class="empty-state-icon">${window.__icons?.search || ''}</div>
-          <div class="empty-state-title">Sorun kaydı bulunamadı</div>
-          <div class="empty-state-desc">Kayıt silinmiş veya farklı bir pete ait olabilir.</div>
+          <div class="empty-state-title">${t('issueDetail.not_found_title')}</div>
+          <div class="empty-state-desc">${t('issueDetail.not_found_desc')}</div>
         </div>
       `;
     }
@@ -174,7 +175,7 @@ export function afterRender(params = {}) {
       target.innerHTML = `
         <div class="empty-state">
           <div class="empty-state-icon">${window.__icons?.alert || ''}</div>
-          <div class="empty-state-title">Detay alınamadı</div>
+          <div class="empty-state-title">${t('issueDetail.load_failed')}</div>
           <div class="empty-state-desc">${escapeHtml(err.message)}</div>
         </div>
       `;

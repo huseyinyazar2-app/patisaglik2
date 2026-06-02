@@ -1,5 +1,5 @@
 import { navigate } from '../../router.js';
-import { t } from '../../i18n/tr.js';
+import { t, translateForLocale } from '../../i18n/tr.js';
 import { getPetByPublicToken } from '../../services/pets.js';
 import { showToast } from '../../ui/toast.js';
 
@@ -12,7 +12,7 @@ function escapeHtml(value) {
     .replace(/'/g, '&#039;');
 }
 
-function listValue(items, empty = 'Kayıt paylaşılmadı') {
+function listValue(items, empty = t('publicPetCard.not_shared')) {
   const values = Array.isArray(items) ? items.filter(Boolean) : [];
   return values.length ? values.map(escapeHtml).join(', ') : empty;
 }
@@ -48,14 +48,14 @@ function renderPetCard(pet, token) {
   const canShareLocation = pet.location && ['stray', 'foster'].includes(pet.ownership);
 
   const rows = [
-    canShow(sharedFields, 'İsim ve tür') ? infoRow('paw', 'Pet', `${escapeHtml(pet.name)} · ${escapeHtml(speciesLabel(pet.type))}${pet.breed ? ` · ${escapeHtml(pet.breed)}` : ''}`) : '',
-    infoRow('weight', 'Kilo', `${Number(pet.weight || 0).toLocaleString('tr-TR')} kg`),
-    canShareLocation ? infoRow('search', 'Bakım konumu', escapeHtml(pet.location)) : '',
-    canShow(sharedFields, 'Kronik hastalıklar') ? infoRow('clipboard', 'Kronik hastalıklar', listValue(pet.chronicDiseases)) : '',
-    canShow(sharedFields, 'Alerjiler') ? infoRow('alert', 'Alerjiler', listValue(pet.allergies)) : '',
-    canShow(sharedFields, 'İlaçlar') ? infoRow('stethoscope', 'Kullanılan ilaçlar', listValue(pet.medications)) : '',
-    pet.rawHistory ? infoRow('note', 'Kısa sağlık notu', escapeHtml(pet.rawHistory)) : '',
-    canShow(sharedFields, 'Sahip iletişimi') && pet.ownerEmail ? infoRow('profile', 'Sahip iletişimi', `${escapeHtml(pet.ownerName || 'Sahip')} · ${escapeHtml(pet.ownerEmail)}`) : ''
+    canShow(sharedFields, translateForLocale('tr', 'publicPetCard.field_name_type')) ? infoRow('paw', 'Pet', `${escapeHtml(pet.name)} · ${escapeHtml(speciesLabel(pet.type))}${pet.breed ? ` · ${escapeHtml(pet.breed)}` : ''}`) : '',
+    infoRow('weight', t('publicPetCard.weight'), `${Number(pet.weight || 0).toLocaleString('tr-TR')} kg`),
+    canShareLocation ? infoRow('search', t('publicPetCard.care_location'), escapeHtml(pet.location)) : '',
+    canShow(sharedFields, translateForLocale('tr', 'publicPetCard.field_chronic')) ? infoRow('clipboard', t('publicPetCard.chronic'), listValue(pet.chronicDiseases)) : '',
+    canShow(sharedFields, translateForLocale('tr', 'publicPetCard.field_allergies')) ? infoRow('alert', t('publicPetCard.allergies'), listValue(pet.allergies)) : '',
+    canShow(sharedFields, translateForLocale('tr', 'publicPetCard.field_medications')) ? infoRow('stethoscope', t('publicPetCard.medications'), listValue(pet.medications)) : '',
+    pet.rawHistory ? infoRow('note', t('publicPetCard.short_note'), escapeHtml(pet.rawHistory)) : '',
+    canShow(sharedFields, translateForLocale('tr', 'publicPetCard.field_owner_contact')) && pet.ownerEmail ? infoRow('profile', t('publicPetCard.owner_contact'), `${escapeHtml(pet.ownerName || t('publicPetCard.owner'))} · ${escapeHtml(pet.ownerEmail)}`) : ''
   ].filter(Boolean).join('');
 
   return `
@@ -63,7 +63,7 @@ function renderPetCard(pet, token) {
       <div class="public-card-shell">
         <div class="public-card-hero">
           <div>
-            <div class="premium-screen-kicker">Acil sağlık kartı</div>
+            <div class="premium-screen-kicker">${t('publicPetCard.kicker')}</div>
             <h1>${escapeHtml(pet.name)}</h1>
             <p>${escapeHtml(speciesLabel(pet.type))}${pet.breed ? ` · ${escapeHtml(pet.breed)}` : ''}${pet.age ? ` · ${escapeHtml(pet.age)}` : ''}</p>
           </div>
@@ -71,24 +71,24 @@ function renderPetCard(pet, token) {
         </div>
 
         <div class="public-card-notice">
-          <strong>Veteriner yerine geçmez.</strong>
-          <span>Acil durumda petin temel kayıtlarını hızlı göstermek için hazırlanmıştır.</span>
+          <strong>${t('publicPetCard.not_vet')}</strong>
+          <span>${t('publicPetCard.notice')}</span>
         </div>
 
         <div class="public-card-panel">
-          ${rows || '<div class="empty-state-desc">Bu kartta paylaşılacak kayıt bulunamadı.</div>'}
+          ${rows || `<div class="empty-state-desc">${t('publicPetCard.no_rows')}</div>`}
         </div>
 
         <div class="public-card-meta">
-          <span>Erişim: ${escapeHtml(card.access_duration || 'Belirtilmedi')}</span>
-          <span>Güncelleme: ${card.updated_at ? new Date(card.updated_at).toLocaleDateString('tr-TR') : '-'}</span>
+          <span>${t('publicPetCard.access', { value: escapeHtml(card.access_duration || t('common.not_specified')) })}</span>
+          <span>${t('publicPetCard.updated', { value: card.updated_at ? new Date(card.updated_at).toLocaleDateString('tr-TR') : '-' })}</span>
         </div>
 
         <div class="public-card-actions">
-          ${canShareLocation ? `<button class="btn btn-secondary btn-full" id="btnOpenPublicMap" data-map-location="${escapeHtml(pet.location)}">Konumu Haritada Aç</button>` : ''}
+          ${canShareLocation ? `<button class="btn btn-secondary btn-full" id="btnOpenPublicMap" data-map-location="${escapeHtml(pet.location)}">${t('publicPetCard.open_map')}</button>` : ''}
           <button class="btn btn-primary btn-full" id="btnSharePublicCard">${t('common.share')}</button>
-          <button class="btn btn-outline btn-full" id="btnCopyPublicCard">Bağlantıyı Kopyala</button>
-          <button class="btn btn-ghost btn-full" id="btnOpenApp">Uygulamaya Dön</button>
+          <button class="btn btn-outline btn-full" id="btnCopyPublicCard">${t('publicPetCard.copy_link')}</button>
+          <button class="btn btn-ghost btn-full" id="btnOpenApp">${t('publicPetCard.open_app')}</button>
         </div>
         <input id="publicCardUrl" value="${escapeHtml(publicUrl)}" readonly />
       </div>
@@ -116,9 +116,9 @@ export async function afterRender(params = {}) {
       root.innerHTML = `
         <div class="public-card-shell">
           <div class="public-card-panel">
-            <div class="empty-state-title">Kart bulunamadı</div>
-            <div class="empty-state-desc">Bu bağlantı pasif olabilir veya henüz oluşturulmamış olabilir.</div>
-            <button class="btn btn-primary btn-full mt-4" id="btnOpenApp">Uygulamaya Dön</button>
+            <div class="empty-state-title">${t('publicPetCard.not_found_title')}</div>
+            <div class="empty-state-desc">${t('publicPetCard.not_found_desc')}</div>
+            <button class="btn btn-primary btn-full mt-4" id="btnOpenApp">${t('publicPetCard.open_app')}</button>
           </div>
         </div>
       `;
@@ -131,16 +131,16 @@ export async function afterRender(params = {}) {
       const input = document.getElementById('publicCardUrl');
       try {
         await navigator.clipboard.writeText(input.value);
-        showToast('Bağlantı kopyalandı.');
+        showToast(t('publicPetCard.link_copied'));
       } catch {
         input.select();
-        showToast('Bağlantı alanı seçili bırakıldı.');
+        showToast(t('publicPetCard.link_selected'));
       }
     });
     document.getElementById('btnSharePublicCard')?.addEventListener('click', async () => {
       const url = document.getElementById('publicCardUrl')?.value;
-      if (navigator.share) await navigator.share({ title: 'Pati Sağlık Acil Kart', url });
-      else showToast('Paylaşım desteklenmiyor. Bağlantıyı kopyalayabilirsiniz.');
+      if (navigator.share) await navigator.share({ title: t('publicPetCard.share_title'), url });
+      else showToast(t('publicPetCard.share_unsupported'));
     });
     document.getElementById('btnOpenPublicMap')?.addEventListener('click', (event) => {
       const location = event.currentTarget.dataset.mapLocation;
@@ -150,7 +150,7 @@ export async function afterRender(params = {}) {
     root.innerHTML = `
       <div class="public-card-shell">
         <div class="public-card-panel">
-          <div class="empty-state-title">Kart açılamadı</div>
+          <div class="empty-state-title">${t('publicPetCard.open_failed')}</div>
           <div class="empty-state-desc">${escapeHtml(err.message)}</div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { goBack, navigate } from '../../router.js';
 import { runProductSafetyCheck } from '../../services/productSafety.js';
 import { showToast } from '../../ui/toast.js';
+import { t } from '../../i18n/tr.js';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -16,14 +17,14 @@ function value(id) {
 }
 
 function selected(selector) {
-  return document.querySelector(selector)?.textContent?.trim() || '';
+  return document.querySelector(selector)?.dataset?.value || '';
 }
 
 function levelMeta(level) {
   const map = {
-    high: { title: 'Yüksek güvenlik sinyali', cls: 'danger', score: 82 },
-    watch: { title: 'Kontrol gerektiren sinyal', cls: 'warning', score: 48 },
-    clear: { title: 'Açık eşleşme bulunmadı', cls: 'info', score: 12 }
+    high: { title: t('productSafetyRadar.level_high'), cls: 'danger', score: 82 },
+    watch: { title: t('productSafetyRadar.level_watch'), cls: 'warning', score: 48 },
+    clear: { title: t('productSafetyRadar.level_clear'), cls: 'info', score: 12 }
   };
   return map[level] || map.clear;
 }
@@ -35,12 +36,12 @@ function renderResult(result) {
     <div class="package-risk-result ${meta.cls}">
       <div class="package-risk-score">
         <span>${meta.score}</span>
-        <small>sinyal</small>
+        <small>${t('productSafetyRadar.signal')}</small>
       </div>
       <div>
-        <div class="premium-screen-kicker">Güvenlik radarı</div>
+        <div class="premium-screen-kicker">${t('productSafetyRadar.kicker')}</div>
         <h2>${meta.title}</h2>
-        <p>Kaynak durumu: ${escapeHtml(result.apiStatus)}. Bu ekran kesin hüküm değil, ürün/lot kontrol asistanıdır.</p>
+        <p>${t('productSafetyRadar.source_status', { status: escapeHtml(result.apiStatus) })}</p>
       </div>
     </div>
 
@@ -51,18 +52,18 @@ function renderResult(result) {
           <span>${escapeHtml([item.firm, item.classification, item.status, item.recallNumber].filter(Boolean).join(' · '))}</span>
           <span>${escapeHtml(item.reason)}</span>
         </div>
-      `).join('') : '<div class="package-match-row"><strong>openFDA recall eşleşmesi bulunmadı</strong><span>Lot/seri kontrolü yine de üretici duyurusuyla doğrulanmalıdır.</span></div>'}
+      `).join('') : `<div class="package-match-row"><strong>${t('productSafetyRadar.no_recall')}</strong><span>${t('productSafetyRadar.no_recall_desc')}</span></div>`}
     </div>
 
     ${(result.warnings || []).length ? `
       <div class="knowledge-panel urgent">
-        <h3>Yerel kontrol notları</h3>
+        <h3>${t('productSafetyRadar.local_notes')}</h3>
         <ul>${result.warnings.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
       </div>
     ` : ''}
 
     <div class="knowledge-panel">
-      <h3>Sonraki güvenli adımlar</h3>
+      <h3>${t('productSafetyRadar.next_steps')}</h3>
       <ul>${result.nextSteps.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
     </div>
   `;
@@ -75,7 +76,7 @@ export function render() {
         <div class="header-left">
           <button class="header-icon" id="btnBack">${window.__icons?.back || ''}</button>
         </div>
-        <div class="header-title">Güvenlik Radarı</div>
+        <div class="header-title">${t('productSafetyRadar.title')}</div>
         <div class="header-right">
           <span class="premium-header-shield">${window.__icons?.shield || ''}</span>
         </div>
@@ -85,33 +86,33 @@ export function render() {
         <div class="feature-form-hero gold">
           <div class="premium-icon-box">${window.__icons?.shield || ''}</div>
           <div>
-            <div class="premium-screen-kicker">Mama / ilaç / ürün</div>
-            <h1>Ürün güvenlik radarı</h1>
-            <p>Geri çağırma ve güvenlik sinyali kontrolü yapar. Toksik ambalaj yutma şüphesiyle karıştırılmaz.</p>
+            <div class="premium-screen-kicker">${t('productSafetyRadar.hero_kicker')}</div>
+            <h1>${t('productSafetyRadar.hero_title')}</h1>
+            <p>${t('productSafetyRadar.hero_desc')}</p>
           </div>
         </div>
 
         <div class="info-box warning mb-4">
           <span class="info-box-icon">${window.__icons?.alert || ''}</span>
-          <span>İlk fazda ücretsiz openFDA Food Enforcement recall araması kullanılır. Sonuçlar kesin sebep-sonuç veya tıbbi karar değildir.</span>
+          <span>${t('productSafetyRadar.warning')}</span>
         </div>
 
         <div class="feature-form-card">
           <div class="feature-field">
-            <span>Ürün türü</span>
+            <span>${t('productSafetyRadar.product_type')}</span>
             <div class="feature-chip-row" id="productType">
-              ${['Mama', 'Takviye', 'İlaç', 'Oyuncak / bakım ürünü'].map((item, index) => `<button type="button" class="${index === 0 ? 'selected' : ''}">${item}</button>`).join('')}
+              ${t('productSafetyRadar.product_types').map((item, index) => `<button type="button" data-value="${escapeHtml(item.value)}" class="${index === 0 ? 'selected' : ''}">${escapeHtml(item.label)}</button>`).join('')}
             </div>
           </div>
 
           <label class="feature-field">
-            <span>Ürün adı</span>
-            <input id="productName" placeholder="Örn. somonlu kuru mama, probiyotik, kulak solüsyonu" />
+            <span>${t('productSafetyRadar.product_name')}</span>
+            <input id="productName" placeholder="${t('productSafetyRadar.product_placeholder')}" />
           </label>
 
           <label class="feature-field">
             <span>Marka</span>
-            <input id="brandName" placeholder="Marka / üretici adı" />
+            <input id="brandName" placeholder="${t('productSafetyRadar.brand_placeholder')}" />
           </label>
 
           <label class="feature-field">
@@ -121,15 +122,15 @@ export function render() {
 
           <label class="feature-field">
             <span>Lot / seri / SKT</span>
-            <input id="lotNumber" placeholder="Örn. LOT A123, SKT 12/2026" />
+            <input id="lotNumber" placeholder="${t('productSafetyRadar.lot_placeholder')}" />
           </label>
         </div>
 
         <div id="safetyRadarResult" class="package-risk-output hidden"></div>
 
         <div class="feature-bottom-actions">
-          <button class="btn btn-primary btn-full" id="btnRunSafety">Güvenlik Kontrolü Yap</button>
-          <button class="btn btn-ghost btn-full" id="btnPackageRisk">Toksik Ambalaj Şüphesine Git</button>
+          <button class="btn btn-primary btn-full" id="btnRunSafety">${t('productSafetyRadar.run')}</button>
+          <button class="btn btn-ghost btn-full" id="btnPackageRisk">${t('productSafetyRadar.package_risk')}</button>
         </div>
       </div>
     </div>
@@ -151,17 +152,17 @@ export function afterRender() {
     const productName = value('productName');
     const brand = value('brandName');
     if (!productName && !brand) {
-      showToast('Ürün adı veya marka girin.');
+      showToast(t('productSafetyRadar.name_required'));
       return;
     }
 
     const button = event.currentTarget;
     const original = button.textContent;
     button.disabled = true;
-    button.textContent = 'Kontrol ediliyor...';
+    button.textContent = t('productSafetyRadar.checking');
 
     const result = await runProductSafetyCheck({
-      productType: selected('#productType button.selected') || 'Mama',
+      productType: selected('#productType button.selected') || 'food',
       productName,
       brand,
       barcode: value('barcode'),
