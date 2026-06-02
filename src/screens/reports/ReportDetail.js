@@ -1,5 +1,5 @@
 import { goBack } from '../../router.js';
-import { t } from '../../i18n/tr.js';
+import { getLocale, t } from '../../i18n/tr.js';
 import { getActivePet } from '../../mock/pets.js';
 import { getClinicExportDocumentById } from '../../services/documents.js';
 import { getFreeRecords } from '../../services/freeRecords.js';
@@ -7,16 +7,16 @@ import { getMeasurements } from '../../services/measurements.js';
 import { showToast } from '../../ui/toast.js';
 
 function formatDate(date) {
-  if (!date) return 'Tarih yok';
-  return new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(date));
+  if (!date) return t('reports.detail.no_date');
+  return new Intl.DateTimeFormat(getLocale() === 'tr' ? 'tr-TR' : getLocale(), { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(date));
 }
 
 function safeFileName(value) {
   return String(value || 'pati-saglik-raporu')
-    .toLocaleLowerCase('tr-TR')
+    .toLocaleLowerCase(getLocale() === 'tr' ? 'tr-TR' : getLocale())
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9ğüşöçıİ_-]+/gi, '-')
+    .replace(/[^a-z0-9_-]+/gi, '-')
     .replace(/^-+|-+$/g, '')
     .slice(0, 70) || 'pati-saglik-raporu';
 }
@@ -31,7 +31,7 @@ function escapeHtml(value) {
 }
 
 function formatMoney(amountCents, currency = 'TRY') {
-  return new Intl.NumberFormat('tr-TR', {
+  return new Intl.NumberFormat(getLocale() === 'tr' ? 'tr-TR' : getLocale(), {
     style: 'currency',
     currency,
     maximumFractionDigits: 0
@@ -39,29 +39,11 @@ function formatMoney(amountCents, currency = 'TRY') {
 }
 
 function healthTypeLabel(type) {
-  const labels = {
-    photo_followup: 'Foto takip',
-    poop_score: 'Dışkı skoru',
-    diet_log: 'Beslenme',
-    chronic_followup: 'Kronik takip',
-    postop_followup: 'Postop takip',
-    reproduction_followup: 'Üreme takibi',
-    senior_followup: 'Yaşlı pet',
-    toxin_foreign_body: 'Acil toksik/yabancı cisim',
-    issue: 'Sorun'
-  };
-  return labels[type] || 'Sağlık kaydı';
+  return t(`reports.detail.health_types.${type}`) || t('reports.detail.health_types.default');
 }
 
 function measurementLabel(type) {
-  const labels = {
-    weight: 'Kilo',
-    temperature: 'Vücut ısısı',
-    respiratory: 'Solunum',
-    respiratory_rate: 'Solunum',
-    heart_rate: 'Kalp atışı'
-  };
-  return labels[type] || type || 'Ölçüm';
+  return t(`reports.detail.measurements.${type}`) || type || t('reports.detail.measurements.default');
 }
 
 function renderDataRows(items, emptyText) {
@@ -94,48 +76,48 @@ function renderOcrDetails(doc) {
 
   return `
     <div class="mt-4 border-t border-gray-200 pt-3">
-      ${ocr.summary ? `<p class="text-sm text-gray-800 leading-relaxed"><span class="font-semibold">AI özet:</span> ${escapeHtml(ocr.summary)}</p>` : ''}
+      ${ocr.summary ? `<p class="text-sm text-gray-800 leading-relaxed"><span class="font-semibold">${t('reports.detail.ai_summary')}:</span> ${escapeHtml(ocr.summary)}</p>` : ''}
       <div class="grid grid-cols-2 gap-2 mt-3">
-        ${ocr.documentDate ? `<div class="bg-white p-2 rounded border border-gray-200"><span class="text-xs text-gray-500">Tarih</span><div class="font-semibold">${escapeHtml(ocr.documentDate)}</div></div>` : ''}
-        ${ocr.clinic ? `<div class="bg-white p-2 rounded border border-gray-200"><span class="text-xs text-gray-500">Klinik</span><div class="font-semibold">${escapeHtml(ocr.clinic)}</div></div>` : ''}
-        ${ocr.invoice?.total ? `<div class="bg-white p-2 rounded border border-gray-200"><span class="text-xs text-gray-500">Tutar</span><div class="font-semibold">${escapeHtml(`${ocr.invoice.total} ${ocr.invoice.currency || ''}`)}</div></div>` : ''}
-        ${ocr.confidence ? `<div class="bg-white p-2 rounded border border-gray-200"><span class="text-xs text-gray-500">Güven</span><div class="font-semibold">${Math.round(ocr.confidence)} / 100</div></div>` : ''}
+        ${ocr.documentDate ? `<div class="bg-white p-2 rounded border border-gray-200"><span class="text-xs text-gray-500">${t('reports.detail.date')}</span><div class="font-semibold">${escapeHtml(ocr.documentDate)}</div></div>` : ''}
+        ${ocr.clinic ? `<div class="bg-white p-2 rounded border border-gray-200"><span class="text-xs text-gray-500">${t('reports.detail.clinic')}</span><div class="font-semibold">${escapeHtml(ocr.clinic)}</div></div>` : ''}
+        ${ocr.invoice?.total ? `<div class="bg-white p-2 rounded border border-gray-200"><span class="text-xs text-gray-500">${t('reports.detail.amount')}</span><div class="font-semibold">${escapeHtml(`${ocr.invoice.total} ${ocr.invoice.currency || ''}`)}</div></div>` : ''}
+        ${ocr.confidence ? `<div class="bg-white p-2 rounded border border-gray-200"><span class="text-xs text-gray-500">${t('reports.detail.confidence')}</span><div class="font-semibold">${Math.round(ocr.confidence)} / 100</div></div>` : ''}
       </div>
       ${labValues.length ? `
-        <h4 class="font-semibold text-gray-800 mt-4 mb-2">Tahlil Değerleri</h4>
+        <h4 class="font-semibold text-gray-800 mt-4 mb-2">${t('reports.detail.lab_values')}</h4>
         <div class="grid grid-cols-1 gap-2">
           ${labValues.slice(0, 8).map((item) => `
             <div class="bg-white p-2 rounded border border-gray-200 text-sm flex justify-between gap-2">
-              <span>${escapeHtml(item.name || 'Değer')}</span>
+              <span>${escapeHtml(item.name || t('reports.detail.value'))}</span>
               <b>${escapeHtml([item.value, item.unit].filter(Boolean).join(' '))}</b>
             </div>
           `).join('')}
         </div>
       ` : ''}
       ${medications.length ? `
-        <h4 class="font-semibold text-gray-800 mt-4 mb-2">İlaç / Reçete</h4>
+        <h4 class="font-semibold text-gray-800 mt-4 mb-2">${t('reports.detail.medication_prescription')}</h4>
         <div class="grid grid-cols-1 gap-2">
           ${medications.slice(0, 6).map((item) => `
             <div class="bg-white p-2 rounded border border-gray-200 text-sm">
-              <b>${escapeHtml(item.name || 'İlaç')}</b>
-              <div class="text-gray-600">${escapeHtml([item.doseText, item.frequency, item.duration, item.note].filter(Boolean).join(' · '))}</div>
+              <b>${escapeHtml(item.name || t('reports.detail.medication'))}</b>
+              <div class="text-gray-600">${escapeHtml([item.doseText, item.frequency, item.duration, item.note].filter(Boolean).join(t('reports.detail.separator')))}</div>
             </div>
           `).join('')}
         </div>
       ` : ''}
       ${tasks.length ? `
-        <h4 class="font-semibold text-gray-800 mt-4 mb-2">Takip Görevleri</h4>
+        <h4 class="font-semibold text-gray-800 mt-4 mb-2">${t('reports.detail.followup_tasks')}</h4>
         <ul class="text-sm text-gray-700">
-          ${tasks.slice(0, 5).map((item) => `<li>${escapeHtml([item.title, item.dueDate, item.note].filter(Boolean).join(' · '))}</li>`).join('')}
+          ${tasks.slice(0, 5).map((item) => `<li>${escapeHtml([item.title, item.dueDate, item.note].filter(Boolean).join(t('reports.detail.separator')))}</li>`).join('')}
         </ul>
       ` : ''}
-      ${warnings.length ? `<p class="text-xs text-gray-500 mt-3">Uyarı: ${escapeHtml(warnings.slice(0, 2).join(' · '))}</p>` : ''}
+      ${warnings.length ? `<p class="text-xs text-gray-500 mt-3">${t('reports.detail.warning')}: ${escapeHtml(warnings.slice(0, 2).join(t('reports.detail.separator')))}</p>` : ''}
     </div>
   `;
 }
 
 function currentReportTitle() {
-  return document.querySelector('#reportDetailBody h1')?.textContent?.trim() || 'Pati Sağlık Raporu';
+  return document.querySelector('#reportDetailBody h1')?.textContent?.trim() || t('reports.detail.default_title');
 }
 
 function currentReportText() {
@@ -146,7 +128,7 @@ function createReportHtmlExport() {
   const title = currentReportTitle();
   const content = document.querySelector('#reportDetailBody')?.innerHTML || '';
   const html = `<!doctype html>
-<html lang="tr">
+<html lang="${getLocale()}">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -198,7 +180,7 @@ function downloadReportFile() {
 function renderDocument(doc, records = null, measurements = []) {
   const pet = getActivePet(doc.pet_id);
   const isHealthDocument = doc.document_type === 'health_document';
-  const included = doc.included.length ? doc.included : ['Pet profili', 'Aşı ve ilaçlar', 'Şikayet geçmişi', 'Masraflar'];
+  const included = doc.included.length ? doc.included : t('reports.detail.default_included');
   const healthRecords = records?.healthRecords || [];
   const reminders = records?.reminders || [];
   const expenses = records?.expenses || [];
@@ -210,33 +192,33 @@ function renderDocument(doc, records = null, measurements = []) {
       <div class="flex justify-between items-start border-b border-gray-200 pb-4 mb-4">
         <div>
           <h1 class="text-xl font-bold text-gray-900">${doc.title}</h1>
-          <p class="text-sm text-gray-500 mt-1">Oluşturma: ${formatDate(doc.created_at)} · ${doc.status === 'draft' ? 'Taslak' : 'Hazır'}</p>
+          <p class="text-sm text-gray-500 mt-1">${t('reports.detail.created')}: ${formatDate(doc.created_at)}${t('reports.detail.separator')}${doc.status === 'draft' ? t('reports.detail.draft') : t('reports.detail.ready')}</p>
         </div>
         <div class="premium-icon-box">${window.__icons?.briefcase}</div>
       </div>
 
       <div class="bg-gray-50 p-4 rounded-lg mb-6 text-sm">
-        <h3 class="font-bold text-gray-700 mb-2 border-b border-gray-200 pb-1">Pet Bilgileri</h3>
-        <p><span class="font-semibold w-24 inline-block">İsim:</span> ${pet?.name || 'Aktif pet'}</p>
-        <p><span class="font-semibold w-24 inline-block">${isHealthDocument ? 'Belge:' : 'Amaç:'}</span> ${doc.purpose}</p>
+        <h3 class="font-bold text-gray-700 mb-2 border-b border-gray-200 pb-1">${t('reports.detail.pet_info')}</h3>
+        <p><span class="font-semibold w-24 inline-block">${t('reports.detail.name')}:</span> ${pet?.name || t('reports.detail.active_pet')}</p>
+        <p><span class="font-semibold w-24 inline-block">${isHealthDocument ? t('reports.detail.document') : t('reports.detail.purpose')}:</span> ${doc.purpose}</p>
       </div>
 
       <div class="border-l-4 border-primary bg-primary-50 p-4 mb-6">
-        <h3 class="font-bold text-primary-dark mb-2">${isHealthDocument ? 'Belge Notu' : 'Klinik Notu'}</h3>
-        <p class="text-sm text-gray-800 leading-relaxed">${doc.note || (isHealthDocument ? 'Belge için ek not girilmedi.' : 'Veteriner için özel not eklenmedi.')}</p>
+        <h3 class="font-bold text-primary-dark mb-2">${isHealthDocument ? t('reports.detail.document_note') : t('reports.detail.clinic_note')}</h3>
+        <p class="text-sm text-gray-800 leading-relaxed">${doc.note || (isHealthDocument ? t('reports.detail.no_document_note') : t('reports.detail.no_clinic_note'))}</p>
       </div>
 
       ${isHealthDocument ? `
         <div class="bg-gray-50 p-4 rounded-lg mb-6 text-sm">
-          <h3 class="font-bold text-gray-700 mb-2 border-b border-gray-200 pb-1">AI / OCR Okuma Hazırlığı</h3>
-          <p><span class="font-semibold w-24 inline-block">Hedef:</span> ${doc.read_goal || 'Klinik özeti'}</p>
-          <p><span class="font-semibold w-24 inline-block">Durum:</span> ${doc.status === 'ai_pending' ? 'AI okuma bekliyor' : doc.status || 'Yüklendi'}</p>
-          ${doc.visible_values ? `<p class="mt-1"><span class="font-semibold w-24 inline-block">Elle not:</span> ${doc.visible_values}</p>` : ''}
+          <h3 class="font-bold text-gray-700 mb-2 border-b border-gray-200 pb-1">${t('reports.detail.ocr_prep')}</h3>
+          <p><span class="font-semibold w-24 inline-block">${t('reports.detail.goal')}:</span> ${doc.read_goal || t('reports.detail.clinic_summary')}</p>
+          <p><span class="font-semibold w-24 inline-block">${t('reports.detail.status')}:</span> ${doc.status === 'ai_pending' ? t('reports.detail.ai_waiting') : doc.status || t('reports.detail.uploaded')}</p>
+          ${doc.visible_values ? `<p class="mt-1"><span class="font-semibold w-24 inline-block">${t('reports.detail.manual_note')}:</span> ${doc.visible_values}</p>` : ''}
           ${renderOcrDetails(doc)}
         </div>
       ` : ''}
 
-      <h3 class="font-bold text-gray-800 border-b border-gray-200 pb-1 mb-3">${isHealthDocument ? 'Planlanan Çıkarımlar' : 'Dahil Edilecek Bölümler'}</h3>
+      <h3 class="font-bold text-gray-800 border-b border-gray-200 pb-1 mb-3">${isHealthDocument ? t('reports.detail.planned_outputs') : t('reports.detail.included_sections')}</h3>
       <div class="grid grid-cols-1 gap-2 mb-6">
         ${included.map((item) => `
           <div class="bg-gray-50 p-3 rounded text-sm flex items-center gap-2">
@@ -246,31 +228,31 @@ function renderDocument(doc, records = null, measurements = []) {
         `).join('')}
       </div>
 
-      <h3 class="font-bold text-gray-800 border-b border-gray-200 pb-1 mb-3">Sağlık Kayıt Özeti</h3>
+      <h3 class="font-bold text-gray-800 border-b border-gray-200 pb-1 mb-3">${t('reports.detail.health_summary')}</h3>
       ${renderDataRows(healthRecords.slice(0, 4).map((item) => ({
         title: item.title,
-        meta: `${healthTypeLabel(item.record_type)} · ${formatDate(item.occurred_at || item.created_at)}`,
+        meta: `${healthTypeLabel(item.record_type)}${t('reports.detail.separator')}${formatDate(item.occurred_at || item.created_at)}`,
         summary: item.summary
-      })), 'Henüz sağlık kaydı yok.')}
+      })), t('reports.detail.no_health_records'))}
 
-      <h3 class="font-bold text-gray-800 border-b border-gray-200 pb-1 mb-3">Takvim ve Hatırlatıcılar</h3>
+      <h3 class="font-bold text-gray-800 border-b border-gray-200 pb-1 mb-3">${t('reports.detail.calendar_reminders')}</h3>
       ${renderDataRows(reminders.slice(0, 4).map((item) => ({
         title: item.title,
         meta: formatDate(item.due_at),
-        summary: `${item.reminder_type || 'Hatırlatıcı'} · ${item.status || 'scheduled'}`
-      })), 'Yaklaşan hatırlatıcı yok.')}
+        summary: `${item.reminder_type || t('reports.detail.reminder')}${t('reports.detail.separator')}${item.status || 'scheduled'}`
+      })), t('reports.detail.no_upcoming_reminders'))}
 
-      <h3 class="font-bold text-gray-800 border-b border-gray-200 pb-1 mb-3">Masraf ve Ölçüm Özeti</h3>
+      <h3 class="font-bold text-gray-800 border-b border-gray-200 pb-1 mb-3">${t('reports.detail.expense_measurement_summary')}</h3>
       <div class="grid grid-cols-2 gap-2 mb-6">
         <div class="bg-gray-50 p-3 rounded text-sm">
-          <div class="text-gray-500">Toplam masraf</div>
+          <div class="text-gray-500">${t('reports.detail.total_expense')}</div>
           <div class="font-bold text-gray-900 mt-1">${formatMoney(totalExpense)}</div>
-          <div class="text-xs text-gray-500 mt-1">${expenses.length} kayıt</div>
+          <div class="text-xs text-gray-500 mt-1">${t('reports.detail.record_count').replace('{count}', expenses.length)}</div>
         </div>
         <div class="bg-gray-50 p-3 rounded text-sm">
-          <div class="text-gray-500">Son ölçüm</div>
-          <div class="font-bold text-gray-900 mt-1">${latestMeasurements[0] ? `${latestMeasurements[0].value} ${latestMeasurements[0].unit}` : 'Yok'}</div>
-          <div class="text-xs text-gray-500 mt-1">${latestMeasurements[0] ? measurementLabel(latestMeasurements[0].measurement_type) : 'Kayıt bekliyor'}</div>
+          <div class="text-gray-500">${t('reports.detail.latest_measurement')}</div>
+          <div class="font-bold text-gray-900 mt-1">${latestMeasurements[0] ? `${latestMeasurements[0].value} ${latestMeasurements[0].unit}` : t('reports.detail.none')}</div>
+          <div class="text-xs text-gray-500 mt-1">${latestMeasurements[0] ? measurementLabel(latestMeasurements[0].measurement_type) : t('reports.detail.waiting_record')}</div>
         </div>
       </div>
 
@@ -279,19 +261,19 @@ function renderDocument(doc, records = null, measurements = []) {
           ${latestMeasurements.slice(1).map((item) => `
             <div class="bg-gray-50 p-3 rounded text-sm flex justify-between gap-3">
               <span class="font-semibold">${measurementLabel(item.measurement_type)}</span>
-              <span class="text-gray-600">${item.value} ${item.unit} · ${formatDate(item.measured_at)}</span>
+              <span class="text-gray-600">${item.value} ${item.unit}${t('reports.detail.separator')}${formatDate(item.measured_at)}</span>
             </div>
           `).join('')}
         </div>
       ` : ''}
 
-      <h3 class="font-bold text-gray-800 border-b border-gray-200 pb-1 mb-2">Üretim Durumu</h3>
+      <h3 class="font-bold text-gray-800 border-b border-gray-200 pb-1 mb-2">${t('reports.detail.production_status')}</h3>
       <p class="text-sm text-gray-700 leading-relaxed">
         ${isHealthDocument
           ? (doc.ai_ocr && doc.ai_ocr.status !== 'queued_for_server'
-              ? 'Bu belge AI/OCR ile ayrıştırıldı ve okunabilen alanlar sağlık dosyasına işlendi. Canlı sistemde aynı işlem server/API katmanında çalıştırılacak.'
-              : 'Bu belge AI/OCR okuma kuyruğuna hazırlanmış ham kayıt olarak saklanır. Gerçek ayrıştırma için Gemini anahtarı veya server/API katmanı gerekir.')
-          : 'Bu kayıt veritabanına kaydedilir ve bu ekrandan indirilebilir HTML dosyası olarak dışa aktarılır. Sunucu taraflı gerçek PDF üretimi sonraki aşamada server/API katmanına bağlanacak.'}
+              ? t('reports.detail.ocr_processed_note')
+              : t('reports.detail.ocr_queued_note'))
+          : t('reports.detail.export_note')}
       </p>
     </div>
   `;
@@ -304,7 +286,7 @@ export function render(params = {}) {
         <div class="header-left">
           <button class="header-icon" id="btnBack">${window.__icons?.back}</button>
         </div>
-        <div class="header-title">Rapor Önizleme</div>
+        <div class="header-title">${t('reports.detail.preview_title')}</div>
         <div class="header-right">
           <button class="btn-ghost text-primary text-sm font-semibold p-2" id="btnShareTop">${t('common.share')}</button>
         </div>
@@ -315,8 +297,8 @@ export function render(params = {}) {
           <div class="report-card">
             <div class="report-card-header">
               <div>
-                <div class="report-card-title">Rapor yükleniyor</div>
-                <div class="report-card-date">Klinik dosyası kontrol ediliyor</div>
+                <div class="report-card-title">${t('reports.detail.loading_title')}</div>
+                <div class="report-card-date">${t('reports.detail.loading_desc')}</div>
               </div>
               <div class="premium-icon-box">${window.__icons?.clock}</div>
             </div>
@@ -325,7 +307,7 @@ export function render(params = {}) {
 
         <div class="flex gap-3 mt-6">
           <button class="btn btn-primary flex-1 shadow-sm" id="btnDownload">
-            <span class="modern-button-icon">${window.__icons?.upload}</span> HTML Dosya İndir
+            <span class="modern-button-icon">${window.__icons?.upload}</span> ${t('reports.detail.download_html')}
           </button>
           <button class="btn btn-outline flex-1 shadow-sm bg-white" id="btnSend">
             <span class="modern-button-icon">${window.__icons?.message}</span> ${t('reports.send_vet')}
@@ -353,7 +335,7 @@ export function afterRender(params = {}) {
       return;
     }
     downloadReportFile();
-    showToast('Paylaşım menüsü desteklenmiyor. Rapor dosyası indirildi.');
+    showToast(t('reports.detail.share_fallback'));
   };
   document.getElementById('btnSend')?.addEventListener('click', () => shareReport().catch(() => {}));
   document.getElementById('btnShareTop')?.addEventListener('click', () => shareReport().catch(() => {}));
@@ -365,8 +347,8 @@ export function afterRender(params = {}) {
       target.innerHTML = `
       <div class="empty-state">
         <div class="premium-icon-box" style="margin: 0 auto 16px;">${window.__icons?.clipboard}</div>
-        <div class="font-bold mb-2">Rapor bulunamadı</div>
-        <div class="text-sm text-secondary px-4">Bu dosya silinmiş veya henüz senkronize edilmemiş olabilir.</div>
+        <div class="font-bold mb-2">${t('reports.detail.not_found')}</div>
+        <div class="text-sm text-secondary px-4">${t('reports.detail.not_found_desc')}</div>
       </div>
     `;
       return;

@@ -266,14 +266,117 @@ const en = {
     first_noticed: 'First noticed', issue_desc: 'Description',
     tracking_freq: 'Tracking frequency',
     status_new: 'New', status_tracking: 'Tracking', status_improving: 'Improving',
-    status_worsening: 'Worsening', status_closed: 'Closed'
+    status_worsening: 'Worsening', status_closed: 'Closed',
+    no_date: 'No date',
+    loading: 'Loading',
+    expense: 'Expense',
+    calendar: 'Calendar',
+    loading_free_records: 'Loading free records...',
+    health_lower: 'health',
+    expense_lower: 'expense',
+    calendar_lower: 'calendar',
+    record: 'Record',
+    form_record: 'Form record',
+    no_free_records: 'No free records yet.',
+    free_archive: 'Free Health Archive',
+    free_tier: 'Free',
+    separator: ' · ',
+    menu: {
+      timeline: { title: 'Full Timeline', desc: 'Checks, notes and media records' },
+      measurements: { title: 'Measurements', desc: 'Weight, temperature, respiration and core values' },
+      issues: { title: 'Health Files', desc: 'Complaints, skin-wound follow-ups and photo comparison' },
+      expense: { title: 'Expense Tracking', desc: 'Food, vet, vaccine and medication expenses' },
+      reminders: { title: 'Vaccine / Medication / Appointment Calendar', desc: 'Regular medication, vaccine and clinic visit reminders' },
+      templates: { title: 'Tracking Templates', desc: 'Chronic disease, post-op, pregnancy and birth' },
+      senior: { title: 'Senior Pet Monitoring', desc: 'Water, weight, pain and movement sensitivities' }
+    }
   },
   reports: {
     title: 'Reports', new_report: 'Create New Report',
     source_last: 'Latest check result', source_issue: 'Tracked issue',
     source_date: 'Date range', source_manual: 'Manual selection',
     preview: 'Preview', download: 'Download as PDF',
-    share: 'Share', send_vet: 'Send to Vet', edit: 'Edit', delete: 'Delete'
+    share: 'Share', send_vet: 'Send to Vet', edit: 'Edit', delete: 'Delete',
+    detail: {
+      no_date: 'No date',
+      health_types: {
+        photo_followup: 'Photo follow-up',
+        poop_score: 'Stool score',
+        diet_log: 'Nutrition',
+        chronic_followup: 'Chronic follow-up',
+        postop_followup: 'Post-op follow-up',
+        reproduction_followup: 'Reproduction follow-up',
+        senior_followup: 'Senior pet',
+        toxin_foreign_body: 'Urgent toxin/foreign body',
+        issue: 'Issue',
+        default: 'Health record'
+      },
+      measurements: {
+        weight: 'Weight',
+        temperature: 'Body temperature',
+        respiratory: 'Respiration',
+        respiratory_rate: 'Respiration',
+        heart_rate: 'Heart rate',
+        default: 'Measurement'
+      },
+      ai_summary: 'AI summary',
+      date: 'Date',
+      clinic: 'Clinic',
+      amount: 'Amount',
+      confidence: 'Confidence',
+      lab_values: 'Lab Values',
+      value: 'Value',
+      medication_prescription: 'Medication / Prescription',
+      medication: 'Medication',
+      followup_tasks: 'Follow-up Tasks',
+      warning: 'Warning',
+      separator: ' · ',
+      default_title: 'Pati Health Report',
+      default_included: ['Pet profile', 'Vaccines and medications', 'Complaint history', 'Expenses'],
+      created: 'Created',
+      draft: 'Draft',
+      ready: 'Ready',
+      pet_info: 'Pet Details',
+      name: 'Name',
+      active_pet: 'Active pet',
+      document: 'Document',
+      purpose: 'Purpose',
+      document_note: 'Document Note',
+      clinic_note: 'Clinic Note',
+      no_document_note: 'No extra document note was entered.',
+      no_clinic_note: 'No special note was added for the veterinarian.',
+      ocr_prep: 'AI / OCR Reading Prep',
+      goal: 'Goal',
+      clinic_summary: 'Clinic summary',
+      status: 'Status',
+      ai_waiting: 'Waiting for AI reading',
+      uploaded: 'Uploaded',
+      manual_note: 'Manual note',
+      planned_outputs: 'Planned Extracts',
+      included_sections: 'Included Sections',
+      health_summary: 'Health Record Summary',
+      no_health_records: 'No health records yet.',
+      calendar_reminders: 'Calendar and Reminders',
+      reminder: 'Reminder',
+      no_upcoming_reminders: 'No upcoming reminders.',
+      expense_measurement_summary: 'Expense and Measurement Summary',
+      total_expense: 'Total expense',
+      record_count: '{count} record(s)',
+      latest_measurement: 'Latest measurement',
+      none: 'None',
+      waiting_record: 'Waiting for record',
+      production_status: 'Production Status',
+      ocr_processed_note: 'This document was parsed with AI/OCR and readable fields were added to the health file. In production, the same workflow will run through the server/API layer.',
+      ocr_queued_note: 'This document is stored as a raw record prepared for the AI/OCR reading queue. Real parsing requires the Gemini key or the server/API layer.',
+      export_note: 'This record is saved to the database and can be exported from this screen as a downloadable HTML file. Server-side real PDF generation will be connected to the server/API layer later.',
+      preview_title: 'Report Preview',
+      loading_title: 'Loading report',
+      loading_desc: 'Checking the clinic file',
+      download_html: 'Download HTML File',
+      share_fallback: 'Sharing is not supported. The report file was downloaded.',
+      not_found: 'Report not found',
+      not_found_desc: 'This file may have been deleted or not synced yet.'
+    }
   },
   profile: {
     title: 'Profile', edit: 'Edit Profile',
@@ -652,6 +755,53 @@ const en = {
       vet_search: 'Find a Vet',
       open_nearby_clinics: 'Open Nearby Clinics',
       alert_disclaimer: 'This alert is not a diagnosis; it organizes records for a veterinary conversation.',
+      payload_labels: {
+        score: 'Score',
+        extra_finding: 'Extra finding',
+        note: 'Note',
+        reaction: 'Reaction',
+        diet_note: 'Nutrition note',
+        today_status: 'Today status',
+        followup_note: 'Follow-up note',
+        medication_use: 'Medication use',
+        wound_status: 'Wound status',
+        general_status: 'Overall status',
+        followup_type: 'Follow-up type',
+        sign: 'Sign',
+        daily_status: 'Daily status',
+        focus: 'Focus',
+        observation: 'Observation',
+        detail: 'Detail',
+        what_ingested: 'What was swallowed / contacted?',
+        when_happened: 'When did it happen?',
+        sign_question: 'Any signs?',
+        start_date: 'Start date',
+        template: 'Template',
+        measurement_observation: 'Measurement / observation',
+        surgery_day: 'Operation day',
+        next_dose_check: 'Next dose / check',
+        new_food_meal: 'New food / meal',
+        transition_day: 'Transition day',
+        visual_change: 'Visual change'
+      },
+      keywords: {
+        blood: ['blood'],
+        poop_watch: ['mucus', 'very watery', 'very hard'],
+        vomiting_diarrhea: ['vomiting', 'diarrhea'],
+        diet_watch: ['itching', 'gas'],
+        chronic_watch: ['worse', 'missed medication'],
+        discharge: ['discharge'],
+        wound_watch: ['red', 'swollen'],
+        medication_watch: ['missed', 'side effect'],
+        reproduction_watch: ['discharge', 'appetite change'],
+        senior_watch: ['painful', 'no appetite', 'pain'],
+        toxin_danger: ['breathing issue', 'tremor', 'medicine', 'chocolate', '0-1 hour'],
+        toxin_watch: ['vomiting', 'lethargy', 'drooling', '1-3 hours', 'not sure'],
+        media_before: ['before'],
+        media_after: ['today', 'after', 'new'],
+        change_danger: ['increased', 'new'],
+        change_good: ['decreased']
+      },
       fields: {
         category: 'Category',
         note: 'Note',
@@ -952,8 +1102,143 @@ const en = {
       { id: 'weight_change', weight: 3, words: ['weight', 'thin', 'lost weight', 'weight loss'] }
     ]
   },
+  packageRisk: {
+    title: 'Package Risk Check',
+    package_photo: 'Package photo',
+    choose_photo: 'Choose photo',
+    photo_hint: 'Product label, ingredient list or package front',
+    product_name: 'Product / substance name',
+    product_placeholder: 'Example: sugar-free gum, dark chocolate, cleaning product',
+    ingredients: 'Ingredients / label text',
+    ingredients_placeholder: 'Write what you see on the label: xylitol, cocoa, grapes, medicine name, chemical name...',
+    amount: 'Approximate amount',
+    amount_placeholder: 'Example: 2 pieces, half a pack, not sure',
+    when: 'When did it happen?',
+    symptom_question: 'Any signs?',
+    run_scan: 'Run Risk Scan',
+    save_record: 'Create Toxic Emergency Record',
+    knowledge: 'Toxic Knowledge Base',
+    visual: 'Image',
+    separator: ' · ',
+    input_required: 'Add at least one of product name, ingredient text or package photo.',
+    scanning: 'Scanning with AI...',
+    record_created: 'Toxic emergency record created.',
+    record_failed: 'Record could not be created',
+    ai_enabled: 'AI-assisted scan',
+    ai_ready: 'AI-ready scan',
+    heading: 'Possible package risk',
+    hero_desc: 'Add the photo and visible label contents for {name}. This screen does not make a final safe/dangerous judgment.',
+    info: 'The photo is saved; scanning runs on the product name and ingredient text you enter. If the Gemini key is configured, a safe AI summary is also added.',
+    risk_score: 'risk score',
+    result_kicker: 'Controlled scan result',
+    do_not_do: 'Do not do this now',
+    ai_safe_summary: 'AI safe summary',
+    ai_assessment: 'AI assessment',
+    prepare_for_vet: 'Prepare for the vet',
+    questions_to_ask: 'Questions to ask',
+    ai_failed_note: 'AI summary could not be retrieved; showing the safe rule result.',
+    ai_inactive_note: 'If the Gemini key is not available in local env, AI summary stays passive; the safe rule result is shown.',
+    sign_or_risk: 'Sign/risk',
+    no_keyword: 'No clear toxic keyword found',
+    no_keyword_desc: 'This does not mean it is safe; amount and context still matter.',
+    unknown: 'unknown',
+    none: 'none',
+    not_specified: 'not specified',
+    no_symptom_specified: 'no sign / not specified',
+    scan_result: 'Scan result',
+    severe_symptom_reported: 'Serious sign reported',
+    severe_symptom_action: 'If serious signs are present, urgent veterinary evaluation may be needed even if the substance is unknown.',
+    severe_symptom_ids: ['seizure_tremor', 'breathing_issue', 'fainting', 'constant_vomiting'],
+    timing_ids: ['zero_one_hour', 'one_three_hours', 'today', 'yesterday', 'not_sure'],
+    timing: {
+      zero_one_hour: '0-1 hour',
+      one_three_hours: '1-3 hours',
+      today: 'Today',
+      yesterday: 'Yesterday',
+      not_sure: 'Not sure'
+    },
+    symptom_ids: ['none', 'vomiting', 'constant_vomiting', 'lethargy', 'drooling', 'seizure_tremor', 'breathing_issue', 'fainting'],
+    symptoms: {
+      none: 'No signs',
+      vomiting: 'Vomiting',
+      constant_vomiting: 'Repeated vomiting',
+      lethargy: 'Lethargy',
+      drooling: 'Drooling',
+      seizure_tremor: 'Seizure / tremor',
+      breathing_issue: 'Breathing issue',
+      fainting: 'Fainting'
+    },
+    levels: {
+      critical: { title: 'Urgent risk', cls: 'danger', score: 95 },
+      high: { title: 'High risk', cls: 'danger', score: 82 },
+      foreign: { title: 'Foreign body risk', cls: 'warning', score: 74 },
+      watch: { title: 'Close watch', cls: 'warning', score: 46 },
+      unknown: { title: 'Unclear', cls: 'info', score: 28 }
+    },
+    rules: [
+      {
+        level: 'critical',
+        label: 'Very high-risk content',
+        terms: ['ksilitol', 'xylitol', 'fare zehiri', 'rat poison', 'rodenticide', 'antifriz', 'antifreeze', 'ethylene glycol', 'etilen glikol', 'parasetamol', 'paracetamol', 'acetaminophen', 'ibuprofen', 'naproksen', 'naproxen', 'pil', 'battery', 'nikotin', 'nicotine', 'çamaşır suyu', 'bleach', 'kostik', 'drain cleaner'],
+        action: 'Contact a veterinarian or emergency clinic without waiting. Keep the package and approximate amount with you.'
+      },
+      {
+        level: 'high',
+        label: 'High-risk food/product',
+        terms: ['çikolata', 'chocolate', 'kakao', 'cocoa', 'üzüm', 'grape', 'kuru üzüm', 'raisin', 'soğan', 'onion', 'sarımsak', 'garlic', 'alkol', 'alcohol', 'kafein', 'caffeine', 'kahve', 'coffee', 'maya', 'yeast dough', 'macadamia', 'zambak', 'lily'],
+        action: 'Contact a veterinarian even if there are no signs. Prepare species, weight, timing and amount details.'
+      },
+      {
+        level: 'foreign',
+        label: 'Foreign body / blockage risk',
+        terms: ['ip', 'string', 'misina', 'fishing line', 'oyuncak', 'toy', 'kemik', 'bone', 'mıknatıs', 'magnet', 'iğne', 'needle', 'plastik', 'plastic', 'poşet', 'bag', 'paket', 'package', 'ambalaj', 'wrapper', 'mısır koçanı', 'corn cob', 'kumaş', 'fabric', 'çorap', 'sock'],
+        action: 'Do not try to induce vomiting or pull a visible string. Note the object size and material.'
+      },
+      {
+        level: 'watch',
+        label: 'Content that needs follow-up',
+        terms: ['yağlı', 'fatty', 'baharat', 'spicy', 'süt', 'milk', 'laktoz', 'lactose', 'licorice', 'meyve çekirdeği', 'apricot kernel', 'peach pit'],
+        action: 'Risk depends on context. A veterinary opinion may be needed based on amount, species, weight and signs.'
+      }
+    ],
+    safe_steps: {
+      no_home_treatment: 'Do not induce vomiting or give medicine, activated charcoal, milk, oil or salt water unless a veterinarian tells you to.',
+      keep_package: 'Keep the package, label, remaining substance and photo.',
+      note_details: 'Note when it happened, approximately how much, and which signs are present.'
+    },
+    default_next_action: 'Do not assume it is safe if the substance is unclear. Prepare the product name, ingredient list and amount for a veterinary conversation.',
+    system_prompt: 'You are a pet health assistant that does not replace a veterinarian and only gives safe urgency guidance.',
+    ai_prompt: `Assess package/toxic exposure risk for a pet.
+Do not provide a diagnosis, dose, medicine, home vomiting induction, activated charcoal or treatment instructions.
+Use safe wording: "risk", "contact a veterinarian", "urgent evaluation may be needed".
+
+Pet context:
+- Species/breed/life stage: {species} / {lifeStage}
+- Risk tags: {riskTags}
+
+User input:
+- Product/substance: {productName}
+- Ingredients/label: {ingredientText}
+- Approximate amount: {amount}
+- Timing: {timing}
+- Signs: {symptoms}
+
+Rule engine result:
+- Level: {level}
+- Matches: {matches}
+
+Return JSON:
+{
+  "level": "critical|high|foreign|watch|unknown",
+  "headline": "short headline",
+  "reason": "reason in no more than 2 sentences",
+  "doNotDo": ["up to 3 safe do-not-do items"],
+  "prepare": ["up to 4 pieces of information to prepare for the veterinarian"],
+  "askVet": ["up to 3 veterinarian questions"]
+}`
+  },
   common: {
-    save: 'Save', cancel: 'Cancel', back: 'Back', next: 'Continue', done: 'Done',
+    save: 'Save', saving: 'Saving...', cancel: 'Cancel', back: 'Back', next: 'Continue', done: 'Done',
     delete: 'Delete', edit: 'Edit', share: 'Share', close: 'Close',
     loading: 'Loading...', error: 'Something went wrong', retry: 'Try Again',
     confirm: 'Confirm', yes: 'Yes', no: 'No',

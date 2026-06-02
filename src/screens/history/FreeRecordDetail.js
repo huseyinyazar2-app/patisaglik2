@@ -3,7 +3,7 @@ import { getState } from '../../store.js';
 import { getActivePet } from '../../mock/pets.js';
 import { getFreeRecords, updateReminderStatus } from '../../services/freeRecords.js';
 import { showToast } from '../../ui/toast.js';
-import { getLocale, t } from '../../i18n/tr.js';
+import { getLocale, t, translateForLocale } from '../../i18n/tr.js';
 
 const staticConfig = {
   expenses: { icon: 'briefcase', listRoute: '/history/expenses', addRoute: '/feature/expense' },
@@ -71,7 +71,7 @@ function icsDate(date) {
 function safeFileName(value) {
   return String(value || 'hatirlatici')
     .toLocaleLowerCase(localeTag())
-    .replace(/[^a-z0-9ğüşöçıİĞÜŞÖÇ]+/gi, '-')
+    .replace(/[^a-z0-9_-]+/gi, '-')
     .replace(/^-|-$/g, '')
     .slice(0, 44) || 'hatirlatici';
 }
@@ -147,74 +147,87 @@ function payloadText(payload = {}, labels = []) {
   }).join(' ').toLocaleLowerCase(localeTag());
 }
 
+function trValue(key) {
+  return translateForLocale('tr', key);
+}
+
+function payloadLabel(key) {
+  return trValue(`freeRecords.detail.payload_labels.${key}`);
+}
+
+function keywords(key) {
+  const value = trValue(`freeRecords.detail.keywords.${key}`);
+  return Array.isArray(value) ? value : [];
+}
+
 function includesAny(text, words = []) {
   return words.some((word) => text.includes(word.toLocaleLowerCase(localeTag())));
 }
 
-const VET_MAP_URL = 'https://www.google.com/maps/search/veteriner+kliniği';
+const VET_MAP_URL = 'https://www.google.com/maps/search/?api=1&query=veterinary+clinic';
 
 function renderRuleAlert(record) {
   const payload = record.payload || {};
   const alerts = [];
 
   if (record.record_type === 'poop_score') {
-    const score = Number(payloadFirst(payload, ['Skor'], 0));
-    const finding = payloadText(payload, ['Ek bulgu', 'Not']);
-    if (score <= 1 || score >= 5 || includesAny(finding, ['kan'])) {
+    const score = Number(payloadFirst(payload, [payloadLabel('score')], 0));
+    const finding = payloadText(payload, [payloadLabel('extra_finding'), payloadLabel('note')]);
+    if (score <= 1 || score >= 5 || includesAny(finding, keywords('blood'))) {
       alerts.push({ tone: 'danger', title: t('freeRecords.detail.alerts.poop_danger.title'), desc: t('freeRecords.detail.alerts.poop_danger.desc') });
-    } else if (score === 2 || score === 4 || includesAny(finding, ['mukus', 'çok sulu', 'çok sert'])) {
+    } else if (score === 2 || score === 4 || includesAny(finding, keywords('poop_watch'))) {
       alerts.push({ tone: 'watch', title: t('freeRecords.detail.alerts.poop_watch.title'), desc: t('freeRecords.detail.alerts.poop_watch.desc') });
     }
   }
 
   if (record.record_type === 'diet_log') {
-    const reaction = payloadText(payload, ['Reaksiyon', 'Beslenme notu']);
-    if (includesAny(reaction, ['kusma', 'ishal'])) {
+    const reaction = payloadText(payload, [payloadLabel('reaction'), payloadLabel('diet_note')]);
+    if (includesAny(reaction, keywords('vomiting_diarrhea'))) {
       alerts.push({ tone: 'danger', title: t('freeRecords.detail.alerts.diet_danger.title'), desc: t('freeRecords.detail.alerts.diet_danger.desc') });
-    } else if (includesAny(reaction, ['kaşıntı', 'gaz'])) {
+    } else if (includesAny(reaction, keywords('diet_watch'))) {
       alerts.push({ tone: 'watch', title: t('freeRecords.detail.alerts.diet_watch.title'), desc: t('freeRecords.detail.alerts.diet_watch.desc') });
     }
   }
 
   if (record.record_type === 'chronic_followup') {
-    const status = payloadText(payload, ['Bugünkü durum', 'Takip notu']);
-    if (includesAny(status, ['daha kötü', 'ilaç atlandı'])) {
+    const status = payloadText(payload, [payloadLabel('today_status'), payloadLabel('followup_note')]);
+    if (includesAny(status, keywords('chronic_watch'))) {
       alerts.push({ tone: 'watch', title: t('freeRecords.detail.alerts.chronic_watch.title'), desc: t('freeRecords.detail.alerts.chronic_watch.desc') });
     }
   }
 
   if (record.record_type === 'postop_followup') {
-    const wound = payloadText(payload, ['Yara durumu', 'Genel durum']);
-    const medication = payloadText(payload, ['İlaç kullanımı']);
-    if (includesAny(wound, ['akıntı'])) {
+    const wound = payloadText(payload, [payloadLabel('wound_status'), payloadLabel('general_status')]);
+    const medication = payloadText(payload, [payloadLabel('medication_use')]);
+    if (includesAny(wound, keywords('discharge'))) {
       alerts.push({ tone: 'danger', title: t('freeRecords.detail.alerts.postop_danger.title'), desc: t('freeRecords.detail.alerts.postop_danger.desc') });
-    } else if (includesAny(wound, ['kızarık', 'şiş'])) {
+    } else if (includesAny(wound, keywords('wound_watch'))) {
       alerts.push({ tone: 'watch', title: t('freeRecords.detail.alerts.postop_watch.title'), desc: t('freeRecords.detail.alerts.postop_watch.desc') });
     }
-    if (includesAny(medication, ['atlandı', 'yan etki'])) {
+    if (includesAny(medication, keywords('medication_watch'))) {
       alerts.push({ tone: 'watch', title: t('freeRecords.detail.alerts.medication_watch.title'), desc: t('freeRecords.detail.alerts.medication_watch.desc') });
     }
   }
 
   if (record.record_type === 'reproduction_followup') {
-    const finding = payloadText(payload, ['Takip türü', 'Belirti', 'Not']);
-    if (includesAny(finding, ['akıntı', 'iştah değişimi'])) {
+    const finding = payloadText(payload, [payloadLabel('followup_type'), payloadLabel('sign'), payloadLabel('note')]);
+    if (includesAny(finding, keywords('reproduction_watch'))) {
       alerts.push({ tone: 'watch', title: t('freeRecords.detail.alerts.reproduction_watch.title'), desc: t('freeRecords.detail.alerts.reproduction_watch.desc') });
     }
   }
 
   if (record.record_type === 'senior_followup') {
-    const senior = payloadText(payload, ['Günlük durum', 'Odak', 'Gözlem', 'Not']);
-    if (includesAny(senior, ['ağrılı', 'iştahsız', 'ağrı'])) {
+    const senior = payloadText(payload, [payloadLabel('daily_status'), payloadLabel('focus'), payloadLabel('observation'), payloadLabel('note')]);
+    if (includesAny(senior, keywords('senior_watch'))) {
       alerts.push({ tone: 'watch', title: t('freeRecords.detail.alerts.senior_watch.title'), desc: t('freeRecords.detail.alerts.senior_watch.desc') });
     }
   }
 
   if (record.record_type === 'toxin_foreign_body') {
-    const finding = payloadText(payload, ['Ne yuttu / temas etti?', 'Ne zaman oldu?', 'Belirti var mı?', 'Detay']);
-    if (includesAny(finding, ['nefes sorunu', 'titreme', 'ilaç', 'çikolata', '0-1 saat'])) {
+    const finding = payloadText(payload, [payloadLabel('what_ingested'), payloadLabel('when_happened'), payloadLabel('sign_question'), payloadLabel('detail')]);
+    if (includesAny(finding, keywords('toxin_danger'))) {
       alerts.push({ tone: 'danger', title: t('freeRecords.detail.alerts.toxin_danger.title'), desc: t('freeRecords.detail.alerts.toxin_danger.desc'), actionLabel: t('freeRecords.detail.vet_search'), actionUrl: VET_MAP_URL });
-    } else if (includesAny(finding, ['kusma', 'halsizlik', 'salya', '1-3 saat', 'emin değilim'])) {
+    } else if (includesAny(finding, keywords('toxin_watch'))) {
       alerts.push({ tone: 'watch', title: t('freeRecords.detail.alerts.toxin_watch.title'), desc: t('freeRecords.detail.alerts.toxin_watch.desc'), actionLabel: t('freeRecords.detail.open_nearby_clinics'), actionUrl: VET_MAP_URL });
     }
   }
@@ -272,15 +285,15 @@ function renderPlanRows(rows = []) {
 
 function renderFollowupPlan(record) {
   const payload = record.payload || {};
-  const elapsed = daysSince(payload['Başlangıç tarihi'] || record.occurred_at || record.created_at);
+  const elapsed = daysSince(payload[payloadLabel('start_date')] || record.occurred_at || record.created_at);
   const elapsedText = elapsed === null ? t('freeRecords.detail.no_duration') : t('freeRecords.detail.day_count').replace('{count}', elapsed);
   const plans = {
     chronic_followup: {
       title: t('freeRecords.detail.plans.chronic.title'),
       desc: t('freeRecords.detail.plans.chronic.desc'),
       rows: [
-        { icon: 'clipboard', title: payloadFirst(payload, ['Şablon'], t('freeRecords.detail.plans.chronic.template')), desc: payloadFirst(payload, ['Bugünkü durum'], t('freeRecords.detail.plans.chronic.no_status')) },
-        { icon: 'measurement', title: t('freeRecords.detail.plans.common.measurement_observation'), desc: payloadFirst(payload, ['Ölçüm / gözlem'], t('freeRecords.detail.plans.chronic.measurement_desc')) },
+        { icon: 'clipboard', title: payloadFirst(payload, [payloadLabel('template')], t('freeRecords.detail.plans.chronic.template')), desc: payloadFirst(payload, [payloadLabel('today_status')], t('freeRecords.detail.plans.chronic.no_status')) },
+        { icon: 'measurement', title: t('freeRecords.detail.plans.common.measurement_observation'), desc: payloadFirst(payload, [payloadLabel('measurement_observation')], t('freeRecords.detail.plans.chronic.measurement_desc')) },
         { icon: 'calendar', title: t('freeRecords.detail.plans.common.routine_check'), desc: t('freeRecords.detail.plans.chronic.routine_desc'), reminder: { type: t('freeRecords.detail.appointment'), title: t('freeRecords.detail.plans.chronic.reminder_title'), days: 7, repeat: t('freeRecords.detail.weekly'), note: t('freeRecords.detail.plans.chronic.reminder_note') } }
       ]
     },
@@ -288,17 +301,17 @@ function renderFollowupPlan(record) {
       title: t('freeRecords.detail.plans.postop.title'),
       desc: t('freeRecords.detail.plans.postop.desc'),
       rows: [
-        { icon: 'calendar', title: payloadFirst(payload, ['Operasyon günü'], elapsedText), desc: t('freeRecords.detail.plans.postop.day_desc') },
-        { icon: 'shield', title: t('freeRecords.detail.plans.common.wound_status'), desc: payloadFirst(payload, ['Yara durumu'], t('freeRecords.detail.plans.postop.wound_desc')) },
-        { icon: 'bell', title: payloadFirst(payload, ['İlaç kullanımı'], t('freeRecords.detail.plans.postop.medication_title')), desc: payloadFirst(payload, ['Sonraki doz / kontrol'], t('freeRecords.detail.plans.postop.medication_desc')), reminder: { type: t('freeRecords.detail.medication'), title: t('freeRecords.detail.plans.postop.reminder_title'), date: payloadFirst(payload, ['Sonraki doz / kontrol'], ''), days: 1, repeat: t('freeRecords.detail.daily'), note: t('freeRecords.detail.plans.postop.reminder_note') } }
+        { icon: 'calendar', title: payloadFirst(payload, [payloadLabel('surgery_day')], elapsedText), desc: t('freeRecords.detail.plans.postop.day_desc') },
+        { icon: 'shield', title: t('freeRecords.detail.plans.common.wound_status'), desc: payloadFirst(payload, [payloadLabel('wound_status')], t('freeRecords.detail.plans.postop.wound_desc')) },
+        { icon: 'bell', title: payloadFirst(payload, [payloadLabel('medication_use')], t('freeRecords.detail.plans.postop.medication_title')), desc: payloadFirst(payload, [payloadLabel('next_dose_check')], t('freeRecords.detail.plans.postop.medication_desc')), reminder: { type: t('freeRecords.detail.medication'), title: t('freeRecords.detail.plans.postop.reminder_title'), date: payloadFirst(payload, [payloadLabel('next_dose_check')], ''), days: 1, repeat: t('freeRecords.detail.daily'), note: t('freeRecords.detail.plans.postop.reminder_note') } }
       ]
     },
     diet_log: {
       title: t('freeRecords.detail.plans.diet.title'),
       desc: t('freeRecords.detail.plans.diet.desc'),
       rows: [
-        { icon: 'heartPulse', title: payloadFirst(payload, ['Yeni mama / öğün'], t('freeRecords.detail.plans.diet.new_food')), desc: payloadFirst(payload, ['Geçiş günü'], t('freeRecords.detail.plans.diet.no_transition_day')) },
-        { icon: 'activity', title: t('freeRecords.detail.plans.common.reaction'), desc: payloadFirst(payload, ['Reaksiyon'], t('freeRecords.detail.plans.diet.no_reaction')) },
+        { icon: 'heartPulse', title: payloadFirst(payload, [payloadLabel('new_food_meal')], t('freeRecords.detail.plans.diet.new_food')), desc: payloadFirst(payload, [payloadLabel('transition_day')], t('freeRecords.detail.plans.diet.no_transition_day')) },
+        { icon: 'activity', title: t('freeRecords.detail.plans.common.reaction'), desc: payloadFirst(payload, [payloadLabel('reaction')], t('freeRecords.detail.plans.diet.no_reaction')) },
         { icon: 'calendar', title: t('freeRecords.detail.plans.common.next_check'), desc: t('freeRecords.detail.plans.diet.next_desc'), reminder: { type: t('freeRecords.detail.appointment'), title: t('freeRecords.detail.plans.diet.reminder_title'), days: 3, repeat: t('freeRecords.common.once'), note: t('freeRecords.detail.plans.diet.reminder_note') } }
       ]
     },
@@ -306,8 +319,8 @@ function renderFollowupPlan(record) {
       title: t('freeRecords.detail.plans.poop.title'),
       desc: t('freeRecords.detail.plans.poop.desc'),
       rows: [
-        { icon: 'activity', title: t('freeRecords.detail.plans.poop.last_score'), desc: payloadFirst(payload, ['Skor'], t('freeRecords.detail.plans.poop.no_score')) },
-        { icon: 'search', title: t('freeRecords.detail.plans.poop.extra_finding'), desc: payloadFirst(payload, ['Ek bulgu'], t('freeRecords.detail.plans.poop.no_finding')) },
+        { icon: 'activity', title: t('freeRecords.detail.plans.poop.last_score'), desc: payloadFirst(payload, [payloadLabel('score')], t('freeRecords.detail.plans.poop.no_score')) },
+        { icon: 'search', title: t('freeRecords.detail.plans.poop.extra_finding'), desc: payloadFirst(payload, [payloadLabel('extra_finding')], t('freeRecords.detail.plans.poop.no_finding')) },
         { icon: 'camera', title: t('freeRecords.detail.plans.common.visual_record'), desc: t('freeRecords.detail.plans.poop.visual_desc') }
       ]
     },
@@ -315,8 +328,8 @@ function renderFollowupPlan(record) {
       title: t('freeRecords.detail.plans.reproduction.title'),
       desc: t('freeRecords.detail.plans.reproduction.desc'),
       rows: [
-        { icon: 'calendar', title: payloadFirst(payload, ['Takip türü'], t('freeRecords.detail.plans.reproduction.followup_type')), desc: payloadFirst(payload, ['Başlangıç tarihi'], elapsedText) },
-        { icon: 'note', title: t('freeRecords.detail.plans.common.sign'), desc: payloadFirst(payload, ['Belirti'], t('freeRecords.detail.plans.reproduction.no_sign')) },
+        { icon: 'calendar', title: payloadFirst(payload, [payloadLabel('followup_type')], t('freeRecords.detail.plans.reproduction.followup_type')), desc: payloadFirst(payload, [payloadLabel('start_date')], elapsedText) },
+        { icon: 'note', title: t('freeRecords.detail.plans.common.sign'), desc: payloadFirst(payload, [payloadLabel('sign')], t('freeRecords.detail.plans.reproduction.no_sign')) },
         { icon: 'bell', title: t('freeRecords.detail.plans.common.reminder'), desc: t('freeRecords.detail.plans.reproduction.reminder_desc'), reminder: { type: t('freeRecords.detail.appointment'), title: t('freeRecords.detail.plans.reproduction.reminder_title'), days: 7, repeat: t('freeRecords.common.once'), note: t('freeRecords.detail.plans.reproduction.reminder_note') } }
       ]
     },
@@ -324,8 +337,8 @@ function renderFollowupPlan(record) {
       title: t('freeRecords.detail.plans.senior.title'),
       desc: t('freeRecords.detail.plans.senior.desc'),
       rows: [
-        { icon: 'heartPulse', title: payloadFirst(payload, ['Günlük durum'], t('freeRecords.detail.plans.senior.daily_status')), desc: payloadFirst(payload, ['Odak'], t('freeRecords.detail.plans.senior.no_focus')) },
-        { icon: 'measurement', title: t('freeRecords.detail.plans.common.observation'), desc: payloadFirst(payload, ['Gözlem'], t('freeRecords.detail.plans.senior.no_observation')) },
+        { icon: 'heartPulse', title: payloadFirst(payload, [payloadLabel('daily_status')], t('freeRecords.detail.plans.senior.daily_status')), desc: payloadFirst(payload, [payloadLabel('focus')], t('freeRecords.detail.plans.senior.no_focus')) },
+        { icon: 'measurement', title: t('freeRecords.detail.plans.common.observation'), desc: payloadFirst(payload, [payloadLabel('observation')], t('freeRecords.detail.plans.senior.no_observation')) },
         { icon: 'calendar', title: t('freeRecords.detail.plans.common.routine'), desc: t('freeRecords.detail.plans.senior.routine_desc'), reminder: { type: t('freeRecords.detail.appointment'), title: t('freeRecords.detail.plans.senior.reminder_title'), days: 7, repeat: t('freeRecords.detail.weekly'), note: t('freeRecords.detail.plans.senior.reminder_note') } }
       ]
     },
@@ -333,8 +346,8 @@ function renderFollowupPlan(record) {
       title: t('freeRecords.detail.plans.toxin.title'),
       desc: t('freeRecords.detail.plans.toxin.desc'),
       rows: [
-        { icon: 'alert', title: payloadFirst(payload, ['Ne yuttu / temas etti?'], t('freeRecords.detail.plans.toxin.substance')), desc: payloadFirst(payload, ['Ne zaman oldu?'], t('freeRecords.detail.plans.toxin.no_time')) },
-        { icon: 'activity', title: t('freeRecords.detail.plans.common.sign'), desc: payloadFirst(payload, ['Belirti var mı?'], t('freeRecords.detail.plans.toxin.no_sign')) },
+        { icon: 'alert', title: payloadFirst(payload, [payloadLabel('what_ingested')], t('freeRecords.detail.plans.toxin.substance')), desc: payloadFirst(payload, [payloadLabel('when_happened')], t('freeRecords.detail.plans.toxin.no_time')) },
+        { icon: 'activity', title: t('freeRecords.detail.plans.common.sign'), desc: payloadFirst(payload, [payloadLabel('sign_question')], t('freeRecords.detail.plans.toxin.no_sign')) },
         { icon: 'stethoscope', title: t('freeRecords.detail.plans.toxin.vet_prep'), desc: t('freeRecords.detail.plans.toxin.vet_prep_desc') }
       ]
     }
@@ -357,13 +370,13 @@ function renderFollowupPlan(record) {
 }
 
 function compareInsight(files = [], payload = {}, recordType = '') {
-  const beforeFile = files.find((file) => String(file.metadata?.label || '').toLocaleLowerCase('tr-TR').includes('önce'));
+  const beforeFile = files.find((file) => includesAny(String(file.metadata?.label || '').toLocaleLowerCase(localeTag()), keywords('media_before')));
   const afterFile = files.find((file) => {
-    const label = String(file.metadata?.label || '').toLocaleLowerCase('tr-TR');
-    return label.includes('bugün') || label.includes('sonra') || label.includes('yeni');
+    const label = String(file.metadata?.label || '').toLocaleLowerCase(localeTag());
+    return includesAny(label, keywords('media_after'));
   });
-  const change = payloadFirst(payload, ['Görsel değişim'], '');
-  const wound = payloadFirst(payload, ['Yara durumu'], '');
+  const change = payloadFirst(payload, [payloadLabel('visual_change')], '');
+  const wound = payloadFirst(payload, [payloadLabel('wound_status')], '');
   const hasPair = Boolean(beforeFile && afterFile);
   const sizeDelta = hasPair ? Number(afterFile.file_size_bytes || 0) - Number(beforeFile.file_size_bytes || 0) : 0;
   const sizeText = hasPair && sizeDelta
@@ -371,8 +384,8 @@ function compareInsight(files = [], payload = {}, recordType = '') {
     : hasPair ? t('freeRecords.detail.compare.size_close') : t('freeRecords.detail.compare.waiting_pair');
 
   if (recordType === 'photo_followup' && (hasPair || change)) {
-    const tone = includesAny(String(change).toLocaleLowerCase(localeTag()), ['arttı', 'yeni']) ? 'danger'
-      : includesAny(String(change).toLocaleLowerCase(localeTag()), ['azaldı']) ? 'good'
+    const tone = includesAny(String(change).toLocaleLowerCase(localeTag()), keywords('change_danger')) ? 'danger'
+      : includesAny(String(change).toLocaleLowerCase(localeTag()), keywords('change_good')) ? 'good'
         : 'watch';
     const title = tone === 'danger' ? t('freeRecords.detail.compare.photo_danger_title') : tone === 'good' ? t('freeRecords.detail.compare.photo_good_title') : t('freeRecords.detail.compare.photo_watch_title');
     const desc = tone === 'danger'
@@ -385,8 +398,8 @@ function compareInsight(files = [], payload = {}, recordType = '') {
 
   if (recordType === 'postop_followup' && (files.length || wound)) {
     const woundText = String(wound).toLocaleLowerCase(localeTag());
-    const tone = includesAny(woundText, ['akıntı']) ? 'danger'
-      : includesAny(woundText, ['kızarık', 'şiş']) ? 'watch'
+    const tone = includesAny(woundText, keywords('discharge')) ? 'danger'
+      : includesAny(woundText, keywords('wound_watch')) ? 'watch'
         : 'good';
     const title = tone === 'danger' ? t('freeRecords.detail.compare.wound_danger_title') : tone === 'watch' ? t('freeRecords.detail.compare.wound_watch_title') : t('freeRecords.detail.compare.wound_good_title');
     const desc = tone === 'danger'
@@ -419,10 +432,10 @@ function renderMediaGallery(files = [], subject = t('freeRecords.detail.subject_
   if (!files.length) return '';
   const payload = record?.payload || {};
   const recordType = record?.record_type || '';
-  const beforeFile = files.find((file) => String(file.metadata?.label || '').toLocaleLowerCase(localeTag()).includes('önce'));
+  const beforeFile = files.find((file) => includesAny(String(file.metadata?.label || '').toLocaleLowerCase(localeTag()), keywords('media_before')));
   const afterFile = files.find((file) => {
     const label = String(file.metadata?.label || '').toLocaleLowerCase(localeTag());
-    return label.includes('bugün') || label.includes('sonra') || label.includes('yeni');
+    return includesAny(label, keywords('media_after'));
   });
   const comparePanel = beforeFile || afterFile ? `
     <div class="record-compare-panel">

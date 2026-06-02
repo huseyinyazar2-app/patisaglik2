@@ -1,27 +1,27 @@
-// Pati Sağlık — History Main Screen
+// History main screen
 import { navigate, goBack } from '../../router.js';
 import { getState } from '../../store.js';
-import { t } from '../../i18n/tr.js';
+import { getLocale, t } from '../../i18n/tr.js';
 import { getActivePet } from '../../mock/pets.js';
 import { getFreeRecords, mergeRecentRecords } from '../../services/freeRecords.js';
 
 const menuItems = [
-  { id: 'timeline', icon: 'clock', title: 'Tüm Zaman Akışı', desc: 'Kontroller, notlar ve medya kayıtları', path: '/history/timeline', tier: 'Ücretsiz' },
-  { id: 'measurements', icon: 'measurement', title: 'Ölçümler', desc: 'Kilo, ateş, solunum ve temel değerler', path: '/history/measurements', tier: 'Ücretsiz' },
-  { id: 'issues', icon: 'search', title: 'Sağlık Dosyaları', desc: 'Şikayetler, deri-yara takipleri ve foto karşılaştırma', path: '/history/health-records', tier: 'Ücretsiz' },
-  { id: 'expense', icon: 'briefcase', title: 'Masraf Takibi', desc: 'Mama, veteriner, aşı ve ilaç harcamaları', path: '/history/expenses', tier: 'Ücretsiz' },
-  { id: 'reminders', icon: 'calendar', title: 'Aşı / İlaç / Randevu Takvimi', desc: 'Düzenli ilaç, aşı ve klinik ziyaret hatırlatmaları', path: '/history/reminders', tier: 'Ücretsiz' },
-  { id: 'templates', icon: 'clipboard', title: 'Takip Şablonları', desc: 'Kronik hastalık, operasyon sonrası, gebelik ve doğum', path: '/history/health-records?filter=chronic_followup&sort=newest', tier: 'Ücretsiz' },
-  { id: 'senior', icon: 'shield', title: 'Yaşlı Pet İzlemi', desc: 'Su, kilo, ağrı ve hareket hassasiyetleri', path: '/history/health-records?filter=senior_followup&sort=newest', tier: 'Ücretsiz' }
+  { id: 'timeline', icon: 'clock', path: '/history/timeline' },
+  { id: 'measurements', icon: 'measurement', path: '/history/measurements' },
+  { id: 'issues', icon: 'search', path: '/history/health-records' },
+  { id: 'expense', icon: 'briefcase', path: '/history/expenses' },
+  { id: 'reminders', icon: 'calendar', path: '/history/reminders' },
+  { id: 'templates', icon: 'clipboard', path: '/history/health-records?filter=chronic_followup&sort=newest' },
+  { id: 'senior', icon: 'shield', path: '/history/health-records?filter=senior_followup&sort=newest' }
 ];
 
 function formatShortDate(date) {
-  if (!date) return 'Tarih yok';
-  return new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long' }).format(new Date(date));
+  if (!date) return t('history.no_date');
+  return new Intl.DateTimeFormat(getLocale() === 'tr' ? 'tr-TR' : getLocale(), { day: 'numeric', month: 'long' }).format(new Date(date));
 }
 
 function formatMoney(amountCents, currency = 'TRY') {
-  return new Intl.NumberFormat('tr-TR', {
+  return new Intl.NumberFormat(getLocale() === 'tr' ? 'tr-TR' : getLocale(), {
     style: 'currency',
     currency,
     maximumFractionDigits: 0
@@ -33,9 +33,9 @@ function renderHistoryPreview(records = null) {
     return `
       <div class="free-record-panel">
         <div class="free-record-metrics">
-          <span>Yükleniyor</span><span>Masraf</span><span>Takvim</span>
+          <span>${t('history.loading')}</span><span>${t('history.expense')}</span><span>${t('history.calendar')}</span>
         </div>
-        <p>Ücretsiz kayıtlar getiriliyor...</p>
+        <p>${t('history.loading_free_records')}</p>
       </div>
     `;
   }
@@ -46,20 +46,20 @@ function renderHistoryPreview(records = null) {
   return `
     <div class="free-record-panel">
       <div class="free-record-metrics">
-        <span><b>${records.healthRecords.length}</b> sağlık</span>
-        <span><b>${formatMoney(expenseTotal)}</b> masraf</span>
-        <span><b>${records.reminders.length}</b> takvim</span>
+        <span><b>${records.healthRecords.length}</b> ${t('history.health_lower')}</span>
+        <span><b>${formatMoney(expenseTotal)}</b> ${t('history.expense_lower')}</span>
+        <span><b>${records.reminders.length}</b> ${t('history.calendar_lower')}</span>
       </div>
       <div class="free-record-list">
         ${recent.length ? recent.map(item => `
           <div class="free-record-row">
             <div class="premium-icon-box">${window.__icons?.[item.kind === 'expense' ? 'briefcase' : item.kind === 'reminder' ? 'calendar' : 'heartPulse']}</div>
             <div>
-              <strong>${item.title || item.category || item.record_type || 'Kayıt'}</strong>
-              <p>${formatShortDate(item.date)} · ${item.kind === 'expense' ? formatMoney(item.amount_cents, item.currency) : item.summary || item.note || 'Form kaydı'}</p>
+              <strong>${item.title || item.category || item.record_type || t('history.record')}</strong>
+              <p>${formatShortDate(item.date)} ${t('history.separator')} ${item.kind === 'expense' ? formatMoney(item.amount_cents, item.currency) : item.summary || item.note || t('history.form_record')}</p>
             </div>
           </div>
-        `).join('') : '<p>Henüz ücretsiz kayıt yok.</p>'}
+        `).join('') : `<p>${t('history.no_free_records')}</p>`}
       </div>
     </div>
   `;
@@ -85,7 +85,7 @@ export function render() {
         <div class="history-summary-panel">
           <div class="avatar">${window.__icons?.paw}</div>
           <div>
-            <div class="premium-screen-kicker">Ücretsiz Sağlık Arşivi</div>
+            <div class="premium-screen-kicker">${t('history.free_archive')}</div>
             <h2>${pet.name}</h2>
             <p>${pet.breed} · ${pet.age} · ${pet.statusText}</p>
           </div>
@@ -102,10 +102,10 @@ export function render() {
             <button class="feature-menu-card" data-path="${item.path || ''}" data-feature="${item.id}">
               <div class="premium-icon-box">${window.__icons?.[item.icon]}</div>
               <div>
-                <strong>${item.title}</strong>
-                <p>${item.desc}</p>
+                <strong>${t(`history.menu.${item.id}.title`)}</strong>
+                <p>${t(`history.menu.${item.id}.desc`)}</p>
               </div>
-              <span>${item.tier}</span>
+              <span>${t('history.free_tier')}</span>
             </button>
           `).join('')}
         </div>

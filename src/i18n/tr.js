@@ -295,14 +295,117 @@ const tr = {
     first_noticed: 'İlk fark edilen tarih', issue_desc: 'Açıklama',
     tracking_freq: 'Takip sıklığı',
     status_new: 'Yeni', status_tracking: 'Takipte', status_improving: 'İyileşiyor',
-    status_worsening: 'Kötüleşiyor', status_closed: 'Kapandı'
+    status_worsening: 'Kötüleşiyor', status_closed: 'Kapandı',
+    no_date: 'Tarih yok',
+    loading: 'Yükleniyor',
+    expense: 'Masraf',
+    calendar: 'Takvim',
+    loading_free_records: 'Ücretsiz kayıtlar getiriliyor...',
+    health_lower: 'sağlık',
+    expense_lower: 'masraf',
+    calendar_lower: 'takvim',
+    record: 'Kayıt',
+    form_record: 'Form kaydı',
+    no_free_records: 'Henüz ücretsiz kayıt yok.',
+    free_archive: 'Ücretsiz Sağlık Arşivi',
+    free_tier: 'Ücretsiz',
+    separator: ' · ',
+    menu: {
+      timeline: { title: 'Tüm Zaman Akışı', desc: 'Kontroller, notlar ve medya kayıtları' },
+      measurements: { title: 'Ölçümler', desc: 'Kilo, ateş, solunum ve temel değerler' },
+      issues: { title: 'Sağlık Dosyaları', desc: 'Şikayetler, deri-yara takipleri ve foto karşılaştırma' },
+      expense: { title: 'Masraf Takibi', desc: 'Mama, veteriner, aşı ve ilaç harcamaları' },
+      reminders: { title: 'Aşı / İlaç / Randevu Takvimi', desc: 'Düzenli ilaç, aşı ve klinik ziyaret hatırlatmaları' },
+      templates: { title: 'Takip Şablonları', desc: 'Kronik hastalık, operasyon sonrası, gebelik ve doğum' },
+      senior: { title: 'Yaşlı Pet İzlemi', desc: 'Su, kilo, ağrı ve hareket hassasiyetleri' }
+    }
   },
   reports: {
     title: 'Raporlar', new_report: 'Yeni Rapor Oluştur',
     source_last: 'Son muayene sonucu', source_issue: 'Takip edilen sorun',
     source_date: 'Tarih aralığı', source_manual: 'Manuel seçim',
     preview: 'Önizle', download: 'PDF Olarak İndir',
-    share: 'Paylaş', send_vet: 'Veterinere Gönder', edit: 'Düzenle', delete: 'Sil'
+    share: 'Paylaş', send_vet: 'Veterinere Gönder', edit: 'Düzenle', delete: 'Sil',
+    detail: {
+      no_date: 'Tarih yok',
+      health_types: {
+        photo_followup: 'Foto takip',
+        poop_score: 'Dışkı skoru',
+        diet_log: 'Beslenme',
+        chronic_followup: 'Kronik takip',
+        postop_followup: 'Postop takip',
+        reproduction_followup: 'Üreme takibi',
+        senior_followup: 'Yaşlı pet',
+        toxin_foreign_body: 'Acil toksik/yabancı cisim',
+        issue: 'Sorun',
+        default: 'Sağlık kaydı'
+      },
+      measurements: {
+        weight: 'Kilo',
+        temperature: 'Vücut ısısı',
+        respiratory: 'Solunum',
+        respiratory_rate: 'Solunum',
+        heart_rate: 'Kalp atışı',
+        default: 'Ölçüm'
+      },
+      ai_summary: 'AI özet',
+      date: 'Tarih',
+      clinic: 'Klinik',
+      amount: 'Tutar',
+      confidence: 'Güven',
+      lab_values: 'Tahlil Değerleri',
+      value: 'Değer',
+      medication_prescription: 'İlaç / Reçete',
+      medication: 'İlaç',
+      followup_tasks: 'Takip Görevleri',
+      warning: 'Uyarı',
+      separator: ' · ',
+      default_title: 'Pati Sağlık Raporu',
+      default_included: ['Pet profili', 'Aşı ve ilaçlar', 'Şikayet geçmişi', 'Masraflar'],
+      created: 'Oluşturma',
+      draft: 'Taslak',
+      ready: 'Hazır',
+      pet_info: 'Pet Bilgileri',
+      name: 'İsim',
+      active_pet: 'Aktif pet',
+      document: 'Belge',
+      purpose: 'Amaç',
+      document_note: 'Belge Notu',
+      clinic_note: 'Klinik Notu',
+      no_document_note: 'Belge için ek not girilmedi.',
+      no_clinic_note: 'Veteriner için özel not eklenmedi.',
+      ocr_prep: 'AI / OCR Okuma Hazırlığı',
+      goal: 'Hedef',
+      clinic_summary: 'Klinik özeti',
+      status: 'Durum',
+      ai_waiting: 'AI okuma bekliyor',
+      uploaded: 'Yüklendi',
+      manual_note: 'Elle not',
+      planned_outputs: 'Planlanan Çıkarımlar',
+      included_sections: 'Dahil Edilecek Bölümler',
+      health_summary: 'Sağlık Kayıt Özeti',
+      no_health_records: 'Henüz sağlık kaydı yok.',
+      calendar_reminders: 'Takvim ve Hatırlatıcılar',
+      reminder: 'Hatırlatıcı',
+      no_upcoming_reminders: 'Yaklaşan hatırlatıcı yok.',
+      expense_measurement_summary: 'Masraf ve Ölçüm Özeti',
+      total_expense: 'Toplam masraf',
+      record_count: '{count} kayıt',
+      latest_measurement: 'Son ölçüm',
+      none: 'Yok',
+      waiting_record: 'Kayıt bekliyor',
+      production_status: 'Üretim Durumu',
+      ocr_processed_note: 'Bu belge AI/OCR ile ayrıştırıldı ve okunabilen alanlar sağlık dosyasına işlendi. Canlı sistemde aynı işlem server/API katmanında çalıştırılacak.',
+      ocr_queued_note: 'Bu belge AI/OCR okuma kuyruğuna hazırlanmış ham kayıt olarak saklanır. Gerçek ayrıştırma için Gemini anahtarı veya server/API katmanı gerekir.',
+      export_note: 'Bu kayıt veritabanına kaydedilir ve bu ekrandan indirilebilir HTML dosyası olarak dışa aktarılır. Sunucu taraflı gerçek PDF üretimi sonraki aşamada server/API katmanına bağlanacak.',
+      preview_title: 'Rapor Önizleme',
+      loading_title: 'Rapor yükleniyor',
+      loading_desc: 'Klinik dosyası kontrol ediliyor',
+      download_html: 'HTML Dosya İndir',
+      share_fallback: 'Paylaşım menüsü desteklenmiyor. Rapor dosyası indirildi.',
+      not_found: 'Rapor bulunamadı',
+      not_found_desc: 'Bu dosya silinmiş veya henüz senkronize edilmemiş olabilir.'
+    }
   },
   profile: {
     title: 'Profil', edit: 'Profili Düzenle',
@@ -681,6 +784,53 @@ const tr = {
       vet_search: 'Veteriner Ara',
       open_nearby_clinics: 'Yakındaki Klinikleri Aç',
       alert_disclaimer: 'Bu uyarı teşhis değildir; veteriner görüşmesine hazırlık için kayıtları düzenler.',
+      payload_labels: {
+        score: 'Skor',
+        extra_finding: 'Ek bulgu',
+        note: 'Not',
+        reaction: 'Reaksiyon',
+        diet_note: 'Beslenme notu',
+        today_status: 'Bugünkü durum',
+        followup_note: 'Takip notu',
+        medication_use: 'İlaç kullanımı',
+        wound_status: 'Yara durumu',
+        general_status: 'Genel durum',
+        followup_type: 'Takip türü',
+        sign: 'Belirti',
+        daily_status: 'Günlük durum',
+        focus: 'Odak',
+        observation: 'Gözlem',
+        detail: 'Detay',
+        what_ingested: 'Ne yuttu / temas etti?',
+        when_happened: 'Ne zaman oldu?',
+        sign_question: 'Belirti var mı?',
+        start_date: 'Başlangıç tarihi',
+        template: 'Şablon',
+        measurement_observation: 'Ölçüm / gözlem',
+        surgery_day: 'Operasyon günü',
+        next_dose_check: 'Sonraki doz / kontrol',
+        new_food_meal: 'Yeni mama / öğün',
+        transition_day: 'Geçiş günü',
+        visual_change: 'Görsel değişim'
+      },
+      keywords: {
+        blood: ['kan'],
+        poop_watch: ['mukus', 'çok sulu', 'çok sert'],
+        vomiting_diarrhea: ['kusma', 'ishal'],
+        diet_watch: ['kaşıntı', 'gaz'],
+        chronic_watch: ['daha kötü', 'ilaç atlandı'],
+        discharge: ['akıntı'],
+        wound_watch: ['kızarık', 'şiş'],
+        medication_watch: ['atlandı', 'yan etki'],
+        reproduction_watch: ['akıntı', 'iştah değişimi'],
+        senior_watch: ['ağrılı', 'iştahsız', 'ağrı'],
+        toxin_danger: ['nefes sorunu', 'titreme', 'ilaç', 'çikolata', '0-1 saat'],
+        toxin_watch: ['kusma', 'halsizlik', 'salya', '1-3 saat', 'emin değilim'],
+        media_before: ['önce'],
+        media_after: ['bugün', 'sonra', 'yeni'],
+        change_danger: ['arttı', 'yeni'],
+        change_good: ['azaldı']
+      },
       fields: {
         category: 'Kategori',
         note: 'Not',
@@ -981,8 +1131,143 @@ const tr = {
       { id: 'weight_change', weight: 3, words: ['kilo', 'zayif', 'zayıf', 'kilo kaybi', 'kilo kaybı'] }
     ]
   },
+  packageRisk: {
+    title: 'Ambalaj Risk Kontrolü',
+    package_photo: 'Ambalaj fotoğrafı',
+    choose_photo: 'Fotoğraf seç',
+    photo_hint: 'Ürün etiketi, içerik listesi veya paket önü',
+    product_name: 'Ürün / madde adı',
+    product_placeholder: 'Örn. şekersiz sakız, bitter çikolata, temizlik ürünü',
+    ingredients: 'İçerik / etikette yazanlar',
+    ingredients_placeholder: 'Etikette gördüğün içerikleri yaz: xylitol, kakao, üzüm, ilaç adı, kimyasal adı...',
+    amount: 'Yaklaşık miktar',
+    amount_placeholder: 'Örn. 2 parça, yarım paket, emin değilim',
+    when: 'Ne zaman oldu?',
+    symptom_question: 'Belirti var mı?',
+    run_scan: 'Risk Taramasını Çalıştır',
+    save_record: 'Toksik Acil Kayıt Oluştur',
+    knowledge: 'Toksik Bilgi Bankası',
+    visual: 'Görsel',
+    separator: ' · ',
+    input_required: 'Ürün adı, içerik metni veya ambalaj fotoğrafından en az birini ekleyin.',
+    scanning: 'AI ile taranıyor...',
+    record_created: 'Toksik acil kayıt oluşturuldu.',
+    record_failed: 'Kayıt oluşturulamadı',
+    ai_enabled: 'AI destekli tarama',
+    ai_ready: 'AI hazırlıklı tarama',
+    heading: 'Ambalajdan risk şüphesi',
+    hero_desc: '{name} için fotoğrafı ve etikette gördüğün içerikleri ekle. Bu ekran kesin güvenli/tehlikeli hükmü vermez.',
+    info: 'Fotoğraf kaydedilir; tarama ürün adı ve yazdığın içerik metni üzerinden yapılır. Gemini anahtarı tanımlıysa güvenli AI özeti de eklenir.',
+    risk_score: 'risk puanı',
+    result_kicker: 'Kontrollü tarama sonucu',
+    do_not_do: 'Şimdi yapma',
+    ai_safe_summary: 'AI güvenli özet',
+    ai_assessment: 'AI değerlendirmesi',
+    prepare_for_vet: 'Veteriner için hazırla',
+    questions_to_ask: 'Sorulacaklar',
+    ai_failed_note: 'AI özeti alınamadı; güvenli kural sonucu gösteriliyor.',
+    ai_inactive_note: 'Gemini anahtarı local env içinde yoksa AI özeti pasif kalır; güvenli kural sonucu gösterilir.',
+    sign_or_risk: 'Belirti/risk',
+    no_keyword: 'Net toksik anahtar kelime bulunmadı',
+    no_keyword_desc: 'Bu sonuç güvenli anlamına gelmez; miktar ve bağlam önemlidir.',
+    unknown: 'bilinmiyor',
+    none: 'yok',
+    not_specified: 'belirtilmedi',
+    no_symptom_specified: 'belirti yok/belirtilmedi',
+    scan_result: 'Tarama sonucu',
+    severe_symptom_reported: 'Ciddi belirti bildirildi',
+    severe_symptom_action: 'Ciddi belirti varsa madde bilinmese bile acil veteriner değerlendirmesi gerekir.',
+    severe_symptom_ids: ['seizure_tremor', 'breathing_issue', 'fainting', 'constant_vomiting'],
+    timing_ids: ['zero_one_hour', 'one_three_hours', 'today', 'yesterday', 'not_sure'],
+    timing: {
+      zero_one_hour: '0-1 saat',
+      one_three_hours: '1-3 saat',
+      today: 'Bugün',
+      yesterday: 'Dün',
+      not_sure: 'Emin değilim'
+    },
+    symptom_ids: ['none', 'vomiting', 'constant_vomiting', 'lethargy', 'drooling', 'seizure_tremor', 'breathing_issue', 'fainting'],
+    symptoms: {
+      none: 'Belirti yok',
+      vomiting: 'Kusma',
+      constant_vomiting: 'Sürekli kusma',
+      lethargy: 'Halsizlik',
+      drooling: 'Salya',
+      seizure_tremor: 'Nöbet / titreme',
+      breathing_issue: 'Nefes sorunu',
+      fainting: 'Bayılma'
+    },
+    levels: {
+      critical: { title: 'Acil risk', cls: 'danger', score: 95 },
+      high: { title: 'Yüksek risk', cls: 'danger', score: 82 },
+      foreign: { title: 'Yabancı cisim riski', cls: 'warning', score: 74 },
+      watch: { title: 'Yakın takip', cls: 'warning', score: 46 },
+      unknown: { title: 'Belirsiz', cls: 'info', score: 28 }
+    },
+    rules: [
+      {
+        level: 'critical',
+        label: 'Çok yüksek riskli içerik',
+        terms: ['ksilitol', 'xylitol', 'fare zehiri', 'rodenticide', 'antifriz', 'ethylene glycol', 'etilen glikol', 'parasetamol', 'paracetamol', 'ibuprofen', 'naproksen', 'pil', 'battery', 'nikotin', 'nicotine', 'çamaşır suyu', 'bleach', 'kostik', 'drain cleaner'],
+        action: 'Beklemeden veteriner veya acil klinikle görüş. Ambalajı ve yaklaşık miktarı yanında tut.'
+      },
+      {
+        level: 'high',
+        label: 'Yüksek riskli gıda/ürün',
+        terms: ['çikolata', 'chocolate', 'kakao', 'cocoa', 'üzüm', 'grape', 'kuru üzüm', 'raisin', 'soğan', 'onion', 'sarımsak', 'garlic', 'alkol', 'alcohol', 'kafein', 'caffeine', 'kahve', 'coffee', 'maya', 'yeast dough', 'macadamia', 'zambak', 'lily'],
+        action: 'Belirti olmasa bile veterinerle görüş. Tür, kilo, zaman ve miktar bilgisini hazırla.'
+      },
+      {
+        level: 'foreign',
+        label: 'Yabancı cisim / tıkanma riski',
+        terms: ['ip', 'misina', 'oyuncak', 'kemik', 'mıknatıs', 'magnet', 'iğne', 'needle', 'plastik', 'poşet', 'paket', 'ambalaj', 'mısır koçanı', 'corn cob', 'kumaş', 'çorap'],
+        action: 'Kusturmaya veya görünen ipi çekmeye çalışma. Nesnenin boyutunu ve materyalini not et.'
+      },
+      {
+        level: 'watch',
+        label: 'Takip gerektiren içerik',
+        terms: ['yağlı', 'fatty', 'baharat', 'spicy', 'süt', 'milk', 'laktoz', 'licorice', 'meyve çekirdeği', 'apricot kernel', 'peach pit'],
+        action: 'Risk daha bağlama bağlıdır. Miktar, tür, kilo ve belirtilere göre veteriner görüşü gerekebilir.'
+      }
+    ],
+    safe_steps: {
+      no_home_treatment: 'Veteriner söylemeden kusturma, ilaç, aktif kömür, süt, yağ veya tuzlu su verme.',
+      keep_package: 'Ambalajı, etiketi, kalan maddeyi ve fotoğrafı sakla.',
+      note_details: 'Ne zaman, yaklaşık ne kadar ve hangi belirtiler olduğunu not et.'
+    },
+    default_next_action: 'Madde net değilse “güvenli” varsayma. Ürün adı, içerik listesi ve miktarla veteriner görüşüne hazırlan.',
+    system_prompt: 'Sen veteriner yerine geçmeyen, güvenli aciliyet yönlendirmesi yapan bir pet sağlık asistanısın.',
+    ai_prompt: `Evcil hayvan için ambalaj/toksik risk ön değerlendirmesi yap.
+Kesin teşhis, doz, ilaç, evde kusturma, aktif kömür veya tedavi talimatı verme.
+Güvenli dil kullan: "risk", "veterinerle görüş", "acil değerlendirme gerekebilir".
+
+Pet bağlamı:
+- Tür/ırk/yaşam evresi: {species} / {lifeStage}
+- Risk etiketleri: {riskTags}
+
+Kullanıcı girdisi:
+- Ürün/madde: {productName}
+- İçerik/etiket: {ingredientText}
+- Yaklaşık miktar: {amount}
+- Zaman: {timing}
+- Belirtiler: {symptoms}
+
+Kural motoru sonucu:
+- Seviye: {level}
+- Eşleşmeler: {matches}
+
+JSON döndür:
+{
+  "level": "critical|high|foreign|watch|unknown",
+  "headline": "kısa başlık",
+  "reason": "2 cümleyi geçmeyen gerekçe",
+  "doNotDo": ["en fazla 3 güvenli yapma maddesi"],
+  "prepare": ["en fazla 4 veteriner için hazırlanacak bilgi"],
+  "askVet": ["en fazla 3 veteriner sorusu"]
+}`
+  },
   common: {
-    save: 'Kaydet', cancel: 'İptal', back: 'Geri', next: 'Devam', done: 'Tamam',
+    save: 'Kaydet', saving: 'Kaydediliyor...', cancel: 'İptal', back: 'Geri', next: 'Devam', done: 'Tamam',
     delete: 'Sil', edit: 'Düzenle', share: 'Paylaş', close: 'Kapat',
     loading: 'Yükleniyor...', error: 'Bir hata oluştu', retry: 'Tekrar Dene',
     confirm: 'Onayla', yes: 'Evet', no: 'Hayır',
