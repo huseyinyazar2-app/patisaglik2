@@ -9,6 +9,7 @@ vite-dev*.log
 web-preview*.log
 .chrome-pdf-profile/
 .chrome-slide-render-profile/
+.chrome-brochure-render-profile/
 docs/.pptx-build/
 docs/ppt-slides/
 docs/*-preview.png

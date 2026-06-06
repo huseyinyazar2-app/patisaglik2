@@ -553,3 +553,11 @@ Bu fazın ürün dili teşhis değil; çekim kalitesini artırma, değişim taki
 - [x] Frontend/admin API fallback adresleri `https://api.pethelp.app` olarak guncellendi.
 - [x] GitHub `main` branch pushlandi ve Coolify deploy tetiklendi.
 - [x] HTTPS kontrolleri tamamlandi: ana site, `www`, `api` ve `/api/health` 200 donuyor.
+
+## Canli Kontrol ve PWA Fix - 06.06.2026
+
+- [x] Canli smoke kontrolde `/manifest.webmanifest` ve `/pwa-icon.svg` dosyalarinin SPA HTML fallback dondugu tespit edildi.
+- [x] PWA manifest, ikon ve service worker dosyalari Vite production build'e girmesi icin `public/` altina tasindi.
+- [x] Server MIME listesine `.webmanifest` icin `application/manifest+json` eklendi.
+- [x] Canli kontrolde manifest, icon, service worker, ana site ve API health endpointleri dogru icerik/MIME ile 200 donuyor.
+- [x] Canli API smoke testi tamamlandi: admin login, overview/settings, kullanici register/login, 1 kredi atamasi ve test kullanici temizligi basarili.
