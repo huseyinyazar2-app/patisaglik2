@@ -1,7 +1,7 @@
 {
   "name": "Pet Help",
   "short_name": "Pet Help",
-  "description": "Evcil hayvan sağlık kayıtları, AI ön kontrol ve veteriner hazırlık asistanı.",
+  "description": "Pet health records, AI pre-checks and vet-ready case preparation.",
   "start_url": "/#/auth/splash",
   "scope": "/",
   "display": "standalone",
