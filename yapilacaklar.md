@@ -561,3 +561,9 @@ Bu fazın ürün dili teşhis değil; çekim kalitesini artırma, değişim taki
 - [x] Server MIME listesine `.webmanifest` icin `application/manifest+json` eklendi.
 - [x] Canli kontrolde manifest, icon, service worker, ana site ve API health endpointleri dogru icerik/MIME ile 200 donuyor.
 - [x] Canli API smoke testi tamamlandi: admin login, overview/settings, kullanici register/login, 1 kredi atamasi ve test kullanici temizligi basarili.
+
+## Admin Hesap Duzenleme - 06.06.2026
+
+- [x] Canli Turso `admin_accounts` tablosunda aktif admin sayisi kontrol edildi ve tek aktif super admin hesabi birakildi.
+- [x] Default admin seed mantigi guvenli hale getirildi; herhangi bir admin hesabi varken eski varsayilan admin yeniden olusturulmayacak.
+- [x] Eski varsayilan admin girisi kapatildi ve yeni admin girisi canli API uzerinden dogrulandi.
