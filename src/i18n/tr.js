@@ -1,4 +1,4 @@
-// Pati Sağlık — i18n Turkish translations
+// Pet Help — i18n Turkish translations
 import en from './en.js';
 
 export const supportedLocales = [
@@ -29,7 +29,7 @@ export const supportedLocales = [
 ];
 
 const tr = {
-  app: { name: 'Pati Sağlık', tagline: 'Evcil dostunuzun sağlık geçmişini takip edin, değişimleri erken fark edin.' },
+  app: { name: 'Pet Help', tagline: 'Evcil dostunuzun sağlık geçmişini takip edin, değişimleri erken fark edin.' },
   splash: { start: 'Başlayalım', login: 'Giriş Yap' },
   onboarding: {
     s1_title: 'Pet sağlık asistanınız', s1_desc: 'Evcil dostunuzun sağlık kayıtlarını tek yerde toplayın.',
@@ -43,6 +43,7 @@ const tr = {
     register_title: 'Hesap Oluştur', register_subtitle: 'Yeni bir hesap oluşturun',
     email: 'E-posta', password: 'Şifre', password_confirm: 'Şifre Tekrar', fullname: 'Ad Soyad',
     login_btn: 'Giriş Yap', register_btn: 'Hesap Oluştur',
+    login_failed: 'Giriş yapılamadı.', register_failed: 'Kayıt oluşturulamadı.',
     forgot: 'Şifremi Unuttum',
     no_account: 'Hesabın yok mu?', has_account: 'Zaten hesabın var mı?',
     register_link: 'Kayıt Ol', login_link: 'Giriş Yap',
@@ -138,7 +139,7 @@ const tr = {
     record_summary: 'Kayıt Özeti',
     recent_records: 'Son kayıtlar',
     free_tools_title: 'Ücretsiz Takip Araçları',
-    no_credit: 'Kredi harcamaz',
+    no_credit: 'İlk AI kredisi dahil',
     care_programs: 'Takip Programları',
     templates: 'Şablonlar',
     active_followups: 'Aktif Takipler',
@@ -251,6 +252,35 @@ const tr = {
     add_note: 'Bu kayıtla ilgili not ekleyin',
     optional_note: 'Opsiyonel not...',
     save: 'Kaydet', skip: 'Atla'
+  },
+  qualityCheck: {
+    analyzing: 'Kalite kontrol ediliyor',
+    analyzing_desc: 'Işık, netlik ve çözünürlük hızlıca değerlendiriliyor.',
+    video_analyzing_desc: 'Süre, çözünürlük ve ilk kare ışığı hızlıca değerlendiriliyor.',
+    manual_check: 'Manuel kontrol gerekli',
+    manual_check_desc: 'Otomatik kalite kontrolü tamamlanamadı. Pet net görünüyorsa kaydı kullanabilirsiniz.',
+    score: 'Kalite skoru: {score}/100',
+    before_photo_title: 'Net kayıt için kontrol',
+    before_photo_desc: 'Işığı artır, peti kadraja al, mümkünse telefonu sabit tut ve ilgili bölgeyi yakın ama kesmeden çek.',
+    before_video_title: 'Video rehberi',
+    before_video_desc: 'Peti tamamen kadraja al, telefonu sabit tut, en az 6-10 saniye çek ve yürüyüş/solunum bölgesini kapatma.',
+    good_photo: 'Fotoğraf veteriner raporu için kullanılabilir görünüyor.',
+    good_video: 'Video veteriner raporu için kullanılabilir görünüyor.',
+    photo_meta: '{width}x{height} · ışık {brightness}',
+    video_meta: '{width}x{height} · {duration} sn',
+    levels: {
+      good: 'Kayıt iyi görünüyor',
+      watch: 'Kayıt kullanılabilir ama dikkat',
+      poor: 'Tekrar çekmek daha iyi olur'
+    },
+    issues: {
+      low_resolution: 'Çözünürlük düşük; mümkünse daha net/yakın çekim yapın.',
+      too_dark: 'Işık yetersiz; daha aydınlık bir ortam deneyin.',
+      too_bright: 'Görüntü fazla parlak; direkt ışığı azaltın.',
+      low_contrast: 'Pet veya ilgili bölge zeminden yeterince ayrışmıyor.',
+      blurry: 'Görüntü bulanık; telefonu sabitleyip tekrar çekin.',
+      too_short: 'Video çok kısa; en az 6-10 saniyelik kayıt daha faydalı olur.'
+    }
   },
   summary: {
     title: 'Kontrol Özeti', complaint: 'Şikayet', categories: 'Anlaşılan Kategoriler',
@@ -441,7 +471,7 @@ const tr = {
       followup_tasks: 'Takip Görevleri',
       warning: 'Uyarı',
       separator: ' · ',
-      default_title: 'Pati Sağlık Raporu',
+      default_title: 'Pet Help Raporu',
       default_included: ['Pet profili', 'Aşı ve ilaçlar', 'Şikayet geçmişi', 'Masraflar'],
       created: 'Oluşturma',
       draft: 'Taslak',
@@ -611,13 +641,13 @@ const tr = {
     document: 'Belge',
     pet: 'pet',
     login_kicker: 'Admin girişi',
-    login_title: 'Pati Sağlık Yönetim',
+    login_title: 'Pet Help Yönetim',
     login_desc: 'Geçici giriş: kullanıcı adı <strong>admin</strong>, şifre <strong>admin123</strong>. Girişten sonra ayarlardan değiştirilebilir.',
     username: 'Kullanıcı adı',
     password: 'Şifre',
     login_button: 'Giriş yap',
     back_to_web: 'Tanıtıma dön',
-    brand: 'Pati Sağlık Admin',
+    brand: 'Pet Help Admin',
     web_intro: 'Tanıtım',
     logout: 'Çıkış',
     hero_kicker: 'Yetkili yönetim paneli',
@@ -790,8 +820,9 @@ const tr = {
     go_home: 'Ana Sayfaya Dön',
     paid_kicker: 'Kredi / Pro Alanı',
     paid_desc_suffix: 'Bu özellik ücretsiz sağlık kayıtlarından ayrı tutulur.',
-    paid_info: 'Ücretsiz planda kayıt arşivi, masraf, hatırlatıcı, QR kart ve takip formları açıktır. Bakıcı paylaşımı için kredi veya Pro plan gerekir.',
+    paid_info: 'Bu alan mağaza yayını sonrası güncelleme ile açılacak. Ücretsiz kayıt arşivi, masraf, hatırlatıcı, QR kart ve takip formları kullanılmaya devam eder.',
     view_plans: 'Planları Gör',
+    store_update_later: 'Store sonrası açılacak',
     hero_desc: '{name} için {desc}',
     ocr_completed: 'OCR tamamlandı',
     ocr_default_summary: 'Belgeden yapılandırılmış veri çıkarıldı.',
@@ -807,8 +838,8 @@ const tr = {
     domain_table_saved: ' ve {table} tablosuna işlendi',
     turso_saved: 'Form Turso test veritabanına yazıldı{target}.',
     local_saved: 'Form yerel yedek kayda yazıldı. Turso için VITE_TURSO_* env gerekli.',
-    sitter_invite_ready: 'Pati Sağlık bakıcı daveti hazır.',
-    sitter_invite_title: 'Pati Sağlık Bakıcı Daveti',
+    sitter_invite_ready: 'Pet Help bakıcı daveti hazır.',
+    sitter_invite_title: 'Pet Help Bakıcı Daveti',
     save_failed: 'Kayıt başarısız',
     required_marker: ' *',
     required_error: 'Zorunlu alanları doldurmalısın.',
@@ -1258,8 +1289,8 @@ const tr = {
     repeat: 'Tekrar',
     no_size: 'Boyut yok',
     open: 'Aç',
-    reminder_ics_title: 'Pati Sağlık Hatırlatıcı',
-    reminder_ics_desc: 'Pati Sağlık hatırlatıcısı',
+    reminder_ics_title: 'Pet Help Hatırlatıcı',
+    reminder_ics_desc: 'Pet Help hatırlatıcısı',
     appointment: 'Randevu',
     medication: 'İlaç',
     daily: 'Günlük',
@@ -1474,7 +1505,7 @@ const tr = {
     submissions: {
       sitter_default_name: 'Bakıcı',
       invite_no_permissions: 'Seçilmedi',
-      invite_text: '{name} için Pati Sağlık bakıcı daveti hazır. Süre: {duration}. İzinler: {permissions}.',
+      invite_text: '{name} için Pet Help bakıcı daveti hazır. Süre: {duration}. İzinler: {permissions}.',
       expense_other: 'Diğer',
       reminder_general: 'Genel',
       reminder_once: 'Tek sefer',
@@ -1802,12 +1833,12 @@ JSON döndür:
 }`
   },
   checkCenter: {
-    kicker: 'Kredi / Premium Alanı',
+    kicker: 'AI Destek Alanı',
     heading: 'Veteriner öncesi AI triyaj',
     hero_desc: '{name} için semptom analizi, belge okuma ve klinik hazırlık modülleri burada çalışır.',
-    plan: 'Plan',
-    free_note: 'Ücretsiz takip, takvim, masraf, dışkı skoru ve günlük kayıtlar Ana Sayfa ile Geçmiş sekmelerinde kalır.',
-    modules_title: 'Premium AI Modülleri',
+    plan: 'Sürüm',
+    free_note: 'İlk üyelikte 1 AI kredisi verilir. Satın alma kapalıdır; gerekirse admin panelinden kredi artırılıp azaltılabilir.',
+    modules_title: 'AI Modülleri',
     assistants: {
       smart: { title: 'Akıllı Şikayet Kontrolü', desc: 'Semptomları analiz eder, aciliyet riskini ve kanıt görevlerini çıkarır.', action: 'Başlat' },
       knowledge: { title: 'Acil Bilgi Bankası', desc: 'Tedavi önerisi vermeden; neyi yapmamak, neyi hazırlamak ve ne zaman acile gitmek gerektiğini gösterir.', action: 'Aç' },
@@ -1842,7 +1873,7 @@ JSON döndür:
     note_placeholder: 'Kısa bir not ekle',
     save_request: 'Talebi Kaydet',
     share_text: '{pet} konumu: {location}',
-    share_title: 'Pati Sağlık Gönüllü Konumu',
+    share_title: 'Pet Help Gönüllü Konumu',
     location_copied: 'Konum bağlantısı kopyalandı.',
     location_copy_failed: 'Konum bağlantısı kopyalanamadı. Harita bağlantısını açarak paylaşabilirsiniz.',
     required_error: 'İletişim ve talep türü zorunlu.',
@@ -1931,7 +1962,7 @@ JSON döndür:
     not_found_desc: 'Bu bağlantı pasif olabilir veya henüz oluşturulmamış olabilir.',
     link_copied: 'Bağlantı kopyalandı.',
     link_selected: 'Bağlantı alanı seçili bırakıldı.',
-    share_title: 'Pati Sağlık Acil Kart',
+    share_title: 'Pet Help Acil Kart',
     share_unsupported: 'Paylaşım desteklenmiyor. Bağlantıyı kopyalayabilirsiniz.',
     open_failed: 'Kart açılamadı'
   },
@@ -2038,7 +2069,7 @@ JSON döndür:
     title: 'Vaka Raporu',
     not_found_title: 'Rapor bulunamadı',
     not_found_desc: 'Bu link cihazda kayıtlı değil veya temizlenmiş olabilir.',
-    share_title: 'Pati Sağlık vaka raporu',
+    share_title: 'Pet Help vaka raporu',
     link_ready: 'Rapor linki hazır.'
   },
   vetOutcome: {
@@ -2081,32 +2112,90 @@ JSON döndür:
   },
   landing: {
     admin: 'Admin',
-    admin_panel: 'Admin Paneli',
+    nav_features: 'Özellikler',
+    nav_flow: 'Akış',
+    nav_safety: 'Güven',
+    language: 'Dil',
+    admin_panel: 'Yönetim panelini aç',
     open_app: 'Uygulamayı Aç',
-    kicker: 'Pet sağlık yönetimi',
-    hero_title: 'Panik anında doğru veriyi topla, veterinere eksiksiz dosyayla git.',
-    hero_desc: 'Pet sahibi için sağlık pasaportu, AI ön şikayet dosyası, güvenli aciliyet yönlendirmesi ve tedavi sonrası takip aynı deneyimde birleşir.',
+    kicker: 'Evcil hayvan sağlığı için daha sakin, daha düzenli bir deneyim',
+    hero_title: 'Belirtiyi toparla, kaydı düzenle, veterinere hazırlıklı git.',
+    hero_desc: 'Pet Help; pet profilini, sağlık geçmişini, ön kontrol akışını, güvenli yönlendirmeyi ve tedavi sonrası takibi tek yerde birleştirir. Amaç teşhis vermek değil, karar anında dağınıklığı azaltmaktır.',
+    hero_primary: 'Yönetim panelini incele',
+    hero_secondary: 'Mobil deneyimi aç',
     mobile_preview: 'Mobil Önizleme',
-    visual_label: 'Pati Sağlık ürün özeti',
+    visual_label: 'Pet Help tanıtım sahnesi',
     free_health_area: 'Ücretsiz sağlık alanı',
     pre_check: 'Ön kontrol',
-    preview_subject: 'Pet sağlık dosyası',
-    preview_meta: 'Kayıtlar · AI ön triyaj · takip',
-    preview_passport: 'Pasaport',
-    preview_weight: 'Kilo',
+    preview_subject: 'Canlı sağlık dosyası',
+    preview_meta: 'Kayıtlar · ön değerlendirme · takip',
+    preview_passport: 'Paylaşılabilir dosya',
+    preview_weight: 'Ağırlık',
     preview_followup: 'Takip',
-    preview_model: 'Güvenli AI',
+    preview_single_flow: 'Tek akış',
     risk_signal: 'Risk sinyali',
     vet_guidance_ready: 'Veteriner yönlendirme hazır',
+    visual_floating_top: 'Sağlık pasaportu',
+    visual_floating_top_title: 'Aşı, ölçüm, belge ve masraf tek yerde',
+    visual_floating_top_desc: 'Farklı ekranlara dağılmadan düzenli arşiv',
+    visual_floating_bottom: 'Takip planı',
+    visual_floating_bottom_title: 'İlaç, kontrol ve belirtiler aynı planda',
+    visual_floating_bottom_desc: 'Tedavi sonrasında kopmayan izlem akışı',
+    visual_side_one: 'Ön değerlendirme',
+    visual_side_one_title: 'Şikayet daralır',
+    visual_side_one_desc: 'İlgili sorular açılır, gereksiz kartlar çoğalmaz.',
+    visual_side_two: 'Klinik hazırlık',
+    visual_side_two_title: 'Rapor linki hazır',
+    visual_side_two_desc: 'Veteriner görüşmesinden önce özetli paylaşım.',
+    story_kicker: 'Tek amaç',
+    story_title: 'Panik anında daha az belirsizlik, daha iyi kayıt, daha net iletişim.',
+    story_desc: 'Kullanıcı çoğu zaman neyin önemli olduğunu, neyi not etmesi gerektiğini ve veterinere ne anlatacağını bilmez. Pet Help bu boşluğu kullanışlı bir kayıt akışına dönüştürür.',
+    story_badge_title: 'Evde teşhis değil, düzenli karar desteği',
+    story_badge_desc: 'Riskli alanlarda yönlendirme dili kontrollü kalır; kayıt, gözlem ve zaman çizelgesi merkezdedir.',
+    features_kicker: 'Ürünün çekirdeği',
+    features_title: 'Mobil uygulama sadece not tutmaz; karışık anları düzenler.',
+    features_desc: 'Temel sağlık arşivi ile AI destekli ön kontrol akışı aynı deneyimde buluşur. Kullanıcı tek bir ekosistemde kayıt açar, takip eder ve paylaşır.',
     features: [
-      { title: 'AI ön triyaj', desc: 'Şikayeti, pet geçmişini ve kırmızı bayrakları veterinere hazır özetler.' },
-      { title: 'Sağlık pasaportu', desc: 'Aşı, parazit, ölçüm, belge, masraf ve takip kayıtlarını tek dosyada toplar.' },
-      { title: 'Güvenli risk akışı', desc: 'Zehirlenme ve yabancı cisim şüphesinde evde tedavi değil, güvenli aciliyet yönlendirmesi yapar.' },
-      { title: 'Takip asistanı', desc: 'Tedavi sonrası ilaç uyumu, belirti değişimi, yara/foto kontrolü ve randevu takibini düzenler.' }
+      { title: 'Akıllı ön kontrol', desc: 'Ana şikayetten başlayıp ilgili sorulara daralan akışla kullanıcıyı gereksiz adımlardan çıkarır.' },
+      { title: 'Sağlık pasaportu', desc: 'Aşı, parazit, ölçüm, belge, masraf ve serbest kayıtlar tek pet dosyasında birikir.' },
+      { title: 'Kırmızı bayrak mantığı', desc: 'Acil riskleri ayırır, dilini kontrollü tutar ve kullanıcıyı doğru sonraki adıma iter.' },
+      { title: 'Medya ve belge arşivi', desc: 'Fotoğraf, video, reçete, tahlil ve paylaşılabilir rapor linkleri düzenli kalır.' },
+      { title: 'Tedavi sonrası takip', desc: 'İlaç saati, belirti değişimi, yara kontrolü ve kontrol randevusu aynı planda izlenir.' },
+      { title: 'Aile ve bakım paylaşımı', desc: 'Birden fazla pet, farklı bakım sorumluları ve paylaşılabilir kayıt yapısı aynı temelde çalışır.' }
     ],
-    hybrid_kicker: 'Hibrit AI modeli',
-    hybrid_title: 'Önemsiz işte 3 Flash, kritik sağlık analizinde 3.5 Flash.',
-    hybrid_desc: 'Standart belge/özet akışları maliyet kontrollü çalışır. Zehirlenme, kırmızı bayrak ve kritik yönlendirme gibi hassas alanlarda daha güçlü model devreye girer; server filtresi evde müdahale önerilerini temizler.'
+    journey_kicker: 'Nasıl çalışır',
+    journey_title: 'Kullanıcıyı veriyle boğmak yerine adım adım ilerletir.',
+    journey_desc: 'Akış önce ana sorunu toplar, sonra ilgili veriyi ister, en sonda anlaşılır bir paylaşım ve takip çıktısına döner.',
+    journey: [
+      { title: 'Şikayeti netleştir', desc: 'Kullanıcı ana problemi seçer. Sistem alakasız dalları budar, ilgili soru kartlarını açar.' },
+      { title: 'Gerekli kaydı topla', desc: 'Fotoğraf, video, belge, ölçüm veya kısa öykü gibi veriler ihtiyaç oldukça eklenir.' },
+      { title: 'Hazır dosyayla ilerle', desc: 'Sonuç; iç kullanım kaydı, paylaşılabilir veteriner linki ve tedavi sonrası takip planına dönüşür.' }
+    ],
+    audience_kicker: 'Kime hitap eder',
+    audience_title: 'Tek kullanıcıya değil, gerçek bakım ağlarına göre kuruldu.',
+    audience_desc: 'Evde tek pet kullanan sahipten, çoklu profil yöneten aileye ve düzenli takip ihtiyacı olan bakım akışına kadar genişler.',
+    audiences: [
+      { title: 'Pet sahipleri', desc: 'Belirti anında daha derli toplu hareket etmek, geçmişi kaybetmemek ve kontrolü sürdürmek isteyen kullanıcılar.' },
+      { title: 'Aile ve bakıcı çevresi', desc: 'Aynı pet üzerinde paylaşılmış kayıt, not ve izin yapısıyla birden fazla kişi birlikte çalışabilir.' },
+      { title: 'Klinik öncesi iletişim', desc: 'Klinik yazılımı yerine geçmeden, veterinere gitmeden önce daha okunabilir bir vaka özeti üretir.' }
+    ],
+    safety_kicker: 'Güvenli alan',
+    safety_title: 'Dilin gücü yüksek, sınırları net.',
+    safety_desc: 'Ürün, kullanıcıyı evde riskli müdahaleye itmeden; kayıt, aciliyet farkındalığı ve paylaşım kalitesini artırmak için tasarlandı.',
+    safety_points: [
+      'Evde teşhis veya ilaç/doz önerisi vermek yerine güvenli yönlendirme mantığı kullanılır.',
+      'Kırmızı bayrak, toksik madde ve yabancı cisim gibi senaryolarda kontrollü dil korunur.',
+      'Belge, medya ve takip kayıtları daha sonra tekrar bakılabilecek düzenli bir arşiv olarak saklanır.'
+    ],
+    proof: ['Kayıt merkezli yapı', 'Paylaşılabilir rapor linkleri', 'Tedavi sonrası takip akışı'],
+    metrics: [
+      { value: '1 dosya', label: 'Pet sağlık geçmişi' },
+      { value: '24/7', label: 'Kayıt erişimi' },
+      { value: 'Çoklu pet', label: 'Aile ölçeğinde kullanım' }
+    ],
+    cta_kicker: 'Başlangıç noktası',
+    cta_title: 'Sağlık kaydını daha düzenli tutmak, doğru anda daha değerlidir.',
+    cta_desc: 'Pet Help; hızlı görünen ama eksik kalan not alışkanlığını, paylaşılabilir ve takip edilebilir bir sağlık deneyimine çevirir.'
   },
   reportCreate: {
     clinic_title: 'Klinik / sigorta dosyası',
@@ -2130,11 +2219,18 @@ JSON döndür:
   },
   privacyScreen: {
     permissions_title: 'Veri İzinleri',
-    health_desc: 'Geçmiş kontroller ve ölçümler sunucularda şifreli saklansın.',
-    media_desc: 'Fotoğraf, video ve ses kayıtları buluta yedeklensin. Kapatılırsa sadece bu cihazda saklanır.',
+    health_desc: 'Sağlık kayıtları cihazda tutulur; paylaşım veya senkron gereken alanlarda güvenli API üzerinden işlenir.',
+    media_desc: 'Fotoğraf, video ve ses kayıtları öncelikle cihazda kalır; rapor veya AI analizi gerektiğinde izinli yükleme kullanılır.',
     ai_desc: 'Belirtiler ve kayıtlar yapay zeka analizine gönderilsin.',
     anon_desc: 'Veriler anonimleştirilerek ürün geliştirmede kullanılsın.',
     management_title: 'Veri Yönetimi',
+    legal_title: 'Yasal ve sağlık sınırları',
+    terms_title: 'Kullanım koşulları',
+    terms_desc: 'Uygulama kayıt tutma, takip ve veteriner görüşmesine hazırlık amacıyla kullanılır; kullanıcı girdiği bilgilerin doğruluğundan sorumludur.',
+    health_disclaimer_title: 'Veteriner yerine geçmez',
+    health_disclaimer_desc: 'AI veya bilgi ekranları teşhis, tedavi, ilaç ya da doz önerisi değildir. Acil belirti, zehirlenme şüphesi veya kötüleşme varsa veteriner desteği gerekir.',
+    payment_policy_title: 'Ödeme durumu',
+    payment_policy_desc: 'İlk mağaza sürümünde ödeme ve abonelik kapalıdır. Yeni hesaplara 1 AI kredisi verilir; kredi düzeltmeleri yalnızca admin panelinden yapılır.',
     settings_saved: 'Ayarlar kaydedildi.',
     preparing_export: 'Veriler hazırlanıyor...',
     export_failed: 'Veri dışa aktarımı başarısız: {error}',
@@ -2143,7 +2239,7 @@ JSON döndür:
     delete_data_confirm: 'Verileri Sil',
     data_deleted: 'Bu cihazdaki sağlık verileri silindi.',
     remove_account_title: 'Hesabı bu cihazdan kaldır',
-    remove_account_message: 'Hesap oturumu ve bu cihazdaki tüm Pati Sağlık verileri silinecek.',
+    remove_account_message: 'Hesap oturumu ve bu cihazdaki tüm Pet Help verileri silinecek.',
     remove_account_confirm: 'Hesabı Kaldır',
     account_removed: 'Bu cihazdaki hesap oturumu ve yerel veriler silindi.'
   },
@@ -2363,7 +2459,7 @@ JSON döndür:
     connecting: 'Cihaza Bağlanılıyor...',
     required: 'Basic Kit Gerekli',
     connecting_desc: 'Lütfen Basic Kit cihazınızı açın ve Bluetooth bağlantısını onaylayın. Kamerayı kulak içine veya deriye yaklaştırın.',
-    required_desc: 'Bu görev için Pati Sağlık Basic Kit donanımı gerekmektedir. Cihazınız varsa ayarlardan aktifleştirebilirsiniz.',
+    required_desc: 'Bu görev için Pet Help Basic Kit donanımı gerekmektedir. Cihazınız varsa ayarlardan aktifleştirebilirsiniz.',
     device_settings: 'Cihaz Ayarlarına Git',
     searching: 'Cihaz Aranıyor...'
   },
@@ -2414,17 +2510,25 @@ JSON döndür:
     required_skip_blocked: '{count} zorunlu görev henüz tamamlanmadı. Bu kontrol için zorunlu kanıtları atlayamazsınız.'
   },
   planScreen: {
-    no_test_price: 'Test fiyatı yok',
-    subscription: 'Abonelik',
-    credit: 'Kredi',
+    no_test_price: 'Pasif',
+    subscription: 'Pasif',
+    credit: 'Pasif',
     loading: 'Plan bilgileri yükleniyor...',
     active: 'Aktif',
     apply_test: 'Testte Uygula',
-    title: 'Plan ve Krediler',
-    desc: 'Pet limiti, kredi bakiyesi ve premium/kredi ayrımı veritabanı plan altyapısından okunur.',
-    packages: 'Paketler',
-    test_note: 'Bu ekrandaki plan değiştirme test içindir; gerçek ödeme ve abonelik doğrulaması production servisinde tamamlanacak.',
-    load_failed: 'Plan bilgisi alınamadı: {error}'
+    title: 'Planlar',
+    desc: 'Ödeme alanları ilk mağaza sürümü için pasif tutuluyor.',
+    packages: 'Pasif paketler',
+    test_note: 'Plan değiştirme ilk mağaza sürümü için kapalıdır.',
+    store_note: 'Satın alma akışı sonraki mağaza güncellemesinde açılacak.',
+    credit_packages: 'Pasif kredi alanı',
+    buy_in_store: 'Pasif',
+    insufficient_credits: 'Bu AI işlemi için yeterli krediniz yok.',
+    load_failed: 'Plan bilgisi alınamadı: {error}',
+    paused_title: 'Planlar',
+    paused_heading: 'Ödeme ve abonelik geçici olarak kapalı',
+    paused_desc: 'Uygulama ilk yayın sürümünde ödeme almadan kullanılacak. Abonelik, kredi ve mağaza satın alma alanları sonraki güncellemede aktif edilecek.',
+    paused_note: 'Bu ekran silinmedi; mağaza doğrulaması hazır olduğunda yeniden açılacak.'
   },
   billingPlans: {
     free: 'Ücretsiz',
@@ -2434,7 +2538,7 @@ JSON döndür:
   },
   notificationService: {
     test_body: 'Hatırlatıcı bildirimleri bu cihazda aktif.',
-    reminder_title: 'Pati Sağlık Hatırlatıcı',
+    reminder_title: 'Pet Help Hatırlatıcı',
     reminder_fallback: 'Hatırlatıcı',
     reminder_due_soon: '{title} zamanı yaklaşıyor.',
     reminder_due_now: '{title} zamanı geldi.'
@@ -2451,12 +2555,13 @@ JSON döndür:
     urine_strip_reader: 'İdrar Analiz Stripi Okuyucu',
     urine_strip_reader_desc: 'Kamera ile renk dönüşümünü otomatik analiz edin.',
     buy_kit: 'Basic Kit Satın Al',
+    buy_kit_paused: 'Basic Kit mağaza sonrası açılacak',
     last_test_ready: 'Son test: {value} · Native eşleşme hazır'
   },
   petProfiles: {
     open_map: 'Haritada Aç',
     share_location: 'Konumu Paylaş',
-    share_title: 'Pati Sağlık Konum Paylaşımı',
+    share_title: 'Pet Help Konum Paylaşımı',
     location_copied: 'Konum bağlantısı kopyalandı.',
     location_copy_failed: 'Konum bağlantısı kopyalanamadı. Harita bağlantısını açarak paylaşabilirsiniz.'
   },
@@ -2487,7 +2592,8 @@ JSON döndür:
   },
   vetReadyDefaults: {
     urgency_green: 'Yeşil',
-    home_monitoring: 'Evde kontrollü izlem'
+    home_monitoring: 'Evde kontrollü izlem',
+    media_excluded: '{count} medya kaydı düşük kalite veya alakasız işaretlendiği için rapora dahil edilmedi.'
   },
   main: {
     screen_load_failed: 'Ekran yüklenemedi'
@@ -2531,7 +2637,7 @@ JSON döndür:
   },
   tabs: {
     home: 'Ana Sayfa',
-    check: 'Pati AI',
+    check: 'Pet AI',
     history: 'Kayıtlar',
     reports: 'Raporlar',
     profile: 'Profil'

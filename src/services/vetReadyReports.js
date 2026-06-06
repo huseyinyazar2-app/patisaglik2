@@ -1,4 +1,5 @@
 import { translateForLocale } from '../i18n/tr.js';
+import { getAppSettings } from './appSettings.js';
 
 const LOCAL_KEY = 'pati_vet_ready_reports';
 
@@ -23,12 +24,27 @@ function publicPath(id) {
   return `/public/report/${id}`;
 }
 
+function shouldExcludeMedia(media) {
+  if (!media) return false;
+  if (media.quality === 'no') return true;
+  if (media.qualityCheck?.level === 'poor') return true;
+  return false;
+}
+
+function reportMedia(media = []) {
+  const settings = getAppSettings();
+  if (!settings.aiIgnoreLowQualityMedia) return { included: media, excludedCount: 0 };
+  const included = media.filter(item => !shouldExcludeMedia(item));
+  return { included, excludedCount: media.length - included.length };
+}
+
 export function getVetReadyReport(id) {
   return readReports().find((report) => report.id === id) || null;
 }
 
 export function saveVetReadyReport({ session = {}, pet = {}, assessment = {}, guidance = {}, urgency = {} }) {
   const id = makeId();
+  const media = reportMedia(session.media || []);
   const report = {
     id,
     petId: pet?.id || session.petId || null,
@@ -59,10 +75,15 @@ export function saveVetReadyReport({ session = {}, pet = {}, assessment = {}, gu
     answers: session.questionAnswers || {},
     tasks: session.tasks || [],
     measurements: session.measurements || [],
-    media: session.media || [],
+    media: media.included,
     warnings: guidance.warnings || [],
     steps: guidance.steps || [],
-    contextWarnings: session.petRiskContext?.warnings || []
+    contextWarnings: [
+      ...(session.petRiskContext?.warnings || []),
+      ...(media.excludedCount
+        ? [translateForLocale('tr', 'vetReadyDefaults.media_excluded', { count: media.excludedCount })]
+        : [])
+    ]
   };
 
   writeReports([report, ...readReports().filter((item) => item.id !== id)]);

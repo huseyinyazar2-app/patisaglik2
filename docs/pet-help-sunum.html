@@ -1,0 +1,1096 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pet Help - Ürün Sunumu</title>
+  <style>
+    :root {
+      --ink: #10201b;
+      --muted: #5f716a;
+      --deep: #005343;
+      --green: #007c68;
+      --mint: #e8f5f0;
+      --mint-2: #f4fbf8;
+      --gold: #b9822b;
+      --amber: #fff4df;
+      --rose: #fff0ee;
+      --line: #dce9e4;
+      --white: #ffffff;
+      --shadow: 0 20px 60px rgba(0, 67, 55, .14);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #eef6f3;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      line-height: 1.35;
+    }
+
+    .deck {
+      width: 100%;
+      display: grid;
+      gap: 18px;
+      padding: 18px;
+    }
+
+    .slide {
+      position: relative;
+      width: 297mm;
+      min-height: 210mm;
+      margin: 0 auto;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(0, 124, 104, .08), transparent 28%),
+        linear-gradient(135deg, #fbfffd 0%, #eff8f4 54%, #ffffff 100%);
+      border: 1px solid rgba(0, 83, 67, .12);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      page-break-after: always;
+    }
+
+    .slide::after {
+      content: "";
+      position: absolute;
+      right: 28px;
+      bottom: 22px;
+      width: 86px;
+      height: 4px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--gold), var(--green));
+      opacity: .55;
+    }
+
+    .inner {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      min-height: 210mm;
+      padding: 34px 44px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 24px;
+    }
+
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--deep);
+      text-transform: none;
+      font-size: 18px;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--deep);
+      color: white;
+      font-weight: 900;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+    h1 {
+      max-width: 720px;
+      font-size: 58px;
+      line-height: .98;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      max-width: 720px;
+      font-size: 42px;
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      font-size: 20px;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 680px;
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 21px;
+    }
+
+    .kicker {
+      width: fit-content;
+      margin-bottom: 14px;
+      color: #8a6121;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .content {
+      display: grid;
+      align-items: center;
+      gap: 34px;
+    }
+
+    .two-col {
+      grid-template-columns: 1fr .82fr;
+    }
+
+    .two-col-even {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .page-no {
+      color: var(--deep);
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .hero-img {
+      width: 100%;
+      max-height: 500px;
+      object-fit: contain;
+      filter: drop-shadow(0 24px 34px rgba(0, 83, 67, .16));
+    }
+
+    .hero-panel {
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, .82);
+      box-shadow: 0 18px 44px rgba(0, 83, 67, .1);
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .badge {
+      padding: 9px 13px;
+      border-radius: 999px;
+      background: var(--mint);
+      color: var(--deep);
+      border: 1px solid #cfe6df;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .list {
+      display: grid;
+      gap: 13px;
+      margin-top: 20px;
+    }
+
+    .li {
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, .74);
+    }
+
+    .dot {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--deep);
+      color: white;
+      font-weight: 900;
+    }
+
+    .li strong {
+      display: block;
+      margin-bottom: 3px;
+      font-size: 16px;
+    }
+
+    .li span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .problem-card {
+      padding: 24px;
+      border-radius: 18px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      box-shadow: 0 20px 50px rgba(0, 83, 67, .1);
+    }
+
+    .question-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .question {
+      min-height: 76px;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid #e3eee9;
+      background: #fff;
+      color: var(--ink);
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 26px;
+    }
+
+    .flow-card {
+      min-height: 158px;
+      padding: 20px;
+      border-radius: 18px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      box-shadow: 0 16px 38px rgba(0, 83, 67, .08);
+    }
+
+    .flow-card span {
+      display: inline-grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      margin-bottom: 14px;
+      border-radius: 10px;
+      background: var(--amber);
+      color: #9b6720;
+      font-weight: 900;
+    }
+
+    .flow-card p {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .phone {
+      width: 290px;
+      min-height: 540px;
+      margin: 0 auto;
+      padding: 18px;
+      border-radius: 36px;
+      background: #11241e;
+      box-shadow: 0 26px 60px rgba(0, 48, 39, .25);
+    }
+
+    .screen {
+      min-height: 504px;
+      padding: 18px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, #f8fffc, #edf8f3);
+      overflow: hidden;
+    }
+
+    .screen-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #fff4db, #dff2eb);
+      border: 1px solid #d7e8e2;
+    }
+
+    .mini-card {
+      padding: 14px;
+      margin-top: 12px;
+      border-radius: 18px;
+      background: white;
+      border: 1px solid #dcebe5;
+      box-shadow: 0 10px 24px rgba(0, 83, 67, .08);
+    }
+
+    .mini-card b {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 16px;
+    }
+
+    .mini-card small {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .risk {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .risk-card {
+      min-height: 160px;
+      padding: 18px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .risk-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 22px;
+    }
+
+    .risk-card p {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .green { border-top: 8px solid #18825f; }
+    .yellow { border-top: 8px solid #dfb348; }
+    .orange { border-top: 8px solid #e37a2f; }
+    .red { border-top: 8px solid #d94b44; }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .feature {
+      min-height: 128px;
+      padding: 17px;
+      border-radius: 16px;
+      background: white;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 30px rgba(0, 83, 67, .07);
+    }
+
+    .feature .icon {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      background: var(--mint);
+      color: var(--deep);
+      font-weight: 900;
+    }
+
+    .feature p {
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .report-preview {
+      padding: 24px;
+      border-radius: 22px;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .report-preview header {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .report-section {
+      padding: 13px 0;
+      border-bottom: 1px solid #eef4f1;
+    }
+
+    .report-section strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .report-section span {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 70px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .time {
+      color: var(--gold);
+      font-weight: 900;
+    }
+
+    .timeline-box {
+      padding: 16px;
+      border-radius: 16px;
+      background: white;
+      border: 1px solid var(--line);
+    }
+
+    .safety-box {
+      padding: 28px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, var(--deep), #007765);
+      color: white;
+      box-shadow: 0 20px 50px rgba(0, 83, 67, .24);
+    }
+
+    .safety-box p {
+      margin-top: 14px;
+      color: rgba(255, 255, 255, .82);
+      font-size: 18px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .stat {
+      padding: 18px;
+      border-radius: 18px;
+      background: white;
+      border: 1px solid var(--line);
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--deep);
+      font-size: 28px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-weight: 750;
+      font-size: 13px;
+    }
+
+    .visual-card {
+      padding: 20px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, .82);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .visual-card img {
+      width: 100%;
+      max-height: 360px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .visual-card.compact img {
+      max-height: 255px;
+    }
+
+    .qr-img {
+      width: 186px;
+      height: 186px;
+      display: block;
+      margin: 18px auto;
+      padding: 10px;
+      border-radius: 18px;
+      background: white;
+      border: 1px solid var(--line);
+      box-shadow: 0 16px 34px rgba(0, 83, 67, .1);
+    }
+
+    .revenue-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .revenue-card {
+      min-height: 116px;
+      padding: 18px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 28px rgba(0, 83, 67, .07);
+    }
+
+    .revenue-card strong {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--deep);
+      font-size: 19px;
+    }
+
+    .revenue-card span {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 650;
+    }
+
+    .market-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .market-pill {
+      padding: 14px 12px;
+      border-radius: 16px;
+      background: var(--mint);
+      border: 1px solid #cfe6df;
+      text-align: center;
+    }
+
+    .market-pill strong {
+      display: block;
+      color: var(--deep);
+      font-size: 25px;
+    }
+
+    .market-pill span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .closing {
+      text-align: center;
+      place-items: center;
+    }
+
+    .closing h2 {
+      max-width: 850px;
+      font-size: 52px;
+    }
+
+    .closing .lead {
+      max-width: 760px;
+    }
+
+    @media print {
+      @page { size: A4 landscape; margin: 0; }
+      body { background: white; }
+      .deck { padding: 0; gap: 0; }
+      .slide {
+        width: 297mm;
+        height: 210mm;
+        min-height: 210mm;
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      .inner { min-height: 210mm; }
+    }
+
+    html.single-slide,
+    html.single-slide body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #eef6f3;
+    }
+
+    html.single-slide .deck {
+      width: 100vw;
+      height: 100vh;
+      padding: 0;
+      gap: 0;
+      display: block;
+    }
+
+    html.single-slide .slide {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      min-height: 100vh;
+      margin: 0;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    html.single-slide .slide.is-current {
+      display: block;
+    }
+
+    html.single-slide .inner {
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Ürün Sunumu</span></div>
+        <div class="content two-col">
+          <div>
+            <div class="kicker">Dijital sağlık pasaportu</div>
+            <h1>Belirtiyi toparla, kaydı düzenle, veterinere hazırlıklı git.</h1>
+            <p class="lead">Pet Help; pet profilini, sağlık geçmişini, akıllı ön kontrol akışını, güvenli yönlendirmeyi ve tedavi sonrası takibi tek yerde birleştirir.</p>
+            <div class="badges"><span class="badge">Pet sağlık pasaportu</span><span class="badge">Veterinere hazır rapor</span><span class="badge">Güvenli AI yaklaşımı</span></div>
+          </div>
+          <img class="hero-img" src="assets/pet-help-report-hero.png" alt="Pet Help ürün görseli" />
+        </div>
+        <div class="footer"><span>PWA + mobil uygulama deneyimi</span><span class="page-no">01</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Problem</span></div>
+        <div class="content two-col-even">
+          <div>
+            <div class="kicker">Kullanıcı acısı</div>
+            <h2>Pet sahipleri çoğu zaman neyi takip edeceğini ve ne kadar acil davranması gerektiğini bilmiyor.</h2>
+            <p class="lead">Belirti anında bilgiler dağılır, kayıtlar farklı yerlerde kalır ve veteriner görüşmesine eksik öyküyle gidilir.</p>
+          </div>
+          <div class="problem-card">
+            <h3>Panik anında sorulan sorular</h3>
+            <div class="question-grid">
+              <div class="question">Belirti ne zaman başladı?</div>
+              <div class="question">Kaç kez tekrar etti?</div>
+              <div class="question">Son mama veya ilaç değişti mi?</div>
+              <div class="question">Bu durum acil mi?</div>
+              <div class="question">Veterinere ne götürmeliyim?</div>
+              <div class="question">Geçmiş kayıtlar nerede?</div>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span>Dağınık gözlem, eksik anamnez ve stresli karar anı</span><span class="page-no">02</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Çözüm</span></div>
+        <div class="content">
+          <div>
+            <div class="kicker">Ürün vaadi</div>
+            <h2>Dağınık pet sağlık bilgisini düzenli ve paylaşılabilir bir sağlık dosyasına dönüştürür.</h2>
+            <p class="lead">Pet Help teşhis koymaz; kullanıcıyı doğru bilgiyi toplamaya, kayıtları düzenlemeye ve veteriner görüşmesini güçlendirmeye yönlendirir.</p>
+          </div>
+          <div class="flow">
+            <div class="flow-card"><span>1</span><h3>Geçmişi Topla</h3><p>Pet profili, belgeler, ölçümler, masraflar ve hatırlatıcılar tek dosyada birleşir.</p></div>
+            <div class="flow-card"><span>2</span><h3>Belirtiyi Anla</h3><p>Ön kontrol akışı ana şikayeti ve ilişkili bulguları düzenli şekilde toplar.</p></div>
+            <div class="flow-card"><span>3</span><h3>Veterinere Hazırla</h3><p>Kronolojik vaka özeti ve paylaşılabilir link ile görüşme daha verimli olur.</p></div>
+          </div>
+        </div>
+        <div class="footer"><span>Panik anında rehber, günlük bakımda düzen</span><span class="page-no">03</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Sağlık Pasaportu</span></div>
+        <div class="content two-col">
+          <div>
+            <div class="kicker">Tek pet profili</div>
+            <h2>Her pet için düzenli, güncel ve genişleyebilir dijital sağlık pasaportu.</h2>
+            <p class="lead">Kedi ve köpekten başlayıp kuş, akvaryum canlıları, sürüngenler ve farklı evcil türlere büyüyebilecek profil altyapısı.</p>
+            <div class="list">
+              <div class="li"><div class="dot">✓</div><div><strong>Temel profil</strong><span>Tür, ırk, yaş, cinsiyet, kilo, kısırlaştırma ve risk bağlamı.</span></div></div>
+              <div class="li"><div class="dot">✓</div><div><strong>Sağlık geçmişi</strong><span>Kronik durumlar, alerjiler, ilaçlar, belgeler, ölçümler ve kayıtlar.</span></div></div>
+              <div class="li"><div class="dot">✓</div><div><strong>Paylaşım</strong><span>QR sağlık kartı, klinik hazırlık dosyası ve aile/bakıcı yetki altyapısı.</span></div></div>
+            </div>
+          </div>
+          <div class="phone">
+            <div class="screen">
+              <div class="screen-top"><div class="avatar"></div><div><b>Boncuk</b><br><small>Kedi · 3 yaş · Takipte</small></div></div>
+              <div class="mini-card"><b>Sağlık pasaportu</b><small>Profil, ölçüm, belge ve geçmiş tek yerde</small></div>
+              <div class="mini-card"><b>Yaklaşanlar</b><small>Aşı, ilaç, randevu ve kontrol hatırlatmaları</small></div>
+              <div class="mini-card"><b>Son kayıtlar</b><small>Dışkı skoru, masraf, belge ve ölçümler</small></div>
+              <div class="mini-card"><b>QR sağlık kartı</b><small>Gerektiğinde kontrollü paylaşım</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span>Pet merkezli kayıt omurgası</span><span class="page-no">04</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Akıllı Ön Kontrol</span></div>
+        <div class="content two-col-even">
+          <div>
+            <div class="kicker">Genelden özele</div>
+            <h2>Şikayeti tek ekranda büyütmez; doğru sırayla, ilişkili sorularla toplar.</h2>
+            <p class="lead">Ana şikayet belirlenir, alakasız bulgular ayrı kontrol uyarısına alınır, kullanıcı gereksiz soru kalabalığında kaybolmaz.</p>
+            <div class="list">
+              <div class="li"><div class="dot">1</div><div><strong>Pet öyküsü</strong><span>Kronik durum, ilaç, alerji, önceki benzer şikayet ve son değişiklikler alınır.</span></div></div>
+              <div class="li"><div class="dot">2</div><div><strong>Daralan sorular</strong><span>Cevaplara göre ilgili kartlar açılır, test uzadıkça akış daha hedefli kalır.</span></div></div>
+              <div class="li"><div class="dot">3</div><div><strong>Görevler</strong><span>Gerekirse fotoğraf, video, belge veya ölçüm bilgisi istenir.</span></div></div>
+            </div>
+          </div>
+          <div class="report-preview">
+            <header><div><b>Ön kontrol dosyası</b><br><small>Ana şikayet: Kusma</small></div><span class="badge">Sarı</span></header>
+            <div class="report-section"><strong>Öykü</strong><span>Son mama değişimi var, kronik kayıt yok.</span></div>
+            <div class="report-section"><strong>Yanıtlar</strong><span>2 kez kusma, halsizlik hafif, su içiyor.</span></div>
+            <div class="report-section"><strong>Görev</strong><span>Gerekirse dışkı/fotoğraf ve kilo ölçümü eklenir.</span></div>
+            <div class="report-section"><strong>Sonuç dili</strong><span>Teşhis değil; aciliyet riski ve veteriner hazırlığı.</span></div>
+          </div>
+        </div>
+        <div class="footer"><span>Akıllı soru akışı ve güvenli yönlendirme</span><span class="page-no">05</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Aciliyet</span></div>
+        <div class="content">
+          <div>
+            <div class="kicker">Trafik ışığı</div>
+            <h2>Kullanıcıya “ne kadar acil?” sorusunda daha anlaşılır bir yönlendirme sunar.</h2>
+            <p class="lead">Sonuç ekranı hastalık adı söylemeye değil, güvenli aksiyon seviyesini görünür kılmaya odaklanır.</p>
+          </div>
+          <div class="risk">
+            <div class="risk-card green"><strong>Yeşil</strong><p>Evde takip edilebilir, kayıt tut ve değişimi izle.</p></div>
+            <div class="risk-card yellow"><strong>Sarı</strong><p>Yakın zamanda veterinerle görüşmek iyi olur.</p></div>
+            <div class="risk-card orange"><strong>Turuncu</strong><p>Bugün veteriner değerlendirmesi planlanmalıdır.</p></div>
+            <div class="risk-card red"><strong>Kırmızı</strong><p>Acil veteriner desteği gerekebilir.</p></div>
+          </div>
+        </div>
+        <div class="footer"><span>Teşhis değil, aciliyet riski ve güvenli yönlendirme</span><span class="page-no">06</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Veterinere Hazır Rapor</span></div>
+        <div class="content two-col">
+          <div>
+            <div class="kicker">Paylaşılabilir vaka özeti</div>
+            <h2>Dağınık gözlemleri klinikte işe yarayacak rapora çevirir.</h2>
+            <p class="lead">Kullanıcı “ne anlatacağım?” kaygısını azaltır; veteriner şikayetin başlangıcını, gelişimini ve ekleri daha düzenli görür.</p>
+            <div class="badges"><span class="badge">Anamnez</span><span class="badge">Kırmızı bayrak</span><span class="badge">Ölçüm ve medya</span><span class="badge">Paylaşılabilir link</span></div>
+          </div>
+          <div class="report-preview">
+            <header><div><b>Veteriner Linki</b><br><small>Rapor paylaşımı hazır</small></div><span class="badge">Hazır</span></header>
+            <div class="report-section"><strong>Şikayet özeti</strong><span>Başlangıç zamanı, tekrar sayısı ve mevcut durum.</span></div>
+            <div class="report-section"><strong>Pet geçmişi</strong><span>Yaş, tür, kronik kayıt, ilaç ve alerji bilgisi.</span></div>
+            <div class="report-section"><strong>Ekler</strong><span>Fotoğraf, video, belge ve ölçüm durumu.</span></div>
+            <div class="report-section"><strong>Takip notu</strong><span>Güvenli yapılacaklar ve kaçınılacaklar.</span></div>
+          </div>
+        </div>
+        <div class="footer"><span>Klinik görüşmeye hazırlık dosyası</span><span class="page-no">07</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Tedavi Takibi</span></div>
+        <div class="content two-col-even">
+          <div>
+            <div class="kicker">Veteriner sonrası</div>
+            <h2>Tedavi başladıktan sonra takip sürecinin dağılmasını önler.</h2>
+            <p class="lead">Amaç ilaç önerisi vermek değil, veterinerin verdiği planın düzenli takip edilmesine yardımcı olmaktır.</p>
+            <div class="timeline-row"><div class="time">Gün 1</div><div class="timeline-box"><b>Reçete ve plan</b><br><span>İlaç saatleri, kontrol tarihi ve veteriner notu kaydedilir.</span></div></div>
+            <div class="timeline-row"><div class="time">Gün 3</div><div class="timeline-box"><b>Günlük check-in</b><br><span>İştah, yan etki, yara/foto ve genel durum izlenir.</span></div></div>
+            <div class="timeline-row"><div class="time">Gün 7</div><div class="timeline-box"><b>Takip raporu</b><br><span>Gelişim geçmişi veteriner görüşmesi için düzenlenir.</span></div></div>
+          </div>
+          <div class="visual-card">
+            <img src="assets/pet-help-vet-followup.png" alt="Veteriner raporu ve tedavi takip görseli" />
+          </div>
+        </div>
+        <div class="footer"><span>İlaç uyumu, yan etki ve kontrol randevusu takibi</span><span class="page-no">08</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Kayıt Araçları</span></div>
+        <div class="content two-col">
+          <div>
+            <div class="kicker">Ücretsiz sağlık alanı</div>
+            <h2>Günlük sağlık takibi için temel araçlar tek yerde.</h2>
+            <p class="lead">Kullanıcı yalnızca AI sonucu beklemez; petinin gerçek sağlık geçmişini düzenli kayıtlarla oluşturur.</p>
+            <div class="feature-grid" style="grid-template-columns:1fr 1fr">
+              <div class="feature"><div class="icon">1</div><h3>Hatırlatıcılar</h3><p>Aşı, ilaç, parazit ve veteriner randevuları.</p></div>
+              <div class="feature"><div class="icon">2</div><h3>Ölçümler</h3><p>Kilo, ateş, solunum ve kayıt bazlı trendler.</p></div>
+              <div class="feature"><div class="icon">3</div><h3>Masraf Takibi</h3><p>Mama, veteriner, aşı, ilaç ve belge ilişkisi.</p></div>
+              <div class="feature"><div class="icon">4</div><h3>Belge Arşivi</h3><p>Tahlil, reçete, fatura ve klinik dosyaları.</p></div>
+            </div>
+          </div>
+          <div class="visual-card">
+            <img src="assets/pet-help-record-tools.png" alt="Ücretsiz sağlık kayıt araçları görseli" />
+            <div class="badges"><span class="badge">Dışkı skoru</span><span class="badge">Beslenme</span><span class="badge">Kronik takip</span></div>
+          </div>
+        </div>
+        <div class="footer"><span>Form, liste, detay ve rapor akışları</span><span class="page-no">09</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Belge Okuma</span></div>
+        <div class="content two-col-even">
+          <div>
+            <div class="kicker">Belge / tahlil / fatura</div>
+            <h2>Veteriner belgelerini arşivler ve önemli bilgileri görünür hale getirir.</h2>
+            <p class="lead">Rapor, tahlil, reçete ve faturalar pet profiliyle ilişkilendirilir; takip ve klinik dosyalarına bağlanabilir.</p>
+            <div class="list">
+              <div class="li"><div class="dot">✓</div><div><strong>Arşiv</strong><span>Belgeler pet geçmişi içinde saklanır.</span></div></div>
+              <div class="li"><div class="dot">✓</div><div><strong>Özet</strong><span>Önemli değerler, ilaçlar ve takip notları ayrıştırılabilir.</span></div></div>
+              <div class="li"><div class="dot">✓</div><div><strong>Raporlama</strong><span>Klinik hazırlık dosyasına dahil edilebilir.</span></div></div>
+            </div>
+          </div>
+          <div class="phone">
+            <div class="screen">
+              <div class="mini-card"><b>Belge eklendi</b><small>Tahlil · 24 Mayıs</small></div>
+              <div class="mini-card"><b>Okuma hedefi</b><small>Değerler, ilaçlar, takip görevi</small></div>
+              <div class="mini-card"><b>Veteriner notu</b><small>Kontrol randevusunda gösterilecek</small></div>
+              <div class="mini-card"><b>Dosyaya bağlandı</b><small>Pet sağlık pasaportunda görünür</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span>Doküman yönetimi ve klinik hazırlık</span><span class="page-no">10</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Risk Kontrol</span></div>
+        <div class="content two-col-even">
+          <div>
+            <div class="kicker">Ambalaj ve ürün güvenliği</div>
+            <h2>Toksik madde şüphesi ile ürün güvenlik takibini birbirinden ayırır.</h2>
+            <p class="lead">Panik anındaki yutma şüphesi hızlı risk tarama akışına; mama/ilaç/ürün takibi ise güvenlik radarına gider.</p>
+          </div>
+          <div class="feature-grid" style="grid-template-columns:1fr 1fr">
+            <div class="feature"><div class="icon">!</div><h3>Ambalaj Risk Kontrolü</h3><p>Fotoğraf, içerik, miktar, zaman ve belirti üzerinden güvenli ön tarama.</p></div>
+            <div class="feature"><div class="icon">✓</div><h3>Ürün Güvenlik Radarı</h3><p>Mama, ilaç, barkod, lot ve geri çağırma sinyali takibi.</p></div>
+            <div class="feature"><div class="icon">↗</div><h3>Acil Kayıt</h3><p>Risk varsa mevcut toksik/yabancı cisim sağlık kaydına bağlanır.</p></div>
+            <div class="feature"><div class="icon">⌁</div><h3>Güvenli Dil</h3><p>Kesin güvenli hükmü veya evde riskli müdahale talimatı verilmez.</p></div>
+          </div>
+        </div>
+        <div class="footer"><span>Panik akışı ve ürün takip akışı ayrı tutulur</span><span class="page-no">11</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Paylaşım</span></div>
+        <div class="content two-col">
+          <div>
+            <div class="kicker">QR sağlık kartı</div>
+            <h2>Petin önemli bilgileri gerektiğinde hızlıca paylaşılabilir.</h2>
+            <p class="lead">Kayıp pet, bakıcı, aile üyesi veya veteriner ziyareti gibi durumlarda kontrollü sağlık bilgisi paylaşımı sağlar.</p>
+            <div class="badges"><span class="badge">Public pet kartı</span><span class="badge">Bakıcı modu</span><span class="badge">Sınırlı erişim</span><span class="badge">Klinik hazırlık</span></div>
+          </div>
+          <div class="report-preview">
+            <header><div><b>QR Sağlık Kartı</b><br><small>Paylaşılabilir profil</small></div><span class="badge">Aktif</span></header>
+            <img class="qr-img" src="assets/pet-help-demo-qr.png" alt="Örnek Pet Help QR kodu" />
+            <div class="report-section"><strong>Paylaşılacaklar</strong><span>Temel profil, önemli notlar, acil iletişim ve bakım bilgisi.</span></div>
+          </div>
+        </div>
+        <div class="footer"><span>Pratik, kontrollü ve pet merkezli paylaşım</span><span class="page-no">12</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Altyapı</span></div>
+        <div class="content">
+          <div>
+            <div class="kicker">Büyümeye hazır temel</div>
+            <h2>Çoklu pet, aile/bakıcı yetkisi, plan, kredi ve abonelik yapısı hazırlandı.</h2>
+            <p class="lead">Ürün tek pet kayıt uygulaması olarak kalmaz; aile, bakıcı, çoklu pet ve premium senaryolarına büyüyebilir.</p>
+          </div>
+          <div class="stats">
+            <div class="stat"><strong>Çoklu Pet</strong><span>Bir hesapta birden fazla pet profili</span></div>
+            <div class="stat"><strong>Yetki</strong><span>Aile, bakıcı ve sınırlı erişim modeli</span></div>
+            <div class="stat"><strong>Plan</strong><span>Ücretsiz, kredi ve abonelik altyapısı</span></div>
+          </div>
+          <div class="flow">
+            <div class="flow-card"><span>TR</span><h3>Telefon öncelikli profil</h3><p>Ülke, il, ilçe, mahalle, dil ve saat dilimi bilgisiyle yerel deneyim.</p></div>
+            <div class="flow-card"><span>20+</span><h3>Çok dil hedefi</h3><p>Arayüz ve güvenlik metinleri yeni dillere taşınabilecek anahtar yapısında.</p></div>
+            <div class="flow-card"><span>API</span><h3>Yönetilebilir veri</h3><p>Mobil kayıtlar, belgeler, planlar ve kullanıcılar admin panelinden izlenebilir.</p></div>
+          </div>
+        </div>
+        <div class="footer"><span>Global yayın ve operasyon hazırlığı</span><span class="page-no">13</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Global Ölçek & Gelir Modeli</span></div>
+        <div class="content two-col">
+          <div>
+            <div class="kicker">Yatırımcı özeti</div>
+            <h2>Global pazara açılabilecek, freemium tabanlı ve çok katmanlı gelir modeline hazır ürün.</h2>
+            <p class="lead">Pet Help yalnızca yerel bir kayıt uygulaması olarak değil, 20+ dilde mağaza yayınına hazırlanabilecek global pet sağlık asistanı olarak kurgulandı.</p>
+            <div class="market-strip">
+              <div class="market-pill"><strong>20+</strong><span>Dil hedefi</span></div>
+              <div class="market-pill"><strong>3</strong><span>Gelir katmanı</span></div>
+              <div class="market-pill"><strong>∞</strong><span>Çoklu pet</span></div>
+              <div class="market-pill"><strong>API</strong><span>Ölçeklenebilir</span></div>
+            </div>
+            <div class="revenue-grid">
+              <div class="revenue-card"><strong>Freemium</strong><span>Temel sağlık pasaportu, kayıtlar ve hatırlatıcılarla geniş kullanıcı tabanı.</span></div>
+              <div class="revenue-card"><strong>Kredi modeli</strong><span>Belge okuma, ambalaj risk özeti ve gelişmiş rapor gibi işlem bazlı özellikler.</span></div>
+              <div class="revenue-card"><strong>Aylık/yıllık abonelik</strong><span>Çoklu pet, gelişmiş takip, sınırsız rapor ve aile/bakıcı senaryoları.</span></div>
+              <div class="revenue-card"><strong>Gelecek B2B alanı</strong><span>Klinikler için hafif vaka inbox, takip paneli ve rapor kabul akışları.</span></div>
+            </div>
+          </div>
+          <div class="visual-card">
+            <img src="assets/pet-help-global-revenue.png" alt="Global yayın ve gelir modeli görseli" />
+          </div>
+        </div>
+        <div class="footer"><span>Global büyüme: dil altyapısı, plan/kredi modeli ve çoklu pet senaryosu</span><span class="page-no">14</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Güvenli AI</span></div>
+        <div class="content two-col-even">
+          <div class="safety-box">
+            <h2>AI karar desteği katmanıdır; kontrolsüz tavsiye motoru değildir.</h2>
+            <p>Ürün güvenli sınırları korur: teşhis, ilaç dozu, kusturma veya evde riskli müdahale talimatı vermez.</p>
+          </div>
+          <div class="list">
+            <div class="li"><div class="dot">✓</div><div><strong>Ön değerlendirme dili</strong><span>Hastalık adı yerine aciliyet ve hazırlık odağı.</span></div></div>
+            <div class="li"><div class="dot">✓</div><div><strong>Pet bağlamı</strong><span>Yaş, tür, kilo, kronik durum ve geçmiş yanıtlarla daha anlamlı akış.</span></div></div>
+            <div class="li"><div class="dot">✓</div><div><strong>Güvenli fallback</strong><span>AI başarısız olursa kural tabanlı güvenli yönlendirme korunur.</span></div></div>
+            <div class="li"><div class="dot">✓</div><div><strong>Veteriner yönlendirmesi</strong><span>Kritik durumlarda klinik değerlendirme açıkça öne çıkar.</span></div></div>
+          </div>
+        </div>
+        <div class="footer"><span>Sorumlu sağlık asistanı yaklaşımı</span><span class="page-no">15</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Yönetim</span></div>
+        <div class="content two-col">
+          <div>
+            <div class="kicker">Mobil + web admin</div>
+            <h2>Kullanıcı deneyimi mobil merkezli; operasyon tarafı canlı veriyi kontrol edebilir.</h2>
+            <p class="lead">Süper admin paneli kullanıcı, pet, kayıt, belge, kullanım, kredi ve plan yönetimini tek ekranda toplar.</p>
+            <div class="list">
+              <div class="li"><div class="dot">✓</div><div><strong>Canlı kayıt görünümü</strong><span>Mobilde oluşan sağlık, ölçüm, belge ve masraf kayıtları izlenir.</span></div></div>
+              <div class="li"><div class="dot">✓</div><div><strong>Yönetim aksiyonları</strong><span>Ekleme, düzenleme, silme, plan atama ve kredi işlemleri.</span></div></div>
+            </div>
+          </div>
+          <div class="problem-card">
+            <h3>Admin panel özeti</h3>
+            <div class="feature-grid" style="grid-template-columns:1fr 1fr">
+              <div class="feature"><div class="icon">U</div><h3>Kullanıcı</h3><p>Arama, detay ve hesap yönetimi.</p></div>
+              <div class="feature"><div class="icon">P</div><h3>Pet</h3><p>Profil, sahiplik ve durum kontrolü.</p></div>
+              <div class="feature"><div class="icon">R</div><h3>Kayıt</h3><p>Tüm mobil kayıtları inceleme.</p></div>
+              <div class="feature"><div class="icon">₺</div><h3>Plan</h3><p>Plan, kredi ve kullanım takibi.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="footer"><span>Operasyon ve destek için süper admin</span><span class="page-no">16</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Değer</span></div>
+        <div class="content">
+          <div>
+            <div class="kicker">Kullanıcıya net fayda</div>
+            <h2>Pet Help pet sahibinin en zor anlarını sadeleştirir.</h2>
+            <p class="lead">Kullanıcının asıl ihtiyacı hastalık adı duymak değil; kayıtlarını düzenlemek, aciliyeti anlamak ve veterinere doğru bilgilerle gitmektir.</p>
+          </div>
+          <div class="feature-grid">
+            <div class="feature"><div class="icon">✓</div><h3>Geçmiş kaybolmaz</h3><p>Belgeler, ölçümler ve takip kayıtları tek yerde durur.</p></div>
+            <div class="feature"><div class="icon">✓</div><h3>Panik azalır</h3><p>Şikayet anında hangi bilgi gerektiği belli olur.</p></div>
+            <div class="feature"><div class="icon">✓</div><h3>Veteriner görüşmesi güçlenir</h3><p>Eksik ve dağınık anlatım yerine düzenli dosya oluşur.</p></div>
+            <div class="feature"><div class="icon">✓</div><h3>Takip aksatılmaz</h3><p>Tedavi, ilaç, kontrol ve günlük durum izlenir.</p></div>
+            <div class="feature"><div class="icon">✓</div><h3>Çoklu pet yönetilir</h3><p>Birden fazla pet ve aile/bakıcı senaryoları desteklenir.</p></div>
+            <div class="feature"><div class="icon">✓</div><h3>Güvenli sınır korunur</h3><p>Teşhis ve ilaç yerine yönlendirme ve hazırlık odağı.</p></div>
+          </div>
+        </div>
+        <div class="footer"><span>Unutkanlık, panik ve dağınık kayıt sorununa çözüm</span><span class="page-no">17</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="inner">
+        <div class="topline"><div class="brand"><span class="brand-mark">P</span>Pet Help</div><span>Kapanış</span></div>
+        <div class="content closing">
+          <div>
+            <div class="kicker" style="margin-inline:auto;">Özet mesaj</div>
+            <h2>Pet Help, evcil hayvan bakımını kayıtlı, takip edilebilir ve paylaşılabilir hale getirir.</h2>
+            <p class="lead">Panik anında rehber, günlük bakımda düzen, veteriner görüşmesinde güçlü bir hazırlık dosyası.</p>
+            <div class="badges" style="justify-content:center"><span class="badge">Sağlık pasaportu</span><span class="badge">Ön kontrol</span><span class="badge">Takip asistanı</span><span class="badge">Veteriner raporu</span></div>
+          </div>
+        </div>
+        <div class="footer"><span>Pet Help ürün sunumu</span><span class="page-no">18</span></div>
+      </div>
+    </section>
+  </main>
+  <script>
+    const slideParam = Number(new URLSearchParams(window.location.search).get('slide'));
+    if (slideParam > 0) {
+      const slides = [...document.querySelectorAll('.slide')];
+      document.documentElement.classList.add('single-slide');
+      slides.forEach((slide, index) => slide.classList.toggle('is-current', index === slideParam - 1));
+    }
+  </script>
+</body>
+</html>

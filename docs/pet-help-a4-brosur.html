@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pet Help - A4 Broşür</title>
+  <style>
+    :root {
+      --ink: #10201b;
+      --muted: #62756e;
+      --deep: #005343;
+      --green: #007c68;
+      --mint: #eaf7f2;
+      --soft: #f8fcfa;
+      --gold: #b9822b;
+      --amber: #fff4df;
+      --rose: #fff0ee;
+      --line: #d9e9e3;
+      --white: #fff;
+      --shadow: 0 20px 70px rgba(0, 70, 58, .16);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #dfece8;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    }
+
+    .page {
+      position: relative;
+      width: 1240px;
+      height: 1754px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 16% 7%, rgba(0, 124, 104, .14), transparent 23%),
+        radial-gradient(circle at 92% 21%, rgba(185, 130, 43, .12), transparent 22%),
+        linear-gradient(145deg, #fbfffd 0%, #f0faf5 50%, #ffffff 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .page::before {
+      content: "";
+      position: absolute;
+      inset: 32px;
+      border: 1px solid rgba(0, 83, 67, .13);
+      border-radius: 32px;
+      pointer-events: none;
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      padding: 72px 78px 64px;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 34px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      color: var(--deep);
+    }
+
+    .mark {
+      width: 58px;
+      height: 58px;
+      display: grid;
+      place-items: center;
+      border-radius: 18px;
+      background: var(--deep);
+      color: white;
+      font-size: 31px;
+      font-weight: 900;
+      box-shadow: 0 16px 28px rgba(0, 83, 67, .22);
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 34px;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .pill {
+      padding: 12px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 83, 67, .16);
+      background: rgba(255, 255, 255, .68);
+      color: var(--deep);
+      font-size: 15px;
+      font-weight: 850;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 42px;
+      align-items: center;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 72px;
+      line-height: .96;
+      letter-spacing: 0;
+      max-width: 610px;
+    }
+
+    .lead {
+      margin-top: 24px;
+      max-width: 610px;
+      color: var(--muted);
+      font-size: 26px;
+      line-height: 1.35;
+      font-weight: 650;
+    }
+
+    .hero-card {
+      position: relative;
+      height: 420px;
+      border-radius: 34px;
+      overflow: hidden;
+      background: var(--white);
+      border: 1px solid rgba(0, 83, 67, .12);
+      box-shadow: 0 24px 58px rgba(0, 83, 67, .14);
+    }
+
+    .hero-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .hero-chip {
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 24px;
+      padding: 18px 20px;
+      border-radius: 22px;
+      color: white;
+      background: rgba(0, 58, 48, .82);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .hero-chip strong {
+      font-size: 24px;
+      line-height: 1.05;
+    }
+
+    .hero-chip span {
+      color: rgba(255,255,255,.76);
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.04fr .96fr;
+      gap: 32px;
+      align-items: stretch;
+    }
+
+    .panel {
+      border-radius: 30px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(0, 83, 67, .12);
+      padding: 30px;
+      box-shadow: 0 18px 46px rgba(0, 83, 67, .08);
+    }
+
+    .panel h2 {
+      font-size: 34px;
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    .features {
+      display: grid;
+      gap: 18px;
+    }
+
+    .feature {
+      display: grid;
+      grid-template-columns: 54px 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 18px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #ffffff, #f2fbf7);
+      border: 1px solid rgba(0, 83, 67, .10);
+    }
+
+    .icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 17px;
+      display: grid;
+      place-items: center;
+      background: var(--mint);
+      color: var(--deep);
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .feature:nth-child(2n) .icon {
+      background: var(--amber);
+      color: #93651e;
+    }
+
+    .feature strong {
+      display: block;
+      font-size: 22px;
+      line-height: 1.1;
+    }
+
+    .feature p {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.35;
+      font-weight: 620;
+    }
+
+    .visual-stack {
+      display: grid;
+      gap: 22px;
+    }
+
+    .visual {
+      position: relative;
+      height: 236px;
+      border-radius: 30px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 83, 67, .12);
+      background: var(--white);
+      box-shadow: 0 18px 44px rgba(0, 83, 67, .10);
+    }
+
+    .visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .visual small {
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.86);
+      color: var(--deep);
+      font-size: 14px;
+      font-weight: 900;
+      box-shadow: 0 10px 24px rgba(0,0,0,.12);
+    }
+
+    .bottom {
+      display: grid;
+      grid-template-columns: 1fr 150px;
+      gap: 26px;
+      align-items: center;
+      padding: 28px 30px;
+      border-radius: 30px;
+      background: linear-gradient(135deg, var(--deep), #00705e);
+      color: white;
+      box-shadow: 0 18px 44px rgba(0, 83, 67, .2);
+    }
+
+    .bottom h2 {
+      font-size: 34px;
+      line-height: 1.08;
+    }
+
+    .bottom p {
+      margin-top: 10px;
+      color: rgba(255,255,255,.78);
+      font-size: 18px;
+      font-weight: 650;
+      max-width: 780px;
+    }
+
+    .qr {
+      width: 150px;
+      height: 150px;
+      padding: 10px;
+      border-radius: 22px;
+      background: white;
+    }
+
+    .qr img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="content">
+      <header class="nav">
+        <div class="brand">
+          <div class="mark">P</div>
+          <div>
+            <strong>Pet Help</strong>
+            <span>Dijital pet sağlık asistanı</span>
+          </div>
+        </div>
+        <div class="pill">24 dil altyapısı · AI destekli ön değerlendirme</div>
+      </header>
+
+      <section class="hero">
+        <div>
+          <div class="eyebrow">Pet sahipleri için güvenli sağlık yönetimi</div>
+          <h1>Panik anında ne yapacağını bil.</h1>
+          <p class="lead">Pet Help, evcil dostunuzun sağlık geçmişini düzenler, belirtileri doğru sorularla toplar ve veterinere hazır anlaşılır bir vaka dosyası oluşturur.</p>
+        </div>
+        <div class="hero-card">
+          <img src="assets/pet-help-report-hero.png" alt="Pet Help rapor görseli" />
+          <div class="hero-chip">
+            <div>
+              <strong>Veterinere hazır rapor</strong>
+              <span>Belirti, geçmiş, medya ve takip özeti tek linkte</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="main-grid">
+        <article class="panel">
+          <h2>Ne işe yarar?</h2>
+          <div class="features">
+            <div class="feature">
+              <div class="icon">01</div>
+              <div><strong>Pet Sağlık Pasaportu</strong><p>Aşı, parazit, ölçüm, masraf, belge ve sağlık kayıtlarını her pet için tek profilde toplar.</p></div>
+            </div>
+            <div class="feature">
+              <div class="icon">02</div>
+              <div><strong>AI Ön Şikayet Dosyası</strong><p>Kullanıcının belirtisini genelden özele daraltır; kırmızı bayrakları ve aciliyet seviyesini güvenli dille gösterir.</p></div>
+            </div>
+            <div class="feature">
+              <div class="icon">03</div>
+              <div><strong>Tedavi Sonrası Takip</strong><p>Veteriner planı, ilaç saatleri, kontrol tarihi, yan etki ve iyileşme notlarını düzenli takip eder.</p></div>
+            </div>
+            <div class="feature">
+              <div class="icon">04</div>
+              <div><strong>Güvenli Risk Kontrolü</strong><p>Ambalaj, içerik veya şüpheli madde durumlarında evde riskli müdahale önermeden veteriner hazırlığı yapar.</p></div>
+            </div>
+            <div class="feature">
+              <div class="icon">05</div>
+              <div><strong>Aile ve Çoklu Pet Yapısı</strong><p>Bir hesapta birden fazla pet, aile üyesi ve bakıcı senaryolarına hazır yetki altyapısı sunar.</p></div>
+            </div>
+          </div>
+        </article>
+
+        <aside class="visual-stack">
+          <div class="visual">
+            <img src="assets/pet-help-record-tools.png" alt="Kayıt araçları" />
+            <small>Kayıtlar ve takip araçları</small>
+          </div>
+          <div class="visual">
+            <img src="assets/pet-help-vet-followup.png" alt="Tedavi takip asistanı" />
+            <small>Tedavi sonrası güvenli takip</small>
+          </div>
+          <div class="panel">
+            <h2>Veterinerin yerine geçmez; doğru veriyi hazırlar.</h2>
+            <p class="lead" style="font-size:21px;margin-top:0;">Amaç teşhis koymak değil; pet sahibinin panik, unutkanlık ve dağınık kayıt problemini azaltıp veteriner görüşmesini daha verimli hale getirmektir.</p>
+          </div>
+        </aside>
+      </section>
+
+      <footer class="bottom">
+        <div>
+          <h2>Sağlık geçmişi, aciliyet farkındalığı ve veteriner paylaşımı tek yerde.</h2>
+          <p>Ücretsiz kayıt araçları, kredi sistemi ve Premium abonelik modeliyle hem günlük kullanım hem de gelişmiş AI analiz akışları için hazır.</p>
+        </div>
+        <div class="qr"><img src="assets/pet-help-demo-qr.png" alt="Pet Help QR" /></div>
+      </footer>
+    </section>
+  </main>
+</body>
+</html>

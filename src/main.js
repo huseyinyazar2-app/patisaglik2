@@ -2,6 +2,7 @@ import { registerRoute, initRouter, navigate, setBeforeNavigate } from './router
 import { getState } from './store.js';
 import { startReminderScheduler } from './services/reminderScheduler.js';
 import { cleanupSmokeTestArtifacts } from './services/devHygiene.js';
+import { refreshAppSettings } from './services/appSettings.js';
 import { getLocale, setLocale, t } from './i18n/tr.js';
 
 // SVG Icons for tab bar
@@ -50,6 +51,7 @@ window.__icons = icons;
 const tabRoutes = ['/home', '/check', '/history', '/reports', '/profile'];
 const tabLabelKeys = ['tabs.home', 'tabs.check', 'tabs.history', 'tabs.reports', 'tabs.profile'];
 const tabIcons = ['home', 'spark', 'history', 'reports', 'profile'];
+let appInitialized = false;
 
 // Routes that show tab bar
 const tabBarRoutes = ['/home', '/check', '/history', '/history/timeline', '/history/measurements',
@@ -269,7 +271,10 @@ function setupRoutes() {
 
 // Initialize app
 async function init() {
+  if (appInitialized) return;
+  appInitialized = true;
   setLocale(getLocale());
+  await refreshAppSettings();
   await cleanupSmokeTestArtifacts();
   setupRoutes();
   
@@ -289,6 +294,9 @@ async function init() {
 
   initRouter();
   startReminderScheduler();
+  if ('serviceWorker' in navigator && !location.hostname.includes('localhost')) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
 }
 
 // Start

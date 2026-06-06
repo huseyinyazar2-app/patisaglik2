@@ -1,4 +1,4 @@
-// Pati Sağlık — Hash-based SPA Router
+// Pet Help — Hash-based SPA Router
 const routes = {};
 let currentRoute = null;
 let beforeNavigateHook = null;

@@ -1,4 +1,4 @@
-# Pati Saglik Database
+# Pet Help Database
 
 Bu klasor Turso/libSQL semasini ve migration notlarini tutar.
 

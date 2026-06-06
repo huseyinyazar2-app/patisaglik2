@@ -1,9 +1,14 @@
-// Pati Sağlık — Login Screen
+// Pet Help — Login Screen
 import { navigate } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
 import { showToast } from '../../ui/toast.js';
 import { saveLocalUserProfile } from '../../services/users.js';
+import { loginAccount } from '../../services/apiClient.js';
+
+function canUseLocalAuthFallback(error) {
+  return /db_not_configured|not_found|http_404|Failed to fetch|Unexpected token/i.test(String(error?.message || error || ''));
+}
 
 export function render(params = {}, query = {}) {
   const state = getState();
@@ -49,7 +54,7 @@ export function render(params = {}, query = {}) {
 }
 
 export function afterRender(params = {}, query = {}) {
-  document.getElementById('login-submit-btn')?.addEventListener('click', () => {
+  document.getElementById('login-submit-btn')?.addEventListener('click', async () => {
     const phone = document.getElementById('login-phone')?.value?.trim();
     const password = document.getElementById('login-password')?.value;
 
@@ -61,12 +66,36 @@ export function afterRender(params = {}, query = {}) {
       return;
     }
 
-    // Simulate login success
-    const profile = saveLocalUserProfile({ phone });
+    const btn = document.getElementById('login-submit-btn');
+    const originalText = btn?.textContent;
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = t('pets.saving');
+    }
+
+    let profile;
+    try {
+      const result = await loginAccount({ phone, password });
+      profile = saveLocalUserProfile(result.user || { phone });
+    } catch (error) {
+      if (!canUseLocalAuthFallback(error)) {
+        showToast(error.message || t('auth.login_failed'));
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
+        return;
+      }
+      profile = saveLocalUserProfile({ phone });
+    }
     setState(s => {
       s.user = { ...s.user, ...profile, isLoggedIn: true };
     });
     navigate('/home');
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
   });
 
   document.getElementById('login-forgot')?.addEventListener('click', () => {

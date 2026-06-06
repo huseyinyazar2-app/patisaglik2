@@ -1,6 +1,7 @@
 import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
+import { isMediaQualityCheckEnabled } from '../../services/appSettings.js';
 
 export function render(params = {}) {
   const state = getState();
@@ -8,6 +9,7 @@ export function render(params = {}) {
   const session = state.session || {};
   const task = (session.tasks || []).find(tk => tk.id === taskId);
   const taskTitle = task ? task.title : t('tasks.take_photo');
+  const qualityEnabled = isMediaQualityCheckEnabled();
 
   return `
     <div class="capture-screen">
@@ -30,6 +32,10 @@ export function render(params = {}) {
           <div style="position: absolute; top: 33.33%; left: 0; right: 0; height: 1px; background: white;"></div>
           <div style="position: absolute; top: 66.66%; left: 0; right: 0; height: 1px; background: white;"></div>
         </div>
+        ${qualityEnabled ? `<div class="capture-quality-guide">
+          <strong>${t('qualityCheck.before_photo_title')}</strong>
+          <span>${t('qualityCheck.before_photo_desc')}</span>
+        </div>` : ''}
       </div>
 
       <div class="capture-controls">

@@ -4,6 +4,7 @@ import { getActivePet } from '../../services/pets.js';
 import { submitFeatureForm } from '../../services/formSubmissions.js';
 import { isDocumentOcrConfigured, runDocumentOcr } from '../../services/documentOcr.js';
 import { uploadMediaFile } from '../../services/apiClient.js';
+import { PAYMENTS_DISABLED, getFeatureCreditAvailability, recordFeatureUsage } from '../../services/billing.js';
 import QRCode from 'qrcode';
 import { t } from '../../i18n/tr.js';
 
@@ -200,7 +201,7 @@ export function render(params = {}, query = {}) {
   }
 
   const planCode = state.subscription?.planCode || state.subscription?.tier || 'free';
-  if (config.requiresPaid && planCode === 'free') {
+  if (!PAYMENTS_DISABLED && config.requiresPaid && planCode === 'free') {
     return `
       <div class="screen premium-check feature-form-screen">
         <div class="header premium-soft-header">
@@ -231,7 +232,7 @@ export function render(params = {}, query = {}) {
           </div>
 
           <div class="feature-bottom-actions">
-            <button class="btn btn-primary btn-full" id="btnPlan">${t('featureForm.view_plans')}</button>
+            <button class="btn btn-primary btn-full" disabled>${t('featureForm.store_update_later')}</button>
             <button class="btn btn-ghost btn-full" id="btnCancel">${t('common.cancel')}</button>
           </div>
         </div>
@@ -436,6 +437,11 @@ export function afterRender() {
       showNotice(t('featureForm.ocr_not_ready'), 'error');
       return;
     }
+    const credit = await getFeatureCreditAvailability({ userId: state.user?.id || 'user-1', featureCode: 'document-ocr' });
+    if (!credit.ok) {
+      showNotice(t('planScreen.insufficient_credits'), 'error');
+      return;
+    }
 
     btn.textContent = t('featureForm.reading_document');
     btn.disabled = true;
@@ -448,6 +454,7 @@ export function afterRender() {
         note: textareaValue(t('featureForm.labels.extra_note'))
       });
       if (!response.ok) throw new Error(response.reason || 'ocr_failed');
+      await recordFeatureUsage({ userId: state.user?.id || 'user-1', petId: state.activePetId || null, featureCode: 'document-ocr' });
       currentDocumentOcrResult = response.data;
       renderOcrResult(response.data);
       const visibleValues = [...document.querySelectorAll('.feature-field')]
@@ -504,7 +511,6 @@ export function afterRender() {
 
   document.getElementById('btnBack')?.addEventListener('click', () => goBack());
   document.getElementById('btnGoHome')?.addEventListener('click', () => navigate('/home'));
-  document.getElementById('btnPlan')?.addEventListener('click', () => navigate('/profile/plan'));
   document.getElementById('btnCancel')?.addEventListener('click', () => goBack());
   document.getElementById('btnSaveFeature')?.addEventListener('click', async (event) => {
     if (!validateRequiredFields()) return;

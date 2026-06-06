@@ -58,7 +58,7 @@ export async function runDocumentOcr({ file, documentKind, readGoal, extractionO
   }
 
   if (!isGeminiConfigured()) return { ok: false, reason: 'missing_key' };
-  const system = translateForLocale('tr', 'documentOcr.system_prompt');
+  const system = `${translateForLocale('tr', 'documentOcr.system_prompt')} If the uploaded media/document is unrelated to veterinary health, lab, prescription, invoice or clinical follow-up context, do not extract findings; return status needs_review, confidence 0-25 and add an irrelevant media warning.`;
   const prompt = translateForLocale('tr', 'documentOcr.user_prompt', {
     documentKind: documentKind || translateForLocale('tr', 'common.unknown'),
     readGoal: readGoal || translateForLocale('tr', 'documentOcr.default_goal'),

@@ -1,6 +1,25 @@
 import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
+import { analyzeVideoQuality } from '../../services/mediaQuality.js';
+import { isMediaQualityCheckEnabled } from '../../services/appSettings.js';
+
+function renderQualityPanel(result = null) {
+  if (!result) {
+    return `<div class="media-quality-panel" id="qualityPanel"><strong>${t('qualityCheck.analyzing')}</strong><p>${t('qualityCheck.video_analyzing_desc')}</p></div>`;
+  }
+  const issues = result.issues || [];
+  return `
+    <div class="media-quality-panel ${result.level}" id="qualityPanel">
+      <div class="media-quality-head">
+        <div><strong>${t(`qualityCheck.levels.${result.level}`)}</strong><p>${t('qualityCheck.score', { score: result.score })}</p></div>
+        <span>${result.score}</span>
+      </div>
+      ${issues.length ? `<ul>${issues.slice(0, 3).map(item => `<li>${t(item.messageKey)}</li>`).join('')}</ul>` : `<p>${t('qualityCheck.good_video')}</p>`}
+      <small>${t('qualityCheck.video_meta', { width: result.metrics.width, height: result.metrics.height, duration: result.metrics.duration })}</small>
+    </div>
+  `;
+}
 
 export function render(params = {}) {
   const state = getState();
@@ -10,6 +29,7 @@ export function render(params = {}) {
   const taskTitle = task ? task.title : t('tasks.record_video');
   const media = (session.media || []).filter(item => item.taskId === taskId && item.type === 'video');
   const lastMedia = media[media.length - 1] || null;
+  const qualityEnabled = isMediaQualityCheckEnabled();
   const previewHtml = lastMedia?.dataUrl
     ? `<video src="${lastMedia.dataUrl}" controls playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>`
     : `<div style="text-align: center;"><div style="width: 64px; margin: 0 auto var(--space-2);">${window.__icons?.video || ''}</div><div style="color: rgba(255,255,255,0.7); font-size: var(--font-size-sm);">${t('tasks.record_video')}</div></div>`;
@@ -30,6 +50,8 @@ export function render(params = {}) {
         <div class="preview-image" style="background: linear-gradient(135deg, #1a1a2e, #16213e); overflow: hidden;">
           ${previewHtml}
         </div>
+
+        ${qualityEnabled && lastMedia?.dataUrl ? renderQualityPanel(lastMedia?.qualityCheck || null) : ''}
 
         <div class="card card-bordered" style="margin-bottom: var(--space-4);">
           <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3);">
@@ -61,6 +83,27 @@ export function render(params = {}) {
 
 export function afterRender(params = {}) {
   const taskId = params.taskId || '';
+  const state = getState();
+  const lastMedia = (state.session?.media || []).filter(item => item.taskId === taskId && item.type === 'video').slice(-1)[0];
+  const qualityEnabled = isMediaQualityCheckEnabled();
+
+  if (qualityEnabled && lastMedia?.dataUrl && !lastMedia.qualityCheck) {
+    analyzeVideoQuality(lastMedia.dataUrl).then((result) => {
+      setState(s => {
+        const media = (s.session.media || []).find(item => item.id === lastMedia.id);
+        if (media) media.qualityCheck = result;
+      });
+      const panel = document.getElementById('qualityPanel');
+      if (panel) panel.outerHTML = renderQualityPanel(result);
+      const noButton = document.querySelector('[data-quality="no"]');
+      const yesButton = document.querySelector('[data-quality="yes"]');
+      if (result.level === 'poor' && noButton) noButton.click();
+      else if (yesButton) yesButton.click();
+    }).catch(() => {
+      const panel = document.getElementById('qualityPanel');
+      if (panel) panel.outerHTML = `<div class="media-quality-panel watch" id="qualityPanel"><strong>${t('qualityCheck.manual_check')}</strong><p>${t('qualityCheck.manual_check_desc')}</p></div>`;
+    });
+  }
 
   document.getElementById('backBtn')?.addEventListener('click', () => goBack());
 
@@ -86,6 +129,7 @@ export function afterRender(params = {}) {
         media.quality = quality;
         media.note = note;
       }
+      if (qualityEnabled && task && media?.qualityCheck) task.qualityCheck = media.qualityCheck;
       if (!s.session.mediaCount) s.session.mediaCount = { photo: 0, video: 0, audio: 0 };
       s.session.mediaCount.video = (s.session.media || []).filter(item => item.type === 'video').length;
     });

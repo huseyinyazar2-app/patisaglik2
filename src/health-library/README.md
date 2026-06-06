@@ -1,8 +1,8 @@
-# Pati Sağlık — Olay, Soru, Görev, Öneri ve Takip Kütüphanesi Paketi
+# Pet Help — Olay, Soru, Görev, Öneri ve Takip Kütüphanesi Paketi
 
 Oluşturma tarihi: 2026-05-30 17:05
 
-Bu paket, Pati Sağlık uygulamasında kullanılacak çekirdek sağlık kontrol kütüphanesidir.
+Bu paket, Pet Help uygulamasında kullanılacak çekirdek sağlık kontrol kütüphanesidir.
 
 ## İçerik Sayıları
 

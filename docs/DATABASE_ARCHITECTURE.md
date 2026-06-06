@@ -1,4 +1,4 @@
-# Pati Saglik DB Mimarisi
+# Pet Help DB Mimarisi
 
 ## Hedef
 
@@ -18,9 +18,17 @@ Bu dokuman, baska ajanlarin veritabani isini kaldigi yerden anlayabilmesi icin t
 - Kimlik: `users`
 - Pet: `pets`, `pet_species`, `pet_breeds`, `pet_profile_attributes`
 - Paylasim/yetki: `pet_members`, `roles`, `permissions`, `role_permissions`, `pet_member_permission_overrides`
-- Ticari model: `plans`, `subscriptions`, `credit_wallets`, `credit_transactions`, `feature_usage`
+- Ticari model: `plans`, `credit_packages`, `subscriptions`, `credit_wallets`, `credit_transactions`, `store_purchases`, `feature_usage`
 - Saglik kayitlari: `health_records`, `measurements`, `reminders`, `expenses`, `media_files`, `documents`
 - AI/is akisi: `ai_analysis_jobs`, `followups`, `form_submissions`
+
+## Odeme ve Kredi Katalogu
+
+- Plan katalogu `plans` tablosundan gelir; admin panelinde fiyat, aylik AI kredi hakki, pet limiti, aktiflik ve Google Play product id duzenlenebilir.
+- Varsayilan abonelikler: `premium_monthly` = 24900 kurus / TRY, aylik 8 AI kredi; `premium_yearly` = 199000 kurus / TRY, aylik 8 AI kredi.
+- Kredi paketleri `credit_packages` tablosundan gelir; varsayilan paketler `credit_1` = 1 kredi / 4900 kurus ve `credit_10` = 10 kredi / 39000 kurus.
+- Google Play satin alma dogrulamasi gelince dogrulanan tokenlar `store_purchases` tablosuna yazilacak; abonelik hakki `subscriptions`, kredi hakki `credit_wallets` ve `credit_transactions` ile yansitilacak.
+- AI kullanim maliyeti varsayilan 1 kredidir. Abonelik varsa once aylik `monthly_credit_allowance`, sonra kullanicinin `credit_wallets.balance` bakiyesi kullanilir; kullanim `feature_usage.credit_cost` ile izlenir.
 - Dil: `locales`, `translation_keys`, `translations`, `localized_content`
 - Guvenlik/iz: `audit_logs`
 

@@ -1,4 +1,4 @@
-# Pati Sağlık - Yapılacak Yeni Özellikler
+# Pet Help - Yapılacak Yeni Özellikler
 
 Aşağıdaki 15 özellik, uygulamanın değerini artırmak, kullanıcı bağlılığı yaratmak ve premium modele geçişi teşvik etmek amacıyla sisteme eklenecektir.
 
@@ -39,9 +39,13 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
 - [x] Ücretsiz form ekranlarındaki eski `Önizlemeyi Kaydet` / mock buton izi kaldırıldı; gerçek kayıt aksiyonu `Kaydet` olarak hizalandı.
 - [x] Plan/abonelik okuma servisi eklendi: `plans`, `subscriptions` ve `credit_wallets` tabloları tek hesap plan modeline çevriliyor.
 - [x] Özellik kullanımı `feature_usage` tablosuna plan kodu ve kredi maliyetiyle yazılacak şekilde bağlandı.
+- [x] Ticari katalog altyapısı `plans` ve `credit_packages` tablolarında tutuluyor; ilk mağaza sürümü için ödeme/abonelik/kredi satın alma kullanıcı tarafında pasifleştirildi.
+- [x] Admin panelinden plan, Play product id, aylık AI kredi hakkı, kredi paketleri ve ödeme kayıtları yönetilebilir hale getirildi.
+- [x] AI kullanım maliyeti 1 kredi olarak bağlandı; abonelikte önce aylık 8 kredi hakkı, sonra cüzdan kredisi kullanılır.
+- [x] Yeni kullanıcı için başlangıç AI hakkı 1 kredi olarak ayarlandı; admin panelindeki kredi düzenleme ekranından artırılıp azaltılabilir.
 - [x] Ham belge arşivi ve klinik hazırlık dosyası ücretsiz akışta bırakıldı; kredi maliyeti AI/Pro fazına ayrıldı.
-- [x] Pati AI sekmesindeki belge OCR/AI kartı ücretsiz ham belge arşivine yönlendirmeyecek şekilde sonraki faz olarak pasifleştirildi.
-- [x] Pati AI sekmesindeki toksik madde AI triyaj kartı ücretsiz acil kayıt formuna yönlendirmeyecek şekilde sonraki faz olarak pasifleştirildi.
+- [x] Pet AI sekmesindeki belge OCR/AI kartı ücretsiz ham belge arşivine yönlendirmeyecek şekilde sonraki faz olarak pasifleştirildi.
+- [x] Pet AI sekmesindeki toksik madde AI triyaj kartı ücretsiz acil kayıt formuna yönlendirmeyecek şekilde sonraki faz olarak pasifleştirildi.
 - [x] Profil plan açıklaması ücretsiz ham kayıtlar ile kredi/Pro AI-OCR alanını net ayıracak şekilde güncellendi.
 - [x] Production icin ilk server/API katmani eklendi: Node API, Dockerfile, health endpoint ve B2 signed upload/download ilk fazı.
 - [x] Pet ekleme/secme ve listeleme ekranlari DB okuma-yazma + local fallback hattina baglandi.
@@ -52,7 +56,7 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
   - Form tasarımı yapıldı: yutulan madde, zaman, belirti, detay alanları.
   - DB/local kayıt yapıldı: form `health_records` arşivinde `toxin_foreign_body` sağlık kaydı olarak tutuluyor.
   - Ücretsiz acil kayıt aracı Ana Sayfa ücretsiz takip araçlarına eklendi.
-  - Pati AI tarafındaki otomatik toksik madde triyajı kartı sonraki AI fazı olarak pasifleştirildi.
+  - Pet AI tarafındaki otomatik toksik madde triyajı kartı sonraki AI fazı olarak pasifleştirildi.
   - Detay ekranında riskli belirti, zaman ve madde bilgisine göre kural tabanlı acil veteriner yönlendirme paneli eklendi.
   - Acil paneline yakındaki veteriner kliniklerini haritada arama aksiyonu eklendi.
   - Sağlık arşivi, zaman akışı ve rapor etiketleri toksik/yabancı cisim kaydını ayırt edecek şekilde genişletildi.
@@ -188,7 +192,7 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
   - Plan/limit görünümü yapıldı.
   - Pet seçme/listeleme DB okuma hattına, pet ekleme DB yazma hattına bağlandı.
   - Pet limiti `plans/subscriptions/credit_wallets` okuyan hesap plan servisine bağlandı.
-  - Profil altında plan ve kredi ekranı yapıldı: `/profile/plan`.
+  - Profil altındaki plan/kredi linki ilk mağaza sürümü için kaldırıldı; `/profile/plan` rotası pasif bilgilendirme ekranı olarak tutuluyor.
   - Özellik kullanım kayıtları plan/kredi ayrımını `feature_usage` içine yazıyor.
   - Kodlama yapılmadı: ödeme sağlayıcısı ile gerçek abonelik tahsilatı ve doğrulaması.
 
@@ -235,7 +239,7 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
 - [x] Sağlık kayıtları listesine `Sorun` filtresi eklendi.
 - [x] Sağlık sorunu canlı liste doğrulandı: test sorun kaydı sağlık kayıtlarında göründü.
 - [x] Ölçümler, ölçüm ekleme, zaman akışı ve cihaz ekranlarındaki eski emoji ikonlar modern SVG ikon sistemine taşındı.
-- [x] Alt menüdeki `Pati AI` etiketi emoji yerine mevcut spark SVG ikonu ile bırakıldı.
+- [x] Alt menüdeki `Pet AI` etiketi emoji yerine mevcut spark SVG ikonu ile bırakıldı.
 - [x] Görünür sağlık/geçmiş/cihaz ekranlarında eski emoji ikon kalmadığı tarayıcıda doğrulandı.
 - [x] Cihaz modu, eski pet seçimi, ölçüm ekleme, acil yönlendirme ve sorun detayı ekranlarındaki kalan emoji ikonlar SVG ikonlarla değiştirildi.
 - [x] İkon temizliği sonrası `/pets/device-mode` ve `/history/measurements/new` tarayıcıda doğrulandı.
@@ -326,7 +330,7 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
 - [x] Gönüllü Ağı build ve `/profile/volunteer-network` tarayıcı smoke testiyle doğrulandı.
 - [x] Gönüllü Ağı destek talebi modalı eklendi; `volunteer-help` form kaydı local-fallback servis testi ve build ile doğrulandı.
 - [x] Bildirim ekranına opsiyonel Capacitor LocalNotifications cihaz planı köprüsü eklendi; fake-Capacitor servis testi, build ve `/profile/notifications` tarayıcı smoke testiyle doğrulandı.
-- [x] Plan/abonelik servisi local-fallback testiyle doğrulandı; `/profile/plan` ekranı ve `/pets/select` pet limit göstergesi tarayıcıda test edildi.
+- [x] Plan/abonelik servisi local-fallback testiyle doğrulandı; ilk mağaza sürümü için `/profile/plan` pasif bilgilendirme ekranına çevrildi ve pet limit göstergesi kullanıcı arayüzünden kaldırıldı.
 - [x] `feature_usage` plan/kredi kaydı güncellendi; ham belge arşivi ve klinik hazırlık ücretsiz, kredi maliyeti sonraki AI/Pro fazı ve paylaşım özellikleri için ayrıldı.
 - [x] Kliniğe Hazırlık formu `vet_prep` belge arşivine bağlandı; local-fallback servis testi, build ve `/feature/vet-prep` tarayıcı kontrolüyle doğrulandı.
 - [x] Gizlilik ekranındaki veri dışa aktarma mock akışı gerçek JSON indirme akışına bağlandı; yerel sağlık verisi temizleme aksiyonu ilgili local kayıt anahtarlarını siliyor.
@@ -343,7 +347,7 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
 - [x] Rapor detay mock kod temizliği build ve `/reports` smoke testiyle doğrulandı; eski AI rapor metni görünmüyor.
 - [x] Kullanılmayan mock rapor veri dosyası kaldırıldı ve build ile doğrulandı.
 - [x] Belge arşivi ücretsiz ham arşiv olarak ayrıştırıldı; `/feature/document-ai` ve `/reports/new` smoke testlerinde Premium AI/OCR metni görünmüyor.
-- [x] Pati AI belge OCR kartı build ve `/check` smoke testiyle doğrulandı; kart sonraki faz olarak pasif ve ücretsiz belge arşivine yönlendirmiyor.
+- [x] Pet AI belge OCR kartı build ve `/check` smoke testiyle doğrulandı; kart sonraki faz olarak pasif ve ücretsiz belge arşivine yönlendirmiyor.
 - [x] Eski mock pet seçme ekranı kaldırıldı; build ve `/pets/select` smoke testi canlı pet profilleri ekranının korunduğunu doğruladı.
 - [x] Acil kayıt / toksik AI triyaj ayrımı build ve `/home`, `/check`, `/feature/toxic` smoke testleriyle doğrulandı; ücretsiz form erişilebilir, AI kartı pasif.
 - [x] Klinik dosyası formunda AI özeti seçeneği kaldırıldı; ücretsiz dosya kapsamı kural tabanlı notlarla hizalandı.
@@ -380,7 +384,7 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
 - [x] Bilinmeyen feature rota düzeltmesi build ve `/feature/not-real-feature` smoke testiyle doğrulandı.
 - [x] Pro/kredi alanındaki Bakıcı Modu doğrudan URL ile ücretsiz planda açılmayacak şekilde kilitlendi; ücretsiz alan ile ücretli paylaşım akışı ayrımı güçlendirildi.
 - [x] Bakıcı Modu erişim ayrımı build, ücretsiz plan gate smoke testi ve mevcut ücretli plan form smoke testiyle doğrulandı.
-- [x] Feature form link audit'i tekrarlandı; ana sayfa, profil, geçmiş, raporlar ve Pati AI ekranlarındaki `/feature/*` bağlantılarının tamamı mevcut form id'leriyle eşleşiyor.
+- [x] Feature form link audit'i tekrarlandı; ana sayfa, profil, geçmiş, raporlar ve Pet AI ekranlarındaki `/feature/*` bağlantılarının tamamı mevcut form id'leriyle eşleşiyor.
 - [x] Kalan native `alert()` kullanımları PWA/Capacitor uyumlu toast bildirimlerine çevrildi; `src` içinde `alert(` kalmadı.
 - [x] Lazy yüklenen followup ve fiziksel muayene ekranlarındaki kaçışlı template literal parse sorunu düzeltildi; build ve `/followups/*`, `/check/new/physical-exam/:taskId` smoke testleriyle doğrulandı.
 - [x] Kayıtlı 73 route örnek parametrelerle tarayıcıda smoke test edildi; hiçbirinde `Ekran yüklenemedi` runtime hatası görülmedi.
@@ -396,7 +400,7 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
 - [x] AI akışı build ve tarayıcı smoke testleriyle doğrulandı: ana şikayet filtresi, sağlık öyküsü, daraltılmış soru sayısı, ölçüm ekranı, sonuç ekranı ve veteriner sonucu ekranı runtime hatası vermiyor.
 - [x] AI akışında aktif pet bulunamazsa ekran kırılmaması ve sesli örnek şikayetin yeni ana şikayet/ek bulgu state yapısına yazılması için küçük sağlamlaştırma yapıldı; build ve ana akış smoke testi geçti.
 - [x] Acil Bilgi Bankası eklendi: toksik/zehirlenme, yabancı cisim, kusma-ishal, solunum, nöbet/bayılma, sıcak çarpması, göz yaralanması, yara/kanama, idrar yapamama ve doğum komplikasyonu konuları güvenli “yapma / hazırla / acil veteriner” formatında yazıldı.
-- [x] Bilgi bankası Pati AI merkezine bağlandı; `Ambalaj Risk Kontrolü` kartı sonraki AI adımı olarak konumlandırıldı. Build ve `/check`, `/check/knowledge`, `/check/knowledge/toxic` smoke testleri geçti.
+- [x] Bilgi bankası Pet AI merkezine bağlandı; `Ambalaj Risk Kontrolü` kartı sonraki AI adımı olarak konumlandırıldı. Build ve `/check`, `/check/knowledge`, `/check/knowledge/toxic` smoke testleri geçti.
 - [x] `Ambalaj Risk Kontrolü` çalışır ilk faz olarak eklendi: ambalaj fotoğrafı, ürün adı, içerik metni, miktar, zaman ve belirti girişi alıyor; ksilitol/çikolata/üzüm/ilaç/kimyasal/yabancı cisim gibi anahtar riskleri güvenli kural tabanlı tarıyor.
 - [x] Ambalaj risk sonucu “kesin güvenli” hükmü vermeden acil/yüksek/yabancı cisim/takip/belirsiz seviyeleriyle gösteriliyor; sonuçtan mevcut `toxic` acil kayıt hattına kayıt oluşturma butonu bağlandı.
 - [x] Ambalaj risk akışı build ve `/check` -> `/check/package-risk` tarayıcı smoke testiyle doğrulandı; xylitol örneği acil risk olarak yakalandı, testte veritabanına kayıt bırakılmadı.
@@ -423,7 +427,7 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
 - [x] Gemini modeli hibrit yapıya alındı: server/local standart model `gemini-3-flash-preview`, kritik model `gemini-3.5-flash`; canlı `/api/ai/package-risk` şema yanıtı test edildi.
 - [x] Kritik 3.5 Flash ambalaj risk yanıtına sunucu tarafı güvenlik filtresi eklendi; evde bal/şeker, kusturma, aktif kömür, ilaç, süt/tuzlu su gibi müdahale çağrıştıran öneriler `askVet/prepare` alanlarından temizleniyor.
 - [x] Ambalaj risk AI endpointine `responseSchema` ve şema doğrulaması eklendi; Gemini beklenen `level/headline/reason/doNotDo/prepare/askVet` alanları dışında cevap verirse güvenli fallback korunuyor.
-- [x] Genel ekran audit'i yapıldı: auth, pet, ana tablar, Pati AI, bilgi bankası, paket risk, ürün radarı, ücretsiz formlar, takip, geçmiş, rapor, profil, public QR/report ve davet rotaları smoke test edildi.
+- [x] Genel ekran audit'i yapıldı: auth, pet, ana tablar, Pet AI, bilgi bankası, paket risk, ürün radarı, ücretsiz formlar, takip, geçmiş, rapor, profil, public QR/report ve davet rotaları smoke test edildi.
 - [x] Gerçek kullanıcı akışıyla kayıt olma, pet ekleme, cihaz modu, ölçüm kaydetme ve sağlık sorunu kaydetme test edildi.
 - [x] Ölçüm kaydetme hatası düzeltildi: `selectedType/typeInfo` save handler içinde yeniden hesaplanıyor; kayıt sonrası ölçüm listesinde değer görünüyor.
 - [x] Cihaz modu seçenekleri erişilebilir gerçek butonlara çevrildi; seçenek tıklayınca `/home` geçişi doğrulandı.
@@ -441,7 +445,7 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
   - [x] Profil ekranında eksik telefon/il/ilçe bilgisi görünür “tamamla” uyarısı olarak işaretleniyor.
 - [x] Dil altyapısı ilk faz güçlendirildi: `tr/en` sözlükleri, aktif profile göre `t()` seçimi, hesap ekranı dil seçimi ve tab bar çeviri bağlantısı eklendi.
 - [x] I18N audit script'i ve raporu eklendi: `scripts/audit-i18n.mjs`, `docs/I18N_AUDIT.md`.
-- [ ] Kalan hardcoded Türkçe metinler i18n'e taşınacak: son audit `1076` string literal / `74` dosya.
+- [x] Kalan hardcoded Türkçe metinler i18n'e taşındı: son audit `0` string literal / `0` dosya.
 - [x] Pet profil bağlamı AI karar motoruna bağlandı.
   - [x] Pet yaşından yaşam evresi hesaplanıyor: `newborn`, `young`, `adult`, `senior`, `geriatric`.
   - [x] Tür, ırk, kısa burunlu/büyük ırk/yavru/yaşlı/kronik durum gibi risk etiketleri üretiliyor.
@@ -459,6 +463,59 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
   - [x] Çevresel Risk Asistanı ve Hafif Veteriner Inbox kullanıcı kararıyla şimdilik kapsam dışına alındı.
   - [x] API entegrasyonları kullanıcı kararıyla sonraya ertelendi; sadece sürdürülebilir/ücretsiz kaynaklar daha sonra değerlendirilecek.
   - [x] Değerlendirilecek API adayları sonraki faza taşındı: openFDA recall/adverse events, Open Pet Food Facts, Open-Meteo hava/air quality. Google Places/Foursquare ve wearable API’leri daha sonraya bırakılacak.
+
+## Görsel / Hareket AI Fazı - Eklenecek Mantıklı Özellikler
+
+Bu fazın ürün dili teşhis değil; çekim kalitesini artırma, değişim takibi, ölçülebilir sinyal çıkarma ve veterinere daha iyi kanıt hazırlama olarak tutulacak.
+
+- [x] Akıllı Çekim Kalitesi Kontrolü
+  - [x] Web/PWA ilk fazı yapıldı: fotoğraf önizlemede ışık, bulanıklık, kontrast ve çözünürlük kontrolü gösteriliyor.
+  - [x] Web/PWA ilk fazı yapıldı: video önizlemede süre, çözünürlük ve ilk kare ışık/kontrast kontrolü gösteriliyor.
+  - [x] Çekim öncesi ekrana doğru çekim rehberi eklendi: ışık, kadraj, sabit telefon ve minimum video süresi hatırlatılıyor.
+  - [x] Kalite skoru ve uyarılar medya/task metadata içine yazılıyor; veteriner raporu akışında kullanılabilecek hale geldi.
+  - [x] Admin kontrolü eklendi; özellik varsayılan olarak kapalı. Kapalıyken otomatik kalite analizi ve çekim rehberi çalışmaz.
+  - [x] Alakasız/düşük kalite işaretlenen medya veteriner raporu linkine dahil edilmez; rapora sadece dışlama uyarısı eklenir.
+  - [ ] Native kamera plugin fazında canlı kadraj/pet görünürlüğü uyarısı eklenecek: biraz uzaklaş, ışığı artır, peti kadraja al, telefonu sabit tut.
+  - İlk uygulanan alanlar: AI görevlerinden gelen fotoğraf ve video kanıt ekranları.
+
+- [ ] Yönlendirmeli Video Çekim Şablonları
+  - Topallama için yandan yürüyüş, önden geliş, arkadan gidiş, otur-kalk gibi kısa görev şablonları eklenecek.
+  - Solunum için pet sakin haldeyken göğüs/karın bölgesi kadrajda olacak şekilde çekim rehberi gösterilecek.
+  - Veteriner rapor linkine çekim açısı, süre ve kalite puanı eklenecek.
+
+- [ ] Solunum Sayacı
+  - Kısa videoda göğüs/karın hareketinden dakikadaki tahmini solunum sayısı çıkarılacak.
+  - Sonuç `measurements` tablosuna `respiratory` ölçümü olarak kaydedilecek.
+  - Dil güvenli tutulacak: tahmini ölçüm, sakin dinlenme halinde tekrar çekim önerisi, yüksek/şüpheli değerde veterinerle görüş uyarısı.
+
+- [ ] Yara / Deri / Göz Önce-Sonra Karşılaştırma
+  - Aynı bölgenin önceki ve yeni fotoğrafında kızarıklık alanı, belirgin şişlik, akıntı görünümü veya leke boyutu değişimi karşılaştırılacak.
+  - Sonuç teşhis değil değişim takibi olarak gösterilecek: artmış/azalmış/benzer görünüyor.
+  - Mevcut Foto Takip ve Operasyon Sonrası Takip ekranlarına bağlanacak.
+
+- [ ] Dışkı / Kusmuk Foto Skor Destek Sistemi
+  - Fotoğraf kalitesi uygunsa dışkı kıvamı, renk grubu ve kan/mukus şüphesi gibi güvenli gözlem etiketleri önerilecek.
+  - Mevcut Dışkı Skoru formunu otomatik doldurmaya yardımcı olacak; kullanıcı onaylamadan kayıt yazılmayacak.
+
+- [ ] Kaşıntı / Yalama / Isırma Davranış Sayacı
+  - Kısa videoda aynı bölgeye tekrar eden yalama, kaşıma veya ısırma davranışı zaman damgasıyla işaretlenecek.
+  - Alerji/deri takip dosyasında “davranış sıklığı” olarak saklanacak.
+  - Veteriner paylaşım linkinde video kanıt özeti olarak gösterilecek.
+
+- [ ] Topallama Asimetri Sinyali
+  - Yönlendirmeli yürüyüş videosunda basış ritmi ve adım simetrisi açısından kaba sinyal üretilecek.
+  - Sonuç teşhis/derece değil, “asimetri şüphesi / video tekrar gerekli / kalite yetersiz” gibi güvenli seviyelerle gösterilecek.
+  - Bu özellik veri ve doğrulama ihtiyacı yüksek olduğu için kalite kontrol + çekim rehberinden sonra yapılacak.
+
+- [ ] Mama / Su Kabı Önce-Sonra Takibi
+  - Önce-sonra fotoğrafla mama veya su seviyesinde belirgin azalma var mı yaklaşık takip edilecek.
+  - İştahsızlık, çok su içme, yaşlı pet ve kronik takip şablonlarına yardımcı sinyal olarak bağlanacak.
+  - İlk fazda hassas gram/ml ölçümü iddia edilmeyecek; sadece belirgin değişim etiketi üretilecek.
+
+- [ ] Teknik Not
+  - İlk fazda cihaz içi basit kalite/hareket kontrolleri öncelikli olacak.
+  - Ağır analizler server tarafında veya optimize edilmiş mobil modelle çalışacak; kullanıcıdan izin alınmadan medya kalıcı saklanmayacak.
+  - YOLO/segmentasyon/pose modelleri sadece kanıt kalitesi ve değişim takibi için kullanılacak; hastalık teşhisi, ilaç/doz veya kesin acil hüküm üretmeyecek.
 - [ ] Native plugin kurulumu/store build testi ve arka plan push teslimi henüz yapılmadı.
 - [x] Turso token frontend için sadece test amaçlı bırakıldı; canlı sistem için server/API katmanı ve B2 signed upload modeli başlatıldı.
 ## Dil Altyapisi / Store Hazirligi - 02.06.2026
@@ -478,5 +535,13 @@ Not: Aşağıdaki maddelerin çoğu artık görsel prototipten çıkıp Turso/lo
 - [x] `formSubmissions` otomatik uretilen davet, belge, hatirlatici ve fallback baslik/not metinleri TR/EN i18n sozluklerine tasindi; kalan form/payload label anahtarlari veri uyumlulugu icin bilincli birakildi.
 - [x] Triage/şikayet chip başlıkları, süre/ciddiyet seçenekleri ve ayrı kontrol uyarısı TR/EN i18n sözlüklerine taşındı; Türkçe keyword eşleşmeleri sınıflandırma mantığı olduğu için ayrı çok dilli NLP fazına bırakıldı.
 - [x] Sonuç ekranı (`Result`) trafik ışığı, klinik özet, takip adımları, uyarılar, butonlar ve toast metinleri TR/EN i18n sözlüklerine taşındı; risk hesaplama kelime anahtarları mantık gereği bırakıldı.
-- [ ] Kalan hardcoded Turkce metinler i18n'e tasinacak: son audit `787` string literal / `73` dosya.
+- [x] Kalan hardcoded Turkce metinler i18n'e tasindi: son audit `0` string literal / `0` dosya.
 - [ ] Diger 22 dil icin profesyonel ceviri sozlukleri eklenecek; su an TR/EN disindaki diller English -> Turkish fallback ile calisiyor.
+
+## Marka Gecisi - 06.06.2026
+
+- [x] Uygulama markasi `Pet Help` olarak guncellendi.
+- [x] PWA manifest, HTML title/meta, package slug, service worker cache adi, TR/EN i18n metinleri ve admin/AI ekran basliklari yeni markaya tasindi.
+- [x] Eski AI sekme etiketi `Pet AI` olarak guncellendi.
+- [x] Sunum, brosur ve dokuman asset adlari Pet Help adlandirmasina tasindi.
+- [x] Eski marka izi aktif uygulama/dokuman dosyalarinda tarandi; sadece eski referans arsiv klasorleri ve mevcut teknik sunucu/proje adresleri bilincli olarak birakildi.

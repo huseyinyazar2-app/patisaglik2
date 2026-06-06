@@ -88,7 +88,7 @@ export function render(params = {}, query = {}) {
             <button class="btn btn-primary btn-full" id="btnActivateKit">
               ${window.__icons?.spark} ${t('profile.activate_kit')}
             </button>
-            <button class="btn btn-ghost btn-full mt-2 text-primary text-sm font-semibold" id="btnBuyKit">${t('devicesScreen.buy_kit')}</button>
+            <button class="btn btn-ghost btn-full mt-2 text-primary text-sm font-semibold" id="btnBuyKit" disabled>${t('devicesScreen.buy_kit_paused')}</button>
           `}
         </div>
         
@@ -121,7 +121,4 @@ export function afterRender() {
     if (target) target.textContent = t('devicesScreen.last_test_ready', { value: formatStatusDate(status.checkedAt) });
   });
 
-  document.getElementById('btnBuyKit')?.addEventListener('click', () => {
-    navigate('/profile/plan');
-  });
 }

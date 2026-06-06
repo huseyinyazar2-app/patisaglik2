@@ -92,10 +92,10 @@ function downloadReminderIcs(record) {
   const ics = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Pati Saglik//Reminder//TR',
+    'PRODID:-//Pet Help//Reminder//TR',
     'CALSCALE:GREGORIAN',
     'BEGIN:VEVENT',
-    `UID:${record.id || Date.now()}@patisaglik.local`,
+    `UID:${record.id || Date.now()}@pethelp.local`,
     `DTSTAMP:${icsDate(new Date())}`,
     `DTSTART:${icsDate(start)}`,
     `DTEND:${icsDate(end)}`,

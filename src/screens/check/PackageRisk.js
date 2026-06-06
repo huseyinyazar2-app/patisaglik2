@@ -6,6 +6,7 @@ import { showToast } from '../../ui/toast.js';
 import { buildPetRiskContext } from '../../services/petContext.js';
 import { generateGeminiJson, isGeminiConfigured } from '../../services/geminiClient.js';
 import { postApiJson } from '../../services/apiClient.js';
+import { getFeatureCreditAvailability, recordFeatureUsage } from '../../services/billing.js';
 import { getLocale, t, translateForLocale } from '../../i18n/tr.js';
 
 function escapeHtml(value) {
@@ -337,7 +338,11 @@ export function afterRender() {
     });
 
     try {
-      
+        const credit = await getFeatureCreditAvailability({ userId: state.user?.id || 'user-1', featureCode: 'package-risk' });
+        if (!credit.ok) {
+          showToast(t('planScreen.insufficient_credits'));
+          throw new Error('insufficient_credits');
+        }
         const prompt = buildAiPrompt({ productName, ingredientText, amount, timing, symptoms, petContext }, lastResult);
         let ai = await postApiJson('/api/ai/package-risk', { prompt }).catch(() => null);
         if (!ai?.ok && isGeminiConfigured()) ai = await generateGeminiJson({
@@ -346,6 +351,7 @@ export function afterRender() {
           model: import.meta.env?.VITE_GEMINI_CRITICAL_MODEL || 'gemini-3.5-flash'
         });
         if (ai?.ok) {
+          await recordFeatureUsage({ userId: state.user?.id || 'user-1', petId: state.activePetId || null, featureCode: 'package-risk' });
           lastResult.ai = normalizeAiResult(ai.data);
           if (lastResult.ai?.level && lastResult.ai.level !== 'unknown') {
             const order = ['unknown', 'watch', 'foreign', 'high', 'critical'];

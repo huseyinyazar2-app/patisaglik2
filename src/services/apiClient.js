@@ -19,6 +19,14 @@ export async function postApiJson(path, body) {
   return postJson(path, body);
 }
 
+export async function registerAccount(input) {
+  return postJson('/api/auth/register', input);
+}
+
+export async function loginAccount(input) {
+  return postJson('/api/auth/login', input);
+}
+
 export async function requestMediaUpload({ userId, petId, category, file }) {
   return postJson('/api/media/sign-upload', {
     userId,

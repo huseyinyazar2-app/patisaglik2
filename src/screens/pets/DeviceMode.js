@@ -1,4 +1,4 @@
-// Pati Sağlık — Device Mode Screen
+// Pet Help — Device Mode Screen
 import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';

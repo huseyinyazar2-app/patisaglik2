@@ -1,4 +1,4 @@
-// Pati Sağlık — Onboarding Screen
+// Pet Help — Onboarding Screen
 import { navigate } from '../../router.js';
 import { getState } from '../../store.js';
 import { t } from '../../i18n/tr.js';

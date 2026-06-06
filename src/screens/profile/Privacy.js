@@ -32,7 +32,7 @@ function downloadJsonFile(data) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = `pati-saglik-veri-export-${date}.json`;
+  link.download = `pet-help-data-export-${date}.json`;
   document.body.appendChild(link);
   link.click();
   link.remove();
@@ -154,6 +154,22 @@ export function render(params = {}, query = {}) {
             <span class="font-medium text-sm text-danger">${t('profile.delete_account')}</span>
             <span class="text-danger" style="width: 18px; height: 18px;">${window.__icons?.alert}</span>
           </button>
+        </div>
+
+        <h3 class="section-title text-xs uppercase tracking-wider pl-2 mb-3">${t('privacyScreen.legal_title')}</h3>
+        <div class="bg-white rounded-xl shadow-sm border border-border-color overflow-hidden mb-8">
+          <div class="p-4 border-b border-border-color">
+            <div class="font-semibold text-sm mb-1">${t('privacyScreen.terms_title')}</div>
+            <div class="text-xs text-secondary">${t('privacyScreen.terms_desc')}</div>
+          </div>
+          <div class="p-4 border-b border-border-color">
+            <div class="font-semibold text-sm mb-1">${t('privacyScreen.health_disclaimer_title')}</div>
+            <div class="text-xs text-secondary">${t('privacyScreen.health_disclaimer_desc')}</div>
+          </div>
+          <div class="p-4">
+            <div class="font-semibold text-sm mb-1">${t('privacyScreen.payment_policy_title')}</div>
+            <div class="text-xs text-secondary">${t('privacyScreen.payment_policy_desc')}</div>
+          </div>
         </div>
         
         <div class="mt-8 text-center">

@@ -2,8 +2,8 @@ import { navigate, goBack } from '../../router.js';
 import { getState, setActivePet } from '../../store.js';
 import { t } from '../../i18n/tr.js';
 import { getPets } from '../../services/pets.js';
-import { getAccountBilling } from '../../services/billing.js';
-import { showConfirmDialog, showToast } from '../../ui/toast.js';
+import { PAYMENTS_DISABLED, getAccountBilling } from '../../services/billing.js';
+import { showToast } from '../../ui/toast.js';
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -75,8 +75,6 @@ function renderPetList(pets = null, activeId = null) {
 
 export function render() {
   const state = getState();
-  const maxPets = state.subscription?.maxPets || 1;
-  const plan = state.subscription?.tier === 'pro' ? 'PRO' : 'FREE';
 
   return `
     <div class="screen premium-check">
@@ -88,17 +86,7 @@ export function render() {
         <div class="header-right"></div>
       </div>
 
-      <div class="section pt-4">
-        <div class="profile-plan-card">
-          <div>
-            <strong>${t('pets.multi_panel_title')}</strong>
-            <p>${t('pets.multi_panel_desc')}</p>
-          </div>
-          <span class="plan-pill" id="petPlanPill">${plan} · .../${maxPets}</span>
-        </div>
-      </div>
-
-      <div class="section pt-0 pb-24">
+      <div class="section pt-4 pb-24">
         <div class="pets-list mb-6" id="petsList">
           ${renderPetList(null, state.activePetId)}
         </div>
@@ -169,14 +157,7 @@ export function afterRender() {
 
   document.getElementById('btnBack')?.addEventListener('click', () => goBack());
   document.getElementById('btnAddPet')?.addEventListener('click', async () => {
-    if (loadedPets.length >= planLimit) {
-      const ok = await showConfirmDialog({
-        title: 'Pet limiti',
-        message: t('pets.free_limit_confirm'),
-        confirmText: 'Devam Et'
-      });
-      if (!ok) return;
-    }
+    if (!PAYMENTS_DISABLED && loadedPets.length >= planLimit) return;
     navigate('/pets/new');
   });
 
@@ -187,9 +168,7 @@ export function afterRender() {
     loadedPets = pets;
     planLimit = billing.subscription.maxPets || 1;
     const list = document.getElementById('petsList');
-    const pill = document.getElementById('petPlanPill');
     if (list) list.innerHTML = renderPetList(pets, getState().activePetId);
-    if (pill) pill.textContent = `${billing.subscription.planName} · ${pets.length}/${planLimit}`;
     bindPetCards();
   }).catch(() => {
     const list = document.getElementById('petsList');

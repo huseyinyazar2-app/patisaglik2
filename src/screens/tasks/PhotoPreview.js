@@ -1,6 +1,25 @@
 import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
+import { analyzePhotoQuality } from '../../services/mediaQuality.js';
+import { isMediaQualityCheckEnabled } from '../../services/appSettings.js';
+
+function renderQualityPanel(result = null) {
+  if (!result) {
+    return `<div class="media-quality-panel" id="qualityPanel"><strong>${t('qualityCheck.analyzing')}</strong><p>${t('qualityCheck.analyzing_desc')}</p></div>`;
+  }
+  const issues = result.issues || [];
+  return `
+    <div class="media-quality-panel ${result.level}" id="qualityPanel">
+      <div class="media-quality-head">
+        <div><strong>${t(`qualityCheck.levels.${result.level}`)}</strong><p>${t('qualityCheck.score', { score: result.score })}</p></div>
+        <span>${result.score}</span>
+      </div>
+      ${issues.length ? `<ul>${issues.slice(0, 3).map(item => `<li>${t(item.messageKey)}</li>`).join('')}</ul>` : `<p>${t('qualityCheck.good_photo')}</p>`}
+      <small>${t('qualityCheck.photo_meta', { width: result.metrics.width, height: result.metrics.height, brightness: result.metrics.brightness })}</small>
+    </div>
+  `;
+}
 
 export function render(params = {}) {
   const state = getState();
@@ -10,6 +29,7 @@ export function render(params = {}) {
   const taskTitle = task ? task.title : t('tasks.take_photo');
   const media = (session.media || []).filter(item => item.taskId === taskId && item.type === 'photo');
   const lastMedia = media[media.length - 1] || null;
+  const qualityEnabled = isMediaQualityCheckEnabled();
   const previewHtml = lastMedia?.dataUrl
     ? `<img src="${lastMedia.dataUrl}" alt="${taskTitle}" style="width: 100%; height: 100%; object-fit: cover;" />`
     : `<div style="text-align: center;"><div style="width: 64px; margin: 0 auto var(--space-2);">${window.__icons?.camera || ''}</div><div style="font-size: var(--font-size-sm); color: var(--text-tertiary);">${t('photoPreview.title')}</div></div>`;
@@ -30,6 +50,8 @@ export function render(params = {}) {
         <div class="preview-image" style="background: linear-gradient(135deg, var(--gray-100), var(--gray-200)); overflow: hidden;">
           ${previewHtml}
         </div>
+
+        ${qualityEnabled && lastMedia?.dataUrl ? renderQualityPanel(lastMedia?.qualityCheck || null) : ''}
 
         <div class="card card-bordered" style="margin-bottom: var(--space-4);">
           <div style="display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-3);">
@@ -62,6 +84,29 @@ export function render(params = {}) {
 
 export function afterRender(params = {}) {
   const taskId = params.taskId || '';
+  const state = getState();
+  const lastMedia = (state.session?.media || []).filter(item => item.taskId === taskId && item.type === 'photo').slice(-1)[0];
+  const qualityEnabled = isMediaQualityCheckEnabled();
+
+  if (qualityEnabled && lastMedia?.dataUrl && !lastMedia.qualityCheck) {
+    analyzePhotoQuality(lastMedia.dataUrl).then((result) => {
+      setState(s => {
+        const media = (s.session.media || []).find(item => item.id === lastMedia.id);
+        if (media) media.qualityCheck = result;
+      });
+      const panel = document.getElementById('qualityPanel');
+      if (panel) panel.outerHTML = renderQualityPanel(result);
+      const noButton = document.getElementById('qualityNo');
+      const unsureButton = document.getElementById('qualityUnsure');
+      const yesButton = document.getElementById('qualityYes');
+      if (result.level === 'poor' && noButton) noButton.click();
+      else if (result.level === 'watch' && unsureButton) unsureButton.click();
+      else if (yesButton) yesButton.click();
+    }).catch(() => {
+      const panel = document.getElementById('qualityPanel');
+      if (panel) panel.outerHTML = `<div class="media-quality-panel watch" id="qualityPanel"><strong>${t('qualityCheck.manual_check')}</strong><p>${t('qualityCheck.manual_check_desc')}</p></div>`;
+    });
+  }
 
   document.getElementById('backBtn')?.addEventListener('click', () => goBack());
 
@@ -87,6 +132,7 @@ export function afterRender(params = {}) {
         media.quality = quality;
         media.note = note;
       }
+      if (qualityEnabled && task && media?.qualityCheck) task.qualityCheck = media.qualityCheck;
       if (!s.session.mediaCount) s.session.mediaCount = { photo: 0, video: 0, audio: 0 };
       s.session.mediaCount.photo = (s.session.media || []).filter(item => item.type === 'photo').length;
     });

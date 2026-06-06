@@ -1,4 +1,4 @@
-// Pati Sağlık — Splash Screen
+// Pet Help — Splash Screen
 import { navigate } from '../../router.js';
 import { getState } from '../../store.js';
 import { t } from '../../i18n/tr.js';

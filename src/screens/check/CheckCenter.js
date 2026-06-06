@@ -61,7 +61,7 @@ export function render() {
     <div class="screen premium-check">
       <div class="header premium-soft-header">
         <div class="header-left"></div>
-        <div class="header-title">Pati AI</div>
+        <div class="header-title">Pet AI</div>
         <div class="header-right">
           <span class="premium-header-shield">${window.__icons?.spark}</span>
         </div>
@@ -74,16 +74,12 @@ export function render() {
             <h1>${t('checkCenter.heading')}</h1>
             <p>${t('checkCenter.hero_desc').replace('{name}', pet.name)}</p>
           </div>
-          <div class="ai-credit-pill">
-            <strong>${state.subscription?.tier === 'pro' ? 'PRO' : 'FREE'}</strong>
-            <span>${t('checkCenter.plan')}</span>
-          </div>
         </div>
       </div>
 
       <div class="section pt-0">
         <div class="ai-free-note">
-          <span>${window.__icons?.lock}</span>
+          <span>${window.__icons?.shield}</span>
           <p>${t('checkCenter.free_note')}</p>
         </div>
       </div>

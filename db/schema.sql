@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS users (
   email TEXT UNIQUE,
   phone TEXT UNIQUE,
   display_name TEXT NOT NULL,
+  password_hash TEXT,
   locale TEXT NOT NULL DEFAULT 'tr',
   timezone TEXT NOT NULL DEFAULT 'Europe/Istanbul',
   status TEXT NOT NULL DEFAULT 'active',
@@ -138,14 +139,31 @@ CREATE TABLE IF NOT EXISTS plans (
   id TEXT PRIMARY KEY,
   code TEXT NOT NULL UNIQUE,
   billing_type TEXT NOT NULL,
+  billing_period TEXT,
   name_tr TEXT NOT NULL,
   price_cents INTEGER NOT NULL DEFAULT 0,
   currency TEXT NOT NULL DEFAULT 'TRY',
+  play_product_id TEXT,
   max_pets INTEGER,
   monthly_credit_allowance INTEGER NOT NULL DEFAULT 0,
   features TEXT NOT NULL DEFAULT '{}',
   is_active INTEGER NOT NULL DEFAULT 1,
   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+
+CREATE TABLE IF NOT EXISTS credit_packages (
+  id TEXT PRIMARY KEY,
+  code TEXT NOT NULL UNIQUE,
+  name_tr TEXT NOT NULL,
+  credit_amount INTEGER NOT NULL DEFAULT 0,
+  price_cents INTEGER NOT NULL DEFAULT 0,
+  currency TEXT NOT NULL DEFAULT 'TRY',
+  play_product_id TEXT,
+  metadata TEXT NOT NULL DEFAULT '{}',
+  is_active INTEGER NOT NULL DEFAULT 1,
+  sort_order INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
 );
 
 CREATE TABLE IF NOT EXISTS subscriptions (
@@ -188,6 +206,29 @@ CREATE TABLE IF NOT EXISTS credit_transactions (
   created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
   FOREIGN KEY (wallet_id) REFERENCES credit_wallets(id) ON DELETE CASCADE,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS store_purchases (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  provider TEXT NOT NULL DEFAULT 'google_play',
+  product_type TEXT NOT NULL,
+  product_id TEXT NOT NULL,
+  plan_id TEXT,
+  credit_package_id TEXT,
+  purchase_token TEXT,
+  status TEXT NOT NULL DEFAULT 'pending',
+  amount_cents INTEGER NOT NULL DEFAULT 0,
+  currency TEXT NOT NULL DEFAULT 'TRY',
+  credits_granted INTEGER NOT NULL DEFAULT 0,
+  purchased_at TEXT,
+  expires_at TEXT,
+  metadata TEXT NOT NULL DEFAULT '{}',
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (plan_id) REFERENCES plans(id),
+  FOREIGN KEY (credit_package_id) REFERENCES credit_packages(id)
 );
 
 CREATE TABLE IF NOT EXISTS feature_usage (
@@ -416,6 +457,13 @@ CREATE TABLE IF NOT EXISTS admin_sessions (
   FOREIGN KEY (admin_id) REFERENCES admin_accounts(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS app_settings (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL,
+  description TEXT,
+  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+);
+
 CREATE INDEX IF NOT EXISTS idx_pets_owner ON pets(primary_owner_user_id);
 CREATE INDEX IF NOT EXISTS idx_pet_members_pet ON pet_members(pet_id);
 CREATE INDEX IF NOT EXISTS idx_pet_members_user ON pet_members(user_id);
@@ -429,6 +477,8 @@ CREATE INDEX IF NOT EXISTS idx_ai_jobs_user ON ai_analysis_jobs(user_id, status)
 CREATE INDEX IF NOT EXISTS idx_followups_pet ON followups(pet_id, status);
 CREATE INDEX IF NOT EXISTS idx_form_submissions_pet ON form_submissions(pet_id, feature_code, created_at);
 CREATE INDEX IF NOT EXISTS idx_feature_usage_user ON feature_usage(user_id, feature_code, created_at);
+CREATE INDEX IF NOT EXISTS idx_credit_packages_active ON credit_packages(is_active, sort_order);
+CREATE INDEX IF NOT EXISTS idx_store_purchases_user ON store_purchases(user_id, status, created_at);
 
 INSERT OR IGNORE INTO locales (code, name, native_name) VALUES
   ('tr', 'Turkish', 'Türkçe'),
@@ -502,11 +552,19 @@ INSERT OR IGNORE INTO role_permissions (role_id, permission_id) VALUES
   ('role-vet-viewer', 'perm-view-health'),
   ('role-vet-viewer', 'perm-view-reports');
 
-INSERT OR IGNORE INTO plans (id, code, billing_type, name_tr, price_cents, max_pets, monthly_credit_allowance, features) VALUES
-  ('plan-free', 'free', 'free', 'Ücretsiz', 0, 1, 0, '{"ai":false,"documents":false,"members":1}'),
-  ('plan-credit', 'credit', 'credit', 'Kredi Paketi', 0, 3, 0, '{"ai":true,"documents":true,"members":2}'),
-  ('plan-monthly', 'monthly', 'subscription', 'Aylık Pro', 0, 10, 100, '{"ai":true,"documents":true,"members":10}'),
-  ('plan-yearly', 'yearly', 'subscription', 'Yıllık Pro', 0, 10, 1400, '{"ai":true,"documents":true,"members":10}');
+INSERT OR IGNORE INTO app_settings (key, value, description) VALUES
+  ('media_quality_check_enabled', 'false', 'Enable automatic client-side photo/video quality checks.'),
+  ('ai_ignore_low_quality_media', 'true', 'Exclude user-marked poor or irrelevant media from vet-ready reports.');
+
+INSERT OR IGNORE INTO plans (id, code, billing_type, billing_period, name_tr, price_cents, currency, play_product_id, max_pets, monthly_credit_allowance, features) VALUES
+  ('plan-free', 'free', 'free', NULL, 'Ücretsiz', 0, 'TRY', NULL, 1, 0, '{"ai":false,"documents":false,"members":1,"aiCreditCost":1}'),
+  ('plan-credit', 'credit', 'credit', NULL, 'Kredi ile Kullanım', 0, 'TRY', NULL, 3, 0, '{"ai":true,"documents":true,"members":2,"aiCreditCost":1}'),
+  ('plan-premium-monthly', 'premium_monthly', 'subscription', 'monthly', 'Aylık Premium', 24900, 'TRY', 'pati_premium_monthly', 10, 8, '{"ai":true,"documents":true,"members":10,"aiCreditCost":1}'),
+  ('plan-premium-yearly', 'premium_yearly', 'subscription', 'yearly', 'Yıllık Premium', 199000, 'TRY', 'pati_premium_yearly', 10, 8, '{"ai":true,"documents":true,"members":10,"aiCreditCost":1}');
+
+INSERT OR IGNORE INTO credit_packages (id, code, name_tr, credit_amount, price_cents, currency, play_product_id, sort_order, metadata) VALUES
+  ('credit-pack-1', 'credit_1', '1 Kredi', 1, 4900, 'TRY', 'pati_credit_1', 10, '{"aiCreditCost":1}'),
+  ('credit-pack-10', 'credit_10', '10 Kredi', 10, 39000, 'TRY', 'pati_credit_10', 20, '{"aiCreditCost":1}');
 
 INSERT OR IGNORE INTO users (id, email, phone, display_name, locale, metadata) VALUES
   ('user-1', 'ayse@email.com', '+905551112233', 'Ayşe Yılmaz', 'tr', '{"location":{"country":"Türkiye","province":"","district":"","neighborhood":""},"notificationPreference":"push"}');
@@ -520,4 +578,4 @@ INSERT OR IGNORE INTO pet_members (id, pet_id, user_id, role_id, status) VALUES
   ('member-user-1-pet-2', 'pet-2', 'user-1', 'role-owner', 'active');
 
 INSERT OR IGNORE INTO credit_wallets (id, user_id, balance) VALUES
-  ('wallet-user-1', 'user-1', 0);
+  ('wallet-user-1', 'user-1', 1);

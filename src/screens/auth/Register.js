@@ -1,8 +1,14 @@
-// Pati Sağlık — Register Screen
+// Pet Help — Register Screen
 import { navigate } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
 import { saveLocalUserProfile } from '../../services/users.js';
+import { registerAccount } from '../../services/apiClient.js';
+import { showToast } from '../../ui/toast.js';
+
+function canUseLocalAuthFallback(error) {
+  return /db_not_configured|not_found|http_404|Failed to fetch|Unexpected token/i.test(String(error?.message || error || ''));
+}
 
 export function render(params = {}, query = {}) {
   const state = getState();
@@ -69,7 +75,7 @@ export function render(params = {}, query = {}) {
 }
 
 export function afterRender(params = {}, query = {}) {
-  document.getElementById('register-submit-btn')?.addEventListener('click', () => {
+  document.getElementById('register-submit-btn')?.addEventListener('click', async () => {
     const name = document.getElementById('register-name')?.value?.trim();
     const phone = document.getElementById('register-phone')?.value?.trim();
     const email = document.getElementById('register-email')?.value?.trim();
@@ -107,13 +113,45 @@ export function afterRender(params = {}, query = {}) {
       return;
     }
 
-    // Simulate registration
-    const profile = saveLocalUserProfile({ name, phone, email });
+    const btn = document.getElementById('register-submit-btn');
+    const originalText = btn?.textContent;
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = t('pets.saving');
+    }
+
+    let profile;
+    try {
+      const result = await registerAccount({
+        name,
+        phone,
+        email,
+        password,
+        locale: state.user?.locale || 'tr',
+        timezone: state.user?.timezone || 'Europe/Istanbul',
+        location: state.user?.location || {}
+      });
+      profile = saveLocalUserProfile(result.user || { name, phone, email });
+    } catch (error) {
+      if (!canUseLocalAuthFallback(error)) {
+        showToast(error.message || t('auth.register_failed'));
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }
+        return;
+      }
+      profile = saveLocalUserProfile({ name, phone, email });
+    }
     setState(s => {
       s.user.isLoggedIn = true;
       s.user = { ...s.user, ...profile, isLoggedIn: true };
     });
     navigate('/pets/new');
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
   });
 
   document.getElementById('register-login-link')?.addEventListener('click', () => {

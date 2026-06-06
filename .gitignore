@@ -5,3 +5,10 @@ dist/
 .env.local
 .env.*.local
 npm-debug.log*
+vite-dev*.log
+web-preview*.log
+.chrome-pdf-profile/
+.chrome-slide-render-profile/
+docs/.pptx-build/
+docs/ppt-slides/
+docs/*-preview.png

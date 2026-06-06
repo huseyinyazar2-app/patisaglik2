@@ -12,13 +12,13 @@ function formatDate(date) {
 }
 
 function safeFileName(value) {
-  return String(value || 'pati-saglik-raporu')
+  return String(value || 'pet-help-report')
     .toLocaleLowerCase(getLocale() === 'tr' ? 'tr-TR' : getLocale())
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9_-]+/gi, '-')
     .replace(/^-+|-+$/g, '')
-    .slice(0, 70) || 'pati-saglik-raporu';
+    .slice(0, 70) || 'pet-help-report';
 }
 
 function escapeHtml(value) {

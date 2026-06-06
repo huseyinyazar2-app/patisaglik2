@@ -1,7 +1,9 @@
-const GEMINI_STANDARD_MODEL = import.meta.env?.VITE_GEMINI_STANDARD_MODEL || 'gemini-3-flash-preview';
+const GEMINI_STANDARD_MODEL = import.meta.env?.DEV
+  ? import.meta.env?.VITE_GEMINI_STANDARD_MODEL || 'gemini-3-flash-preview'
+  : 'gemini-3-flash-preview';
 
 function getApiKey() {
-  return import.meta.env?.VITE_GEMINI_API_KEY || '';
+  return import.meta.env?.DEV ? import.meta.env?.VITE_GEMINI_API_KEY || '' : '';
 }
 
 function extractJson(text) {

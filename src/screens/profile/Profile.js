@@ -22,7 +22,6 @@ const settingsItems = [
 export function render() {
   const state = getState();
   const user = state.user;
-  const plan = state.subscription?.tier === 'pro' ? 'PRO' : 'FREE';
   const location = user.location || {};
   const profileMissing = !user.phone || !location.province || !location.district;
 
@@ -35,7 +34,6 @@ export function render() {
           <h1>${user.name}</h1>
           <p>${user.phone || user.email || t('profilePage.phone_waiting')}</p>
         </div>
-        <span>${plan}</span>
       </div>
 
       <div class="section pt-0">
@@ -45,13 +43,6 @@ export function render() {
             <span>${t('profilePage.missing_profile_warning')}</span>
           </div>
         ` : ''}
-        <div class="profile-plan-card">
-          <div>
-            <strong>${t('profilePage.plan_card_title')}</strong>
-            <p>${t('profilePage.plan_card_desc')}</p>
-          </div>
-          <button class="btn btn-sm btn-primary" id="btnPlan">Plan</button>
-        </div>
       </div>
 
       <div class="section pt-0">
@@ -104,7 +95,6 @@ export function afterRender() {
     btn.addEventListener('click', () => navigate(btn.dataset.route));
   });
 
-  document.getElementById('btnPlan')?.addEventListener('click', () => navigate('/profile/plan'));
   document.getElementById('btnLogout')?.addEventListener('click', () => {
     setState({ user: { isLoggedIn: false } });
     navigate('/auth/splash');

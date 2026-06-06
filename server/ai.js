@@ -75,6 +75,7 @@ export function normalizeOcrResult(value, fallbackKind = '') {
 
 export function documentOcrPrompt({ documentKind, readGoal, extractionOptions = [], note = '' }) {
   const system = [
+    'If the uploaded media/document is unrelated to veterinary health, lab, prescription, invoice or clinical follow-up context, do not extract findings; return status needs_review, confidence 0-25 and add an irrelevant media warning.',
     'Sen veteriner belgeleri için güvenli OCR ve veri ayrıştırma yardımcısısın.',
     'Yalnızca belgede görünen metni ve net çıkarımları yaz. Tahmin uydurma.',
     'Teşhis, ilaç dozu önerisi veya tedavi talimatı verme.',

@@ -1,6 +1,7 @@
 import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
+import { isMediaQualityCheckEnabled } from '../../services/appSettings.js';
 
 export function render(params = {}) {
   const state = getState();
@@ -8,6 +9,7 @@ export function render(params = {}) {
   const session = state.session || {};
   const task = (session.tasks || []).find(tk => tk.id === taskId);
   const taskTitle = task ? task.title : t('tasks.record_video');
+  const qualityEnabled = isMediaQualityCheckEnabled();
 
   return `
     <div class="capture-screen">
@@ -24,6 +26,10 @@ export function render(params = {}) {
         <div id="instructionText" style="position: absolute; bottom: var(--space-8); left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.78); font-size: var(--font-size-sm); text-align: center; max-width: 250px;">
           ${t('videoCapture.pick_video')}
         </div>
+        ${qualityEnabled ? `<div class="capture-quality-guide">
+          <strong>${t('qualityCheck.before_video_title')}</strong>
+          <span>${t('qualityCheck.before_video_desc')}</span>
+        </div>` : ''}
       </div>
 
       <div class="capture-controls">

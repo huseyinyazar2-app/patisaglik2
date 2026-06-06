@@ -1,0 +1,21 @@
+{
+  "name": "Pet Help",
+  "short_name": "Pet Help",
+  "description": "Evcil hayvan sağlık kayıtları, AI ön kontrol ve veteriner hazırlık asistanı.",
+  "start_url": "/#/auth/splash",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4fbf9",
+  "theme_color": "#00594c",
+  "lang": "tr",
+  "categories": ["health", "medical", "lifestyle"],
+  "icons": [
+    {
+      "src": "/pwa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
