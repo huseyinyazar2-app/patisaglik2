@@ -321,7 +321,7 @@ async function ensureAdminSchema(db) {
     });
   }
 
-  const existing = await db.execute({ sql: `SELECT id FROM admin_accounts WHERE username = ? LIMIT 1`, args: ['admin'] });
+  const existing = await db.execute({ sql: `SELECT id FROM admin_accounts LIMIT 1`, args: [] });
   if (!existing.rows.length) {
     await db.execute({
       sql: `INSERT INTO admin_accounts (id, username, password_hash, role, permissions) VALUES (?, ?, ?, ?, ?)`,
