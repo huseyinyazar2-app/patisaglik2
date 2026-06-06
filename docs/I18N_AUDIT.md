@@ -1,6 +1,6 @@
 # I18N Audit
 
-Son kontrol: 2026-06-02
+Son kontrol: 2026-06-06
 
 ## Mevcut Durum
 
@@ -34,24 +34,18 @@ Ozet:
 
 - Desteklenen locale: `24`
 - Tam ceviri sozlugu: `tr`, `en`
-- Dictionary key sayisi: `tr=772`, `en=772`
+- Dictionary key sayisi: `tr=2235`, `en=2235`
 - `missingInEn`: `0`
 - `extraInEn`: `0`
-- Kalan hardcoded Turkce string literal: `787`
-- Etkilenen dosya: `73`
+- Kalan hardcoded Turkce string literal: `0`
+- Etkilenen dosya: `0`
+- Admin panel sadece ic kullanim icin sabit Turkce tutuldu ve audit istisnasina alindi: `src/screens/web/Admin.js`
 
 En yogun dosyalar:
 
 | Dosya | Kalan |
 | --- | ---: |
-| `src/screens/history/FreeRecordDetail.js` | 47 |
-| `src/screens/home/Home.js` | 45 |
-| `src/screens/web/Admin.js` | 41 |
-| `src/services/formSubmissions.js` | 39 |
-| `src/mock/questions.js` | 38 |
-| `src/screens/reports/ReportDetail.js` | 32 |
-| `src/screens/check/PackageRisk.js` | 26 |
-| `src/screens/history/History.js` | 26 |
+| - | 0 |
 
 ## Production Notu
 
@@ -64,9 +58,6 @@ UI metinleri icin dosya bazli sozluk hizli ve dusuk riskli kalmali. DB ceviri ta
 
 ## Siradaki Sira
 
-1. `Home`, `Admin`, `ReportDetail` dosyalarini i18n'e tasi.
-2. `questions` icinde kalan Turkce keyword listelerini cok dilli NLP/keyword stratejisiyle ayri ele al.
-3. `formSubmissions` icinde kalan payload/form label anahtarlarini guvenli alias yapisina tasidiktan sonra i18n'e al.
-4. Tarih, para ve sayi formatlarini sabit `tr-TR` yerine aktif locale ile uret.
-5. Admin ve web tanitim ekranlarindaki kalan metinleri sozluge al.
-6. Diger 22 dil icin profesyonel ceviri dosyalari eklendiginde sadece dictionary import haritasini genislet.
+1. `questions` icinde kalan Turkce keyword listelerini cok dilli NLP/keyword stratejisiyle ayri ele al.
+2. Tarih, para ve sayi formatlarini sabit `tr-TR` yerine aktif locale ile uret.
+3. Diger 22 dil icin profesyonel ceviri dosyalari eklendiginde sadece dictionary import haritasini genislet.

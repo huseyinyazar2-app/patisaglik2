@@ -65,22 +65,62 @@ function getValue(id) {
   return document.getElementById(id)?.value ?? '';
 }
 
+const STATUS_LABELS = {
+  active: 'Aktif',
+  inactive: 'Pasif',
+  suspended: 'Askıya alındı',
+  deleted: 'Silindi',
+  archived: 'Arşiv',
+  draft: 'Taslak',
+  ready: 'Hazır',
+  pending: 'Bekliyor',
+  verified: 'Doğrulandı',
+  refunded: 'İade edildi',
+  cancelled: 'İptal edildi',
+  scheduled: 'Planlandı',
+  completed: 'Tamamlandı',
+  skipped: 'Atlandı',
+  canceled: 'İptal edildi'
+};
+
+const KIND_LABELS = {
+  health: 'Sağlık',
+  measurement: 'Ölçüm',
+  expense: 'Masraf',
+  reminder: 'Hatırlatıcı',
+  document: 'Belge',
+  form: 'Form'
+};
+
+const BILLING_LABELS = {
+  free: 'Ücretsiz',
+  credit: 'Kredi',
+  subscription: 'Abonelik',
+  monthly: 'Aylık',
+  yearly: 'Yıllık'
+};
+
+function labelFrom(map, value, fallback = '-') {
+  if (!value) return fallback;
+  return map[value] || value;
+}
+
 function localeOptions(selected = 'tr') {
   const items = [
-    { value: 'tr', label: 'Turkish (tr)' },
-    { value: 'en', label: 'English (en)' },
-    { value: 'de', label: 'German (de)' },
-    { value: 'fr', label: 'French (fr)' },
-    { value: 'es', label: 'Spanish (es)' },
-    { value: 'it', label: 'Italian (it)' }
+    { value: 'tr', label: 'Türkçe (tr)' },
+    { value: 'en', label: 'İngilizce (en)' },
+    { value: 'de', label: 'Almanca (de)' },
+    { value: 'fr', label: 'Fransızca (fr)' },
+    { value: 'es', label: 'İspanyolca (es)' },
+    { value: 'it', label: 'İtalyanca (it)' }
   ];
   return items.map((item) => `<option value="${item.value}" ${item.value === selected ? 'selected' : ''}>${item.label}</option>`).join('');
 }
 
 function yesNoOptions(selected = '0') {
   return `
-    <option value="1" ${String(selected) === '1' ? 'selected' : ''}>yes</option>
-    <option value="0" ${String(selected) === '0' ? 'selected' : ''}>no</option>
+    <option value="1" ${String(selected) === '1' ? 'selected' : ''}>Evet</option>
+    <option value="0" ${String(selected) === '0' ? 'selected' : ''}>Hayır</option>
   `;
 }
 
@@ -123,7 +163,7 @@ function metricCard(label, value, note) {
   return `<article class="admin-metric"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong><small>${escapeHtml(note)}</small></article>`;
 }
 
-function optionList(items, valueKey, labelKey, selectedValue = '', allowEmpty = true, emptyLabel = 'All') {
+function optionList(items, valueKey, labelKey, selectedValue = '', allowEmpty = true, emptyLabel = 'Tümü') {
   return [
     allowEmpty ? `<option value="">${escapeHtml(emptyLabel)}</option>` : '',
     ...items.map((item) => `<option value="${escapeHtml(item[valueKey])}" ${String(item[valueKey]) === String(selectedValue) ? 'selected' : ''}>${escapeHtml(item[labelKey])}</option>`)
@@ -148,81 +188,81 @@ function speciesOptions(selected = '') {
 }
 
 function renderUsers(items = []) {
-  if (!items.length) return `<div class="admin-empty">No users match the current filter.</div>`;
+  if (!items.length) return `<div class="admin-empty">Bu filtreye uyan kullanıcı yok.</div>`;
   return items.map((user) => `
     <div class="admin-row admin-row-wide">
       <div>
-        <strong>${escapeHtml(user.display_name || 'Unnamed user')}</strong>
-        <small>${escapeHtml(user.email || user.phone || '-')} · locale ${escapeHtml(user.locale || 'tr')} · pets ${escapeHtml(user.pet_count || 0)} · credits ${escapeHtml(user.credit_balance || 0)}</small>
+        <strong>${escapeHtml(user.display_name || 'İsimsiz kullanıcı')}</strong>
+        <small>${escapeHtml(user.email || user.phone || '-')} · dil ${escapeHtml(user.locale || 'tr')} · pet ${escapeHtml(user.pet_count || 0)} · kredi ${escapeHtml(user.credit_balance || 0)}</small>
       </div>
       <div class="admin-actions">
-        <span>${escapeHtml(user.status || 'active')}</span>
-        <button data-action="user-view" data-id="${escapeHtml(user.id)}">View</button>
-        <button data-action="user-edit" data-id="${escapeHtml(user.id)}">Edit</button>
-        <button data-action="user-credit" data-id="${escapeHtml(user.id)}">Credits</button>
+        <span>${escapeHtml(labelFrom(STATUS_LABELS, user.status, 'Aktif'))}</span>
+        <button data-action="user-view" data-id="${escapeHtml(user.id)}">Gör</button>
+        <button data-action="user-edit" data-id="${escapeHtml(user.id)}">Düzenle</button>
+        <button data-action="user-credit" data-id="${escapeHtml(user.id)}">Kredi</button>
         <button data-action="user-plan" data-id="${escapeHtml(user.id)}">Plan</button>
-        <button class="danger" data-action="user-delete" data-id="${escapeHtml(user.id)}">Delete</button>
+        <button class="danger" data-action="user-delete" data-id="${escapeHtml(user.id)}">Sil</button>
       </div>
     </div>
   `).join('');
 }
 
 function renderPets(items = []) {
-  if (!items.length) return `<div class="admin-empty">No pets match the current filter.</div>`;
+  if (!items.length) return `<div class="admin-empty">Bu filtreye uyan pet yok.</div>`;
   return items.map((pet) => `
     <div class="admin-row admin-row-wide">
       <div>
-        <strong>${escapeHtml(pet.name || 'Unnamed pet')}</strong>
-        <small>${escapeHtml(pet.species_code || '-')} · owner ${escapeHtml(pet.owner_name || '-')} · records ${escapeHtml(pet.health_count || 0)} · docs ${escapeHtml(pet.document_count || 0)}</small>
+        <strong>${escapeHtml(pet.name || 'İsimsiz pet')}</strong>
+        <small>${escapeHtml(pet.species_code || '-')} · sahip ${escapeHtml(pet.owner_name || '-')} · kayıt ${escapeHtml(pet.health_count || 0)} · belge ${escapeHtml(pet.document_count || 0)}</small>
       </div>
       <div class="admin-actions">
-        <span>${escapeHtml(pet.status || 'active')}</span>
-        <button data-action="pet-view" data-id="${escapeHtml(pet.id)}">View</button>
-        <button data-action="pet-edit" data-id="${escapeHtml(pet.id)}">Edit</button>
-        <button class="danger" data-action="pet-delete" data-id="${escapeHtml(pet.id)}">Delete</button>
+        <span>${escapeHtml(labelFrom(STATUS_LABELS, pet.status, 'Aktif'))}</span>
+        <button data-action="pet-view" data-id="${escapeHtml(pet.id)}">Gör</button>
+        <button data-action="pet-edit" data-id="${escapeHtml(pet.id)}">Düzenle</button>
+        <button class="danger" data-action="pet-delete" data-id="${escapeHtml(pet.id)}">Sil</button>
       </div>
     </div>
   `).join('');
 }
 
 function renderRecords(items = []) {
-  if (!items.length) return `<div class="admin-empty">No records match the current filter.</div>`;
+  if (!items.length) return `<div class="admin-empty">Bu filtreye uyan kayıt yok.</div>`;
   return items.map((item) => `
     <div class="admin-row admin-row-wide">
       <div>
-        <strong>${escapeHtml(item.title || item.kind)}</strong>
-        <small>${escapeHtml(item.kind)} · ${escapeHtml(item.type || '-')} · pet ${escapeHtml(item.pet_id || '-')} · ${fmtDate(item.event_at || item.created_at)}</small>
+        <strong>${escapeHtml(item.title || labelFrom(KIND_LABELS, item.kind, 'Kayıt'))}</strong>
+        <small>${escapeHtml(labelFrom(KIND_LABELS, item.kind, item.kind))} · ${escapeHtml(item.type || '-')} · pet ${escapeHtml(item.pet_id || '-')} · ${fmtDate(item.event_at || item.created_at)}</small>
       </div>
       <div class="admin-actions">
-        <span>${escapeHtml(item.kind)}</span>
-        <button data-action="record-view" data-kind="${escapeHtml(item.kind)}" data-id="${escapeHtml(item.id)}">View</button>
-        <button data-action="record-edit" data-kind="${escapeHtml(item.kind)}" data-id="${escapeHtml(item.id)}">Edit</button>
-        <button class="danger" data-action="record-delete" data-kind="${escapeHtml(item.kind)}" data-id="${escapeHtml(item.id)}">Delete</button>
+        <span>${escapeHtml(labelFrom(KIND_LABELS, item.kind, item.kind))}</span>
+        <button data-action="record-view" data-kind="${escapeHtml(item.kind)}" data-id="${escapeHtml(item.id)}">Gör</button>
+        <button data-action="record-edit" data-kind="${escapeHtml(item.kind)}" data-id="${escapeHtml(item.id)}">Düzenle</button>
+        <button class="danger" data-action="record-delete" data-kind="${escapeHtml(item.kind)}" data-id="${escapeHtml(item.id)}">Sil</button>
       </div>
     </div>
   `).join('');
 }
 
 function renderDocuments(items = []) {
-  if (!items.length) return `<div class="admin-empty">No documents match the current filter.</div>`;
+  if (!items.length) return `<div class="admin-empty">Bu filtreye uyan belge yok.</div>`;
   return items.map((doc) => `
     <div class="admin-row admin-row-wide">
       <div>
-        <strong>${escapeHtml(doc.title || 'Untitled document')}</strong>
+        <strong>${escapeHtml(doc.title || 'Başlıksız belge')}</strong>
         <small>${escapeHtml(doc.document_type || '-')} · ${escapeHtml(doc.pet_name || '-')} · ${escapeHtml(doc.user_name || doc.user_email || '-')}</small>
       </div>
       <div class="admin-actions">
-        <span>${escapeHtml(doc.status || 'draft')}</span>
-        <button data-action="document-view" data-id="${escapeHtml(doc.id)}">View</button>
-        <button data-action="document-edit" data-id="${escapeHtml(doc.id)}">Edit</button>
-        <button class="danger" data-action="document-delete" data-id="${escapeHtml(doc.id)}">Delete</button>
+        <span>${escapeHtml(labelFrom(STATUS_LABELS, doc.status, 'Taslak'))}</span>
+        <button data-action="document-view" data-id="${escapeHtml(doc.id)}">Gör</button>
+        <button data-action="document-edit" data-id="${escapeHtml(doc.id)}">Düzenle</button>
+        <button class="danger" data-action="document-delete" data-id="${escapeHtml(doc.id)}">Sil</button>
       </div>
     </div>
   `).join('');
 }
 
 function renderUsage(items = []) {
-  if (!items.length) return `<div class="admin-empty">No usage rows yet.</div>`;
+  if (!items.length) return `<div class="admin-empty">Henüz kullanım kaydı yok.</div>`;
   return items.map((item) => `
     <div class="admin-row admin-row-wide">
       <div>
@@ -230,7 +270,7 @@ function renderUsage(items = []) {
         <small>${escapeHtml(item.user_name || item.user_email || '-')} · ${escapeHtml(item.pet_name || '-')} · ${fmtDate(item.created_at)}</small>
       </div>
       <div class="admin-actions">
-        <span>${escapeHtml(item.credit_cost || 0)} credit</span>
+        <span>${escapeHtml(item.credit_cost || 0)} kredi</span>
       </div>
     </div>
   `).join('');
@@ -241,51 +281,51 @@ function renderPrice(cents, currency = 'TRY') {
 }
 
 function renderPlans(items = []) {
-  if (!items.length) return `<div class="admin-empty">No plans found.</div>`;
+  if (!items.length) return `<div class="admin-empty">Plan bulunamadı.</div>`;
   return items.map((plan) => `
     <div class="admin-row admin-row-wide">
       <div>
         <strong>${escapeHtml(plan.name_tr || plan.code)}</strong>
-        <small>${escapeHtml(plan.code)} · ${escapeHtml(plan.billing_type)}${plan.billing_period ? `/${escapeHtml(plan.billing_period)}` : ''} · ${renderPrice(plan.price_cents, plan.currency)} · pets ${escapeHtml(plan.max_pets ?? '-')} · monthly AI credits ${escapeHtml(plan.monthly_credit_allowance ?? 0)}${plan.play_product_id ? ` · Play ${escapeHtml(plan.play_product_id)}` : ''}</small>
+        <small>${escapeHtml(plan.code)} · ${escapeHtml(labelFrom(BILLING_LABELS, plan.billing_type, '-'))}${plan.billing_period ? `/${escapeHtml(labelFrom(BILLING_LABELS, plan.billing_period, plan.billing_period))}` : ''} · ${renderPrice(plan.price_cents, plan.currency)} · pet limiti ${escapeHtml(plan.max_pets ?? '-')} · aylık AI kredisi ${escapeHtml(plan.monthly_credit_allowance ?? 0)}${plan.play_product_id ? ` · Play ${escapeHtml(plan.play_product_id)}` : ''}</small>
       </div>
       <div class="admin-actions">
-        <span>${Number(plan.is_active) ? 'active' : 'inactive'}</span>
-        <button data-action="plan-edit" data-id="${escapeHtml(plan.id)}">Edit</button>
-        <button class="danger" data-action="plan-delete" data-id="${escapeHtml(plan.id)}">Delete</button>
+        <span>${Number(plan.is_active) ? 'Aktif' : 'Pasif'}</span>
+        <button data-action="plan-edit" data-id="${escapeHtml(plan.id)}">Düzenle</button>
+        <button class="danger" data-action="plan-delete" data-id="${escapeHtml(plan.id)}">Sil</button>
       </div>
     </div>
   `).join('');
 }
 
 function renderCreditPackages(items = []) {
-  if (!items.length) return `<div class="admin-empty">No credit packages found.</div>`;
+  if (!items.length) return `<div class="admin-empty">Kredi paketi bulunamadı.</div>`;
   return items.map((pack) => `
     <div class="admin-row admin-row-wide">
       <div>
         <strong>${escapeHtml(pack.name_tr || pack.code)}</strong>
-        <small>${escapeHtml(pack.code)} · ${escapeHtml(pack.credit_amount || 0)} credit · ${renderPrice(pack.price_cents, pack.currency)}${pack.play_product_id ? ` · Play ${escapeHtml(pack.play_product_id)}` : ''}</small>
+        <small>${escapeHtml(pack.code)} · ${escapeHtml(pack.credit_amount || 0)} kredi · ${renderPrice(pack.price_cents, pack.currency)}${pack.play_product_id ? ` · Play ${escapeHtml(pack.play_product_id)}` : ''}</small>
       </div>
       <div class="admin-actions">
-        <span>${Number(pack.is_active) ? 'active' : 'inactive'}</span>
-        <button data-action="credit-package-edit" data-id="${escapeHtml(pack.id)}">Edit</button>
-        <button class="danger" data-action="credit-package-delete" data-id="${escapeHtml(pack.id)}">Delete</button>
+        <span>${Number(pack.is_active) ? 'Aktif' : 'Pasif'}</span>
+        <button data-action="credit-package-edit" data-id="${escapeHtml(pack.id)}">Düzenle</button>
+        <button class="danger" data-action="credit-package-delete" data-id="${escapeHtml(pack.id)}">Sil</button>
       </div>
     </div>
   `).join('');
 }
 
 function renderPayments(items = []) {
-  if (!items.length) return `<div class="admin-empty">No payment records found.</div>`;
+  if (!items.length) return `<div class="admin-empty">Ödeme kaydı bulunamadı.</div>`;
   return items.map((payment) => `
     <div class="admin-row admin-row-wide">
       <div>
         <strong>${escapeHtml(payment.user_name || payment.user_email || payment.user_id)}</strong>
-        <small>${escapeHtml(payment.provider || 'google_play')} · ${escapeHtml(payment.product_type)} · ${escapeHtml(payment.product_id)} · ${renderPrice(payment.amount_cents, payment.currency)} · credits ${escapeHtml(payment.credits_granted || 0)}</small>
+        <small>${escapeHtml(payment.provider || 'google_play')} · ${escapeHtml(labelFrom(BILLING_LABELS, payment.product_type, payment.product_type))} · ${escapeHtml(payment.product_id)} · ${renderPrice(payment.amount_cents, payment.currency)} · kredi ${escapeHtml(payment.credits_granted || 0)}</small>
       </div>
       <div class="admin-actions">
-        <span>${escapeHtml(payment.status || 'pending')}</span>
-        <button data-action="payment-edit" data-id="${escapeHtml(payment.id)}">Edit</button>
-        <button class="danger" data-action="payment-delete" data-id="${escapeHtml(payment.id)}">Delete</button>
+        <span>${escapeHtml(labelFrom(STATUS_LABELS, payment.status, 'Bekliyor'))}</span>
+        <button data-action="payment-edit" data-id="${escapeHtml(payment.id)}">Düzenle</button>
+        <button class="danger" data-action="payment-delete" data-id="${escapeHtml(payment.id)}">Sil</button>
       </div>
     </div>
   `).join('');
@@ -296,14 +336,14 @@ function renderLogin(error = '') {
     <div class="web-page admin-page">
       <main class="admin-login-shell">
         <section class="admin-login-card">
-          <div class="premium-screen-kicker">Super Admin</div>
-          <h1>Admin Login</h1>
-          <p>Direct access to users, pets, records, documents, billing and live data controls.</p>
-          <label><span>Username</span><input id="adminUsername" autocomplete="username" value="admin" /></label>
-          <label><span>Password</span><input id="adminPassword" type="password" autocomplete="current-password" value="admin123" /></label>
+          <div class="premium-screen-kicker">Süper Yönetici</div>
+          <h1>Yönetici Girişi</h1>
+          <p>Kullanıcı, pet, kayıt, belge, ödeme ve canlı ayarlara doğrudan erişim.</p>
+          <label><span>Kullanıcı adı / e-posta</span><input id="adminUsername" autocomplete="username" placeholder="a@b.com" /></label>
+          <label><span>Şifre</span><input id="adminPassword" type="password" autocomplete="current-password" placeholder="Şifre" /></label>
           ${error ? `<div class="admin-error">${escapeHtml(error)}</div>` : ''}
-          <button class="btn btn-primary" id="btnAdminLogin">Login</button>
-          <button class="btn btn-ghost" id="btnWeb">Back to web</button>
+          <button class="btn btn-primary" id="btnAdminLogin">Giriş Yap</button>
+          <button class="btn btn-ghost" id="btnWeb">Web sitesine dön</button>
         </section>
       </main>
     </div>
@@ -321,156 +361,156 @@ function renderFilters() {
     <section class="admin-grid admin-grid-2">
       <article class="admin-panel">
         <div class="admin-panel-head">
-          <div><span>Users</span><h2>Users & Accounts</h2></div>
-          <div class="admin-actions"><button data-action="user-add">Add user</button></div>
+          <div><span>Kullanıcılar</span><h2>Kullanıcılar & Hesaplar</h2></div>
+          <div class="admin-actions"><button data-action="user-add">Kullanıcı ekle</button></div>
         </div>
         <div class="admin-toolbar">
-          <input id="usersQ" placeholder="Search name, email, phone" value="${escapeHtml(usersFilter.q)}" />
+          <input id="usersQ" placeholder="Ad, e-posta, telefon ara" value="${escapeHtml(usersFilter.q)}" />
           <select id="usersStatus">
-            <option value="">All status</option>
-            <option value="active" ${usersFilter.status === 'active' ? 'selected' : ''}>active</option>
-            <option value="suspended" ${usersFilter.status === 'suspended' ? 'selected' : ''}>suspended</option>
-            <option value="deleted" ${usersFilter.status === 'deleted' ? 'selected' : ''}>deleted</option>
+            <option value="">Tüm durumlar</option>
+            <option value="active" ${usersFilter.status === 'active' ? 'selected' : ''}>Aktif</option>
+            <option value="suspended" ${usersFilter.status === 'suspended' ? 'selected' : ''}>Askıda</option>
+            <option value="deleted" ${usersFilter.status === 'deleted' ? 'selected' : ''}>Silindi</option>
           </select>
-          <button data-action="users-search">Search</button>
+          <button data-action="users-search">Ara</button>
         </div>
         <div id="adminUsers">${renderUsers(adminState.users)}</div>
       </article>
 
       <article class="admin-panel">
         <div class="admin-panel-head">
-          <div><span>Pets</span><h2>Pets & Ownership</h2></div>
-          <div class="admin-actions"><button data-action="pet-add">Add pet</button></div>
+          <div><span>Petler</span><h2>Petler & Sahiplik</h2></div>
+          <div class="admin-actions"><button data-action="pet-add">Pet ekle</button></div>
         </div>
         <div class="admin-toolbar">
-          <input id="petsQ" placeholder="Search pet, owner, species" value="${escapeHtml(petsFilter.q)}" />
+          <input id="petsQ" placeholder="Pet, sahip, tür ara" value="${escapeHtml(petsFilter.q)}" />
           <select id="petsOwner">
-            ${optionList(adminState.lookups.users, 'id', 'display_name', petsFilter.ownerId, true, 'All owners')}
+            ${optionList(adminState.lookups.users, 'id', 'display_name', petsFilter.ownerId, true, 'Tüm sahipler')}
           </select>
           <select id="petsStatus">
-            <option value="">All status</option>
-            <option value="active" ${petsFilter.status === 'active' ? 'selected' : ''}>active</option>
-            <option value="archived" ${petsFilter.status === 'archived' ? 'selected' : ''}>archived</option>
-            <option value="deleted" ${petsFilter.status === 'deleted' ? 'selected' : ''}>deleted</option>
+            <option value="">Tüm durumlar</option>
+            <option value="active" ${petsFilter.status === 'active' ? 'selected' : ''}>Aktif</option>
+            <option value="archived" ${petsFilter.status === 'archived' ? 'selected' : ''}>Arşiv</option>
+            <option value="deleted" ${petsFilter.status === 'deleted' ? 'selected' : ''}>Silindi</option>
           </select>
-          <button data-action="pets-search">Search</button>
+          <button data-action="pets-search">Ara</button>
         </div>
         <div id="adminPets">${renderPets(adminState.pets)}</div>
       </article>
 
       <article class="admin-panel admin-panel-wide">
         <div class="admin-panel-head">
-          <div><span>Records</span><h2>All Mobile Records</h2></div>
+          <div><span>Kayıtlar</span><h2>Tüm Mobil Kayıtlar</h2></div>
           <div class="admin-actions">
-            <button data-action="record-add" data-kind="health">Add health</button>
-            <button data-action="record-add" data-kind="measurement">Add measurement</button>
-            <button data-action="record-add" data-kind="expense">Add expense</button>
-            <button data-action="record-add" data-kind="reminder">Add reminder</button>
-            <button data-action="record-add" data-kind="form">Add form</button>
+            <button data-action="record-add" data-kind="health">Sağlık ekle</button>
+            <button data-action="record-add" data-kind="measurement">Ölçüm ekle</button>
+            <button data-action="record-add" data-kind="expense">Masraf ekle</button>
+            <button data-action="record-add" data-kind="reminder">Hatırlatıcı ekle</button>
+            <button data-action="record-add" data-kind="form">Form ekle</button>
           </div>
         </div>
         <div class="admin-toolbar admin-toolbar-wide">
-          <input id="recordsQ" placeholder="Search title, type, summary" value="${escapeHtml(recordsFilter.q)}" />
+          <input id="recordsQ" placeholder="Başlık, tür, özet ara" value="${escapeHtml(recordsFilter.q)}" />
           <select id="recordsKind">
-            <option value="">All kinds</option>
-            <option value="health" ${recordsFilter.kind === 'health' ? 'selected' : ''}>health</option>
-            <option value="measurement" ${recordsFilter.kind === 'measurement' ? 'selected' : ''}>measurement</option>
-            <option value="expense" ${recordsFilter.kind === 'expense' ? 'selected' : ''}>expense</option>
-            <option value="reminder" ${recordsFilter.kind === 'reminder' ? 'selected' : ''}>reminder</option>
-            <option value="document" ${recordsFilter.kind === 'document' ? 'selected' : ''}>document</option>
-            <option value="form" ${recordsFilter.kind === 'form' ? 'selected' : ''}>form</option>
+            <option value="">Tüm türler</option>
+            <option value="health" ${recordsFilter.kind === 'health' ? 'selected' : ''}>Sağlık</option>
+            <option value="measurement" ${recordsFilter.kind === 'measurement' ? 'selected' : ''}>Ölçüm</option>
+            <option value="expense" ${recordsFilter.kind === 'expense' ? 'selected' : ''}>Masraf</option>
+            <option value="reminder" ${recordsFilter.kind === 'reminder' ? 'selected' : ''}>Hatırlatıcı</option>
+            <option value="document" ${recordsFilter.kind === 'document' ? 'selected' : ''}>Belge</option>
+            <option value="form" ${recordsFilter.kind === 'form' ? 'selected' : ''}>Form</option>
           </select>
           <select id="recordsPet">${petOptions(recordsFilter.petId, true)}</select>
-          <select id="recordsUser">${optionList(adminState.lookups.users, 'id', 'display_name', recordsFilter.userId, true, 'All users')}</select>
-          <button data-action="records-search">Search</button>
+          <select id="recordsUser">${optionList(adminState.lookups.users, 'id', 'display_name', recordsFilter.userId, true, 'Tüm kullanıcılar')}</select>
+          <button data-action="records-search">Ara</button>
         </div>
         <div id="adminRecords">${renderRecords(adminState.records)}</div>
       </article>
 
       <article class="admin-panel">
         <div class="admin-panel-head">
-          <div><span>Documents</span><h2>Documents & AI Files</h2></div>
-          <div class="admin-actions"><button data-action="document-add">Add document</button></div>
+          <div><span>Belgeler</span><h2>Belgeler & AI Dosyaları</h2></div>
+          <div class="admin-actions"><button data-action="document-add">Belge ekle</button></div>
         </div>
         <div class="admin-toolbar">
-          <input id="documentsQ" placeholder="Search title, user, pet" value="${escapeHtml(documentsFilter.q)}" />
+          <input id="documentsQ" placeholder="Başlık, kullanıcı, pet ara" value="${escapeHtml(documentsFilter.q)}" />
           <select id="documentsStatus">
-            <option value="">All status</option>
-            <option value="draft" ${documentsFilter.status === 'draft' ? 'selected' : ''}>draft</option>
-            <option value="ready" ${documentsFilter.status === 'ready' ? 'selected' : ''}>ready</option>
-            <option value="archived" ${documentsFilter.status === 'archived' ? 'selected' : ''}>archived</option>
+            <option value="">Tüm durumlar</option>
+            <option value="draft" ${documentsFilter.status === 'draft' ? 'selected' : ''}>Taslak</option>
+            <option value="ready" ${documentsFilter.status === 'ready' ? 'selected' : ''}>Hazır</option>
+            <option value="archived" ${documentsFilter.status === 'archived' ? 'selected' : ''}>Arşiv</option>
           </select>
-          <input id="documentsType" placeholder="Type filter" value="${escapeHtml(documentsFilter.type)}" />
-          <button data-action="documents-search">Search</button>
+          <input id="documentsType" placeholder="Belge türü" value="${escapeHtml(documentsFilter.type)}" />
+          <button data-action="documents-search">Ara</button>
         </div>
         <div id="adminDocuments">${renderDocuments(adminState.documents)}</div>
       </article>
 
       <article class="admin-panel">
         <div class="admin-panel-head">
-          <div><span>Plans</span><h2>Plans & Billing Model</h2></div>
-          <div class="admin-actions"><button data-action="plan-add">Add plan</button></div>
+          <div><span>Planlar</span><h2>Planlar & Ücret Modeli</h2></div>
+          <div class="admin-actions"><button data-action="plan-add">Plan ekle</button></div>
         </div>
         <div id="adminPlans">${renderPlans(adminState.plans)}</div>
       </article>
 
       <article class="admin-panel">
         <div class="admin-panel-head">
-          <div><span>Credits</span><h2>Credit Packages</h2></div>
-          <div class="admin-actions"><button data-action="credit-package-add">Add package</button></div>
+          <div><span>Krediler</span><h2>Kredi Paketleri</h2></div>
+          <div class="admin-actions"><button data-action="credit-package-add">Paket ekle</button></div>
         </div>
         <div id="adminCreditPackages">${renderCreditPackages(adminState.creditPackages)}</div>
       </article>
 
       <article class="admin-panel admin-panel-wide">
         <div class="admin-panel-head">
-          <div><span>Payments</span><h2>Store Purchases & Entitlements</h2></div>
-          <div class="admin-actions"><button data-action="payment-add">Add payment</button></div>
+          <div><span>Ödemeler</span><h2>Mağaza Ödemeleri & Haklar</h2></div>
+          <div class="admin-actions"><button data-action="payment-add">Ödeme ekle</button></div>
         </div>
         <div class="admin-toolbar">
-          <input id="paymentsQ" placeholder="Search user, product, provider" value="${escapeHtml(paymentsFilter.q)}" />
+          <input id="paymentsQ" placeholder="Kullanıcı, ürün, sağlayıcı ara" value="${escapeHtml(paymentsFilter.q)}" />
           <select id="paymentsStatus">
-            <option value="">All status</option>
-            <option value="pending" ${paymentsFilter.status === 'pending' ? 'selected' : ''}>pending</option>
-            <option value="verified" ${paymentsFilter.status === 'verified' ? 'selected' : ''}>verified</option>
-            <option value="active" ${paymentsFilter.status === 'active' ? 'selected' : ''}>active</option>
-            <option value="refunded" ${paymentsFilter.status === 'refunded' ? 'selected' : ''}>refunded</option>
-            <option value="cancelled" ${paymentsFilter.status === 'cancelled' ? 'selected' : ''}>cancelled</option>
+            <option value="">Tüm durumlar</option>
+            <option value="pending" ${paymentsFilter.status === 'pending' ? 'selected' : ''}>Bekliyor</option>
+            <option value="verified" ${paymentsFilter.status === 'verified' ? 'selected' : ''}>Doğrulandı</option>
+            <option value="active" ${paymentsFilter.status === 'active' ? 'selected' : ''}>Aktif</option>
+            <option value="refunded" ${paymentsFilter.status === 'refunded' ? 'selected' : ''}>İade edildi</option>
+            <option value="cancelled" ${paymentsFilter.status === 'cancelled' ? 'selected' : ''}>İptal edildi</option>
           </select>
-          <button data-action="payments-search">Search</button>
+          <button data-action="payments-search">Ara</button>
         </div>
         <div id="adminPayments">${renderPayments(adminState.payments)}</div>
       </article>
 
       <article class="admin-panel">
-        <div class="admin-panel-head"><div><span>Usage</span><h2>Feature Usage</h2></div></div>
+        <div class="admin-panel-head"><div><span>Kullanım</span><h2>Özellik Kullanımı</h2></div></div>
         <div id="adminUsage">${renderUsage(adminState.usage)}</div>
       </article>
 
       <article class="admin-panel">
-        <div class="admin-panel-head"><div><span>AI & Media</span><h2>App Controls</h2></div></div>
+        <div class="admin-panel-head"><div><span>AI & Medya</span><h2>Uygulama Kontrolleri</h2></div></div>
         <form class="admin-settings-form" id="appSettingsForm">
           <label>
-            <span>Automatic media quality check</span>
+            <span>Otomatik medya kalite kontrolü</span>
             <select id="mediaQualityCheckEnabled">${yesNoOptions(adminState.settings.mediaQualityCheckEnabled ? '1' : '0')}</select>
           </label>
           <label>
-            <span>Ignore low quality media in reports</span>
+            <span>Düşük kaliteli medyayı raporda dikkate alma</span>
             <select id="aiIgnoreLowQualityMedia">${yesNoOptions(adminState.settings.aiIgnoreLowQualityMedia ? '1' : '0')}</select>
           </label>
-          <button class="btn btn-primary" type="submit">Save app controls</button>
+          <button class="btn btn-primary" type="submit">Uygulama kontrollerini kaydet</button>
         </form>
-        <div class="admin-test-result" id="appSettingsResult">Media quality check is currently ${adminState.settings.mediaQualityCheckEnabled ? 'enabled' : 'disabled'}.</div>
+        <div class="admin-test-result" id="appSettingsResult">Medya kalite kontrolü şu an ${adminState.settings.mediaQualityCheckEnabled ? 'açık' : 'kapalı'}.</div>
       </article>
 
       <article class="admin-panel">
-        <div class="admin-panel-head"><div><span>Security</span><h2>Admin Password</h2></div></div>
+        <div class="admin-panel-head"><div><span>Güvenlik</span><h2>Yönetici Şifresi</h2></div></div>
         <form class="admin-settings-form" id="passwordForm">
-          <input type="password" id="currentPassword" placeholder="Current password" />
-          <input type="password" id="newPassword" placeholder="New password" />
-          <button class="btn btn-primary" type="submit">Change password</button>
+          <input type="password" id="currentPassword" placeholder="Mevcut şifre" />
+          <input type="password" id="newPassword" placeholder="Yeni şifre" />
+          <button class="btn btn-primary" type="submit">Şifreyi değiştir</button>
         </form>
-        <div class="admin-test-result" id="settingsResult">Super admin permissions are active for this session.</div>
+        <div class="admin-test-result" id="settingsResult">Bu alan sadece oturumdaki yönetici hesabının şifresini değiştirir.</div>
       </article>
     </section>
   `;
@@ -484,33 +524,33 @@ export function render() {
   return `
     <div class="web-page admin-page">
       <header class="web-nav">
-        <button type="button" class="web-brand" id="btnWeb"><span>${window.__icons?.paw || ''}</span><strong>Pet Help Admin</strong></button>
+        <button type="button" class="web-brand" id="btnWeb"><span>${window.__icons?.paw || ''}</span><strong>Pet Help Yönetim</strong></button>
         <nav>
-          <button type="button" id="btnRefresh">Refresh</button>
-          <button type="button" id="btnMobile">Open mobile</button>
-          <button type="button" id="btnLogout">Logout</button>
+          <button type="button" id="btnRefresh">Yenile</button>
+          <button type="button" id="btnMobile">Mobil ekranı aç</button>
+          <button type="button" id="btnLogout">Çıkış</button>
         </nav>
       </header>
 
       <main class="admin-shell">
         <section class="admin-hero">
           <div>
-            <div class="premium-screen-kicker">Super Admin</div>
-            <h1>Live control for users, pets, records, documents and billing.</h1>
-            <p>Session: ${escapeHtml(auth.admin?.username || 'admin')} · role ${escapeHtml(auth.admin?.role || 'super_admin')}</p>
+            <div class="premium-screen-kicker">Süper Yönetici</div>
+            <h1>Kullanıcı, pet, kayıt, belge ve ödeme yönetimi.</h1>
+            <p>Oturum: ${escapeHtml(auth.admin?.username || 'admin')} · yetki ${escapeHtml(auth.admin?.role || 'super_admin')}</p>
           </div>
           <div class="admin-status-card ok" id="apiStatusCard">
-            <span>Admin API</span>
-            <strong>Connected</strong>
-            <small>Live database management</small>
+            <span>Yönetim API</span>
+            <strong>Bağlı</strong>
+            <small>Canlı veritabanı yönetimi</small>
           </div>
         </section>
 
         <section class="admin-grid admin-grid-4" id="adminMetrics">
-          ${metricCard('Users', metrics.users || 0, 'all accounts')}
-          ${metricCard('Pets', metrics.pets || 0, 'all pet profiles')}
-          ${metricCard('Health + measurements', (metrics.healthRecords || 0) + (metrics.measurements || 0), 'mobile records')}
-          ${metricCard('Docs + forms', (metrics.documents || 0) + (metrics.formSubmissions || 0), 'document and form archive')}
+          ${metricCard('Kullanıcılar', metrics.users || 0, 'tüm hesaplar')}
+          ${metricCard('Petler', metrics.pets || 0, 'tüm pet profilleri')}
+          ${metricCard('Sağlık + ölçüm', (metrics.healthRecords || 0) + (metrics.measurements || 0), 'mobil kayıtlar')}
+          ${metricCard('Belgeler + formlar', (metrics.documents || 0) + (metrics.formSubmissions || 0), 'belge ve form arşivi')}
         </section>
 
         ${renderFilters()}
@@ -526,10 +566,10 @@ function renderState() {
   const metricsTarget = document.getElementById('adminMetrics');
   if (metricsTarget) {
     metricsTarget.innerHTML = [
-      metricCard('Users', metrics.users || 0, 'all accounts'),
-      metricCard('Pets', metrics.pets || 0, 'all pet profiles'),
-      metricCard('Health + measurements', (metrics.healthRecords || 0) + (metrics.measurements || 0), 'mobile records'),
-      metricCard('Docs + forms', (metrics.documents || 0) + (metrics.formSubmissions || 0), 'document and form archive')
+      metricCard('Kullanıcılar', metrics.users || 0, 'tüm hesaplar'),
+      metricCard('Petler', metrics.pets || 0, 'tüm pet profilleri'),
+      metricCard('Sağlık + ölçüm', (metrics.healthRecords || 0) + (metrics.measurements || 0), 'mobil kayıtlar'),
+      metricCard('Belgeler + formlar', (metrics.documents || 0) + (metrics.formSubmissions || 0), 'belge ve form arşivi')
     ].join('');
   }
   const usersTarget = document.getElementById('adminUsers');
@@ -553,7 +593,7 @@ function renderState() {
   const appSettingsResult = document.getElementById('appSettingsResult');
   if (mediaQualitySelect) mediaQualitySelect.value = adminState.settings.mediaQualityCheckEnabled ? '1' : '0';
   if (ignoreMediaSelect) ignoreMediaSelect.value = adminState.settings.aiIgnoreLowQualityMedia ? '1' : '0';
-  if (appSettingsResult) appSettingsResult.textContent = `Media quality check is currently ${adminState.settings.mediaQualityCheckEnabled ? 'enabled' : 'disabled'}.`;
+  if (appSettingsResult) appSettingsResult.textContent = `Medya kalite kontrolü şu an ${adminState.settings.mediaQualityCheckEnabled ? 'açık' : 'kapalı'}.`;
   refreshFilterControls();
 }
 
@@ -561,9 +601,9 @@ function refreshFilterControls() {
   const petsOwner = document.getElementById('petsOwner');
   const recordsPet = document.getElementById('recordsPet');
   const recordsUser = document.getElementById('recordsUser');
-  if (petsOwner) petsOwner.innerHTML = optionList(adminState.lookups.users, 'id', 'display_name', adminState.filters.pets.ownerId, true, 'All owners');
+  if (petsOwner) petsOwner.innerHTML = optionList(adminState.lookups.users, 'id', 'display_name', adminState.filters.pets.ownerId, true, 'Tüm sahipler');
   if (recordsPet) recordsPet.innerHTML = petOptions(adminState.filters.records.petId, true);
-  if (recordsUser) recordsUser.innerHTML = optionList(adminState.lookups.users, 'id', 'display_name', adminState.filters.records.userId, true, 'All users');
+  if (recordsUser) recordsUser.innerHTML = optionList(adminState.lookups.users, 'id', 'display_name', adminState.filters.records.userId, true, 'Tüm kullanıcılar');
 }
 
 async function loadOverview() {
@@ -633,9 +673,9 @@ async function loadAll() {
     await loadLookups();
     await Promise.all([loadOverview(), loadUsers(), loadPets(), loadRecords(), loadDocuments(), loadUsage(), loadPlans(), loadCreditPackages(), loadPayments(), loadSettings()]);
     renderState();
-    if (statusCard) statusCard.innerHTML = `<span>Admin API</span><strong>Connected</strong><small>Live database management</small>`;
+    if (statusCard) statusCard.innerHTML = `<span>Yönetim API</span><strong>Bağlı</strong><small>Canlı veritabanı yönetimi</small>`;
   } catch (error) {
-    if (statusCard) statusCard.innerHTML = `<span>Admin API</span><strong>Disconnected</strong><small>${escapeHtml(error.message)}</small>`;
+    if (statusCard) statusCard.innerHTML = `<span>Yönetim API</span><strong>Bağlantı yok</strong><small>${escapeHtml(error.message)}</small>`;
     throw error;
   }
 }
@@ -658,7 +698,7 @@ async function login() {
     navigate('/admin');
     window.location.reload();
   } catch {
-    document.getElementById('app').innerHTML = renderLogin('Login failed.');
+    document.getElementById('app').innerHTML = renderLogin('Giriş başarısız.');
     bindLogin();
   }
 }
@@ -673,11 +713,11 @@ function closeModal() {
   document.getElementById('adminModal')?.close();
 }
 
-function baseFormActions(submitLabel = 'Save') {
+function baseFormActions(submitLabel = 'Kaydet') {
   return `
     <div class="admin-modal-actions">
       <button class="btn btn-primary" type="submit">${submitLabel}</button>
-      <button class="btn btn-ghost" type="button" id="modalClose">Cancel</button>
+      <button class="btn btn-ghost" type="button" id="modalClose">İptal</button>
     </div>
   `;
 }
@@ -690,23 +730,23 @@ function openUserForm(user = null) {
   const metadata = prettyJson(user?.metadata || { location: {}, notificationPreference: 'push' });
   openModal(`
     <form class="admin-modal-card admin-modal-card-wide" id="userForm">
-      <h3>${user ? 'Edit user' : 'Add user'}</h3>
+      <h3>${user ? 'Kullanıcıyı düzenle' : 'Kullanıcı ekle'}</h3>
       <div class="admin-form-grid">
-        <label><span>Name</span><input id="userDisplayName" value="${escapeHtml(user?.display_name || '')}" required /></label>
-        <label><span>Email</span><input id="userEmail" value="${escapeHtml(user?.email || '')}" /></label>
-        <label><span>Phone</span><input id="userPhone" value="${escapeHtml(user?.phone || '')}" /></label>
-        <label><span>Locale</span><select id="userLocale">${localeOptions(user?.locale || 'tr')}</select></label>
-        <label><span>Timezone</span><input id="userTimezone" value="${escapeHtml(user?.timezone || 'Europe/Istanbul')}" /></label>
-        <label><span>Status</span>
+        <label><span>Ad</span><input id="userDisplayName" value="${escapeHtml(user?.display_name || '')}" required /></label>
+        <label><span>E-posta</span><input id="userEmail" value="${escapeHtml(user?.email || '')}" /></label>
+        <label><span>Telefon</span><input id="userPhone" value="${escapeHtml(user?.phone || '')}" /></label>
+        <label><span>Dil</span><select id="userLocale">${localeOptions(user?.locale || 'tr')}</select></label>
+        <label><span>Saat dilimi</span><input id="userTimezone" value="${escapeHtml(user?.timezone || 'Europe/Istanbul')}" /></label>
+        <label><span>Durum</span>
           <select id="userStatus">
-            <option value="active" ${user?.status === 'active' ? 'selected' : ''}>active</option>
-            <option value="suspended" ${user?.status === 'suspended' ? 'selected' : ''}>suspended</option>
-            <option value="deleted" ${user?.status === 'deleted' ? 'selected' : ''}>deleted</option>
+            <option value="active" ${user?.status === 'active' ? 'selected' : ''}>Aktif</option>
+            <option value="suspended" ${user?.status === 'suspended' ? 'selected' : ''}>Askıda</option>
+            <option value="deleted" ${user?.status === 'deleted' ? 'selected' : ''}>Silindi</option>
           </select>
         </label>
       </div>
       <label><span>Metadata JSON</span><textarea id="userMetadata" rows="10" spellcheck="false" placeholder='{"location":{"country":"TR"}}'>${escapeHtml(metadata)}</textarea></label>
-      ${baseFormActions(user ? 'Update user' : 'Create user')}
+      ${baseFormActions(user ? 'Kullanıcıyı güncelle' : 'Kullanıcı oluştur')}
     </form>
   `);
   bindModalClose();
@@ -733,41 +773,41 @@ function openPetForm(pet = null) {
   const meta = prettyJson(pet?.metadata || { breed: '', chronic: '', allergies: '', medications: '', location: '', volunteerNote: '' });
   openModal(`
     <form class="admin-modal-card admin-modal-card-wide" id="petForm">
-      <h3>${pet ? 'Edit pet' : 'Add pet'}</h3>
+      <h3>${pet ? 'Peti düzenle' : 'Pet ekle'}</h3>
       <div class="admin-form-grid">
-        <label><span>Name</span><input id="petName" value="${escapeHtml(pet?.name || '')}" required /></label>
-        <label><span>Owner</span><select id="petOwner">${userOptions(pet?.primary_owner_user_id || pet?.owner_user_id || '')}</select></label>
-        <label><span>Species</span><select id="petSpecies">${speciesOptions(pet?.species_code || 'cat')}</select></label>
-        <label><span>Sex</span><select id="petSex">
-          <option value="female" ${pet?.sex === 'female' ? 'selected' : ''}>female</option>
-          <option value="male" ${pet?.sex === 'male' ? 'selected' : ''}>male</option>
-          <option value="unknown" ${(!pet?.sex || pet?.sex === 'unknown') ? 'selected' : ''}>unknown</option>
+        <label><span>Ad</span><input id="petName" value="${escapeHtml(pet?.name || '')}" required /></label>
+        <label><span>Sahip</span><select id="petOwner">${userOptions(pet?.primary_owner_user_id || pet?.owner_user_id || '')}</select></label>
+        <label><span>Tür</span><select id="petSpecies">${speciesOptions(pet?.species_code || 'cat')}</select></label>
+        <label><span>Cinsiyet</span><select id="petSex">
+          <option value="female" ${pet?.sex === 'female' ? 'selected' : ''}>Dişi</option>
+          <option value="male" ${pet?.sex === 'male' ? 'selected' : ''}>Erkek</option>
+          <option value="unknown" ${(!pet?.sex || pet?.sex === 'unknown') ? 'selected' : ''}>Bilinmiyor</option>
         </select></label>
-        <label><span>Birth date</span><input id="petBirthDate" type="date" value="${escapeHtml((pet?.birth_date || '').slice(0, 10))}" /></label>
-        <label><span>Weight kg</span><input id="petWeight" type="number" step="0.1" value="${escapeHtml(pet?.weight_kg ?? '')}" /></label>
-        <label><span>Neutered status</span><select id="petNeutered">
-          <option value="yes" ${pet?.neutered_status === 'yes' ? 'selected' : ''}>yes</option>
-          <option value="no" ${pet?.neutered_status === 'no' ? 'selected' : ''}>no</option>
-          <option value="unknown" ${(!pet?.neutered_status || pet?.neutered_status === 'unknown') ? 'selected' : ''}>unknown</option>
+        <label><span>Doğum tarihi</span><input id="petBirthDate" type="date" value="${escapeHtml((pet?.birth_date || '').slice(0, 10))}" /></label>
+        <label><span>Kilo kg</span><input id="petWeight" type="number" step="0.1" value="${escapeHtml(pet?.weight_kg ?? '')}" /></label>
+        <label><span>Kısırlaştırma</span><select id="petNeutered">
+          <option value="yes" ${pet?.neutered_status === 'yes' ? 'selected' : ''}>Evet</option>
+          <option value="no" ${pet?.neutered_status === 'no' ? 'selected' : ''}>Hayır</option>
+          <option value="unknown" ${(!pet?.neutered_status || pet?.neutered_status === 'unknown') ? 'selected' : ''}>Bilinmiyor</option>
         </select></label>
-        <label><span>Ownership</span><select id="petOwnership">
-          <option value="owned" ${(!pet?.ownership_type || pet?.ownership_type === 'owned') ? 'selected' : ''}>owned</option>
-          <option value="family" ${pet?.ownership_type === 'family' ? 'selected' : ''}>family</option>
-          <option value="foster" ${pet?.ownership_type === 'foster' ? 'selected' : ''}>foster</option>
-          <option value="shelter" ${pet?.ownership_type === 'shelter' ? 'selected' : ''}>shelter</option>
+        <label><span>Sahiplik</span><select id="petOwnership">
+          <option value="owned" ${(!pet?.ownership_type || pet?.ownership_type === 'owned') ? 'selected' : ''}>Sahipli</option>
+          <option value="family" ${pet?.ownership_type === 'family' ? 'selected' : ''}>Aile</option>
+          <option value="foster" ${pet?.ownership_type === 'foster' ? 'selected' : ''}>Geçici bakım</option>
+          <option value="shelter" ${pet?.ownership_type === 'shelter' ? 'selected' : ''}>Barınak</option>
         </select></label>
-        <label><span>Status</span>
+        <label><span>Durum</span>
           <select id="petStatus">
-            <option value="active" ${pet?.status === 'active' ? 'selected' : ''}>active</option>
-            <option value="archived" ${pet?.status === 'archived' ? 'selected' : ''}>archived</option>
-            <option value="deleted" ${pet?.status === 'deleted' ? 'selected' : ''}>deleted</option>
+            <option value="active" ${pet?.status === 'active' ? 'selected' : ''}>Aktif</option>
+            <option value="archived" ${pet?.status === 'archived' ? 'selected' : ''}>Arşiv</option>
+            <option value="deleted" ${pet?.status === 'deleted' ? 'selected' : ''}>Silindi</option>
           </select>
         </label>
-        <label><span>Avatar URL</span><input id="petAvatar" value="${escapeHtml(pet?.avatar_url || '')}" /></label>
+        <label><span>Profil görseli URL</span><input id="petAvatar" value="${escapeHtml(pet?.avatar_url || '')}" /></label>
       </div>
-      <label><span>Medical summary</span><textarea id="petSummary">${escapeHtml(pet?.medical_summary || '')}</textarea></label>
+      <label><span>Sağlık özeti</span><textarea id="petSummary">${escapeHtml(pet?.medical_summary || '')}</textarea></label>
       <label><span>Metadata JSON</span><textarea id="petMetadata" rows="10" spellcheck="false" placeholder='{"breed":"british shorthair"}'>${escapeHtml(meta)}</textarea></label>
-      ${baseFormActions(pet ? 'Update pet' : 'Create pet')}
+      ${baseFormActions(pet ? 'Peti güncelle' : 'Pet oluştur')}
     </form>
   `);
   bindModalClose();
@@ -800,12 +840,12 @@ function recordKindFields(kind, record = {}) {
     return `
       <div class="admin-form-grid">
         <label><span>Pet</span><select id="recordPet">${petOptions(record.pet_id || '', false)}</select></label>
-        <label><span>User</span><select id="recordUser">${userOptions(record.created_by_user_id || record.user_id || '')}</select></label>
-        <label><span>Record type</span><input id="recordType" value="${escapeHtml(record.record_type || record.type || '')}" /></label>
-        <label><span>Occurred at</span><input id="recordDate" type="datetime-local" value="${escapeHtml(datetimeLocalValue(record.occurred_at))}" /></label>
+        <label><span>Kullanıcı</span><select id="recordUser">${userOptions(record.created_by_user_id || record.user_id || '')}</select></label>
+        <label><span>Kayıt türü</span><input id="recordType" value="${escapeHtml(record.record_type || record.type || '')}" /></label>
+        <label><span>Olay zamanı</span><input id="recordDate" type="datetime-local" value="${escapeHtml(datetimeLocalValue(record.occurred_at))}" /></label>
       </div>
-      <label><span>Title</span><input id="recordTitle" value="${escapeHtml(record.title || '')}" /></label>
-      <label><span>Summary</span><textarea id="recordSummary">${escapeHtml(record.summary || '')}</textarea></label>
+      <label><span>Başlık</span><input id="recordTitle" value="${escapeHtml(record.title || '')}" /></label>
+      <label><span>Özet</span><textarea id="recordSummary">${escapeHtml(record.summary || '')}</textarea></label>
       <label><span>Payload JSON</span><textarea id="recordPayload" rows="10" spellcheck="false">${escapeHtml(prettyJson(record.payload || {}))}</textarea></label>
     `;
   }
@@ -813,13 +853,13 @@ function recordKindFields(kind, record = {}) {
     return `
       <div class="admin-form-grid">
         <label><span>Pet</span><select id="recordPet">${petOptions(record.pet_id || '', false)}</select></label>
-        <label><span>User</span><select id="recordUser">${userOptions(record.created_by_user_id || record.user_id || '')}</select></label>
-        <label><span>Measurement type</span><input id="recordType" value="${escapeHtml(record.measurement_type || record.title || '')}" /></label>
-        <label><span>Measured at</span><input id="recordDate" type="datetime-local" value="${escapeHtml(datetimeLocalValue(record.measured_at))}" /></label>
-        <label><span>Value</span><input id="recordValue" type="number" step="0.1" value="${escapeHtml(record.value ?? '')}" /></label>
-        <label><span>Unit</span><input id="recordUnit" value="${escapeHtml(record.unit || '')}" /></label>
+        <label><span>Kullanıcı</span><select id="recordUser">${userOptions(record.created_by_user_id || record.user_id || '')}</select></label>
+        <label><span>Ölçüm türü</span><input id="recordType" value="${escapeHtml(record.measurement_type || record.title || '')}" /></label>
+        <label><span>Ölçüm zamanı</span><input id="recordDate" type="datetime-local" value="${escapeHtml(datetimeLocalValue(record.measured_at))}" /></label>
+        <label><span>Değer</span><input id="recordValue" type="number" step="0.1" value="${escapeHtml(record.value ?? '')}" /></label>
+        <label><span>Birim</span><input id="recordUnit" value="${escapeHtml(record.unit || '')}" /></label>
       </div>
-      <label><span>Note</span><textarea id="recordNote">${escapeHtml(record.note || '')}</textarea></label>
+      <label><span>Not</span><textarea id="recordNote">${escapeHtml(record.note || '')}</textarea></label>
       <label><span>Metadata JSON</span><textarea id="recordPayload" rows="10" spellcheck="false">${escapeHtml(prettyJson(record.metadata || {}))}</textarea></label>
     `;
   }
@@ -827,18 +867,18 @@ function recordKindFields(kind, record = {}) {
     return `
       <div class="admin-form-grid">
         <label><span>Pet</span><select id="recordPet">${petOptions(record.pet_id || '', false)}</select></label>
-        <label><span>User</span><select id="recordUser">${userOptions(record.created_by_user_id || record.user_id || '')}</select></label>
-        <label><span>Category</span><input id="recordType" value="${escapeHtml(record.category || record.type || '')}" /></label>
-        <label><span>Spent at</span><input id="recordDate" type="datetime-local" value="${escapeHtml(datetimeLocalValue(record.spent_at))}" /></label>
-        <label><span>Amount cents</span><input id="recordValue" type="number" step="1" value="${escapeHtml(record.amount_cents ?? '')}" /></label>
-        <label><span>Currency</span><select id="recordUnit">
+        <label><span>Kullanıcı</span><select id="recordUser">${userOptions(record.created_by_user_id || record.user_id || '')}</select></label>
+        <label><span>Kategori</span><input id="recordType" value="${escapeHtml(record.category || record.type || '')}" /></label>
+        <label><span>Harcama zamanı</span><input id="recordDate" type="datetime-local" value="${escapeHtml(datetimeLocalValue(record.spent_at))}" /></label>
+        <label><span>Tutar kuruş</span><input id="recordValue" type="number" step="1" value="${escapeHtml(record.amount_cents ?? '')}" /></label>
+        <label><span>Para birimi</span><select id="recordUnit">
           <option value="TRY" ${(record.currency || 'TRY') === 'TRY' ? 'selected' : ''}>TRY</option>
           <option value="USD" ${record.currency === 'USD' ? 'selected' : ''}>USD</option>
           <option value="EUR" ${record.currency === 'EUR' ? 'selected' : ''}>EUR</option>
         </select></label>
       </div>
-      <label><span>Title</span><input id="recordTitle" value="${escapeHtml(record.title || '')}" /></label>
-      <label><span>Note</span><textarea id="recordNote">${escapeHtml(record.note || '')}</textarea></label>
+      <label><span>Başlık</span><input id="recordTitle" value="${escapeHtml(record.title || '')}" /></label>
+      <label><span>Not</span><textarea id="recordNote">${escapeHtml(record.note || '')}</textarea></label>
       <label><span>Metadata JSON</span><textarea id="recordPayload" rows="10" spellcheck="false">${escapeHtml(prettyJson(record.metadata || {}))}</textarea></label>
     `;
   }
@@ -846,32 +886,32 @@ function recordKindFields(kind, record = {}) {
     return `
       <div class="admin-form-grid">
         <label><span>Pet</span><select id="recordPet">${petOptions(record.pet_id || '', false)}</select></label>
-        <label><span>User</span><select id="recordUser">${userOptions(record.created_by_user_id || record.user_id || '')}</select></label>
-        <label><span>Reminder type</span><input id="recordType" value="${escapeHtml(record.reminder_type || record.type || '')}" /></label>
-        <label><span>Due at</span><input id="recordDate" type="datetime-local" value="${escapeHtml(datetimeLocalValue(record.due_at))}" /></label>
-        <label><span>Status</span><select id="recordStatus">
-          <option value="scheduled" ${(!record.status || record.status === 'scheduled') ? 'selected' : ''}>scheduled</option>
-          <option value="completed" ${record.status === 'completed' ? 'selected' : ''}>completed</option>
-          <option value="skipped" ${record.status === 'skipped' ? 'selected' : ''}>skipped</option>
-          <option value="canceled" ${record.status === 'canceled' ? 'selected' : ''}>canceled</option>
+        <label><span>Kullanıcı</span><select id="recordUser">${userOptions(record.created_by_user_id || record.user_id || '')}</select></label>
+        <label><span>Hatırlatıcı türü</span><input id="recordType" value="${escapeHtml(record.reminder_type || record.type || '')}" /></label>
+        <label><span>Zamanı</span><input id="recordDate" type="datetime-local" value="${escapeHtml(datetimeLocalValue(record.due_at))}" /></label>
+        <label><span>Durum</span><select id="recordStatus">
+          <option value="scheduled" ${(!record.status || record.status === 'scheduled') ? 'selected' : ''}>Planlandı</option>
+          <option value="completed" ${record.status === 'completed' ? 'selected' : ''}>Tamamlandı</option>
+          <option value="skipped" ${record.status === 'skipped' ? 'selected' : ''}>Atlandı</option>
+          <option value="canceled" ${record.status === 'canceled' ? 'selected' : ''}>İptal edildi</option>
         </select></label>
-        <label><span>Repeat rule</span><input id="recordUnit" value="${escapeHtml(record.repeat_rule || '')}" /></label>
+        <label><span>Tekrar kuralı</span><input id="recordUnit" value="${escapeHtml(record.repeat_rule || '')}" /></label>
       </div>
-      <label><span>Title</span><input id="recordTitle" value="${escapeHtml(record.title || '')}" /></label>
-      <label><span>Note</span><textarea id="recordNote">${escapeHtml(record.note || '')}</textarea></label>
+      <label><span>Başlık</span><input id="recordTitle" value="${escapeHtml(record.title || '')}" /></label>
+      <label><span>Not</span><textarea id="recordNote">${escapeHtml(record.note || '')}</textarea></label>
       <label><span>Metadata JSON</span><textarea id="recordPayload" rows="10" spellcheck="false">${escapeHtml(prettyJson(record.metadata || {}))}</textarea></label>
     `;
   }
   return `
     <div class="admin-form-grid">
-      <label><span>User</span><select id="recordUser">${userOptions(record.user_id || '', false)}</select></label>
+      <label><span>Kullanıcı</span><select id="recordUser">${userOptions(record.user_id || '', false)}</select></label>
       <label><span>Pet</span><select id="recordPet">${petOptions(record.pet_id || '', true)}</select></label>
-      <label><span>Feature code</span><input id="recordType" value="${escapeHtml(record.feature_code || record.title || '')}" /></label>
-      <label><span>Locale</span><select id="recordUnit">${localeOptions(record.locale || 'tr')}</select></label>
-      <label><span>Status</span><select id="recordStatus">
-        <option value="draft" ${(!record.status || record.status === 'draft') ? 'selected' : ''}>draft</option>
-        <option value="ready" ${record.status === 'ready' ? 'selected' : ''}>ready</option>
-        <option value="archived" ${record.status === 'archived' ? 'selected' : ''}>archived</option>
+      <label><span>Özellik kodu</span><input id="recordType" value="${escapeHtml(record.feature_code || record.title || '')}" /></label>
+      <label><span>Dil</span><select id="recordUnit">${localeOptions(record.locale || 'tr')}</select></label>
+      <label><span>Durum</span><select id="recordStatus">
+        <option value="draft" ${(!record.status || record.status === 'draft') ? 'selected' : ''}>Taslak</option>
+        <option value="ready" ${record.status === 'ready' ? 'selected' : ''}>Hazır</option>
+        <option value="archived" ${record.status === 'archived' ? 'selected' : ''}>Arşiv</option>
       </select></label>
     </div>
     <label><span>Payload JSON</span><textarea id="recordPayload" rows="10" spellcheck="false">${escapeHtml(prettyJson(record.payload || {}))}</textarea></label>
@@ -882,9 +922,9 @@ function openRecordForm(kind, detail = null) {
   const record = detail?.record || {};
   openModal(`
     <form class="admin-modal-card admin-modal-card-wide" id="recordForm">
-      <h3>${record.id ? `Edit ${kind}` : `Add ${kind}`}</h3>
+      <h3>${record.id ? `${labelFrom(KIND_LABELS, kind, kind)} kaydını düzenle` : `${labelFrom(KIND_LABELS, kind, kind)} kaydı ekle`}</h3>
       ${recordKindFields(kind, record)}
-      ${baseFormActions(record.id ? 'Update record' : 'Create record')}
+      ${baseFormActions(record.id ? 'Kaydı güncelle' : 'Kayıt oluştur')}
     </form>
   `);
   bindModalClose();
@@ -946,22 +986,22 @@ function openRecordForm(kind, detail = null) {
 function openDocumentForm(doc = null) {
   openModal(`
     <form class="admin-modal-card admin-modal-card-wide" id="documentForm">
-      <h3>${doc?.id ? 'Edit document' : 'Add document'}</h3>
+      <h3>${doc?.id ? 'Belgeyi düzenle' : 'Belge ekle'}</h3>
       <div class="admin-form-grid">
         <label><span>Pet</span><select id="documentPet">${petOptions(doc?.pet_id || '', false)}</select></label>
-        <label><span>User</span><select id="documentUser">${userOptions(doc?.uploaded_by_user_id || doc?.user_id || '', false)}</select></label>
-        <label><span>Document type</span><input id="documentType" value="${escapeHtml(doc?.document_type || '')}" /></label>
-        <label><span>Status</span><select id="documentStatus">
-          <option value="draft" ${(!doc?.status || doc?.status === 'draft') ? 'selected' : ''}>draft</option>
-          <option value="ready" ${doc?.status === 'ready' ? 'selected' : ''}>ready</option>
-          <option value="archived" ${doc?.status === 'archived' ? 'selected' : ''}>archived</option>
+        <label><span>Kullanıcı</span><select id="documentUser">${userOptions(doc?.uploaded_by_user_id || doc?.user_id || '', false)}</select></label>
+        <label><span>Belge türü</span><input id="documentType" value="${escapeHtml(doc?.document_type || '')}" /></label>
+        <label><span>Durum</span><select id="documentStatus">
+          <option value="draft" ${(!doc?.status || doc?.status === 'draft') ? 'selected' : ''}>Taslak</option>
+          <option value="ready" ${doc?.status === 'ready' ? 'selected' : ''}>Hazır</option>
+          <option value="archived" ${doc?.status === 'archived' ? 'selected' : ''}>Arşiv</option>
         </select></label>
-        <label><span>File media id</span><input id="documentFileMedia" value="${escapeHtml(doc?.file_media_id || '')}" /></label>
+        <label><span>Dosya medya ID</span><input id="documentFileMedia" value="${escapeHtml(doc?.file_media_id || '')}" /></label>
       </div>
-      <label><span>Title</span><input id="documentTitle" value="${escapeHtml(doc?.title || '')}" /></label>
-      <label><span>Extracted text</span><textarea id="documentText" rows="8">${escapeHtml(doc?.extracted_text || '')}</textarea></label>
-      <label><span>Extracted data JSON</span><textarea id="documentData" rows="10" spellcheck="false">${escapeHtml(prettyJson(doc?.extracted_data || {}))}</textarea></label>
-      ${baseFormActions(doc?.id ? 'Update document' : 'Create document')}
+      <label><span>Başlık</span><input id="documentTitle" value="${escapeHtml(doc?.title || '')}" /></label>
+      <label><span>Okunan metin</span><textarea id="documentText" rows="8">${escapeHtml(doc?.extracted_text || '')}</textarea></label>
+      <label><span>Okunan veri JSON</span><textarea id="documentData" rows="10" spellcheck="false">${escapeHtml(prettyJson(doc?.extracted_data || {}))}</textarea></label>
+      ${baseFormActions(doc?.id ? 'Belgeyi güncelle' : 'Belge oluştur')}
     </form>
   `);
   bindModalClose();
@@ -988,33 +1028,33 @@ function openDocumentForm(doc = null) {
 function openPlanForm(plan = null) {
   openModal(`
     <form class="admin-modal-card admin-modal-card-wide" id="planForm">
-      <h3>${plan?.id ? 'Edit plan' : 'Add plan'}</h3>
+      <h3>${plan?.id ? 'Planı düzenle' : 'Plan ekle'}</h3>
       <div class="admin-form-grid">
-        <label><span>Code</span><input id="planCode" value="${escapeHtml(plan?.code || '')}" /></label>
-        <label><span>Billing type</span><select id="planBillingType">
-          <option value="free" ${(!plan?.billing_type || plan.billing_type === 'free') ? 'selected' : ''}>free</option>
-          <option value="credit" ${plan?.billing_type === 'credit' ? 'selected' : ''}>credit</option>
-          <option value="subscription" ${plan?.billing_type === 'subscription' ? 'selected' : ''}>subscription</option>
+        <label><span>Kod</span><input id="planCode" value="${escapeHtml(plan?.code || '')}" /></label>
+        <label><span>Ücret tipi</span><select id="planBillingType">
+          <option value="free" ${(!plan?.billing_type || plan.billing_type === 'free') ? 'selected' : ''}>Ücretsiz</option>
+          <option value="credit" ${plan?.billing_type === 'credit' ? 'selected' : ''}>Kredi</option>
+          <option value="subscription" ${plan?.billing_type === 'subscription' ? 'selected' : ''}>Abonelik</option>
         </select></label>
-        <label><span>Billing period</span><select id="planBillingPeriod">
-          <option value="" ${!plan?.billing_period ? 'selected' : ''}>none</option>
-          <option value="monthly" ${plan?.billing_period === 'monthly' ? 'selected' : ''}>monthly</option>
-          <option value="yearly" ${plan?.billing_period === 'yearly' ? 'selected' : ''}>yearly</option>
+        <label><span>Ücret dönemi</span><select id="planBillingPeriod">
+          <option value="" ${!plan?.billing_period ? 'selected' : ''}>Yok</option>
+          <option value="monthly" ${plan?.billing_period === 'monthly' ? 'selected' : ''}>Aylık</option>
+          <option value="yearly" ${plan?.billing_period === 'yearly' ? 'selected' : ''}>Yıllık</option>
         </select></label>
-        <label><span>Name (TR)</span><input id="planName" value="${escapeHtml(plan?.name_tr || '')}" /></label>
-        <label><span>Price cents</span><input id="planPrice" type="number" step="1" value="${escapeHtml(plan?.price_cents ?? 0)}" /></label>
-        <label><span>Currency</span><select id="planCurrency">
+        <label><span>Ad (TR)</span><input id="planName" value="${escapeHtml(plan?.name_tr || '')}" /></label>
+        <label><span>Fiyat kuruş</span><input id="planPrice" type="number" step="1" value="${escapeHtml(plan?.price_cents ?? 0)}" /></label>
+        <label><span>Para birimi</span><select id="planCurrency">
           <option value="TRY" ${(plan?.currency || 'TRY') === 'TRY' ? 'selected' : ''}>TRY</option>
           <option value="USD" ${plan?.currency === 'USD' ? 'selected' : ''}>USD</option>
           <option value="EUR" ${plan?.currency === 'EUR' ? 'selected' : ''}>EUR</option>
         </select></label>
-        <label><span>Google Play product id</span><input id="planPlayProductId" value="${escapeHtml(plan?.play_product_id || '')}" /></label>
-        <label><span>Max pets</span><input id="planPets" type="number" step="1" value="${escapeHtml(plan?.max_pets ?? '')}" /></label>
-        <label><span>Monthly credits</span><input id="planCredits" type="number" step="1" value="${escapeHtml(plan?.monthly_credit_allowance ?? 0)}" /></label>
-        <label><span>Active</span><select id="planActive">${yesNoOptions(Number(plan?.is_active ?? 1))}</select></label>
+        <label><span>Google Play ürün ID</span><input id="planPlayProductId" value="${escapeHtml(plan?.play_product_id || '')}" /></label>
+        <label><span>Pet limiti</span><input id="planPets" type="number" step="1" value="${escapeHtml(plan?.max_pets ?? '')}" /></label>
+        <label><span>Aylık kredi</span><input id="planCredits" type="number" step="1" value="${escapeHtml(plan?.monthly_credit_allowance ?? 0)}" /></label>
+        <label><span>Aktif</span><select id="planActive">${yesNoOptions(Number(plan?.is_active ?? 1))}</select></label>
       </div>
-      <label><span>Features JSON</span><textarea id="planFeatures" rows="10" spellcheck="false">${escapeHtml(prettyJson(plan?.features || {}))}</textarea></label>
-      ${baseFormActions(plan?.id ? 'Update plan' : 'Create plan')}
+      <label><span>Özellikler JSON</span><textarea id="planFeatures" rows="10" spellcheck="false">${escapeHtml(prettyJson(plan?.features || {}))}</textarea></label>
+      ${baseFormActions(plan?.id ? 'Planı güncelle' : 'Plan oluştur')}
     </form>
   `);
   bindModalClose();
@@ -1044,23 +1084,23 @@ function openPlanForm(plan = null) {
 function openCreditPackageForm(pack = null) {
   openModal(`
     <form class="admin-modal-card admin-modal-card-wide" id="creditPackageForm">
-      <h3>${pack?.id ? 'Edit credit package' : 'Add credit package'}</h3>
+      <h3>${pack?.id ? 'Kredi paketini düzenle' : 'Kredi paketi ekle'}</h3>
       <div class="admin-form-grid">
-        <label><span>Code</span><input id="creditPackageCode" value="${escapeHtml(pack?.code || '')}" /></label>
-        <label><span>Name (TR)</span><input id="creditPackageName" value="${escapeHtml(pack?.name_tr || '')}" /></label>
-        <label><span>Credit amount</span><input id="creditPackageAmount" type="number" step="1" value="${escapeHtml(pack?.credit_amount ?? 1)}" /></label>
-        <label><span>Price cents</span><input id="creditPackagePrice" type="number" step="1" value="${escapeHtml(pack?.price_cents ?? 0)}" /></label>
-        <label><span>Currency</span><select id="creditPackageCurrency">
+        <label><span>Kod</span><input id="creditPackageCode" value="${escapeHtml(pack?.code || '')}" /></label>
+        <label><span>Ad (TR)</span><input id="creditPackageName" value="${escapeHtml(pack?.name_tr || '')}" /></label>
+        <label><span>Kredi adedi</span><input id="creditPackageAmount" type="number" step="1" value="${escapeHtml(pack?.credit_amount ?? 1)}" /></label>
+        <label><span>Fiyat kuruş</span><input id="creditPackagePrice" type="number" step="1" value="${escapeHtml(pack?.price_cents ?? 0)}" /></label>
+        <label><span>Para birimi</span><select id="creditPackageCurrency">
           <option value="TRY" ${(pack?.currency || 'TRY') === 'TRY' ? 'selected' : ''}>TRY</option>
           <option value="USD" ${pack?.currency === 'USD' ? 'selected' : ''}>USD</option>
           <option value="EUR" ${pack?.currency === 'EUR' ? 'selected' : ''}>EUR</option>
         </select></label>
-        <label><span>Google Play product id</span><input id="creditPackagePlayProductId" value="${escapeHtml(pack?.play_product_id || '')}" /></label>
-        <label><span>Sort order</span><input id="creditPackageOrder" type="number" step="1" value="${escapeHtml(pack?.sort_order ?? 0)}" /></label>
-        <label><span>Active</span><select id="creditPackageActive">${yesNoOptions(Number(pack?.is_active ?? 1))}</select></label>
+        <label><span>Google Play ürün ID</span><input id="creditPackagePlayProductId" value="${escapeHtml(pack?.play_product_id || '')}" /></label>
+        <label><span>Sıralama</span><input id="creditPackageOrder" type="number" step="1" value="${escapeHtml(pack?.sort_order ?? 0)}" /></label>
+        <label><span>Aktif</span><select id="creditPackageActive">${yesNoOptions(Number(pack?.is_active ?? 1))}</select></label>
       </div>
       <label><span>Metadata JSON</span><textarea id="creditPackageMetadata" rows="8" spellcheck="false">${escapeHtml(prettyJson(pack?.metadata || { aiCreditCost: 1 }))}</textarea></label>
-      ${baseFormActions(pack?.id ? 'Update package' : 'Create package')}
+      ${baseFormActions(pack?.id ? 'Paketi güncelle' : 'Paket oluştur')}
     </form>
   `);
   bindModalClose();
@@ -1086,43 +1126,43 @@ function openCreditPackageForm(pack = null) {
 }
 
 function creditPackageOptions(selected = '') {
-  return optionList(adminState.creditPackages, 'id', 'name_tr', selected, true, 'No credit package');
+  return optionList(adminState.creditPackages, 'id', 'name_tr', selected, true, 'Kredi paketi yok');
 }
 
 function openPaymentForm(payment = null) {
   openModal(`
     <form class="admin-modal-card admin-modal-card-wide" id="paymentForm">
-      <h3>${payment?.id ? 'Edit payment' : 'Add payment'}</h3>
+      <h3>${payment?.id ? 'Ödemeyi düzenle' : 'Ödeme ekle'}</h3>
       <div class="admin-form-grid">
-        <label><span>User</span><select id="paymentUser">${userOptions(payment?.user_id || '')}</select></label>
-        <label><span>Provider</span><input id="paymentProvider" value="${escapeHtml(payment?.provider || 'google_play')}" /></label>
-        <label><span>Product type</span><select id="paymentProductType">
-          <option value="subscription" ${(!payment?.product_type || payment.product_type === 'subscription') ? 'selected' : ''}>subscription</option>
-          <option value="credit" ${payment?.product_type === 'credit' ? 'selected' : ''}>credit</option>
+        <label><span>Kullanıcı</span><select id="paymentUser">${userOptions(payment?.user_id || '')}</select></label>
+        <label><span>Sağlayıcı</span><input id="paymentProvider" value="${escapeHtml(payment?.provider || 'google_play')}" /></label>
+        <label><span>Ürün tipi</span><select id="paymentProductType">
+          <option value="subscription" ${(!payment?.product_type || payment.product_type === 'subscription') ? 'selected' : ''}>Abonelik</option>
+          <option value="credit" ${payment?.product_type === 'credit' ? 'selected' : ''}>Kredi</option>
         </select></label>
-        <label><span>Product id</span><input id="paymentProductId" value="${escapeHtml(payment?.product_id || '')}" /></label>
-        <label><span>Plan</span><select id="paymentPlan">${optionList(adminState.lookups.plans, 'id', 'name_tr', payment?.plan_id || '', true, 'No plan')}</select></label>
-        <label><span>Credit package</span><select id="paymentCreditPackage">${creditPackageOptions(payment?.credit_package_id || '')}</select></label>
-        <label><span>Status</span><select id="paymentStatus">
-          <option value="pending" ${(!payment?.status || payment.status === 'pending') ? 'selected' : ''}>pending</option>
-          <option value="verified" ${payment?.status === 'verified' ? 'selected' : ''}>verified</option>
-          <option value="active" ${payment?.status === 'active' ? 'selected' : ''}>active</option>
-          <option value="refunded" ${payment?.status === 'refunded' ? 'selected' : ''}>refunded</option>
-          <option value="cancelled" ${payment?.status === 'cancelled' ? 'selected' : ''}>cancelled</option>
+        <label><span>Ürün ID</span><input id="paymentProductId" value="${escapeHtml(payment?.product_id || '')}" /></label>
+        <label><span>Plan</span><select id="paymentPlan">${optionList(adminState.lookups.plans, 'id', 'name_tr', payment?.plan_id || '', true, 'Plan yok')}</select></label>
+        <label><span>Kredi paketi</span><select id="paymentCreditPackage">${creditPackageOptions(payment?.credit_package_id || '')}</select></label>
+        <label><span>Durum</span><select id="paymentStatus">
+          <option value="pending" ${(!payment?.status || payment.status === 'pending') ? 'selected' : ''}>Bekliyor</option>
+          <option value="verified" ${payment?.status === 'verified' ? 'selected' : ''}>Doğrulandı</option>
+          <option value="active" ${payment?.status === 'active' ? 'selected' : ''}>Aktif</option>
+          <option value="refunded" ${payment?.status === 'refunded' ? 'selected' : ''}>İade edildi</option>
+          <option value="cancelled" ${payment?.status === 'cancelled' ? 'selected' : ''}>İptal edildi</option>
         </select></label>
-        <label><span>Amount cents</span><input id="paymentAmount" type="number" step="1" value="${escapeHtml(payment?.amount_cents ?? 0)}" /></label>
-        <label><span>Currency</span><select id="paymentCurrency">
+        <label><span>Tutar kuruş</span><input id="paymentAmount" type="number" step="1" value="${escapeHtml(payment?.amount_cents ?? 0)}" /></label>
+        <label><span>Para birimi</span><select id="paymentCurrency">
           <option value="TRY" ${(payment?.currency || 'TRY') === 'TRY' ? 'selected' : ''}>TRY</option>
           <option value="USD" ${payment?.currency === 'USD' ? 'selected' : ''}>USD</option>
           <option value="EUR" ${payment?.currency === 'EUR' ? 'selected' : ''}>EUR</option>
         </select></label>
-        <label><span>Credits granted</span><input id="paymentCreditsGranted" type="number" step="1" value="${escapeHtml(payment?.credits_granted ?? 0)}" /></label>
-        <label><span>Purchased at</span><input id="paymentPurchasedAt" type="datetime-local" value="${escapeHtml(datetimeLocalValue(payment?.purchased_at))}" /></label>
-        <label><span>Expires at</span><input id="paymentExpiresAt" type="datetime-local" value="${escapeHtml(datetimeLocalValue(payment?.expires_at))}" /></label>
+        <label><span>Verilen kredi</span><input id="paymentCreditsGranted" type="number" step="1" value="${escapeHtml(payment?.credits_granted ?? 0)}" /></label>
+        <label><span>Satın alma zamanı</span><input id="paymentPurchasedAt" type="datetime-local" value="${escapeHtml(datetimeLocalValue(payment?.purchased_at))}" /></label>
+        <label><span>Bitiş zamanı</span><input id="paymentExpiresAt" type="datetime-local" value="${escapeHtml(datetimeLocalValue(payment?.expires_at))}" /></label>
       </div>
-      <label><span>Purchase token</span><input id="paymentToken" value="${escapeHtml(payment?.purchase_token || '')}" /></label>
+      <label><span>Satın alma token</span><input id="paymentToken" value="${escapeHtml(payment?.purchase_token || '')}" /></label>
       <label><span>Metadata JSON</span><textarea id="paymentMetadata" rows="8" spellcheck="false">${escapeHtml(prettyJson(payment?.metadata || {}))}</textarea></label>
-      ${baseFormActions(payment?.id ? 'Update payment' : 'Create payment')}
+      ${baseFormActions(payment?.id ? 'Ödemeyi güncelle' : 'Ödeme oluştur')}
     </form>
   `);
   bindModalClose();
@@ -1158,7 +1198,7 @@ function openReadOnly(title, object) {
       <h3>${escapeHtml(title)}</h3>
       <pre class="admin-json-view">${escapeHtml(prettyJson(object))}</pre>
       <div class="admin-modal-actions">
-        <button class="btn btn-ghost" type="button" id="modalClose">Close</button>
+        <button class="btn btn-ghost" type="button" id="modalClose">Kapat</button>
       </div>
     </div>
   `);
@@ -1168,10 +1208,10 @@ function openReadOnly(title, object) {
 function openCreditForm(userId) {
   openModal(`
     <form class="admin-modal-card" id="creditForm">
-      <h3>Adjust credits</h3>
-      <label><span>Amount</span><input id="creditAmount" type="number" placeholder="+10 or -5" /></label>
-      <label><span>Note</span><input id="creditNote" placeholder="Reason" /></label>
-      ${baseFormActions('Apply')}
+      <h3>Kredi düzenle</h3>
+      <label><span>Tutar</span><input id="creditAmount" type="number" placeholder="+10 veya -5" /></label>
+      <label><span>Not</span><input id="creditNote" placeholder="Gerekçe" /></label>
+      ${baseFormActions('Uygula')}
     </form>
   `);
   bindModalClose();
@@ -1187,11 +1227,11 @@ function openCreditForm(userId) {
 function openUserPlanForm(userId) {
   openModal(`
     <form class="admin-modal-card" id="userPlanForm">
-      <h3>Assign active plan</h3>
+      <h3>Aktif plan ata</h3>
       <label><span>Plan</span><select id="assignPlanId">${planOptions()}</select></label>
-      <label><span>Renews at</span><input id="assignRenewsAt" type="datetime-local" /></label>
-      <label><span>Note</span><input id="assignPlanNote" placeholder="Internal note" /></label>
-      ${baseFormActions('Assign')}
+      <label><span>Yenileme zamanı</span><input id="assignRenewsAt" type="datetime-local" /></label>
+      <label><span>Not</span><input id="assignPlanNote" placeholder="İç not" /></label>
+      ${baseFormActions('Ata')}
     </form>
   `);
   bindModalClose();
@@ -1257,42 +1297,42 @@ async function handleAction(button) {
   if (action === 'credit-package-add') return openCreditPackageForm();
   if (action === 'payment-add') return openPaymentForm();
 
-  if (action === 'user-view') return openReadOnly('User detail', await api(`/api/admin/users/${id}`));
+  if (action === 'user-view') return openReadOnly('Kullanıcı detayı', await api(`/api/admin/users/${id}`));
   if (action === 'user-edit') return openUserForm(await api(`/api/admin/users/${id}`));
   if (action === 'user-credit') return openCreditForm(id);
   if (action === 'user-plan') return openUserPlanForm(id);
   if (action === 'user-delete') {
-    if (!window.confirm('Mark this user as deleted?')) return;
+    if (!window.confirm('Bu kullanıcı silindi olarak işaretlensin mi?')) return;
     await api(`/api/admin/users/${id}`, { method: 'DELETE' });
     await Promise.all([loadUsers(), loadOverview()]);
     renderState();
     return;
   }
 
-  if (action === 'pet-view') return openReadOnly('Pet detail', await api(`/api/admin/pets/${id}`));
+  if (action === 'pet-view') return openReadOnly('Pet detayı', await api(`/api/admin/pets/${id}`));
   if (action === 'pet-edit') return openPetForm(await api(`/api/admin/pets/${id}`));
   if (action === 'pet-delete') {
-    if (!window.confirm('Mark this pet as deleted?')) return;
+    if (!window.confirm('Bu pet silindi olarak işaretlensin mi?')) return;
     await api(`/api/admin/pets/${id}`, { method: 'DELETE' });
     await Promise.all([loadPets(), loadOverview()]);
     renderState();
     return;
   }
 
-  if (action === 'record-view') return openReadOnly(`${kind} detail`, await api(`/api/admin/records/${kind}/${id}`));
+  if (action === 'record-view') return openReadOnly(`${labelFrom(KIND_LABELS, kind, kind)} detayı`, await api(`/api/admin/records/${kind}/${id}`));
   if (action === 'record-edit') return openRecordForm(kind, await api(`/api/admin/records/${kind}/${id}`));
   if (action === 'record-delete') {
-    if (!window.confirm('Delete this record permanently?')) return;
+    if (!window.confirm('Bu kayıt kalıcı olarak silinsin mi?')) return;
     await api(`/api/admin/records/${kind}/${id}`, { method: 'DELETE' });
     await Promise.all([loadRecords(), loadOverview()]);
     renderState();
     return;
   }
 
-  if (action === 'document-view') return openReadOnly('Document detail', await api(`/api/admin/documents/${id}`));
+  if (action === 'document-view') return openReadOnly('Belge detayı', await api(`/api/admin/documents/${id}`));
   if (action === 'document-edit') return openDocumentForm(await api(`/api/admin/documents/${id}`));
   if (action === 'document-delete') {
-    if (!window.confirm('Delete this document permanently?')) return;
+    if (!window.confirm('Bu belge kalıcı olarak silinsin mi?')) return;
     await api(`/api/admin/documents/${id}`, { method: 'DELETE' });
     await Promise.all([loadDocuments(), loadOverview()]);
     renderState();
@@ -1304,7 +1344,7 @@ async function handleAction(button) {
     return openPlanForm(plan);
   }
   if (action === 'plan-delete') {
-    if (!window.confirm('Delete this plan permanently?')) return;
+    if (!window.confirm('Bu plan kalıcı olarak silinsin mi?')) return;
     await api(`/api/admin/plans/${id}`, { method: 'DELETE' });
     await loadPlans();
     renderState();
@@ -1315,7 +1355,7 @@ async function handleAction(button) {
     return openCreditPackageForm(pack);
   }
   if (action === 'credit-package-delete') {
-    if (!window.confirm('Delete this credit package permanently?')) return;
+    if (!window.confirm('Bu kredi paketi kalıcı olarak silinsin mi?')) return;
     await api(`/api/admin/credit-packages/${id}`, { method: 'DELETE' });
     await loadCreditPackages();
     renderState();
@@ -1326,7 +1366,7 @@ async function handleAction(button) {
     return openPaymentForm(payment);
   }
   if (action === 'payment-delete') {
-    if (!window.confirm('Delete this payment permanently?')) return;
+    if (!window.confirm('Bu ödeme kaydı kalıcı olarak silinsin mi?')) return;
     await api(`/api/admin/payments/${id}`, { method: 'DELETE' });
     await Promise.all([loadPayments(), loadOverview()]);
     renderState();
@@ -1359,7 +1399,7 @@ export function afterRender() {
           keepToken: session()?.token
         }
       });
-      if (target) target.textContent = 'Password updated.';
+      if (target) target.textContent = 'Şifre güncellendi.';
       document.getElementById('currentPassword').value = '';
       document.getElementById('newPassword').value = '';
     } catch (error) {
@@ -1382,7 +1422,7 @@ export function afterRender() {
         mediaQualityCheckEnabled: Boolean(data.mediaQualityCheckEnabled),
         aiIgnoreLowQualityMedia: Boolean(data.aiIgnoreLowQualityMedia)
       }));
-      if (target) target.textContent = `Saved. Media quality check is ${data.mediaQualityCheckEnabled ? 'enabled' : 'disabled'}.`;
+      if (target) target.textContent = `Kaydedildi. Medya kalite kontrolü ${data.mediaQualityCheckEnabled ? 'açık' : 'kapalı'}.`;
       renderState();
     } catch (error) {
       if (target) target.textContent = error.message;
@@ -1397,6 +1437,6 @@ export function afterRender() {
 
   loadAll().catch((error) => {
     const card = document.getElementById('apiStatusCard');
-    if (card) card.innerHTML = `<span>Admin API</span><strong>Disconnected</strong><small>${escapeHtml(error.message)}</small>`;
+    if (card) card.innerHTML = `<span>Yönetim API</span><strong>Bağlantı yok</strong><small>${escapeHtml(error.message)}</small>`;
   });
 }

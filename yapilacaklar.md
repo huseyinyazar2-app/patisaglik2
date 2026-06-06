@@ -567,3 +567,11 @@ Bu fazın ürün dili teşhis değil; çekim kalitesini artırma, değişim taki
 - [x] Canli Turso `admin_accounts` tablosunda aktif admin sayisi kontrol edildi ve tek aktif super admin hesabi birakildi.
 - [x] Default admin seed mantigi guvenli hale getirildi; herhangi bir admin hesabi varken eski varsayilan admin yeniden olusturulmayacak.
 - [x] Eski varsayilan admin girisi kapatildi ve yeni admin girisi canli API uzerinden dogrulandi.
+
+## Admin Panel Turkcelestirme - 06.06.2026
+
+- [x] Admin giris ekrani ve panel metinleri sabit Turkce olacak sekilde guncellendi.
+- [x] Login formundaki eski varsayilan kullanici/sifre on dolumu kaldirildi.
+- [x] Admin sifre degistirme alani Turkce etiketler ve aciklayici sonuc mesajiyla gorunur hale getirildi.
+- [x] Kullanici, pet, kayit, belge, plan, kredi paketi ve odeme modal/form metinleri Turkcelestirildi.
+- [x] `audit:i18n` icinde sadece admin panel icin bilerek sabit Turkce istisnasi tanimlandi; kullaniciya acik uygulama i18n kontrolu temiz kaliyor.
