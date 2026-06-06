@@ -545,3 +545,11 @@ Bu fazın ürün dili teşhis değil; çekim kalitesini artırma, değişim taki
 - [x] Eski AI sekme etiketi `Pet AI` olarak guncellendi.
 - [x] Sunum, brosur ve dokuman asset adlari Pet Help adlandirmasina tasindi.
 - [x] Eski marka izi aktif uygulama/dokuman dosyalarinda tarandi; sadece eski referans arsiv klasorleri ve mevcut teknik sunucu/proje adresleri bilincli olarak birakildi.
+
+## Canli Domain Baglantisi - 06.06.2026
+
+- [x] `pethelp.app`, `www.pethelp.app` ve `api.pethelp.app` DNS A kayitlari `46.225.9.243` sunucusuna yonlendirildi.
+- [x] Coolify `patisaglik2-api` uygulamasina yeni domainler eklendi; eski `sslip.io` adresi gecis yedegi olarak korundu.
+- [x] Frontend/admin API fallback adresleri `https://api.pethelp.app` olarak guncellendi.
+- [x] GitHub `main` branch pushlandi ve Coolify deploy tetiklendi.
+- [x] HTTPS kontrolleri tamamlandi: ana site, `www`, `api` ve `/api/health` 200 donuyor.
