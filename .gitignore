@@ -13,3 +13,10 @@ web-preview*.log
 docs/.pptx-build/
 docs/ppt-slides/
 docs/*-preview.png
+android/.gradle/
+android/**/build/
+android/local.properties
+android/keystore.properties
+android/app/*.jks
+android/app/*.keystore
+android/app/release/

@@ -583,3 +583,14 @@ Bu fazın ürün dili teşhis değil; çekim kalitesini artırma, değişim taki
 - [x] Tanitim sitesi metinleri i18n sozlugunden beslenecek sekilde Turkce yenilendi; EN parity korunarak altyapi hazir tutuldu.
 - [x] Premium hero icin gercek gorsel asset eklendi: `public/assets/pet-help-hero.png`.
 - [x] Web landing CSS'i yeni gorsel sahneye ve mobil responsive davranisa gore guncellendi.
+
+## Android / Store Build Hazirligi - 08.06.2026
+
+- [x] Capacitor Android altyapisi eklendi: `capacitor.config.json`, `android/` projesi ve mobil paket adi `app.pethelp.mobile`.
+- [x] Kamera, dosya sistemi, app lifecycle ve local notifications Capacitor pluginleri kuruldu.
+- [x] Android notification small icon kaynagi eklendi: `android/app/src/main/res/drawable/ic_stat_pet_help.xml`.
+- [x] GitHub Actions debug APK build workflow'u eklendi: `.github/workflows/android-build.yml`.
+- [x] Signed release AAB icin secret tabanli keystore/Gradle imza altyapisi hazirlandi.
+- [x] Build notlari eklendi: `docs/ANDROID_BUILD.md`.
+- [ ] Store oncesi Pet Help launcher/adaptive ikonlari tasarlanip Android kaynaklarina islenecek.
+- [ ] GitHub Secrets girildikten sonra signed AAB workflow ciktisi Play Console icin test edilecek.

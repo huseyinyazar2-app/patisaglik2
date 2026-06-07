@@ -5,18 +5,28 @@
   "type": "module",
   "scripts": {
     "dev": "vite --configLoader runner",
-    "build": "vite build",
+    "build": "vite build --configLoader runner",
     "preview": "vite preview",
     "start": "node server/index.js",
     "server": "node server/index.js",
+    "cap:sync": "npm run build && npx cap sync",
+    "cap:sync:android": "npm run build && npx cap sync android",
+    "cap:open:android": "npx cap open android",
     "db:migrate": "node scripts/migrate-turso.mjs",
     "db:smoke": "node scripts/db-smoke-test.mjs",
     "audit:i18n": "node scripts/audit-i18n.mjs"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.4.0",
     "vite": "^6.3.5"
   },
   "dependencies": {
+    "@capacitor/android": "^8.4.0",
+    "@capacitor/app": "^8.1.0",
+    "@capacitor/camera": "^8.2.0",
+    "@capacitor/core": "^8.4.0",
+    "@capacitor/filesystem": "^8.1.2",
+    "@capacitor/local-notifications": "^8.2.0",
     "@libsql/client": "^0.17.3",
     "qrcode": "^1.5.4"
   }

@@ -1,0 +1,21 @@
+{
+  "appId": "app.pethelp.mobile",
+  "appName": "Pet Help",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_pet_help",
+      "iconColor": "#005B4C"
+    },
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "backgroundColor": "#F4FBF9",
+      "androidSplashResourceName": "splash",
+      "showSpinner": false
+    }
+  }
+}
