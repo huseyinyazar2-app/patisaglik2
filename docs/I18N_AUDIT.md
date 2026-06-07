@@ -34,7 +34,7 @@ Ozet:
 
 - Desteklenen locale: `24`
 - Tam ceviri sozlugu: `tr`, `en`
-- Dictionary key sayisi: `tr=2235`, `en=2235`
+- Dictionary key sayisi: `tr=2233`, `en=2233`
 - `missingInEn`: `0`
 - `extraInEn`: `0`
 - Kalan hardcoded Turkce string literal: `0`

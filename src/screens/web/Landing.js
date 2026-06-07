@@ -1,5 +1,5 @@
 import { navigate } from '../../router.js';
-import { getLocale, setLocale, supportedLocales, t } from '../../i18n/tr.js';
+import { t } from '../../i18n/tr.js';
 
 const featureIcons = ['shield', 'clipboard', 'activity', 'camera', 'bell', 'heartPulse'];
 const journeyIcons = ['search', 'clipboard', 'stethoscope'];
@@ -15,19 +15,12 @@ function escapeHtml(value) {
     .replace(/'/g, '&#039;');
 }
 
-function localeOptions(currentLocale) {
-  return supportedLocales
-    .map((locale) => `<option value="${locale.code}" ${currentLocale === locale.code ? 'selected' : ''}>${escapeHtml(locale.nativeName)}</option>`)
-    .join('');
-}
-
 export function render() {
   const features = t('landing.features');
   const journey = t('landing.journey');
   const audiences = t('landing.audiences');
   const proof = t('landing.proof');
   const metrics = t('landing.metrics');
-  const locale = getLocale();
 
   return `
     <div class="web-page">
@@ -40,11 +33,6 @@ export function render() {
           <button type="button" data-scroll="#webFeatures">${t('landing.nav_features')}</button>
           <button type="button" data-scroll="#webJourney">${t('landing.nav_flow')}</button>
           <button type="button" data-scroll="#webSafety">${t('landing.nav_safety')}</button>
-          <label class="web-locale-switch">
-            <span>${t('landing.language')}</span>
-            <select id="landingLocale">${localeOptions(locale)}</select>
-          </label>
-          <button type="button" id="btnAdmin">${t('landing.admin')}</button>
           <button type="button" id="btnOpenApp">${t('landing.open_app')}</button>
         </nav>
       </header>
@@ -85,48 +73,8 @@ export function render() {
             </div>
 
             <div class="web-scene-stage">
-              <div class="web-scene-glow glow-a"></div>
-              <div class="web-scene-glow glow-b"></div>
-
-              <div class="web-device-shell">
-                <div class="web-device-notch"></div>
-                <div class="web-device-screen">
-                  <div class="web-device-badge">${t('landing.free_health_area')}</div>
-                  <div class="web-device-avatar">
-                    <div class="web-device-avatar-core">
-                      <span>${window.__icons?.paw || ''}</span>
-                    </div>
-                  </div>
-                  <strong>${t('landing.preview_subject')}</strong>
-                  <small>${t('landing.preview_meta')}</small>
-
-                  <div class="web-signal-grid">
-                    <div>
-                      <b>AI</b>
-                      <small>${t('landing.pre_check')}</small>
-                    </div>
-                    <div>
-                      <b>Link</b>
-                      <small>${t('landing.preview_passport')}</small>
-                    </div>
-                    <div>
-                      <b>24h</b>
-                      <small>${t('landing.preview_followup')}</small>
-                    </div>
-                    <div>
-                      <b>1</b>
-                      <small>${t('landing.preview_single_flow')}</small>
-                    </div>
-                  </div>
-
-                  <div class="web-device-alert">
-                    <span>${t('landing.risk_signal')}</span>
-                    <strong>${t('landing.vet_guidance_ready')}</strong>
-                  </div>
-                </div>
-              </div>
-
-              <div class="web-side-stack">
+              <img class="web-hero-image" src="/assets/pet-help-hero.png" alt="${escapeHtml(t('landing.visual_label'))}" loading="eager" />
+              <div class="web-hero-callouts">
                 <article class="web-side-card">
                   <span>${t('landing.visual_side_one')}</span>
                   <strong>${t('landing.visual_side_one_title')}</strong>
@@ -136,6 +84,11 @@ export function render() {
                   <span>${t('landing.visual_side_two')}</span>
                   <strong>${t('landing.visual_side_two_title')}</strong>
                   <small>${t('landing.visual_side_two_desc')}</small>
+                </article>
+                <article class="web-side-card calm">
+                  <span>${t('landing.risk_signal')}</span>
+                  <strong>${t('landing.vet_guidance_ready')}</strong>
+                  <small>${t('landing.preview_meta')}</small>
                 </article>
               </div>
             </div>
@@ -249,16 +202,11 @@ export function render() {
 
 export function afterRender() {
   document.getElementById('brandHome')?.addEventListener('click', () => navigate('/web'));
-  document.getElementById('btnAdmin')?.addEventListener('click', () => navigate('/admin'));
-  document.getElementById('btnStart')?.addEventListener('click', () => navigate('/admin'));
-  document.getElementById('btnStartBottom')?.addEventListener('click', () => navigate('/admin'));
-  document.getElementById('btnOpenApp')?.addEventListener('click', () => navigate('/home'));
-  document.getElementById('btnOpenAppBottom')?.addEventListener('click', () => navigate('/home'));
-  document.getElementById('btnDemo')?.addEventListener('click', () => navigate('/home'));
-  document.getElementById('landingLocale')?.addEventListener('change', (event) => {
-    setLocale(event.target.value || 'tr');
-    window.location.reload();
-  });
+  document.getElementById('btnStart')?.addEventListener('click', () => navigate('/auth/register'));
+  document.getElementById('btnStartBottom')?.addEventListener('click', () => navigate('/auth/register'));
+  document.getElementById('btnOpenApp')?.addEventListener('click', () => navigate('/auth/splash'));
+  document.getElementById('btnOpenAppBottom')?.addEventListener('click', () => navigate('/auth/splash'));
+  document.getElementById('btnDemo')?.addEventListener('click', () => document.querySelector('#webJourney')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
   document.querySelectorAll('[data-scroll]').forEach((button) => {
     button.addEventListener('click', () => {
       document.querySelector(button.dataset.scroll)?.scrollIntoView({ behavior: 'smooth', block: 'start' });

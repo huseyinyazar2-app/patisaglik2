@@ -94,7 +94,7 @@ function renderVersionBadge() {
 // Main render function
 function renderApp(screenHtml, showTab = true, activeTab = '/home') {
   const app = document.getElementById('app');
-  const path = (window.location.hash || '').replace('#', '').split('?')[0];
+  const path = (window.location.hash || '#/web').replace('#', '').split('?')[0];
   app.className = path.startsWith('/web') || path.startsWith('/admin') ? 'web-shell-root' : '';
   app.innerHTML = `
     ${renderVersionBadge()}
@@ -151,7 +151,7 @@ async function loadScreen(modulePath, params = {}, query = {}) {
     }
     const mod = screenModules[modulePath];
     const html = mod.render(params, query);
-    const hash = window.location.hash || '';
+    const hash = window.location.hash || '#/web';
     const path = hash.replace('#', '').split('?')[0];
     const showTab = shouldShowTabBar(hash);
     const activeTab = getActiveTab(path);

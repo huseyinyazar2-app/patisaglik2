@@ -575,3 +575,11 @@ Bu fazın ürün dili teşhis değil; çekim kalitesini artırma, değişim taki
 - [x] Admin sifre degistirme alani Turkce etiketler ve aciklayici sonuc mesajiyla gorunur hale getirildi.
 - [x] Kullanici, pet, kayit, belge, plan, kredi paketi ve odeme modal/form metinleri Turkcelestirildi.
 - [x] `audit:i18n` icinde sadece admin panel icin bilerek sabit Turkce istisnasi tanimlandi; kullaniciya acik uygulama i18n kontrolu temiz kaliyor.
+
+## Web Sitesi / Ana Domain - 08.06.2026
+
+- [x] Kök adresin mobil uygulama splash yerine tanitim web sitesini acmasi icin router varsayilani `/web` yapildi.
+- [x] Halka acik landing sayfasi admin odakli metinlerden arindirildi; ana CTA uygulama kayit/acinis akisina baglandi.
+- [x] Tanitim sitesi metinleri i18n sozlugunden beslenecek sekilde Turkce yenilendi; EN parity korunarak altyapi hazir tutuldu.
+- [x] Premium hero icin gercek gorsel asset eklendi: `public/assets/pet-help-hero.png`.
+- [x] Web landing CSS'i yeni gorsel sahneye ve mobil responsive davranisa gore guncellendi.
