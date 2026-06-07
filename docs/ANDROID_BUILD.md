@@ -26,5 +26,5 @@ Workflow, secret'lardan `android/keystore.properties` dosyasini gecici olarak ur
 
 ## Store oncesi notlar
 
-- Varsayilan Capacitor launcher ikonlari store oncesi Pet Help marka ikonlariyla degistirilmeli.
+- Pet Help launcher/adaptive ikonlari Android ve PWA kaynaklarina islendi.
 - OTP ve odeme ekranlari ilk store surumu icin pasif tutuldu; sonradan guncelleme ile acilacak.

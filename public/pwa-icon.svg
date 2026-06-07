@@ -1,6 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="112" fill="#00594c"/>
-  <circle cx="256" cy="256" r="172" fill="#f4fbf9"/>
-  <path d="M256 351c-43-39-93-80-93-136 0-35 27-62 62-62 19 0 34 8 45 22 11-14 26-22 45-22 35 0 62 27 62 62 0 56-50 97-121 136Z" fill="#00594c"/>
-  <path d="M164 320h64l25-69 31 104 24-68h40" fill="none" stroke="#c58f2a" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs>
+    <linearGradient id="bg" x1="86" y1="48" x2="430" y2="464" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#007565"/>
+      <stop offset="0.58" stop-color="#00594C"/>
+      <stop offset="1" stop-color="#003E36"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="150" y1="333" x2="367" y2="272" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E0B35B"/>
+      <stop offset="1" stop-color="#B67824"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="118" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="174" fill="#F4FBF9"/>
+  <circle cx="256" cy="256" r="142" fill="#E4F3EF"/>
+  <path d="M256 354c-47-42-94-79-94-132 0-37 28-65 65-65 17 0 33 7 45 21 12-14 28-21 45-21 37 0 65 28 65 65 0 53-47 90-126 132Z" fill="#00594C"/>
+  <path d="M161 316h62l25-68 33 103 25-67h45" fill="none" stroke="url(#gold)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="210" cy="206" r="12" fill="#F4FBF9" opacity=".95"/>
+  <circle cx="238" cy="188" r="11" fill="#F4FBF9" opacity=".95"/>
+  <circle cx="274" cy="188" r="11" fill="#F4FBF9" opacity=".95"/>
+  <circle cx="302" cy="206" r="12" fill="#F4FBF9" opacity=".95"/>
 </svg>

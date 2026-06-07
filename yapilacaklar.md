@@ -592,5 +592,5 @@ Bu fazın ürün dili teşhis değil; çekim kalitesini artırma, değişim taki
 - [x] GitHub Actions debug APK build workflow'u eklendi: `.github/workflows/android-build.yml`.
 - [x] Signed release AAB icin secret tabanli keystore/Gradle imza altyapisi hazirlandi.
 - [x] Build notlari eklendi: `docs/ANDROID_BUILD.md`.
-- [ ] Store oncesi Pet Help launcher/adaptive ikonlari tasarlanip Android kaynaklarina islenecek.
+- [x] Store oncesi Pet Help launcher/adaptive ikonlari tasarlanip Android ve PWA kaynaklarina islendi.
 - [ ] GitHub Secrets girildikten sonra signed AAB workflow ciktisi Play Console icin test edilecek.
