@@ -2,6 +2,7 @@ import { getDbClient } from './dbClient.js';
 import { postApiJson } from './apiClient.js';
 import { recordFeatureUsage } from './billing.js';
 import { translateForLocale } from '../i18n/tr.js';
+import { CLIENT_ERROR_CODES, makeCodedError } from './errorCodes.js';
 
 const LOCAL_KEY = 'pati_form_submissions';
 
@@ -14,6 +15,10 @@ function saveLocal(record) {
   const current = JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]');
   current.unshift(record);
   localStorage.setItem(LOCAL_KEY, JSON.stringify(current.slice(0, 50)));
+}
+
+function shouldRequireRemote(userId) {
+  return !import.meta.env?.DEV && userId && userId !== 'user-1';
 }
 
 function first(value) {
@@ -646,7 +651,14 @@ export async function submitFeatureForm({ userId, petId, featureCode, locale = '
         invitePath: result.invitePath || result.data?.invitePath,
         inviteText: result.inviteText || result.data?.inviteText
       };
-    } catch {}
+    } catch (error) {
+      if (shouldRequireRemote(record.user_id)) {
+        throw makeCodedError('form_sync_failed', {
+          code: error?.code || CLIENT_ERROR_CODES.form_sync_failed,
+          message: error?.message || 'form_sync_failed'
+        });
+      }
+    }
     saveLocal({ ...record, storage: 'local-fallback' });
     const localDomain = featureCode === 'qr' && record.pet_id ? saveLocalQrCard(record, payloadObject) : null;
     const localDocument = ['clinic-export', 'document-ai', 'vet-prep'].includes(featureCode) ? 'documents' : null;

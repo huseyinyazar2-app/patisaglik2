@@ -1,6 +1,7 @@
 import { getDbClient } from './dbClient.js';
 import { getApiJson, postApiJson } from './apiClient.js';
 import { translateForLocale } from '../i18n/tr.js';
+import { CLIENT_ERROR_CODES, makeCodedError } from './errorCodes.js';
 
 function parseJson(value, fallback = {}) {
   try {
@@ -235,8 +236,10 @@ export function mergeRecentRecords(records) {
 
 function updateLocalReminder(reminderId, patch) {
   const current = JSON.parse(localStorage.getItem('pati_form_submissions') || '[]');
+  let updated = false;
   const next = current.map((item) => {
     if (item.id !== reminderId) return item;
+    updated = true;
     const payload = parseJson(item.payload);
     return {
       ...item,
@@ -250,6 +253,7 @@ function updateLocalReminder(reminderId, patch) {
     };
   });
   localStorage.setItem('pati_form_submissions', JSON.stringify(next));
+  return updated;
 }
 
 export async function updateReminderStatus({ reminderId, status, snoozeDays = 0 }) {
@@ -266,12 +270,19 @@ export async function updateReminderStatus({ reminderId, status, snoozeDays = 0 
     try {
       await postApiJson('/api/reminders/status', { reminderId, status, snoozeDays });
       return { ok: true, storage: 'api' };
-    } catch {}
-    updateLocalReminder(reminderId, {
-      status: status || 'scheduled',
-      due_at: dueAt
-    });
-    return { ok: true, storage: 'local-fallback' };
+    } catch (error) {
+      const updated = updateLocalReminder(reminderId, {
+        status: status || 'scheduled',
+        due_at: dueAt
+      });
+      if (!updated && !import.meta.env?.DEV) {
+        throw makeCodedError('record_sync_failed', {
+          code: error?.code || CLIENT_ERROR_CODES.record_sync_failed,
+          message: error?.message || 'record_sync_failed'
+        });
+      }
+      return { ok: true, storage: 'local-fallback' };
+    }
   }
 
   if (dueAt) {

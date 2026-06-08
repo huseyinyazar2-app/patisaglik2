@@ -398,6 +398,33 @@ function genericTitle(payload, fallback) {
   return value || fallback;
 }
 
+function slug(value) {
+  return String(value || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 40) || Math.random().toString(36).slice(2, 10);
+}
+
+function checkedLabels(value) {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((item) => typeof item === 'string' || item.checked)
+    .map((item) => typeof item === 'string' ? item : item.label)
+    .filter(Boolean);
+}
+
+function documentTypeForFeature(featureCode) {
+  const map = {
+    'clinic-export': 'clinic_export',
+    'document-ai': 'health_document',
+    'vet-prep': 'vet_prep'
+  };
+  return map[featureCode] || featureCode;
+}
+
 async function insertFormMedia(db, record, payload) {
   const files = Array.isArray(payload.__media_files) ? payload.__media_files : [];
   for (const [index, file] of files.entries()) {
@@ -492,13 +519,79 @@ async function insertFormDomainRecord(db, record, payload) {
         id('document'),
         record.pet_id,
         record.user_id,
-        record.feature_code,
+        documentTypeForFeature(record.feature_code),
         genericTitle(payload, 'Belge'),
         firstValue(pickPayload(payload, ['not', 'note', 'özet', 'ozet'])),
         JSON.stringify({ form_submission_id: record.id, feature_code: record.feature_code, payload })
       ]
     });
     return 'documents';
+  }
+  if (record.feature_code === 'qr') {
+    const current = await db.execute({
+      sql: 'SELECT metadata, public_profile_token FROM pets WHERE id = ? LIMIT 1',
+      args: [record.pet_id]
+    });
+    const publicToken = current.rows[0]?.public_profile_token || `qr-${record.pet_id}-${Math.random().toString(36).slice(2, 10)}`;
+    const metadata = parseJson(current.rows[0]?.metadata);
+    await db.execute({
+      sql: `UPDATE pets
+            SET public_profile_token = COALESCE(public_profile_token, ?),
+                metadata = ?,
+                updated_at = ?
+            WHERE id = ?`,
+      args: [
+        publicToken,
+        JSON.stringify({
+          ...metadata,
+          qr_health_card: {
+            form_submission_id: record.id,
+            public_token: publicToken,
+            public_path: `/public/pet/${publicToken}`,
+            shared_fields: checkedLabels(pickPayload(payload, ['shared fields', 'paylasilan alanlar'], [])),
+            updated_at: new Date().toISOString()
+          }
+        }),
+        new Date().toISOString(),
+        record.pet_id
+      ]
+    });
+    return { table: 'pets', publicToken, publicPath: `/public/pet/${publicToken}` };
+  }
+  if (record.feature_code === 'sitter') {
+    const displayName = genericTitle(payload, 'Bakici');
+    const contact = firstValue(pickPayload(payload, ['phone email', 'email', 'phone', 'telefon', 'e-posta'], ''));
+    const email = contact.includes('@') ? contact : `${slug(contact || displayName)}@invite.local`;
+    const invitedUserId = `user-invite-${slug(email)}`;
+    const memberId = `member-${record.pet_id}-${invitedUserId}`;
+    const now = new Date().toISOString();
+    const ends = new Date();
+    ends.setDate(ends.getDate() + 7);
+    await db.execute({
+      sql: `INSERT INTO users (id, email, display_name, locale)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(email) DO UPDATE SET display_name = excluded.display_name`,
+      args: [invitedUserId, email, displayName, record.locale || 'tr']
+    });
+    const userResult = await db.execute({ sql: 'SELECT id FROM users WHERE email = ? LIMIT 1', args: [email] });
+    const finalUserId = userResult.rows[0]?.id || invitedUserId;
+    await db.execute({
+      sql: `INSERT INTO pet_members
+        (id, pet_id, user_id, role_id, invited_by_user_id, status, access_starts_at, access_ends_at, updated_at)
+        VALUES (?, ?, ?, 'role-sitter', ?, 'invited', ?, ?, ?)
+        ON CONFLICT(pet_id, user_id) DO UPDATE SET
+          role_id = excluded.role_id,
+          invited_by_user_id = excluded.invited_by_user_id,
+          status = excluded.status,
+          access_ends_at = excluded.access_ends_at,
+          updated_at = excluded.updated_at`,
+      args: [memberId, record.pet_id, finalUserId, record.user_id, now, ends.toISOString(), now]
+    });
+    return {
+      table: 'pet_members',
+      invitePath: `/invite/sitter/${memberId}`,
+      inviteText: `${displayName} icin bakici daveti hazir.`
+    };
   }
   return null;
 }
@@ -526,8 +619,18 @@ async function handleSubmitForm(req, res) {
     args: [record.id, record.user_id, record.pet_id, record.feature_code, record.locale, record.status, JSON.stringify(record.payload), now, now, now]
   });
   const mediaCount = await insertFormMedia(db, record, record.payload);
-  const domainTable = await insertFormDomainRecord(db, record, record.payload);
-  return sendJson(res, 200, { ok: true, id: record.id, domainTable, mediaCount });
+  const domainResult = await insertFormDomainRecord(db, record, record.payload);
+  const domainTable = typeof domainResult === 'string' ? domainResult : domainResult?.table;
+  return sendJson(res, 200, {
+    ok: true,
+    id: record.id,
+    domainTable,
+    mediaCount,
+    publicToken: domainResult?.publicToken,
+    publicPath: domainResult?.publicPath,
+    invitePath: domainResult?.invitePath,
+    inviteText: domainResult?.inviteText
+  });
 }
 
 async function mediaBySubmission(db, petId, ids) {

@@ -1,6 +1,7 @@
 import { getDbClient } from './dbClient.js';
 import { getApiJson, postApiJson } from './apiClient.js';
 import { translateForLocale } from '../i18n/tr.js';
+import { CLIENT_ERROR_CODES, makeCodedError } from './errorCodes.js';
 
 const LOCAL_KEY = 'pati_measurements';
 
@@ -19,6 +20,10 @@ function writeLocal(records) {
 
 function rowToObject(row) {
   return Object.fromEntries(Object.entries(row));
+}
+
+function shouldRequireRemote(userId) {
+  return !import.meta.env?.DEV && userId && userId !== 'user-1';
 }
 
 export async function saveMeasurement({ userId, petId, type, value, unit, measuredAt, note, metadata = {} }) {
@@ -53,7 +58,14 @@ export async function saveMeasurement({ userId, petId, type, value, unit, measur
         metadata
       });
       return { ok: true, storage: 'api', id: result.id || result.data?.id || record.id };
-    } catch {}
+    } catch (error) {
+      if (shouldRequireRemote(userId)) {
+        throw makeCodedError('measurement_sync_failed', {
+          code: error?.code || CLIENT_ERROR_CODES.measurement_sync_failed,
+          message: error?.message || 'measurement_sync_failed'
+        });
+      }
+    }
     writeLocal([record, ...readLocal()]);
     return { ok: true, storage: 'local-fallback', id: record.id };
   }
