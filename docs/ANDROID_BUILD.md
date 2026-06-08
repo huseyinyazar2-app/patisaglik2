@@ -28,4 +28,5 @@ Workflow, secret'lardan `android/keystore.properties` dosyasini gecici olarak ur
 
 - Pet Help launcher/adaptive ikonlari Android ve PWA kaynaklarina islendi.
 - Play Console icon ve feature graphic hazirlandi: `store/play-console/`.
+- Production APK, API cagirilari icin varsayilan olarak `https://api.pethelp.app` adresini kullanir.
 - OTP ve odeme ekranlari ilk store surumu icin pasif tutuldu; sonradan guncelleme ile acilacak.
