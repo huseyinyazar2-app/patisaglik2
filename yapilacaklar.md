@@ -604,3 +604,13 @@ Bu fazın ürün dili teşhis değil; çekim kalitesini artırma, değişim taki
 - [x] Gercek kullanicida pet kaydi/guncellemesi API'ye yazilamazsa sessiz local fallback basarili sayilmayacak sekilde duzeltildi.
 - [x] Login sonrasi kullanicinin petleri sunucudan cekilip ilk pet aktif secilecek sekilde akis duzeltildi.
 - [x] Canli smoke test yapildi: test kullanici olusturuldu, pet kaydedildi, geri okumada ad/cinsiyet/kilo/kisir durumu dogru geldi.
+
+## Form/API/DB Senkronizasyon Kontrolu - 08.06.2026
+
+- [x] Form kayitlarinda gercek kullanici icin sessiz local fallback kapatildi; API yazimi basarisizsa hata kodlu uyari donuyor.
+- [x] Olcum kayitlarinda gercek kullanici icin sessiz local fallback kapatildi.
+- [x] Hatirlatici status guncellemede API basarisiz ve local kayit yoksa basarili sayilmamasi saglandi.
+- [x] API belge kayit tipleri uygulamanin bekledigi DB degerleriyle hizalandi: `clinic_export`, `health_document`, `vet_prep`.
+- [x] API tarafina `qr` ve `sitter` form domain kayitlari eklendi; `publicPath` ve `invitePath` cevaplari donuyor.
+- [x] Mobil/rapor belge servisi icin `/api/documents` ve `/api/documents/:id` okuma endpointleri eklendi.
+- [x] Canli smoke test yapildi: expense, reminders, 9 saglik kaydi tipi, 3 belge tipi, QR, sitter, measurements ve reminder status update basarili.
