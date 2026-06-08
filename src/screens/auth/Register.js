@@ -75,6 +75,8 @@ export function render(params = {}, query = {}) {
 }
 
 export function afterRender(params = {}, query = {}) {
+  const state = getState();
+
   document.getElementById('register-submit-btn')?.addEventListener('click', async () => {
     const name = document.getElementById('register-name')?.value?.trim();
     const phone = document.getElementById('register-phone')?.value?.trim();
