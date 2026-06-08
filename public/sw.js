@@ -1,5 +1,17 @@
-const CACHE_NAME = 'pet-help-shell-v1';
-const APP_SHELL = ['/', '/index.html', '/manifest.webmanifest', '/pwa-icon.svg'];
+const CACHE_NAME = 'pet-help-shell-v2';
+const APP_SHELL = [
+  '/',
+  '/index.html',
+  '/manifest.webmanifest',
+  '/pwa-icon.svg',
+  '/assets/auth/splash-hero.jpg',
+  '/assets/auth/onboarding-passport.jpg',
+  '/assets/auth/onboarding-triage.jpg',
+  '/assets/auth/onboarding-media.jpg',
+  '/assets/auth/onboarding-report.jpg',
+  '/assets/auth/auth-secure.jpg',
+  '/assets/auth/auth-register.jpg'
+];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()));
