@@ -28,6 +28,17 @@ function measurementLabel(type) {
   return t(`healthPassport.measurements.${type}`) || type || t('reports.detail.measurements.default');
 }
 
+function optionLabel(group, value) {
+  if (!value || value === 'unknown') return t('common.not_specified');
+  return t(`${group}.${value}`);
+}
+
+function weightLabel(weight) {
+  const value = Number(String(weight ?? '').replace(',', '.'));
+  if (!Number.isFinite(value) || value <= 0) return t('common.not_specified');
+  return `${value.toLocaleString(getLocale() === 'tr' ? 'tr-TR' : getLocale(), { maximumFractionDigits: 1 })} kg`;
+}
+
 function renderStatPlaceholders(values = {}) {
   return `
     <div><span>${t('reports.detail.health_types.default')}</span><strong>${values.health ?? '...'}</strong><small>${t('healthPassport.archive')}</small></div>
@@ -76,6 +87,12 @@ export function render() {
             <p>${escapeHtml([pet?.breed, pet?.age, pet?.weight ? `${pet.weight} kg` : ''].filter(Boolean).join(t('history.separator')) || t('healthPassport.profile_info'))}</p>
           </div>
           <button class="btn btn-sm btn-primary" id="btnQr">QR</button>
+        </div>
+
+        <div class="passport-profile-grid">
+          <div><span>${t('pets.gender')}</span><strong>${escapeHtml(optionLabel('pets', pet?.gender))}</strong></div>
+          <div><span>${t('pets.weight')}</span><strong>${escapeHtml(weightLabel(pet?.weight))}</strong></div>
+          <div><span>${t('pets.neutered')}</span><strong>${escapeHtml(optionLabel('pets', pet?.neutered))}</strong></div>
         </div>
 
         <div class="passport-grid" id="passportStats">

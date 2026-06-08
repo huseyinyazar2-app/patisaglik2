@@ -68,6 +68,9 @@ function ageLabel(birthDate) {
 
 function normalize(row) {
   const metadata = typeof row.metadata === 'string' ? parseJson(row.metadata) : row.metadata || {};
+  const gender = row.sex || row.gender || metadata.sex || metadata.gender || 'unknown';
+  const neutered = row.neutered_status ?? row.neutered ?? metadata.neutered_status ?? metadata.neutered ?? metadata.neuteredStatus;
+  const weight = numberFromInput(row.weight_kg ?? row.weight ?? metadata.weight_kg ?? metadata.weight);
   const pet = {
     id: row.id,
     name: row.name,
@@ -75,9 +78,9 @@ function normalize(row) {
     breed: metadata.breed || row.breed || '',
     birthDate: row.birth_date || row.birthDate || '',
     age: row.approximate_age_label || row.age || ageLabel(row.birth_date || row.birthDate),
-    gender: row.sex || row.gender || 'unknown',
-    neutered: normalizeYesNoUnknown(row.neutered_status ?? row.neutered),
-    weight: numberFromInput(row.weight_kg ?? row.weight),
+    gender,
+    neutered: normalizeYesNoUnknown(neutered),
+    weight,
     ownership: row.ownership_type || row.ownership || 'owned',
     location: metadata.location || row.location || '',
     volunteerNote: metadata.volunteerNote || row.volunteerNote || '',
@@ -179,6 +182,9 @@ export async function savePet({ userId = 'user-1', pet }) {
     medical_summary: pet.rawHistory || '',
     metadata: JSON.stringify({
       breed: pet.breed || '',
+      gender: pet.gender || 'unknown',
+      weight: numberFromInput(pet.weight),
+      neutered: pet.neutered || 'unknown',
       chronic: pet.chronic || '',
       allergies: pet.allergies || '',
       medications: pet.medications || '',
@@ -234,10 +240,14 @@ export async function updatePet({ userId = 'user-1', petId, pet }) {
   const now = new Date().toISOString();
   const currentRaw = readLocal();
   const current = currentRaw.find((item) => item.id === petId);
+  const currentPet = current ? normalize(current) : {};
   const metadata = parseJson(current?.metadata);
   const nextMetadata = {
     ...metadata,
     breed: pet.breed ?? metadata.breed ?? '',
+    gender: pet.gender ?? currentPet.gender ?? metadata.gender ?? 'unknown',
+    weight: numberFromInput(pet.weight ?? currentPet.weight ?? metadata.weight),
+    neutered: pet.neutered ?? currentPet.neutered ?? metadata.neutered ?? 'unknown',
     chronic: pet.chronic ?? metadata.chronic ?? '',
     allergies: pet.allergies ?? metadata.allergies ?? '',
     medications: pet.medications ?? metadata.medications ?? '',
@@ -257,11 +267,11 @@ export async function updatePet({ userId = 'user-1', petId, pet }) {
     primary_owner_user_id: userId,
     species_id: current?.species_id || speciesId(pet.type || current?.type),
     name: pet.name ?? current?.name ?? '',
-    sex: pet.gender ?? current?.sex ?? 'unknown',
-    birth_date: pet.birthDate ?? current?.birth_date ?? null,
-    approximate_age_label: ageLabel(pet.birthDate ?? current?.birth_date),
-    weight_kg: numberFromInput(pet.weight ?? current?.weight_kg),
-    neutered_status: pet.neutered ?? current?.neutered_status ?? 'unknown',
+    sex: pet.gender ?? current?.sex ?? current?.gender ?? currentPet.gender ?? 'unknown',
+    birth_date: pet.birthDate ?? current?.birth_date ?? current?.birthDate ?? null,
+    approximate_age_label: ageLabel(pet.birthDate ?? current?.birth_date ?? current?.birthDate),
+    weight_kg: numberFromInput(pet.weight ?? current?.weight_kg ?? current?.weight ?? currentPet.weight),
+    neutered_status: pet.neutered ?? current?.neutered_status ?? current?.neutered ?? currentPet.neutered ?? 'unknown',
     ownership_type: pet.ownership ?? current?.ownership_type ?? 'owned',
     medical_summary: pet.rawHistory ?? current?.medical_summary ?? '',
     avatar_url: pet.photo ?? current?.avatar_url ?? null,
