@@ -2,6 +2,7 @@ import { getDbClient } from './dbClient.js';
 import { getApiJson, postApiJson } from './apiClient.js';
 import { buildPetRiskContext } from './petContext.js';
 import { translateForLocale } from '../i18n/tr.js';
+import { CLIENT_ERROR_CODES, makeCodedError } from './errorCodes.js';
 
 const LOCAL_KEY = 'pati_pets';
 
@@ -16,6 +17,10 @@ function readLocal() {
 
 function writeLocal(pets) {
   localStorage.setItem(LOCAL_KEY, JSON.stringify(pets));
+}
+
+function shouldRequireRemote(userId) {
+  return !import.meta.env?.DEV && userId && userId !== 'user-1';
 }
 
 function mergeLocalCache(pets) {
@@ -158,7 +163,14 @@ export async function getPets({ userId = 'user-1' } = {}) {
       const pets = (result.data?.pets || result.pets || []).map(normalize);
       mergeLocalCache(pets);
       return pets;
-    } catch {}
+    } catch (error) {
+      if (shouldRequireRemote(userId)) {
+        throw makeCodedError('pet_sync_failed', {
+          code: error?.code || CLIENT_ERROR_CODES.pet_sync_failed,
+          message: error?.message || 'pet_sync_failed'
+        });
+      }
+    }
     return getLocalPets();
   }
 
@@ -214,7 +226,14 @@ export async function savePet({ userId = 'user-1', pet }) {
       const savedId = result.id || result.data?.id || record.id;
       writeLocal([normalize({ ...record, id: savedId, type: pet.type }), ...readLocal().filter((item) => item.id !== savedId)]);
       return { ok: true, storage: 'api', id: savedId };
-    } catch {}
+    } catch (error) {
+      if (shouldRequireRemote(userId)) {
+        throw makeCodedError('pet_sync_failed', {
+          code: error?.code || CLIENT_ERROR_CODES.pet_sync_failed,
+          message: error?.message || 'pet_sync_failed'
+        });
+      }
+    }
     writeLocal([normalize({ ...record, type: pet.type }), ...readLocal()]);
     return { ok: true, storage: 'local-fallback', id: record.id };
   }
@@ -302,7 +321,14 @@ export async function updatePet({ userId = 'user-1', petId, pet }) {
     try {
       await postApiJson('/api/pets/update', { userId, petId, pet });
       return { ok: true, storage: 'api', id: petId };
-    } catch {}
+    } catch (error) {
+      if (shouldRequireRemote(userId)) {
+        throw makeCodedError('pet_sync_failed', {
+          code: error?.code || CLIENT_ERROR_CODES.pet_sync_failed,
+          message: error?.message || 'pet_sync_failed'
+        });
+      }
+    }
     return { ok: true, storage: 'local-fallback', id: petId };
   }
 

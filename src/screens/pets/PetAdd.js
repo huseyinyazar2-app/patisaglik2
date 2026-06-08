@@ -3,6 +3,7 @@ import { getState, setActivePet } from '../../store.js';
 import { t } from '../../i18n/tr.js';
 import { getLocalPets, savePet, updatePet } from '../../services/pets.js';
 import { showToast } from '../../ui/toast.js';
+import { formatErrorForDeveloper } from '../../services/errorCodes.js';
 
 const petTypes = [
   ['cat', 'pets.cat'],
@@ -266,7 +267,7 @@ export function afterRender(params = {}) {
     } catch (err) {
       btn.textContent = originalText;
       btn.disabled = false;
-      showToast(`${t('pets.save_error')}: ${err.message}`);
+      showToast(formatErrorForDeveloper(err, t('pets.save_error')));
     }
   });
 }

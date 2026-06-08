@@ -2,6 +2,7 @@ export const CLIENT_ERROR_CODES = {
   network_error: 9001,
   upload_failed: 9002,
   local_file_read_failed: 9003,
+  pet_sync_failed: 9101,
   missing_file: 3101,
   missing_key: 3102,
   http_error: 3999,

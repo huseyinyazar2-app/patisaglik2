@@ -1,10 +1,11 @@
 // Pet Help — Login Screen
 import { navigate } from '../../router.js';
-import { getState, setState } from '../../store.js';
+import { getState, setActivePet, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
 import { showToast } from '../../ui/toast.js';
 import { saveLocalUserProfile } from '../../services/users.js';
 import { loginAccount } from '../../services/apiClient.js';
+import { getPets } from '../../services/pets.js';
 
 function canUseLocalAuthFallback(error) {
   return /db_not_configured|not_found|http_404|Failed to fetch|Unexpected token/i.test(String(error?.message || error || ''));
@@ -116,7 +117,17 @@ export function afterRender(params = {}, query = {}) {
       }
       s.user = { ...s.user, ...profile, isLoggedIn: true };
     });
-    navigate(localDataReset ? '/pets/select' : '/home');
+    try {
+      const pets = await getPets({ userId: profile.id || 'user-1' });
+      if (pets.length) {
+        setActivePet(pets[0].id);
+        navigate('/home');
+      } else {
+        navigate('/pets/select');
+      }
+    } catch {
+      navigate('/pets/select');
+    }
     if (btn) {
       btn.disabled = false;
       btn.textContent = originalText;
