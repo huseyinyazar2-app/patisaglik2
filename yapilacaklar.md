@@ -596,3 +596,11 @@ Bu fazın ürün dili teşhis değil; çekim kalitesini artırma, değişim taki
 - [x] Play Console app icon ve feature graphic hazirlandi: `store/play-console/`.
 - [x] Mobil developer testleri icin numerik hata kodlari, AI audit log, admin AI log ekrani ve B2/AI hata gorunurlugu eklendi.
 - [ ] GitHub Secrets girildikten sonra signed AAB workflow ciktisi Play Console icin test edilecek.
+
+## Pet Profil Senkronizasyonu - 08.06.2026
+
+- [x] Canli API'de `/api/pets` endpointinin eski deploy nedeniyle 404 dondugu tespit edildi.
+- [x] Coolify `patisaglik2-api` deployu tetiklendi; canli `/api/pets` endpointi 200 olarak dogrulandi.
+- [x] Gercek kullanicida pet kaydi/guncellemesi API'ye yazilamazsa sessiz local fallback basarili sayilmayacak sekilde duzeltildi.
+- [x] Login sonrasi kullanicinin petleri sunucudan cekilip ilk pet aktif secilecek sekilde akis duzeltildi.
+- [x] Canli smoke test yapildi: test kullanici olusturuldu, pet kaydedildi, geri okumada ad/cinsiyet/kilo/kisir durumu dogru geldi.
