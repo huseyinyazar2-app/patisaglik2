@@ -18,6 +18,15 @@ function answerValues(value) {
   return [value];
 }
 
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 function answerRisk(value) {
   const text = String(value).toLocaleLowerCase('tr-TR');
   if (text === 'hay\u0131r' || text === 'hi\u00e7' || text === 'normal' || text === 'skipped') return 0;
@@ -151,15 +160,26 @@ export function render() {
   const state = getState();
   const session = state.session || {};
   const pet = getActivePet(state.activePetId);
-  const assessment = calculateAssessment(session);
+  const localAssessment = calculateAssessment(session);
+  const ai = session.aiAssessment || null;
+  const assessment = ai ? {
+    ...localAssessment,
+    level: ai.level || localAssessment.level,
+    score: Number.isFinite(Number(ai.score)) ? Math.round(Number(ai.score)) : localAssessment.score,
+    confidence: Number.isFinite(Number(ai.confidence)) ? Math.round(Number(ai.confidence)) : localAssessment.confidence,
+    aiBacked: true
+  } : localAssessment;
   const guidance = categoryGuidance(session.categories || []);
+  const safeSteps = ai?.safeSteps?.length ? ai.safeSteps : guidance.steps;
+  const watchItems = ai?.watchItems?.length ? ai.watchItems : guidance.warnings;
+  const dontItems = ai?.dontItems?.length ? ai.dontItems : t('result.dont_items');
   const urgency = urgencyMeta(assessment.level);
   const urgent = assessment.level === 'critical' || assessment.level === 'high';
   const categoryText = (session.categories || []).map(c => categoryLabels[c] || c).join(', ') || t('result.category_general');
   const completedEvidenceText = assessment.completedEvidence.length > 0
     ? tr('result.evidence_done', { count: assessment.completedEvidence.length })
     : t('result.evidence_missing');
-  const contextWarnings = session.petRiskContext?.warnings || [];
+  const contextWarnings = ai?.profileContext?.length ? ai.profileContext : (session.petRiskContext?.warnings || []);
 
   return `
     <div class="screen premium-result">
@@ -208,17 +228,34 @@ export function render() {
           <div class="premium-icon-box">${window.__icons?.clipboard}</div>
           <div>
             <h3>${t('result.clinical_summary')}</h3>
-            <p>${tr('result.complaint_summary', { pet: pet?.name || t('result.pet_fallback'), complaint: session.complaintText || t('result.complaint_missing'), category: categoryText })}</p>
-            <p>${completedEvidenceText} ${assessment.uncertainCount > 0 ? tr('result.uncertain_sentence', { count: assessment.uncertainCount }) : ''}</p>
+            <p>${ai?.clinicalSummary ? escapeHtml(ai.clinicalSummary) : tr('result.complaint_summary', { pet: pet?.name || t('result.pet_fallback'), complaint: session.complaintText || t('result.complaint_missing'), category: categoryText })}</p>
+            <p>${ai?.evidenceIntegration ? escapeHtml(ai.evidenceIntegration) : `${completedEvidenceText} ${assessment.uncertainCount > 0 ? tr('result.uncertain_sentence', { count: assessment.uncertainCount }) : ''}`}</p>
+            ${ai?.aiJobId ? `<small>${t('result.ai_job')}: ${escapeHtml(ai.aiJobId)}</small>` : ''}
           </div>
         </div>
+
+        ${ai?.mediaFindings?.length ? `
+          <div class="premium-result-section ${ai.mediaFindings.some(item => item.relevance === 'unrelated') ? 'warning' : ''}">
+            <div class="premium-icon-box">${window.__icons?.camera}</div>
+            <div>
+              <h3>${t('result.media_findings_title')}</h3>
+              <ul>${ai.mediaFindings.map(item => `
+                <li>
+                  <strong>${escapeHtml(item.type || t('common.unknown'))} · ${t(`result.media_relevance.${item.relevance || 'unclear'}`)}</strong>
+                  ${escapeHtml(item.observations || t('result.media_no_observation'))}
+                  ${item.warnings?.length ? `<br><small>${item.warnings.map(escapeHtml).join(' · ')}</small>` : ''}
+                </li>
+              `).join('')}</ul>
+            </div>
+          </div>
+        ` : ''}
 
         ${contextWarnings.length ? `
           <div class="premium-result-section warning">
             <div class="premium-icon-box">${window.__icons?.shield}</div>
             <div>
               <h3>${t('result.profile_context')}</h3>
-              <ul>${contextWarnings.slice(0, 4).map(item => `<li>${item}</li>`).join('')}</ul>
+              <ul>${contextWarnings.slice(0, 4).map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
             </div>
           </div>
         ` : ''}
@@ -227,7 +264,7 @@ export function render() {
           <div class="premium-icon-box">${window.__icons?.alert}</div>
           <div>
             <h3>${t('result.watch_title')}</h3>
-            <ul>${guidance.warnings.map(item => `<li>${item}</li>`).join('')}</ul>
+            <ul>${watchItems.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
             <p class="danger-text">${urgent ? t('result.urgent_home_warning') : t('result.watch_home_warning')}</p>
           </div>
         </div>
@@ -236,7 +273,7 @@ export function render() {
           <div class="premium-icon-box">${window.__icons?.checkCircle}</div>
           <div>
             <h3>${t('result.safe_steps_title')}</h3>
-            <ul>${guidance.steps.map(step => `<li>${step}</li>`).join('')}</ul>
+            <ul>${safeSteps.map(step => `<li>${escapeHtml(step)}</li>`).join('')}</ul>
           </div>
         </div>
 
@@ -244,15 +281,25 @@ export function render() {
           <div class="premium-icon-box">${window.__icons?.xCircle}</div>
           <div>
             <h3>${t('result.dont_title')}</h3>
-            <ul>${t('result.dont_items').map(item => `<li>${item}</li>`).join('')}</ul>
+            <ul>${dontItems.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
           </div>
         </div>
+
+        ${ai?.limitations?.length ? `
+          <div class="premium-result-section warning">
+            <div class="premium-icon-box">${window.__icons?.alert}</div>
+            <div>
+              <h3>${t('result.ai_limitations_title')}</h3>
+              <ul>${ai.limitations.map(item => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
+            </div>
+          </div>
+        ` : ''}
 
         <div class="premium-followup-plan">
           <div class="premium-icon-box">${window.__icons?.calendar}</div>
           <div>
             <h3>${urgent ? t('result.next_step_title') : t('result.followup_plan_title')}</h3>
-            <div class="premium-plan-row"><span>${t('result.recommendation')}</span><strong>${urgency.action}</strong></div>
+            <div class="premium-plan-row"><span>${t('result.recommendation')}</span><strong>${escapeHtml(ai?.nextStep || urgency.action)}</strong></div>
             <div class="premium-plan-row"><span>${t('result.reminder')}</span><strong>${urgent ? t('result.after_clinic') : t('result.open')}</strong></div>
             <div class="premium-plan-row"><span>${t('result.watch_duration')}</span><strong>${urgent ? t('result.immediately') : assessment.level === 'medium' ? '24 saat' : '48 saat'}</strong></div>
           </div>

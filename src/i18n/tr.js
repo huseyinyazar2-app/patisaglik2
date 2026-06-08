@@ -134,6 +134,8 @@ const tr = {
     watch_status: 'Takip gereken kayıt var', urgent_status: 'Acil kayıt var',
     free_area: 'Ücretsiz Sağlık Alanı',
     start_ai_check: 'AI Kontrol Başlat',
+    ai_credit_title: 'AI kredisi',
+    ai_credit_balance: '{count} kredi kaldı',
     upcoming: 'Yaklaşanlar',
     free: 'Ücretsiz',
     record_summary: 'Kayıt Özeti',
@@ -235,11 +237,26 @@ const tr = {
   questions: {
     skip: 'Bilmiyorum / Atla', next: 'Devam', back: 'Geri',
     short_placeholder: 'Kısaca açıklayın...',
-    step_title: 'Adım 2/5 (Soru {current}/{total})',
+    step_title: 'Soru {current}/{total}',
     cancel_test: 'Testi İptal Et',
     cancel_title: 'Kontrolü iptal et',
     cancel_message: 'Tüm ilerleme silinecek.',
     cancel_confirm: 'İptal Et'
+  },
+  questionOptionFixes: {
+    yes_no_unsure: ['Evet', 'Hayır', 'Emin değilim'],
+    pain_location: ['Baş / boyun', 'Karın / gövde', 'Sırt / bel', 'Bacak / pati', 'Dokununca genel tepki', 'Emin değilim'],
+    body_location: ['Baş / yüz', 'Gövde / karın', 'Bacak / pati', 'Kulak / göz', 'Ağız / diş', 'Emin değilim'],
+    change_trend: ['Azaldı', 'Aynı', 'Arttı', 'Emin değilim'],
+    vomit_count: ['Kusmadı', '1 kez', '2-3 kez', '4+ kez', 'Emin değilim'],
+    appetite: ['Normal', 'Azaldı', 'Hiç yemiyor', 'Emin değilim'],
+    water_intake: ['Normal', 'Azaldı', 'Arttı', 'Emin değilim'],
+    stool_pattern_text: 'Dışkı yapısı ve sıklığı nasıl?',
+    stool_pattern: ['Normal', 'Yumuşak / sulu - 1 kez', 'Yumuşak / sulu - 2-3 kez', 'Sulu - 4+ kez', 'Çok sık / tutamıyor', 'Sert / zorlanıyor', 'Emin değilim'],
+    gum_color: ['Normal pembe', 'Soluk / beyaz', 'Mor / mavi', 'Sarı', 'Emin değilim'],
+    wound_change: ['Daha iyi', 'Aynı', 'Daha kötü', 'Akıntı / kanama var', 'Emin değilim'],
+    operation_type: ['Kısırlaştırma', 'Diş işlemi', 'Dikişli yara', 'Ortopedik işlem', 'Diğer', 'Emin değilim'],
+    tox_amount_text: 'Alınan miktar hakkında bilgi var mı?'
   },
   tasks: {
     title: 'Bu kontrol için önerilen kayıtlar',
@@ -297,7 +314,9 @@ const tr = {
     answers_count: '{count} soru yanıtlandı.',
     visual: 'Görsel',
     measurement: 'Ölçüm',
-    tasks_skipped: '{count} {label} görev atlandı.'
+    tasks_skipped: '{count} {label} görev atlandı.',
+    checking_credit: 'Kredi kontrol ediliyor...',
+    credit_check_failed: 'Kredi kontrolü başarısız'
   },
   processing: {
     title: 'Kontrol değerlendiriliyor',
@@ -307,7 +326,8 @@ const tr = {
     step_risk: 'Yanıtlar klinik risk açısından kontrol ediliyor',
     step_evidence: 'Eklenen medya ve ölçümler inceleniyor',
     step_report: 'Ön değerlendirme raporu hazırlanıyor',
-    disclaimer: 'Bu değerlendirme veteriner muayenesinin yerine geçmez.'
+    disclaimer: 'Bu değerlendirme veteriner muayenesinin yerine geçmez.',
+    ai_failed: 'AI analizi alınamadı'
   },
   result: {
     title: 'Sonuç',
@@ -327,16 +347,25 @@ const tr = {
     low_confidence_title: 'Güven Düşük',
     low_confidence_desc: 'Bu sonuç eksik veya belirsiz cevaplar nedeniyle temkinli yorumlanmalıdır. Eksik kanıtları tamamlamadan kesin çıkarım yapılmamalıdır.',
     clinical_summary: 'Klinik Özet',
+    ai_job: 'AI log kaydı',
     complaint_summary: '{pet} için bildirilen şikayet: “{complaint}”. Eşleşen alan: {category}.',
     complaint_missing: 'Belirtilmedi',
     pet_fallback: 'Petiniz',
     uncertain_sentence: '{count} acil belirti sorusunda kullanıcı emin değildi.',
     profile_context: 'Profil Bağlamı',
+    media_findings_title: 'Medya Bulguları',
+    media_no_observation: 'Bu medya için belirgin klinik gözlem çıkarılamadı.',
+    media_relevance: {
+      relevant: 'şikayetle ilgili',
+      unrelated: 'şikayetle ilgisiz',
+      unclear: 'belirsiz'
+    },
     watch_title: 'Dikkat Edilmesi Gerekenler',
     urgent_home_warning: 'Bu risk seviyesinde evde izlem tek başına yeterli değildir.',
     watch_home_warning: 'Bu belirtilerden biri gelişirse veteriner hekiminize başvurunuz.',
     safe_steps_title: 'Güvenli Takip Adımları',
     dont_title: 'Yapılmaması Gerekenler',
+    ai_limitations_title: 'AI Sınırları',
     dont_items: ['Veteriner önermedikçe insan ilacı, ağrı kesici veya antibiyotik vermeyin.', 'Belirti kötüleşirse evde beklemeyin.', 'Eksik kanıtla sonucu kesin teşhis gibi yorumlamayın.'],
     next_step_title: 'Sonraki Adım',
     followup_plan_title: 'Takip Planı',
@@ -1862,6 +1891,7 @@ JSON döndür:
     heading: 'Veteriner öncesi AI triyaj',
     hero_desc: '{name} için semptom analizi, belge okuma ve klinik hazırlık modülleri burada çalışır.',
     plan: 'Sürüm',
+    credit_balance: '{count} AI kredisi',
     free_note: 'İlk üyelikte 1 AI kredisi verilir. Satın alma kapalıdır; gerekirse admin panelinden kredi artırılıp azaltılabilir.',
     modules_title: 'AI Modülleri',
     assistants: {
@@ -2277,6 +2307,7 @@ JSON döndür:
     max_related: 'Akışı kısa tutmak için en fazla 3 ilişkili ek bulgu seçin.',
     listening: 'Sesli dinleniyor...',
     voice_not_ready: 'Sesli giriş şu an hazır değil. Şikayeti yazabilir veya belirti seçebilirsin.',
+    voice_error: 'Ses alınamadı. Tekrar deneyebilir veya şikayeti yazabilirsin.',
     required: 'Lütfen şikayeti yazın veya belirti seçin.'
   },
   issues: {
@@ -2713,14 +2744,45 @@ function interpolate(value, params = {}) {
   return value.replace(/\{(\w+)\}/g, (_, name) => params[name] ?? `{${name}}`);
 }
 
+function keyAliases(key) {
+  if (!key.startsWith('freeRecords.detail.')) return [];
+  const aliases = [key.replace('freeRecords.detail.', 'detail.')];
+  if (key.startsWith('freeRecords.detail.plans.')) {
+    aliases.push(key.replace('freeRecords.detail.plans.', 'detail.plans.freeRecords.'));
+  }
+  return aliases;
+}
+
 export function t(key, params = {}) {
   const locale = getLocale();
-  return interpolate(readValue(dictionaries[locale], key) ?? readValue(en, key) ?? readValue(tr, key) ?? key, params);
+  const aliases = keyAliases(key);
+  const aliasValue = (dictionary) => aliases.map(alias => readValue(dictionary, alias)).find(value => value !== undefined);
+  return interpolate(
+    readValue(dictionaries[locale], key) ??
+    aliasValue(dictionaries[locale]) ??
+    readValue(en, key) ??
+    aliasValue(en) ??
+    readValue(tr, key) ??
+    aliasValue(tr) ??
+    key,
+    params
+  );
 }
 
 export function translateForLocale(locale, key, params = {}) {
   const normalized = normalizeLocale(locale);
-  return interpolate(readValue(dictionaries[normalized], key) ?? readValue(en, key) ?? readValue(tr, key) ?? key, params);
+  const aliases = keyAliases(key);
+  const aliasValue = (dictionary) => aliases.map(alias => readValue(dictionary, alias)).find(value => value !== undefined);
+  return interpolate(
+    readValue(dictionaries[normalized], key) ??
+    aliasValue(dictionaries[normalized]) ??
+    readValue(en, key) ??
+    aliasValue(en) ??
+    readValue(tr, key) ??
+    aliasValue(tr) ??
+    key,
+    params
+  );
 }
 
 export default tr;

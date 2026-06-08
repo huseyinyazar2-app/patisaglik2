@@ -1,6 +1,11 @@
 import { navigate } from '../../router.js';
-import { getState } from '../../store.js';
+import { getState, setState } from '../../store.js';
+import { getActivePet } from '../../services/pets.js';
+import { postApiJson } from '../../services/apiClient.js';
+import { recordFeatureUsage } from '../../services/billing.js';
+import { questionSets, redFlagQuestions, categoryLabels } from '../../data/questions.js';
 import { t } from '../../i18n/tr.js';
+import { showToast } from '../../ui/toast.js';
 
 function getProcessingSteps(session) {
   const tasks = session.tasks || [];
@@ -18,6 +23,145 @@ function getProcessingSteps(session) {
 
   steps.push(t('processing.step_report'));
   return steps;
+}
+
+function findQuestion(id) {
+  return Object.values(questionSets).flatMap(set => set.questions || []).find(question => question.id === id);
+}
+
+function redFlagText(id) {
+  for (const group of Object.values(redFlagQuestions)) {
+    const question = group.find(item => item.id === id);
+    if (question) return question.text;
+  }
+  return id;
+}
+
+function mediaInlinePart(media, totalBytes) {
+  const dataUrl = String(media.dataUrl || '');
+  const match = dataUrl.match(/^data:([^;]+);base64,(.+)$/);
+  if (!match) return { ref: { omitted: true, omitReason: 'missing_data_url' }, inline: null, nextTotal: totalBytes };
+  const mimeType = media.mimeType || match[1];
+  const base64 = match[2];
+  const byteSize = Math.ceil(base64.length * 0.75);
+  const nextTotal = totalBytes + byteSize;
+  if (byteSize > 6 * 1024 * 1024 || nextTotal > 12 * 1024 * 1024) {
+    return { ref: { omitted: true, omitReason: 'media_too_large_for_inline_ai' }, inline: null, nextTotal: totalBytes };
+  }
+  return {
+    ref: { omitted: false, inlineBytes: byteSize },
+    inline: { mediaId: media.id, mimeType, base64 },
+    nextTotal
+  };
+}
+
+function buildAiRequest(state) {
+  const session = state.session || {};
+  const pet = getActivePet(state.activePetId);
+  const media = session.media || [];
+  let totalInlineBytes = 0;
+  const inlineMedia = [];
+  const mediaRefs = media.map(item => {
+    const inline = mediaInlinePart(item, totalInlineBytes);
+    totalInlineBytes = inline.nextTotal;
+    if (inline.inline) inlineMedia.push(inline.inline);
+    return {
+      mediaId: item.id,
+      taskId: item.taskId,
+      type: item.type,
+      source: item.source,
+      name: item.name,
+      mimeType: item.mimeType,
+      size: item.size,
+      quality: item.quality,
+      note: item.note,
+      qualityCheck: item.qualityCheck || null,
+      ...inline.ref
+    };
+  });
+  const answers = Object.entries(session.questionAnswers || {}).map(([questionId, answer]) => {
+    const question = findQuestion(questionId);
+    return { questionId, question: question?.text_tr || question?.text || questionId, answer };
+  });
+  const redFlags = Object.entries(session.redFlagAnswers || {}).map(([questionId, answer]) => ({
+    questionId,
+    question: redFlagText(questionId),
+    answer
+  }));
+  const payload = {
+    pet: pet ? {
+      id: pet.id,
+      name: pet.name,
+      type: pet.type,
+      breed: pet.breed,
+      age: pet.age,
+      weight: pet.weight,
+      neutered: pet.neutered,
+      chronicDiseases: pet.chronicDiseases || [],
+      allergies: pet.allergies || [],
+      medications: pet.medications || [],
+      rawHistory: pet.rawHistory || '',
+      riskTags: pet.riskTags || [],
+      riskContext: pet.riskContext || null
+    } : null,
+    complaint: {
+      text: session.complaintText || '',
+      selectedChips: session.selectedChips || [],
+      primaryComplaintLabel: session.primaryComplaintLabel || '',
+      categories: (session.categories || []).map(id => ({ id, label: categoryLabels[id] || id })),
+      classifierConfidence: session.classifierConfidence || null,
+      classifierReasons: session.classifierReasons || {}
+    },
+    history: session.historySnapshot || {},
+    redFlags,
+    answers,
+    tasks: (session.tasks || []).map(task => ({
+      id: task.id,
+      key: task.key,
+      title: task.title,
+      type: task.type,
+      priority: task.priority,
+      status: task.status,
+      quality: task.quality,
+      note: task.note,
+      qualityCheck: task.qualityCheck || null
+    })),
+    measurements: session.measurements || []
+  };
+  return { payload, mediaRefs, inlineMedia };
+}
+
+function writeAiDebugLog(entry) {
+  try {
+    const current = JSON.parse(localStorage.getItem('pati_ai_debug_logs') || '[]');
+    current.unshift({ ...entry, createdAt: new Date().toISOString() });
+    localStorage.setItem('pati_ai_debug_logs', JSON.stringify(current.slice(0, 25)));
+  } catch {}
+}
+
+async function runAiTriage() {
+  const state = getState();
+  const request = buildAiRequest(state);
+  writeAiDebugLog({ featureCode: 'ai-triage', direction: 'request', request: { ...request, inlineMedia: request.inlineMedia.map(item => ({ mediaId: item.mediaId, mimeType: item.mimeType, base64Length: item.base64.length })) } });
+  const response = await postApiJson('/api/ai/triage', {
+    userId: state.user?.id || 'user-1',
+    petId: state.activePetId || null,
+    ...request
+  });
+  writeAiDebugLog({ featureCode: 'ai-triage', direction: 'response', aiJobId: response.aiJobId || null, response });
+  if (!response.usage) {
+    await recordFeatureUsage({
+      userId: state.user?.id || 'user-1',
+      petId: state.activePetId || null,
+      featureCode: 'ai-triage',
+      relatedId: response.aiJobId || null
+    });
+  }
+  setState(current => {
+    current.session.aiAssessment = { ...(response.data || {}), aiJobId: response.aiJobId || null };
+    current.session.aiJobId = response.aiJobId || null;
+    current.session.aiError = null;
+  });
 }
 
 export function render(params = {}, query = {}) {
@@ -58,6 +202,7 @@ export function afterRender() {
   const state = getState();
   const steps = getProcessingSteps(state.session || {}).length;
   let currentStep = 0;
+  let aiStarted = false;
 
   const runStep = () => {
     if (currentStep > 0) {
@@ -84,9 +229,19 @@ export function afterRender() {
       currentStep++;
       setTimeout(runStep, 850);
     } else {
-      setTimeout(() => {
-        navigate('/check/new/result');
-      }, 600);
+      if (aiStarted) return;
+      aiStarted = true;
+      runAiTriage().then(() => {
+        setTimeout(() => navigate('/check/new/result'), 350);
+      }).catch((error) => {
+        writeAiDebugLog({ featureCode: 'ai-triage', direction: 'error', error: error?.message || String(error) });
+        setState(current => {
+          current.session.aiAssessment = null;
+          current.session.aiError = error?.message || 'ai_request_failed';
+        });
+        showToast(`${t('processing.ai_failed')}: ${error?.message || 'ai_request_failed'}`, { duration: 5000 });
+        setTimeout(() => navigate('/check/new/summary'), 800);
+      });
     }
   };
 

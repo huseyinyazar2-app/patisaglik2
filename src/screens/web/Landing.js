@@ -35,6 +35,7 @@ export function render() {
           <button type="button" data-scroll="#webSafety">${t('landing.nav_safety')}</button>
           <button type="button" id="btnOpenApp">${t('landing.open_app')}</button>
         </nav>
+        <button type="button" class="web-mobile-open-app" id="btnOpenAppMobile">${t('landing.open_app')}</button>
       </header>
 
       <main class="web-hero">
@@ -205,6 +206,7 @@ export function afterRender() {
   document.getElementById('btnStart')?.addEventListener('click', () => navigate('/auth/register'));
   document.getElementById('btnStartBottom')?.addEventListener('click', () => navigate('/auth/register'));
   document.getElementById('btnOpenApp')?.addEventListener('click', () => navigate('/auth/splash'));
+  document.getElementById('btnOpenAppMobile')?.addEventListener('click', () => navigate('/auth/splash'));
   document.getElementById('btnOpenAppBottom')?.addEventListener('click', () => navigate('/auth/splash'));
   document.getElementById('btnDemo')?.addEventListener('click', () => document.querySelector('#webJourney')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
   document.querySelectorAll('[data-scroll]').forEach((button) => {

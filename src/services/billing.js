@@ -1,4 +1,5 @@
 import { getDbClient } from './dbClient.js';
+import { postApiJson } from './apiClient.js';
 import { translateForLocale } from '../i18n/tr.js';
 
 const LOCAL_PLAN_KEY = 'pati_local_plan_code';
@@ -162,13 +163,22 @@ export async function getAccountBilling({ userId = 'user-1' } = {}) {
 }
 
 export async function getFeatureCreditAvailability({ userId = 'user-1', featureCode }) {
+  const requiresCredit = aiCreditFeatures.has(featureCode) || creditFeatures.has(featureCode);
+  const db = getDbClient();
+  if (!db && !import.meta.env?.DEV && requiresCredit) {
+    try {
+      return await postApiJson('/api/billing/feature-availability', { userId, featureCode });
+    } catch {
+      return { ok: false, cost: 1, source: 'billing_unavailable', remaining: 0 };
+    }
+  }
+
   const billing = await getAccountBilling({ userId });
   const cost = aiCreditFeatures.has(featureCode)
     ? Number(billing.subscription.features?.aiCreditCost || 1)
     : billing.subscription.billingType === 'credit' && creditFeatures.has(featureCode) ? 1 : 0;
   if (cost <= 0) return { ok: true, cost, source: 'free' };
 
-  const db = getDbClient();
   if (!db) {
     const walletBalance = Number(billing.wallet?.balance || 0);
     if (walletBalance >= cost) return { ok: true, cost, source: 'local-wallet', remaining: walletBalance };
@@ -201,6 +211,22 @@ function localUsageRecord(record) {
 }
 
 export async function recordFeatureUsage({ userId = 'user-1', petId = null, featureCode, relatedId = null }) {
+  const requiresCredit = aiCreditFeatures.has(featureCode) || creditFeatures.has(featureCode);
+  const db = getDbClient();
+  if (!db && !import.meta.env?.DEV && requiresCredit) {
+    const result = await postApiJson('/api/billing/record-usage', { userId, petId, featureCode, relatedId });
+    return {
+      ok: true,
+      storage: 'api',
+      usage: {
+        plan_code: result.usage?.plan_code || 'unknown',
+        credit_cost: Number(result.usage?.credit_cost || 0),
+        id: result.usage?.id,
+        credit_source: result.usage?.credit_source || 'api'
+      }
+    };
+  }
+
   const billing = await getAccountBilling({ userId });
   const aiCost = Number(billing.subscription.features?.aiCreditCost || 1);
   const creditCost = aiCreditFeatures.has(featureCode)
@@ -218,7 +244,6 @@ export async function recordFeatureUsage({ userId = 'user-1', petId = null, feat
     created_at: new Date().toISOString()
   };
 
-  const db = getDbClient();
   if (!db) {
     if (creditCost > 0) {
       const balance = getLocalWalletBalance(userId);

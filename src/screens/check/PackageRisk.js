@@ -380,13 +380,15 @@ export function afterRender() {
           aiError = error;
           return null;
         });
-        if (!ai?.ok && isGeminiConfigured()) ai = await generateGeminiJson({
+        if (!ai?.ok && aiError?.message !== 'insufficient_credits' && import.meta.env?.DEV && isGeminiConfigured()) ai = await generateGeminiJson({
           system: t('packageRisk.system_prompt'),
           prompt,
           model: import.meta.env?.VITE_GEMINI_CRITICAL_MODEL || 'gemini-3.5-flash'
         });
         if (ai?.ok) {
-          await recordFeatureUsage({ userId: state.user?.id || 'user-1', petId: state.activePetId || null, featureCode: 'package-risk' });
+          if (!ai.usage) {
+            await recordFeatureUsage({ userId: state.user?.id || 'user-1', petId: state.activePetId || null, featureCode: 'package-risk' });
+          }
           lastResult.ai = normalizeAiResult(ai.data);
           if (lastResult.ai?.level && lastResult.ai.level !== 'unknown') {
             const order = ['unknown', 'watch', 'foreign', 'high', 'critical'];

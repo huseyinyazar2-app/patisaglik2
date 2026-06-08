@@ -105,6 +105,8 @@ const en = {
     watch_status: 'There is a record to follow', urgent_status: 'There is an urgent record',
     free_area: 'Free Health Area',
     start_ai_check: 'Start AI Check',
+    ai_credit_title: 'AI credits',
+    ai_credit_balance: '{count} credit(s) left',
     upcoming: 'Upcoming',
     free: 'Free',
     record_summary: 'Record Summary',
@@ -206,11 +208,26 @@ const en = {
   questions: {
     skip: 'Not sure / Skip', next: 'Continue', back: 'Back',
     short_placeholder: 'Briefly describe it...',
-    step_title: 'Step 2/5 (Question {current}/{total})',
+    step_title: 'Question {current}/{total}',
     cancel_test: 'Cancel Test',
     cancel_title: 'Cancel check',
     cancel_message: 'All progress will be deleted.',
     cancel_confirm: 'Cancel'
+  },
+  questionOptionFixes: {
+    yes_no_unsure: ['Yes', 'No', 'Not sure'],
+    pain_location: ['Head / neck', 'Belly / torso', 'Back / lower back', 'Leg / paw', 'General touch reaction', 'Not sure'],
+    body_location: ['Head / face', 'Torso / belly', 'Leg / paw', 'Ear / eye', 'Mouth / teeth', 'Not sure'],
+    change_trend: ['Decreased', 'Same', 'Increased', 'Not sure'],
+    vomit_count: ['No vomiting', '1 time', '2-3 times', '4+ times', 'Not sure'],
+    appetite: ['Normal', 'Lower', 'Not eating', 'Not sure'],
+    water_intake: ['Normal', 'Lower', 'Higher', 'Not sure'],
+    stool_pattern_text: 'What is the stool texture and frequency like?',
+    stool_pattern: ['Normal', 'Soft / watery - 1 time', 'Soft / watery - 2-3 times', 'Watery - 4+ times', 'Very frequent / cannot hold it', 'Hard / straining', 'Not sure'],
+    gum_color: ['Normal pink', 'Pale / white', 'Purple / blue', 'Yellow', 'Not sure'],
+    wound_change: ['Better', 'Same', 'Worse', 'Discharge / bleeding present', 'Not sure'],
+    operation_type: ['Neutering', 'Dental procedure', 'Sutured wound', 'Orthopedic procedure', 'Other', 'Not sure'],
+    tox_amount_text: 'Is there any information about the amount taken?'
   },
   tasks: {
     title: 'Suggested records for this check',
@@ -268,7 +285,9 @@ const en = {
     answers_count: '{count} question(s) answered.',
     visual: 'Visual',
     measurement: 'Measurement',
-    tasks_skipped: '{count} {label} task(s) skipped.'
+    tasks_skipped: '{count} {label} task(s) skipped.',
+    checking_credit: 'Checking credits...',
+    credit_check_failed: 'Credit check failed'
   },
   processing: {
     title: 'Evaluating check',
@@ -278,7 +297,8 @@ const en = {
     step_risk: 'Checking answers for clinical risk',
     step_evidence: 'Reviewing added media and measurements',
     step_report: 'Preparing the pre-assessment report',
-    disclaimer: 'This assessment does not replace a veterinary examination.'
+    disclaimer: 'This assessment does not replace a veterinary examination.',
+    ai_failed: 'AI analysis could not be retrieved'
   },
   result: {
     title: 'Result',
@@ -298,16 +318,25 @@ const en = {
     low_confidence_title: 'Low Confidence',
     low_confidence_desc: 'This result should be interpreted carefully because some answers are missing or uncertain. Do not treat it as a conclusion without completing the missing evidence.',
     clinical_summary: 'Clinical Summary',
+    ai_job: 'AI log record',
     complaint_summary: 'Reported concern for {pet}: “{complaint}”. Matched area: {category}.',
     complaint_missing: 'Not specified',
     pet_fallback: 'Your pet',
     uncertain_sentence: 'The user was unsure on {count} urgent-sign question(s).',
     profile_context: 'Profile Context',
+    media_findings_title: 'Media Findings',
+    media_no_observation: 'No clear clinical observation could be extracted from this media.',
+    media_relevance: {
+      relevant: 'related to the concern',
+      unrelated: 'unrelated to the concern',
+      unclear: 'unclear'
+    },
     watch_title: 'What to Watch',
     urgent_home_warning: 'At this risk level, home monitoring alone is not enough.',
     watch_home_warning: 'Contact your veterinarian if any of these signs develop.',
     safe_steps_title: 'Safe Follow-up Steps',
     dont_title: 'What Not to Do',
+    ai_limitations_title: 'AI Limitations',
     dont_items: ['Do not give human medication, painkillers or antibiotics unless a veterinarian recommends it.', 'Do not wait at home if signs get worse.', 'Do not treat this result as a diagnosis when evidence is incomplete.'],
     next_step_title: 'Next Step',
     followup_plan_title: 'Follow-up Plan',
@@ -1833,6 +1862,7 @@ Return JSON:
     heading: 'Pre-vet AI triage',
     hero_desc: 'Symptom analysis, document reading and clinic prep modules run here for {name}.',
     plan: 'Release',
+    credit_balance: '{count} AI credit(s)',
     free_note: 'New accounts receive 1 AI credit. Purchases are disabled; credits can be adjusted from the admin panel when needed.',
     modules_title: 'AI Modules',
     assistants: {
@@ -2248,6 +2278,7 @@ Return JSON:
     max_related: 'To keep the flow short, choose up to 3 related extra signs.',
     listening: 'Listening...',
     voice_not_ready: 'Voice input is not ready yet. You can type the complaint or choose signs.',
+    voice_error: 'Voice could not be captured. Try again or type the complaint.',
     required: 'Please write the complaint or choose a sign.'
   },
   issues: {

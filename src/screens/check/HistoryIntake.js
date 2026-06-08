@@ -20,10 +20,23 @@ function selectedChips(id) {
   return [...document.querySelectorAll(`#${id} button.selected`)].map(button => button.dataset.value || button.textContent.trim());
 }
 
+function profileText(value) {
+  if (Array.isArray(value)) return value.filter(Boolean).join(', ');
+  return value || '';
+}
+
 export function render() {
   const state = getState();
   const pet = getActivePet(state.activePetId) || { name: 'pet' };
-  const history = state.session?.historySnapshot || {};
+  const savedHistory = state.session?.historySnapshot || {};
+  const history = {
+    chronic: savedHistory.chronic ?? profileText(pet.chronicDiseases),
+    medications: savedHistory.medications ?? profileText(pet.medications),
+    allergies: savedHistory.allergies ?? profileText(pet.allergies),
+    recentChanges: savedHistory.recentChanges ?? profileText(pet.rawHistory),
+    previousComplaint: savedHistory.previousComplaint || '',
+    homeCare: savedHistory.homeCare || []
+  };
 
   return `
     <div class="screen premium-check">

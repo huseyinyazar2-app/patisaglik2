@@ -3,6 +3,7 @@ import { getState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
 import { getActivePet, getLocalPets, updatePetPhoto } from '../../services/pets.js';
 import { getFreeRecords, mergeRecentRecords } from '../../services/freeRecords.js';
+import { getAccountBilling } from '../../services/billing.js';
 import { showToast } from '../../ui/toast.js';
 
 const petIllustrations = {
@@ -195,6 +196,19 @@ function renderFollowups(activeFollowups, healthRecords = []) {
   `;
 }
 
+function renderCreditStatus(wallet = null) {
+  const balance = wallet ? Number(wallet.balance || 0) : null;
+  return `
+    <button class="home-credit-strip" id="btnHomeCredits" type="button">
+      <span>${window.__icons?.spark || ''}</span>
+      <div>
+        <strong>${t('home.ai_credit_title')}</strong>
+        <small>${balance === null ? t('common.loading') : tx('home.ai_credit_balance', { count: balance })}</small>
+      </div>
+    </button>
+  `;
+}
+
 export function render() {
   const state = getState();
   const pet = getHomePet(state.activePetId);
@@ -231,6 +245,7 @@ export function render() {
             <button class="btn btn-primary btn-full" id="btnStartCheck">${window.__icons?.spark} ${t('home.start_ai_check')}</button>
             <button class="btn btn-secondary btn-full" id="btnTimeline">${window.__icons?.clipboard} ${t('tabs.history')}</button>
           </div>
+          <div id="homeCreditStatus">${renderCreditStatus()}</div>
         </div>
       </div>
 
@@ -335,6 +350,7 @@ export function afterRender() {
   document.getElementById('btnStartCheck')?.addEventListener('click', () => navigate('/check'));
   document.getElementById('btnTimeline')?.addEventListener('click', () => navigate('/history'));
   document.getElementById('btnReports')?.addEventListener('click', () => navigate('/reports'));
+  document.getElementById('btnHomeCredits')?.addEventListener('click', () => navigate('/profile/plan'));
   function bindRouteButtons(root = document) {
     root.querySelectorAll('[data-route]').forEach(btn => {
       btn.addEventListener('click', () => navigate(btn.dataset.route));
@@ -376,5 +392,13 @@ export function afterRender() {
     }
     if (insight) bindInsightCards(insight);
     if (count) count.textContent = activeFollowups.length ? tx('home.file_count', { count: activeFollowups.length }) : tx('home.record_count', { count: records.healthRecords.length });
+  }).catch(() => {});
+
+  getAccountBilling({ userId: state.user?.id || 'user-1' }).then((billing) => {
+    const target = document.getElementById('homeCreditStatus');
+    if (target) {
+      target.innerHTML = renderCreditStatus(billing.wallet);
+      document.getElementById('btnHomeCredits')?.addEventListener('click', () => navigate('/profile/plan'));
+    }
   }).catch(() => {});
 }

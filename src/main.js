@@ -53,6 +53,16 @@ const tabLabelKeys = ['tabs.home', 'tabs.check', 'tabs.history', 'tabs.reports',
 const tabIcons = ['home', 'spark', 'history', 'reports', 'profile'];
 let appInitialized = false;
 
+function syncNativeShellClass() {
+  const capacitor = window.Capacitor;
+  const isNativeShell = Boolean(
+    capacitor?.isNativePlatform?.() ||
+    capacitor?.getPlatform?.() === 'android' ||
+    /\bwv\b|Capacitor/i.test(navigator.userAgent)
+  );
+  document.documentElement.classList.toggle('native-shell', isNativeShell);
+}
+
 // Routes that show tab bar
 const tabBarRoutes = ['/home', '/check', '/history', '/history/timeline', '/history/measurements',
   '/history/issues', '/history/expenses', '/history/reminders', '/history/health-records',
@@ -274,6 +284,7 @@ function setupRoutes() {
 async function init() {
   if (appInitialized) return;
   appInitialized = true;
+  syncNativeShellClass();
   setLocale(getLocale());
   await refreshAppSettings();
   await cleanupSmokeTestArtifacts();

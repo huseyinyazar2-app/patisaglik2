@@ -138,6 +138,11 @@
   --tab-height: 64px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --fixed-action-bottom: var(--safe-bottom);
+}
+
+html.native-shell {
+  --fixed-action-bottom: max(var(--safe-bottom), 56px);
 }
 
 /* ---------- Reset & Base ---------- */
@@ -198,6 +203,16 @@ body {
 
 .app-content.no-tab {
   padding-bottom: var(--safe-bottom);
+}
+
+.app-content.no-tab .premium-check > .card[style*="position: fixed"][style*="bottom: 0"] {
+  bottom: var(--fixed-action-bottom) !important;
+}
+
+.app-content.no-tab .premium-check > .section[style*="padding-bottom: 120px"],
+.app-content.no-tab .premium-check > .section[style*="padding-bottom: 124px"],
+.app-content.no-tab .premium-check > .section[style*="padding-bottom: 140px"] {
+  padding-bottom: calc(160px + var(--fixed-action-bottom)) !important;
 }
 
 .screen {
@@ -525,14 +540,15 @@ label {
 
 .radio-item.selected .radio-dot {
   border-color: var(--primary);
+  background: var(--primary);
 }
 
 .radio-dot::after {
-  content: '';
-  width: 10px;
-  height: 10px;
-  border-radius: var(--radius-full);
-  background: var(--primary);
+  content: '✓';
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
   transform: scale(0);
   transition: transform var(--transition-spring);
 }

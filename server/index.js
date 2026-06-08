@@ -15,6 +15,7 @@ const rootDir = path.resolve(__dirname, '..');
 const distDir = path.join(rootDir, 'dist');
 const port = Number(process.env.PORT || 3000);
 const INITIAL_AI_CREDITS = 1;
+const AI_CREDIT_FEATURES = new Set(['document-ai', 'document-ocr', 'package-risk', 'toxic-ai', 'ai-triage', 'vet-prep-ai']);
 
 const mimeTypes = {
   '.html': 'text/html; charset=utf-8',
@@ -217,6 +218,133 @@ async function ensureInitialWallet(db, userId, createdAt = new Date().toISOStrin
     }).catch(() => {});
   }
   return wallet || { balance: INITIAL_AI_CREDITS, currency: 'credit' };
+}
+
+async function activeBillingContext(db, userId) {
+  await ensureInitialWallet(db, userId);
+  const subscription = await db.execute({
+    sql: `SELECT p.code, p.monthly_credit_allowance, p.features
+          FROM subscriptions s
+          JOIN plans p ON p.id = s.plan_id
+          WHERE s.user_id = ? AND s.status IN ('active', 'trialing')
+          ORDER BY COALESCE(s.renews_at, s.starts_at) DESC
+          LIMIT 1`,
+    args: [userId]
+  }).catch(() => ({ rows: [] }));
+  const plan = subscription.rows[0] || await db.execute({
+    sql: `SELECT code, monthly_credit_allowance, features FROM plans WHERE code = 'free' LIMIT 1`,
+    args: []
+  }).then(result => result.rows[0]).catch(() => null);
+  const wallet = await db.execute({ sql: `SELECT id, balance, currency FROM credit_wallets WHERE user_id = ? LIMIT 1`, args: [userId] });
+  return {
+    plan: rowToObject(plan || { code: 'free', monthly_credit_allowance: 0, features: '{"aiCreditCost":1}' }),
+    wallet: rowToObject(wallet.rows[0] || { balance: 0, currency: 'credit' })
+  };
+}
+
+function aiCreditCost(featureCode, plan = {}) {
+  if (!AI_CREDIT_FEATURES.has(featureCode)) return 0;
+  try {
+    const features = typeof plan.features === 'string' ? JSON.parse(plan.features || '{}') : plan.features || {};
+    return Math.max(1, Number(features.aiCreditCost || 1));
+  } catch {
+    return 1;
+  }
+}
+
+async function featureAvailability(db, { userId, featureCode }) {
+  const context = await activeBillingContext(db, userId);
+  const cost = aiCreditCost(featureCode, context.plan);
+  if (cost <= 0) return { ok: true, cost, source: 'free', remaining: Number(context.wallet.balance || 0) };
+
+  const monthStart = new Date();
+  monthStart.setDate(1);
+  monthStart.setHours(0, 0, 0, 0);
+  const used = await db.execute({
+    sql: `SELECT COALESCE(SUM(credit_cost), 0) AS used
+          FROM feature_usage
+          WHERE user_id = ? AND credit_cost > 0 AND created_at >= ?`,
+    args: [userId, monthStart.toISOString()]
+  }).catch(() => ({ rows: [{ used: 0 }] }));
+  const monthlyUsed = Number(used.rows[0]?.used || 0);
+  const allowance = Number(context.plan.monthly_credit_allowance || 0);
+  if (allowance > 0 && monthlyUsed + cost <= allowance) {
+    return { ok: true, cost, source: 'subscription_allowance', remaining: allowance - monthlyUsed };
+  }
+  const walletBalance = Number(context.wallet.balance || 0);
+  if (walletBalance >= cost) return { ok: true, cost, source: 'wallet', remaining: walletBalance };
+  return { ok: false, cost, source: 'insufficient', remaining: Math.max(0, allowance - monthlyUsed) + walletBalance };
+}
+
+async function recordServerFeatureUsage(db, { userId, petId = null, featureCode, relatedId = null }) {
+  const availability = await featureAvailability(db, { userId, featureCode });
+  if (!availability.ok) {
+    const error = new Error('insufficient_credits');
+    error.statusCode = 402;
+    throw error;
+  }
+  const context = await activeBillingContext(db, userId);
+  const createdAt = new Date().toISOString();
+  const usageId = id('usage');
+  let creditSource = availability.source;
+  if (availability.cost > 0 && availability.source === 'wallet') {
+    const nextBalance = Number(context.wallet.balance || 0) - availability.cost;
+    const debit = await db.execute({
+      sql: `UPDATE credit_wallets SET balance = ?, updated_at = ? WHERE id = ? AND balance >= ?`,
+      args: [nextBalance, createdAt, context.wallet.id, availability.cost]
+    });
+    if (Number(debit.rowsAffected ?? 1) < 1) {
+      const error = new Error('insufficient_credits');
+      error.statusCode = 402;
+      throw error;
+    }
+    await db.execute({
+      sql: `INSERT INTO credit_transactions (id, wallet_id, user_id, amount, direction, reason, related_entity_type, related_entity_id, metadata, created_at)
+            VALUES (?, ?, ?, ?, 'out', 'ai_usage', 'feature_usage', ?, ?, ?)`,
+      args: [id('credit'), context.wallet.id, userId, availability.cost, usageId, JSON.stringify({ featureCode, relatedId }), createdAt]
+    });
+  }
+  await db.execute({
+    sql: `INSERT INTO feature_usage
+      (id, user_id, pet_id, feature_code, plan_code, credit_cost, usage_count, metadata, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?)`,
+    args: [
+      usageId,
+      userId,
+      petId,
+      featureCode,
+      context.plan.code || 'free',
+      availability.cost,
+      JSON.stringify({ related_entity_id: relatedId, credit_source: creditSource, billing_source: 'api' }),
+      createdAt
+    ]
+  });
+  return { ok: true, usage: { id: usageId, credit_cost: availability.cost, plan_code: context.plan.code || 'free', credit_source: creditSource } };
+}
+
+async function handleFeatureAvailability(req, res) {
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  const body = await readBody(req);
+  const userId = body.userId || 'user-1';
+  const featureCode = body.featureCode || '';
+  return sendJson(res, 200, await featureAvailability(db, { userId, featureCode }));
+}
+
+async function handleFeatureUsage(req, res) {
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  const body = await readBody(req);
+  try {
+    return sendJson(res, 200, await recordServerFeatureUsage(db, {
+      userId: body.userId || 'user-1',
+      petId: body.petId || null,
+      featureCode: body.featureCode || '',
+      relatedId: body.relatedId || null
+    }));
+  } catch (error) {
+    return sendJson(res, error.statusCode || 500, { ok: false, error: error.message || 'feature_usage_failed' });
+  }
 }
 
 async function handleRegister(req, res) {
@@ -800,6 +928,12 @@ async function handleReminderStatus(req, res) {
 async function handleDocumentOcr(req, res) {
   const body = await readBody(req);
   if (!body.fileBase64) return sendJson(res, 400, codedError('missing_file'));
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  const userId = body.userId || 'user-1';
+  const petId = body.petId || null;
+  const availability = await featureAvailability(db, { userId, featureCode: 'document-ocr' });
+  if (!availability.ok) return sendJson(res, 402, { ok: false, error: 'insufficient_credits', ...availability });
   const { system, prompt } = documentOcrPrompt(body);
   const model = process.env.GEMINI_STANDARD_MODEL || 'gemini-3-flash-preview';
   const startedAt = Date.now();
@@ -813,11 +947,11 @@ async function handleDocumentOcr(req, res) {
     }
   ];
   const job = await createAiJob({
-    userId: body.userId,
-    petId: body.petId || null,
+    userId,
+    petId,
     featureCode: 'document-ocr',
     status: 'running',
-    creditCost: 1,
+    creditCost: availability.cost,
     inputPayload: {
       model,
       systemPrompt: system,
@@ -831,6 +965,17 @@ async function handleDocumentOcr(req, res) {
       }
     }
   });
+  let usage;
+  try {
+    usage = await recordServerFeatureUsage(db, { userId, petId, featureCode: 'document-ocr', relatedId: job.id || null });
+  } catch (error) {
+    await completeAiJob(job.id, {
+      status: 'failed',
+      errorMessage: error.message || 'feature_usage_failed',
+      outputPayload: { billingFailed: true, durationMs: Date.now() - startedAt }
+    });
+    return sendJson(res, error.statusCode || 500, { ok: false, error: error.message || 'feature_usage_failed' });
+  }
   const result = await generateGeminiJson({
     system,
     prompt,
@@ -855,7 +1000,7 @@ async function handleDocumentOcr(req, res) {
     status: 'completed',
     outputPayload: { data: normalized, raw: result.data, durationMs: Date.now() - startedAt }
   });
-  return sendJson(res, 200, { ok: true, data: normalized, aiJobId: job.id || null });
+  return sendJson(res, 200, { ok: true, data: normalized, aiJobId: job.id || null, usage: usage.usage });
 }
 
 async function handlePackageRisk(req, res) {
@@ -907,15 +1052,21 @@ function sanitizePackageRiskResult(data) {
 
 async function handlePackageRiskLogged(req, res) {
   const body = await readBody(req);
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  const userId = body.userId || 'user-1';
+  const petId = body.petId || null;
+  const availability = await featureAvailability(db, { userId, featureCode: 'package-risk' });
+  if (!availability.ok) return sendJson(res, 402, { ok: false, error: 'insufficient_credits', ...availability });
   const model = process.env.GEMINI_CRITICAL_MODEL || 'gemini-3.5-flash';
   const system = 'Sen veteriner yerine gecmeyen, guvenli aciliyet yonlendirmesi yapan bir pet saglik asistanisin.';
   const startedAt = Date.now();
   const job = await createAiJob({
-    userId: body.userId,
-    petId: body.petId || null,
+    userId,
+    petId,
     featureCode: 'package-risk',
     status: 'running',
-    creditCost: 1,
+    creditCost: availability.cost,
     inputPayload: {
       model,
       systemPrompt: system,
@@ -924,6 +1075,17 @@ async function handlePackageRiskLogged(req, res) {
       request: body.context || {}
     }
   });
+  let usage;
+  try {
+    usage = await recordServerFeatureUsage(db, { userId, petId, featureCode: 'package-risk', relatedId: job.id || null });
+  } catch (error) {
+    await completeAiJob(job.id, {
+      status: 'failed',
+      errorMessage: error.message || 'feature_usage_failed',
+      outputPayload: { billingFailed: true, durationMs: Date.now() - startedAt }
+    });
+    return sendJson(res, error.statusCode || 500, { ok: false, error: error.message || 'feature_usage_failed' });
+  }
   const result = await generateGeminiJson({
     system,
     prompt: body.prompt || '',
@@ -962,7 +1124,192 @@ async function handlePackageRiskLogged(req, res) {
     status: 'completed',
     outputPayload: { data: sanitized, raw: result.data, durationMs: Date.now() - startedAt }
   });
-  return sendJson(res, 200, { ok: true, data: sanitized, aiJobId: job.id || null });
+  return sendJson(res, 200, { ok: true, data: sanitized, aiJobId: job.id || null, usage: usage.usage });
+}
+
+function triagePrompt(body = {}) {
+  const payload = body.payload || {};
+  const mediaRefs = Array.isArray(body.mediaRefs) ? body.mediaRefs : [];
+  const system = [
+    'Sen veteriner yerine gecmeyen, guvenli pet sagligi on degerlendirme asistanisin.',
+    'Tanı koyma, ilac/doz/tıbbi tedavi talimatı verme.',
+    'Kullanıcının sikayetini, profil oykusunu, acil belirti yanitlarini, soru cevaplarini ve medya kanitlarini birlikte degerlendir.',
+    'Medya petle veya bildirilen sikayetle ilgisizse bunu acikca mediaFindings icinde unrelated olarak belirt.',
+    'Fotografta/video karesinde ne gordugunu, goruntu yetersizse neyin yetersiz oldugunu yaz.',
+    'Yanit yalnizca gecerli JSON olsun.'
+  ].join(' ');
+  const prompt = `
+Pet:
+${JSON.stringify(payload.pet || {}, null, 2)}
+
+Sikayet ve siniflandirma:
+${JSON.stringify(payload.complaint || {}, null, 2)}
+
+Profil / saglik oykusu:
+${JSON.stringify(payload.history || {}, null, 2)}
+
+Acil belirti yanitlari:
+${JSON.stringify(payload.redFlags || [], null, 2)}
+
+Soru cevaplari:
+${JSON.stringify(payload.answers || [], null, 2)}
+
+Gorevler / kanit ozeti:
+${JSON.stringify(payload.tasks || [], null, 2)}
+
+Medya referanslari:
+${JSON.stringify(mediaRefs, null, 2)}
+
+Olcumler:
+${JSON.stringify(payload.measurements || [], null, 2)}
+
+JSON semasi:
+{
+  "level": "low|medium|high|critical",
+  "score": 0,
+  "confidence": 0,
+  "clinicalSummary": "",
+  "evidenceIntegration": "",
+  "profileContext": [""],
+  "mediaFindings": [{"mediaId":"","type":"photo|video|audio|measurement|unknown","relevance":"relevant|unrelated|unclear","observations":"","warnings":[""]}],
+  "watchItems": [""],
+  "safeSteps": [""],
+  "dontItems": [""],
+  "nextStep": "",
+  "requiresVetToday": false,
+  "limitations": [""]
+}`;
+  return { system, prompt };
+}
+
+function sanitizeTriageResult(data = {}) {
+  const levels = new Set(['low', 'medium', 'high', 'critical']);
+  const cleanList = (value, limit = 5) => (Array.isArray(value) ? value : [])
+    .map(item => String(item || '').trim())
+    .filter(Boolean)
+    .slice(0, limit);
+  return {
+    level: levels.has(data.level) ? data.level : 'medium',
+    score: Math.max(0, Math.min(100, Number(data.score || 0))),
+    confidence: Math.max(0, Math.min(100, Number(data.confidence || 0))),
+    clinicalSummary: String(data.clinicalSummary || '').slice(0, 900),
+    evidenceIntegration: String(data.evidenceIntegration || '').slice(0, 900),
+    profileContext: cleanList(data.profileContext, 5),
+    mediaFindings: (Array.isArray(data.mediaFindings) ? data.mediaFindings : []).slice(0, 8).map(item => ({
+      mediaId: String(item.mediaId || ''),
+      type: String(item.type || 'unknown'),
+      relevance: ['relevant', 'unrelated', 'unclear'].includes(item.relevance) ? item.relevance : 'unclear',
+      observations: String(item.observations || '').slice(0, 700),
+      warnings: cleanList(item.warnings, 4)
+    })),
+    watchItems: cleanList(data.watchItems, 5),
+    safeSteps: cleanList(data.safeSteps, 5),
+    dontItems: cleanList(data.dontItems, 5),
+    nextStep: String(data.nextStep || '').slice(0, 300),
+    requiresVetToday: Boolean(data.requiresVetToday),
+    limitations: cleanList(data.limitations, 5)
+  };
+}
+
+async function handleAiTriage(req, res) {
+  const body = await readBody(req);
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  const userId = body.userId || 'user-1';
+  const petId = body.petId || null;
+  const availability = await featureAvailability(db, { userId, featureCode: 'ai-triage' });
+  if (!availability.ok) {
+    return sendJson(res, 402, { ok: false, error: 'insufficient_credits', ...availability });
+  }
+  const model = process.env.GEMINI_CRITICAL_MODEL || 'gemini-3.5-flash';
+  const startedAt = Date.now();
+  const { system, prompt } = triagePrompt(body);
+  const inlineMedia = Array.isArray(body.inlineMedia) ? body.inlineMedia : [];
+  const mediaRefs = Array.isArray(body.mediaRefs) ? body.mediaRefs : [];
+  const job = await createAiJob({
+    userId,
+    petId,
+    featureCode: 'ai-triage',
+    status: 'running',
+    creditCost: availability.cost,
+    inputPayload: {
+      model,
+      systemPrompt: system,
+      userPrompt: prompt,
+      mediaRefs,
+      request: body.payload || {}
+    }
+  });
+  const parts = inlineMedia
+    .filter(item => item?.base64 && item?.mimeType)
+    .map(item => ({ inlineData: { mimeType: item.mimeType, data: item.base64 } }));
+  let usage;
+  try {
+    usage = await recordServerFeatureUsage(db, {
+      userId,
+      petId,
+      featureCode: 'ai-triage',
+      relatedId: job.id || null
+    });
+  } catch (error) {
+    await completeAiJob(job.id, {
+      status: 'failed',
+      errorMessage: error.message || 'feature_usage_failed',
+      outputPayload: { billingFailed: true, durationMs: Date.now() - startedAt }
+    });
+    return sendJson(res, error.statusCode || 500, { ok: false, error: error.message || 'feature_usage_failed' });
+  }
+  const result = await generateGeminiJson({
+    system,
+    prompt,
+    model,
+    parts,
+    responseSchema: {
+      type: 'object',
+      properties: {
+        level: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
+        score: { type: 'number' },
+        confidence: { type: 'number' },
+        clinicalSummary: { type: 'string' },
+        evidenceIntegration: { type: 'string' },
+        profileContext: { type: 'array', items: { type: 'string' } },
+        mediaFindings: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              mediaId: { type: 'string' },
+              type: { type: 'string' },
+              relevance: { type: 'string', enum: ['relevant', 'unrelated', 'unclear'] },
+              observations: { type: 'string' },
+              warnings: { type: 'array', items: { type: 'string' } }
+            }
+          }
+        },
+        watchItems: { type: 'array', items: { type: 'string' } },
+        safeSteps: { type: 'array', items: { type: 'string' } },
+        dontItems: { type: 'array', items: { type: 'string' } },
+        nextStep: { type: 'string' },
+        requiresVetToday: { type: 'boolean' },
+        limitations: { type: 'array', items: { type: 'string' } }
+      },
+      required: ['level', 'score', 'confidence', 'clinicalSummary', 'mediaFindings', 'watchItems', 'safeSteps', 'dontItems', 'nextStep', 'limitations']
+    }
+  });
+  if (!result.ok) {
+    await completeAiJob(job.id, {
+      status: 'failed',
+      errorMessage: result.reason || 'ai_request_failed',
+      outputPayload: { ...result, durationMs: Date.now() - startedAt }
+    });
+    return sendJson(res, 502, { ...result, error: result.reason || 'ai_request_failed' });
+  }
+  const sanitized = sanitizeTriageResult(result.data);
+  await completeAiJob(job.id, {
+    status: 'completed',
+    outputPayload: { data: sanitized, raw: result.data, durationMs: Date.now() - startedAt }
+  });
+  return sendJson(res, 200, { ok: true, data: sanitized, aiJobId: job.id || null, usage: usage.usage });
 }
 
 function safeSegment(value, fallback) {
@@ -1111,8 +1458,11 @@ async function route(req, res) {
     if (req.method === 'POST' && url.pathname === '/api/media/sign-upload') return handleSignUpload(req, res);
     if (req.method === 'POST' && url.pathname === '/api/media/complete') return handleCompleteUpload(req, res);
     if (req.method === 'GET' && url.pathname === '/api/media/sign-download') return handleSignDownload(req, res, url);
+    if (req.method === 'POST' && url.pathname === '/api/billing/feature-availability') return handleFeatureAvailability(req, res);
+    if (req.method === 'POST' && url.pathname === '/api/billing/record-usage') return handleFeatureUsage(req, res);
     if (req.method === 'POST' && url.pathname === '/api/ai/document-ocr') return handleDocumentOcr(req, res);
     if (req.method === 'POST' && url.pathname === '/api/ai/package-risk') return handlePackageRiskLogged(req, res);
+    if (req.method === 'POST' && url.pathname === '/api/ai/triage') return handleAiTriage(req, res);
     if (url.pathname.startsWith('/api/')) return sendJson(res, 404, { ok: false, error: 'not_found' });
     return serveStatic(req, res, url);
   } catch (err) {

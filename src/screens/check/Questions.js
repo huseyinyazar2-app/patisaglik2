@@ -1,6 +1,6 @@
 import { navigate, goBack } from '../../router.js';
 import { getState, setState, resetSession } from '../../store.js';
-import { t } from '../../i18n/tr.js';
+import { t, translateForLocale } from '../../i18n/tr.js';
 import { questionSets, taskDefinitions } from '../../data/questions.js';
 import { showConfirmDialog } from '../../ui/toast.js';
 
@@ -9,9 +9,94 @@ let allQuestions = [];
 
 const MAX_BASE_QUESTIONS = 8;
 const GENERAL_QUESTION_IDS = new Set(['gen_activity', 'gen_appetite', 'gen_water', 'gen_temperature']);
+const STOOL_WATERY_ANSWER_IDS = new Set(['dia_frequency']);
+const STOOL_CONSTIPATION_IDS = new Set(['con_straining', 'con_pain', 'con_vomit', 'con_appetite', 'con_urine_confusion']);
+
+function optionSet(key) {
+  const value = t(`questionOptionFixes.${key}`);
+  return Array.isArray(value) ? value : [];
+}
+
+function normalize(value = '') {
+  return String(value)
+    .toLocaleLowerCase('tr-TR')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
+
+function hasGenericYesNoOptions(question) {
+  const options = question.options || [];
+  const yesNoUnsure = translateForLocale('tr', 'questionOptionFixes.yes_no_unsure');
+  return options.length === yesNoUnsure.length && yesNoUnsure.every(option => options.includes(option));
+}
+
+function optionsForQuestion(question) {
+  if (question.id === 'dia_frequency') return optionSet('stool_pattern');
+  if (!hasGenericYesNoOptions(question)) return question.options;
+  const text = question.text_tr || question.text || '';
+
+  if (question.id === 'pain_location') {
+    return optionSet('pain_location');
+  }
+  if (question.type === 'body_location' || /hangi bölgede|nerede|nerede yoğun/i.test(text)) {
+    return optionSet('body_location');
+  }
+  if (/azaldı mı arttı mı/i.test(text)) return optionSet('change_trend');
+  if (/kaç kez kustu/i.test(text)) return optionSet('vomit_count');
+  if (/iştahı nasıl|iştah nasıl/i.test(text)) return optionSet('appetite');
+  if (/su içmesi nasıl/i.test(text)) return optionSet('water_intake');
+  if (/diş eti rengi nasıl/i.test(text)) return optionSet('gum_color');
+  if (/yara bölgesi.*nasıl/i.test(text)) return optionSet('wound_change');
+  if (/hangi işlem|hangi operasyon/i.test(text)) return optionSet('operation_type');
+
+  return question.options;
+}
+
+function textForQuestion(question) {
+  if (question.id === 'dia_frequency') return t('questionOptionFixes.stool_pattern_text');
+  if (question.id === 'tox_amount' && hasGenericYesNoOptions(question)) {
+    return t('questionOptionFixes.tox_amount_text');
+  }
+  return question.text_tr || question.text;
+}
 
 function uniqueQuestions(items) {
   return [...new Map(items.map(item => [item.id, item])).values()];
+}
+
+function semanticGroup(question) {
+  const id = question.id || '';
+  const text = normalize(question.text_tr || question.text || '');
+  if (['gen_appetite', 'app_level', 'con_appetite'].includes(id) || text.includes('istah')) return 'appetite';
+  if (['gen_water', 'app_water'].includes(id) || text.includes('su icmesi') || text.includes('su tuketimi')) return 'water';
+  if (id === 'dia_frequency' || text.includes('sulu diski')) return 'stool_watery';
+  if (id.startsWith('con_') || text.includes('kabiz') || text.includes('sert diski') || text.includes('diski yapmak icin zorlan')) return 'stool_constipation';
+  return '';
+}
+
+function hasAnsweredGroup(answers, questions, group) {
+  return Object.keys(answers || {}).some(id => {
+    const question = questions.find(item => item.id === id);
+    return question && semanticGroup(question) === group && answers[id] !== 'skipped';
+  });
+}
+
+function shouldSkipQuestion(question, answers, questions) {
+  if (!answers || answers[question.id] !== undefined) return false;
+
+  const group = semanticGroup(question);
+  if (group && hasAnsweredGroup(answers, questions, group)) return true;
+
+  const hasWateryStoolAnswer = [...STOOL_WATERY_ANSWER_IDS].some(id => {
+    const answer = normalize(answers[id]);
+    return answer && answer !== 'skipped' && !answer.includes('emin') && !answer.includes('sert') && !answer.includes('zorlan');
+  });
+  if (hasWateryStoolAnswer && (STOOL_CONSTIPATION_IDS.has(question.id) || group === 'stool_constipation')) return true;
+
+  const hasConstipationAnswer = [...STOOL_CONSTIPATION_IDS].some(id => normalize(answers[id]).includes('evet'));
+  if (hasConstipationAnswer && (STOOL_WATERY_ANSWER_IDS.has(question.id) || group === 'stool_watery')) return true;
+
+  return false;
 }
 
 function questionPriority(question, index) {
@@ -38,12 +123,14 @@ function buildSmartQuestionList(session) {
     .slice(0, MAX_BASE_QUESTIONS)
     .map(item => item.question);
 
-  return uniqueQuestions([...sortedBase, ...dynamicQuestions]);
+  const questions = uniqueQuestions([...sortedBase, ...dynamicQuestions]);
+  return questions.filter(question => !shouldSkipQuestion(question, session.questionAnswers || {}, questions));
 }
 
 function getQuestionInputHtml(question) {
   const isMultiChoice = question.type === 'multi' || question.type === 'multi_choice';
   const isText = question.type === 'text' || question.type === 'open_ended';
+  const options = optionsForQuestion(question);
 
   if (isText) {
     return `
@@ -51,14 +138,14 @@ function getQuestionInputHtml(question) {
     `;
   }
 
-  if (!question.options?.length) {
+  if (!options?.length) {
     return `
       <textarea id="q_${question.id}" class="complaint-textarea w-full" placeholder="${t('questions.short_placeholder')}" style="background: rgba(255, 255, 255, 0.45); border: 1.5px solid rgba(226, 232, 240, 0.65); padding: 16px; border-radius: var(--radius-lg);"></textarea>
     `;
   }
 
   if (isMultiChoice) {
-    return question.options.map(opt => `
+    return options.map(opt => `
       <label class="checkbox-item mb-3" style="display: flex; justify-content: space-between; align-items: center; padding: 18px; border-radius: var(--radius-lg); cursor: pointer; transition: all var(--transition-spring); border: 1.5px solid var(--border-color); background: var(--white);">
         <span style="font-size: 15px; font-weight: 600; color: var(--text-primary);">${opt}</span>
         <div class="check-box" style="width: 24px; height: 24px; border: 2px solid var(--gray-300); border-radius: 6px; display: flex; align-items: center; justify-content: center; transition: all 0.2s;"></div>
@@ -67,7 +154,7 @@ function getQuestionInputHtml(question) {
     `).join('');
   }
 
-  return question.options.map(opt => `
+  return options.map(opt => `
     <label class="radio-item mb-3" style="display: flex; justify-content: space-between; align-items: center; padding: 18px; border-radius: var(--radius-lg); cursor: pointer; transition: all var(--transition-spring);">
       <span style="font-size: 15px; font-weight: 600; color: var(--text-primary);">${opt}</span>
       <div class="radio-dot"></div>
@@ -114,7 +201,7 @@ export function render() {
 
       <div class="section pt-6" style="padding-bottom: 140px;">
         <div class="card mb-6" style="padding: 24px;">
-          <h2 class="text-xl font-bold text-text-primary" style="line-height: 1.4; margin-bottom: 0;">${question.text_tr || question.text}</h2>
+          <h2 class="text-xl font-bold text-text-primary" style="line-height: 1.4; margin-bottom: 0;">${textForQuestion(question)}</h2>
         </div>
 
         <div class="question-options">
@@ -147,10 +234,12 @@ export function afterRender() {
         document.querySelectorAll('.question-options .radio-item').forEach(lbl => {
           lbl.style.borderColor = 'var(--border-color)';
           lbl.style.background = 'var(--white)';
+          lbl.classList.remove('selected');
           lbl.querySelector('.radio-dot').classList.remove('selected');
         });
 
         input.checked = true;
+        label.classList.add('selected');
         label.style.borderColor = 'var(--primary)';
         label.style.background = 'var(--primary-50)';
         label.querySelector('.radio-dot').classList.add('selected');
@@ -169,12 +258,14 @@ export function afterRender() {
         input.checked = !input.checked;
 
         if (input.checked) {
+          label.classList.add('selected');
           label.style.borderColor = 'var(--primary)';
           label.style.background = 'var(--primary-50)';
           checkBox.style.borderColor = 'var(--primary)';
           checkBox.style.background = 'var(--primary)';
           checkBox.innerHTML = `<span style="width: 14px; height: 14px; color: white;">${window.__icons?.checkCircle || ''}</span>`;
         } else {
+          label.classList.remove('selected');
           label.style.borderColor = 'var(--border-color)';
           label.style.background = 'var(--white)';
           checkBox.style.borderColor = 'var(--gray-300)';
@@ -220,6 +311,10 @@ export function afterRender() {
           question.followupQuestionSetIds[val].forEach(setId => {
             if (!state.session.questionSetIds.includes(setId)) state.session.questionSetIds.push(setId);
           });
+        }
+
+        if (question.id === 'dia_frequency' && /sert|zorlan/i.test(String(val || ''))) {
+          if (!state.session.questionSetIds.includes('constipation_basic')) state.session.questionSetIds.push('constipation_basic');
         }
 
         if (question.task_triggers) {

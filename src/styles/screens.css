@@ -373,6 +373,13 @@
   color: var(--primary);
 }
 
+.voice-btn.listening {
+  color: var(--white);
+  background: var(--primary);
+  border-color: var(--primary);
+  box-shadow: 0 10px 22px rgba(0, 91, 76, 0.22);
+}
+
 /* ---------- Understanding Screen ---------- */
 .understanding-categories {
   display: flex;
@@ -2168,6 +2175,70 @@
   padding: 10px 12px;
   border-radius: 12px;
   white-space: normal;
+}
+
+.home-credit-strip,
+.ai-credit-inline-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(0, 91, 76, 0.12);
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--primary-dark);
+  box-shadow: 0 10px 24px rgba(0, 61, 52, 0.08);
+  cursor: pointer;
+}
+
+.home-credit-strip {
+  width: 100%;
+  justify-content: flex-start;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+.home-credit-strip span,
+.ai-credit-inline-pill span {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  background: rgba(0, 91, 76, 0.09);
+}
+
+.home-credit-strip div {
+  min-width: 0;
+}
+
+.home-credit-strip strong,
+.home-credit-strip small,
+.ai-credit-inline-pill b {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-credit-strip strong {
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.home-credit-strip small,
+.ai-credit-inline-pill b {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-secondary);
+}
+
+.ai-credit-inline-pill {
+  margin-top: 14px;
+  max-width: 100%;
+  padding: 8px 12px;
+  border-radius: 999px;
 }
 
 .pet-switcher-btn {
@@ -4837,6 +4908,20 @@
   font-weight: 800;
 }
 
+.web-mobile-open-app {
+  display: none;
+  width: 100%;
+  min-height: 42px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--primary);
+  color: var(--white);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  box-shadow: 0 12px 24px rgba(0, 91, 76, 0.2);
+}
+
 .web-locale-switch {
   display: inline-flex;
   align-items: center;
@@ -5926,9 +6011,11 @@
   }
 
   .web-nav nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 6px;
-    overflow-x: auto;
-    flex-wrap: nowrap;
+    overflow-x: visible;
+    flex-wrap: initial;
     padding-bottom: 2px;
   }
 
@@ -5936,7 +6023,15 @@
     min-height: 34px;
     padding: 0 10px;
     font-size: 11px;
-    white-space: nowrap;
+    white-space: normal;
+  }
+
+  .web-nav nav #btnOpenApp {
+    display: none;
+  }
+
+  .web-mobile-open-app {
+    display: block;
   }
 
   .web-hero {

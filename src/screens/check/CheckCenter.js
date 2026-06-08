@@ -1,6 +1,7 @@
 import { navigate } from '../../router.js';
 import { getState, resetSession } from '../../store.js';
 import { getActivePet } from '../../services/pets.js';
+import { getAccountBilling } from '../../services/billing.js';
 import { t } from '../../i18n/tr.js';
 
 const premiumAssistants = [
@@ -53,6 +54,10 @@ const premiumAssistants = [
   }
 ];
 
+function formatCredit(balance = null) {
+  return balance === null ? t('common.loading') : t('checkCenter.credit_balance', { count: Number(balance || 0) });
+}
+
 export function render() {
   const state = getState();
   const pet = getActivePet(state.activePetId);
@@ -73,6 +78,10 @@ export function render() {
             <div class="premium-screen-kicker">${t('checkCenter.kicker')}</div>
             <h1>${t('checkCenter.heading')}</h1>
             <p>${t('checkCenter.hero_desc').replace('{name}', pet.name)}</p>
+            <button class="ai-credit-inline-pill" id="btnAiCredits" type="button">
+              <span>${window.__icons?.spark || ''}</span>
+              <b>${formatCredit()}</b>
+            </button>
           </div>
         </div>
       </div>
@@ -106,6 +115,7 @@ export function render() {
 }
 
 export function afterRender() {
+  const state = getState();
   const handlers = {
     smart: () => {
       resetSession();
@@ -130,4 +140,10 @@ export function afterRender() {
     if (btn.disabled) return;
     btn.addEventListener('click', () => handlers[btn.dataset.assistant]?.());
   });
+
+  document.getElementById('btnAiCredits')?.addEventListener('click', () => navigate('/profile/plan'));
+  getAccountBilling({ userId: state.user?.id || 'user-1' }).then((billing) => {
+    const target = document.querySelector('#btnAiCredits b');
+    if (target) target.textContent = formatCredit(billing.wallet?.balance);
+  }).catch(() => {});
 }

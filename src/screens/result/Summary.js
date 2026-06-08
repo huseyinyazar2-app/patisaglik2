@@ -2,6 +2,8 @@ import { navigate, goBack } from '../../router.js';
 import { getState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
 import { categoryLabels, redFlagQuestions } from '../../data/questions.js';
+import { getFeatureCreditAvailability } from '../../services/billing.js';
+import { showToast } from '../../ui/toast.js';
 
 export function render(params = {}, query = {}) {
   const state = getState();
@@ -129,8 +131,32 @@ export function afterRender() {
   document.getElementById('btnBack')?.addEventListener('click', () => goBack());
 
   
-  document.getElementById('btnEvaluate')?.addEventListener('click', () => {
-    navigate('/check/new/processing');
+  document.getElementById('btnEvaluate')?.addEventListener('click', async () => {
+    const button = document.getElementById('btnEvaluate');
+    const originalText = button?.textContent || '';
+    if (button) {
+      button.disabled = true;
+      button.textContent = t('summary.checking_credit');
+    }
+    try {
+      const state = getState();
+      const credit = await getFeatureCreditAvailability({ userId: state.user?.id || 'user-1', featureCode: 'ai-triage' });
+      if (!credit.ok) {
+        showToast(t('planScreen.insufficient_credits'));
+        if (button) {
+          button.disabled = false;
+          button.textContent = originalText;
+        }
+        return;
+      }
+      navigate('/check/new/processing');
+    } catch (error) {
+      showToast(`${t('summary.credit_check_failed')}: ${error.message || error}`);
+      if (button) {
+        button.disabled = false;
+        button.textContent = originalText;
+      }
+    }
   });
   
   document.getElementById('btnSaveDraft')?.addEventListener('click', () => {

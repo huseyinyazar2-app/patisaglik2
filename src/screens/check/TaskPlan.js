@@ -77,10 +77,6 @@ export function render() {
         <div class="task-list flex flex-col mb-6">
           ${taskCardsHtml || `<div class="empty-state">${t('taskPlan.no_tasks')}</div>`}
         </div>
-
-        <button class="btn btn-outline btn-full flex items-center justify-center gap-2" id="btnAddCustomTask" style="padding: 12px; border-radius: var(--radius-lg); font-weight: 700; background: rgba(255,255,255,0.62);">
-          <span style="width: 16px; height: 16px; display: inline-flex; align-items: center; color: var(--primary);">${window.__icons?.plus}</span> ${t('tasks.add_task')}
-        </button>
       </div>
 
       <div class="card" style="position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: var(--max-width); border-radius: 24px 24px 0 0; padding: 20px 24px; box-shadow: var(--shadow-xl); z-index: 10; border-top: 1px solid rgba(229, 222, 209, 0.8); background: rgba(255, 254, 251, 0.86); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);">

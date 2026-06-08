@@ -490,7 +490,9 @@ export function afterRender() {
         note: textareaValue(t('featureForm.labels.extra_note'))
       });
       if (!response.ok) throw new Error(response.reason || 'ocr_failed');
-      await recordFeatureUsage({ userId: state.user?.id || 'user-1', petId: state.activePetId || null, featureCode: 'document-ocr' });
+      if (!response.usage) {
+        await recordFeatureUsage({ userId: state.user?.id || 'user-1', petId: state.activePetId || null, featureCode: 'document-ocr' });
+      }
       currentDocumentOcrResult = response.data;
       renderOcrResult(response.data);
       const visibleValues = [...document.querySelectorAll('.feature-field')]

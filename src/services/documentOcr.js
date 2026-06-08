@@ -82,7 +82,8 @@ export async function runDocumentOcr({ file, documentKind, readGoal, extractionO
       note
     });
     if (server.ok) return server;
-  } catch {
+  } catch (error) {
+    if (!import.meta.env?.DEV || error?.message === 'insufficient_credits') throw error;
     // Local Vite dev server has no API; fall back to browser Gemini when configured.
   }
 
