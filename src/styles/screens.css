@@ -5903,3 +5903,151 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 520px) {
+  .web-page {
+    width: min(100% - 18px, 430px);
+    padding-bottom: 36px;
+  }
+
+  .web-nav {
+    gap: 10px;
+    padding: 12px 0;
+  }
+
+  .web-brand {
+    min-height: 38px;
+    font-size: 14px;
+  }
+
+  .web-brand span {
+    width: 32px;
+    height: 32px;
+  }
+
+  .web-nav nav {
+    gap: 6px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 2px;
+  }
+
+  .web-nav nav button {
+    min-height: 34px;
+    padding: 0 10px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .web-hero {
+    gap: 22px;
+    padding: 18px 0 18px;
+  }
+
+  .web-hero-copy h1,
+  .admin-hero h1 {
+    font-size: 29px;
+    line-height: 1.08;
+  }
+
+  .web-story-card h2,
+  .web-section-head h2,
+  .web-cta-panel h2,
+  .web-section-split h2 {
+    font-size: 24px;
+    line-height: 1.16;
+  }
+
+  .web-hero-copy p,
+  .admin-hero p,
+  .web-section-split p,
+  .web-story-card p,
+  .web-section-head p,
+  .web-cta-panel p {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .web-proof-strip,
+  .web-hero-actions,
+  .web-metric-row {
+    margin-top: 16px;
+  }
+
+  .web-proof-pill {
+    min-height: 38px;
+    padding: 0 11px;
+    gap: 8px;
+  }
+
+  .web-proof-pill span,
+  .web-feature-card span,
+  .web-journey-card span,
+  .web-audience-card span,
+  .web-safety-card span,
+  .web-story-card.accent span {
+    width: 32px;
+    height: 32px;
+    border-radius: 12px;
+  }
+
+  .web-proof-pill b,
+  .web-metric-card span,
+  .web-feature-card p,
+  .web-journey-card p,
+  .web-audience-card p,
+  .web-safety-card p {
+    font-size: 12px;
+  }
+
+  .web-metric-card,
+  .web-story-card,
+  .web-feature-card,
+  .web-journey-card,
+  .web-audience-card,
+  .web-safety-card,
+  .web-cta-panel {
+    border-radius: 18px;
+    padding: 15px;
+  }
+
+  .web-metric-card strong {
+    font-size: 23px;
+  }
+
+  .web-feature-card h3,
+  .web-journey-card h3,
+  .web-audience-card h3 {
+    font-size: 16px;
+  }
+
+  .web-section-block {
+    margin-top: 34px;
+  }
+
+  .web-scene-shell {
+    padding-top: 12px;
+  }
+
+  .web-hero-image {
+    min-height: 260px;
+    border-radius: 22px;
+  }
+
+  .web-scene-stage {
+    border-radius: 26px;
+    padding: 10px;
+  }
+
+  .web-floating-card,
+  .web-side-card {
+    border-radius: 18px;
+    padding: 12px;
+  }
+
+  .web-floating-card strong,
+  .web-side-card strong {
+    font-size: 14px;
+  }
+}
