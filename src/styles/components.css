@@ -1443,7 +1443,6 @@
 }
 
 /* Float Animation for Large Illustrations */
-.onboarding-illustration,
 .emergency-icon,
 .processing-animation {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(240, 249, 255, 0.75) 100%) !important;
@@ -1452,6 +1451,12 @@
     0 12px 28px rgba(14, 165, 233, 0.08),
     0 4px 10px rgba(14, 165, 233, 0.04),
     inset 0 2px 4px rgba(255, 255, 255, 1) !important;
+  animation: premiumFloat 6s ease-in-out infinite !important;
+}
+
+.onboarding-illustration {
+  border: 1px solid rgba(214, 233, 227, 0.95) !important;
+  box-shadow: 0 20px 48px rgba(0, 61, 52, 0.14) !important;
   animation: premiumFloat 6s ease-in-out infinite !important;
 }
 
