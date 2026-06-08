@@ -1,4 +1,5 @@
 import { getDbClient } from './dbClient.js';
+import { getApiJson, postApiJson } from './apiClient.js';
 import { translateForLocale } from '../i18n/tr.js';
 
 function parseJson(value, fallback = {}) {
@@ -147,7 +148,16 @@ async function getMediaFilesForSubmissions({ db, petId, submissionIds }) {
 
 export async function getFreeRecords({ petId, limit = 8 } = {}) {
   const db = getDbClient();
-  if (!db) return fromLocalStorage(petId);
+  if (!db) {
+    try {
+      const query = new URLSearchParams();
+      if (petId) query.set('petId', petId);
+      query.set('limit', String(limit));
+      const result = await getApiJson(`/api/records?${query.toString()}`);
+      return result.data || result.records || fromLocalStorage(petId);
+    } catch {}
+    return fromLocalStorage(petId);
+  }
 
   const args = petId ? [petId, limit] : [limit];
   const petFilter = petId ? 'WHERE pet_id = ?' : '';
@@ -253,6 +263,10 @@ export async function updateReminderStatus({ reminderId, status, snoozeDays = 0 
   }
 
   if (!db) {
+    try {
+      await postApiJson('/api/reminders/status', { reminderId, status, snoozeDays });
+      return { ok: true, storage: 'api' };
+    } catch {}
     updateLocalReminder(reminderId, {
       status: status || 'scheduled',
       due_at: dueAt

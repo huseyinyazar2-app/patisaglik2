@@ -1,4 +1,5 @@
 import { getDbClient } from './dbClient.js';
+import { getApiJson, postApiJson } from './apiClient.js';
 import { buildPetRiskContext } from './petContext.js';
 import { translateForLocale } from '../i18n/tr.js';
 
@@ -150,7 +151,16 @@ export function getActivePet(activePetId) {
 
 export async function getPets({ userId = 'user-1' } = {}) {
   const db = getDbClient();
-  if (!db) return getLocalPets();
+  if (!db) {
+    try {
+      const query = new URLSearchParams({ userId });
+      const result = await getApiJson(`/api/pets?${query.toString()}`);
+      const pets = (result.data?.pets || result.pets || []).map(normalize);
+      mergeLocalCache(pets);
+      return pets;
+    } catch {}
+    return getLocalPets();
+  }
 
   const result = await db.execute({
     sql: `SELECT p.*, s.code AS species_code
@@ -199,6 +209,12 @@ export async function savePet({ userId = 'user-1', pet }) {
 
   const db = getDbClient();
   if (!db) {
+    try {
+      const result = await postApiJson('/api/pets', { userId, pet });
+      const savedId = result.id || result.data?.id || record.id;
+      writeLocal([normalize({ ...record, id: savedId, type: pet.type }), ...readLocal().filter((item) => item.id !== savedId)]);
+      return { ok: true, storage: 'api', id: savedId };
+    } catch {}
     writeLocal([normalize({ ...record, type: pet.type }), ...readLocal()]);
     return { ok: true, storage: 'local-fallback', id: record.id };
   }
@@ -282,7 +298,13 @@ export async function updatePet({ userId = 'user-1', petId, pet }) {
   writeLocal([record, ...currentRaw.filter((item) => item.id !== petId)]);
 
   const db = getDbClient();
-  if (!db) return { ok: true, storage: 'local-fallback', id: petId };
+  if (!db) {
+    try {
+      await postApiJson('/api/pets/update', { userId, petId, pet });
+      return { ok: true, storage: 'api', id: petId };
+    } catch {}
+    return { ok: true, storage: 'local-fallback', id: petId };
+  }
 
   await db.execute({
     sql: `UPDATE pets

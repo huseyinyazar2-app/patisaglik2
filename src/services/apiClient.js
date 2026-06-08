@@ -26,8 +26,30 @@ async function postJson(path, body) {
   return data;
 }
 
+async function getJson(path) {
+  let response;
+  try {
+    response = await fetch(apiUrl(path), {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (error) {
+    throw makeCodedError('network_error', { code: CLIENT_ERROR_CODES.network_error, message: error.message || 'network_error' });
+  }
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.ok === false) {
+    const reason = data.error || data.reason || `http_${response.status}`;
+    throw makeCodedError(reason, { code: data.errorCode, message: reason });
+  }
+  return data;
+}
+
 export async function postApiJson(path, body) {
   return postJson(path, body);
+}
+
+export async function getApiJson(path) {
+  return getJson(path);
 }
 
 export async function registerAccount(input) {

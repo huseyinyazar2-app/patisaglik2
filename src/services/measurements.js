@@ -1,4 +1,5 @@
 import { getDbClient } from './dbClient.js';
+import { getApiJson, postApiJson } from './apiClient.js';
 import { translateForLocale } from '../i18n/tr.js';
 
 const LOCAL_KEY = 'pati_measurements';
@@ -40,6 +41,19 @@ export async function saveMeasurement({ userId, petId, type, value, unit, measur
 
   const db = getDbClient();
   if (!db) {
+    try {
+      const result = await postApiJson('/api/measurements', {
+        userId,
+        petId,
+        type,
+        value: record.value,
+        unit,
+        measuredAt: record.measured_at,
+        note,
+        metadata
+      });
+      return { ok: true, storage: 'api', id: result.id || result.data?.id || record.id };
+    } catch {}
     writeLocal([record, ...readLocal()]);
     return { ok: true, storage: 'local-fallback', id: record.id };
   }
@@ -72,6 +86,14 @@ export async function saveMeasurement({ userId, petId, type, value, unit, measur
 export async function getMeasurements({ petId, type, limit = 50 } = {}) {
   const db = getDbClient();
   if (!db) {
+    try {
+      const query = new URLSearchParams();
+      if (petId) query.set('petId', petId);
+      if (type) query.set('type', type);
+      query.set('limit', String(limit));
+      const result = await getApiJson(`/api/measurements?${query.toString()}`);
+      return result.data?.measurements || result.measurements || [];
+    } catch {}
     return readLocal()
       .filter((item) => (!petId || item.pet_id === petId) && (!type || item.measurement_type === type))
       .slice(0, limit);

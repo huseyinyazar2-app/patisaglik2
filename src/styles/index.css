@@ -425,6 +425,8 @@ input[type="email"],
 input[type="password"],
 input[type="number"],
 input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
 input[type="tel"],
 textarea,
 select {

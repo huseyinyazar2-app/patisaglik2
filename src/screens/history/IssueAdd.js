@@ -17,7 +17,7 @@ export function render(params = {}, query = {}) {
         <div class="header-right"></div>
       </div>
       
-      <div class="section pt-6 pb-24">
+      <div class="section pt-6">
         <div class="form-group">
           <label class="block text-sm font-bold mb-2">${t('history.issue_name')}</label>
           <input type="text" id="inputName" class="w-full p-3 rounded-lg border border-border-color bg-gray-50 focus:border-primary focus:outline-none" placeholder="${t('issueAdd.name_placeholder')}">
@@ -50,11 +50,11 @@ export function render(params = {}, query = {}) {
           </select>
         </div>
         <div class="feature-form-notice hidden" id="issueFormNotice" role="status"></div>
-      </div>
-      
-      <div class="card" style="position: fixed; bottom: 0; left: 0; right: 0; border-radius: 24px 24px 0 0; padding: 20px 24px; box-shadow: 0 -4px 20px rgba(0,0,0,0.05); z-index: 10;">
-        <button class="btn btn-primary btn-full mb-3" id="btnSave">${t('common.save')}</button>
-        <button class="btn btn-ghost btn-full text-secondary" id="btnCancel">${t('common.cancel')}</button>
+
+        <div class="feature-bottom-actions">
+          <button class="btn btn-primary btn-full mb-3" id="btnSave">${t('common.save')}</button>
+          <button class="btn btn-ghost btn-full text-secondary" id="btnCancel">${t('common.cancel')}</button>
+        </div>
       </div>
     </div>
   `;

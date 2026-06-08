@@ -1,4 +1,5 @@
 import { getDbClient } from './dbClient.js';
+import { postApiJson } from './apiClient.js';
 import { recordFeatureUsage } from './billing.js';
 import { translateForLocale } from '../i18n/tr.js';
 
@@ -618,6 +619,34 @@ export async function submitFeatureForm({ userId, petId, featureCode, locale = '
 
   const db = getDbClient();
   if (!db) {
+    try {
+      const result = await postApiJson('/api/forms/submit', {
+        userId: record.user_id,
+        petId: record.pet_id,
+        featureCode,
+        locale,
+        payload: payloadObject
+      });
+      const usageResult = await recordFeatureUsage({
+        userId: record.user_id,
+        petId: record.pet_id,
+        featureCode,
+        relatedId: result.id || result.data?.id || record.id
+      });
+      return {
+        ok: true,
+        storage: 'api',
+        id: result.id || result.data?.id || record.id,
+        domainTable: result.domainTable || result.data?.domainTable,
+        mediaCount: result.mediaCount || result.data?.mediaCount || 0,
+        usagePlan: usageResult.usage.plan_code,
+        creditCost: usageResult.usage.credit_cost,
+        publicToken: result.publicToken || result.data?.publicToken,
+        publicPath: result.publicPath || result.data?.publicPath,
+        invitePath: result.invitePath || result.data?.invitePath,
+        inviteText: result.inviteText || result.data?.inviteText
+      };
+    } catch {}
     saveLocal({ ...record, storage: 'local-fallback' });
     const localDomain = featureCode === 'qr' && record.pet_id ? saveLocalQrCard(record, payloadObject) : null;
     const localDocument = ['clinic-export', 'document-ai', 'vet-prep'].includes(featureCode) ? 'documents' : null;

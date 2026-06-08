@@ -62,14 +62,12 @@ export function render(params = {}, query = {}) {
           <div class="text-sm text-tertiary mb-3 modern-title-icon">${window.__icons?.[typeInfo.iconKey] || window.__icons?.measurement} ${typeInfo.label}</div>
           <div class="measurement-value-input" style="justify-content: center;">
             <input
-              type="number"
+              type="text"
               id="valueInput"
               placeholder="${typeInfo.placeholder}"
-              min="${typeInfo.min}"
-              max="${typeInfo.max}"
-              step="${typeInfo.step}"
               style="font-size: var(--font-size-4xl); font-weight: 800; text-align: center; max-width: 160px; border: none; background: transparent; color: var(--primary); outline: none;"
               inputmode="decimal"
+              autocomplete="off"
             />
             <span class="measurement-unit" style="font-size: var(--font-size-xl);">${typeInfo.unit}</span>
           </div>
@@ -122,6 +120,11 @@ export function afterRender(params = {}, query = {}) {
   const selectedType = query.type || 'weight';
   const typeInfo = MEASUREMENT_TYPES.find(t => t.id === selectedType) || MEASUREMENT_TYPES[0];
 
+  function parseDecimal(value) {
+    const parsed = Number.parseFloat(String(value || '').replace(',', '.'));
+    return Number.isFinite(parsed) ? parsed : Number.NaN;
+  }
+
   function showMeasurementToast(message) {
     const toast = document.createElement('div');
     toast.className = 'toast';
@@ -156,7 +159,8 @@ export function afterRender(params = {}, query = {}) {
     const time = document.getElementById('timeInput')?.value || '12:00';
     const note = document.getElementById('noteInput')?.value;
 
-    if (!value || isNaN(parseFloat(value))) {
+    const numericValue = parseDecimal(value);
+    if (!Number.isFinite(numericValue)) {
       showMeasurementToast(`${window.__icons?.alert || ''} ${t('measurementAdd.invalid_value')}`);
       return;
     }
@@ -169,7 +173,7 @@ export function afterRender(params = {}, query = {}) {
         userId: getState().user?.id || 'user-1',
         petId: getState().activePetId,
         type: selectedType,
-        value,
+        value: numericValue,
         unit: typeInfo.unit,
         measuredAt: new Date(`${date}T${time}:00`).toISOString(),
         note

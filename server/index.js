@@ -106,6 +106,91 @@ function safeUser(row = {}) {
   };
 }
 
+function rowToObject(row) {
+  return Object.fromEntries(Object.entries(row || {}));
+}
+
+function parseJson(value, fallback = {}) {
+  try {
+    return value ? JSON.parse(value) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function normalizeKey(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+}
+
+function firstValue(value) {
+  if (Array.isArray(value)) {
+    const first = value.find((item) => item && (typeof item === 'string' || item.checked));
+    return typeof first === 'string' ? first : first?.label || '';
+  }
+  return value || '';
+}
+
+function pickPayload(payload, names, fallback = '') {
+  const entries = Object.entries(payload || {});
+  const needles = names.map(normalizeKey);
+  for (const [key, value] of entries) {
+    const normalized = normalizeKey(key);
+    if (needles.some((needle) => normalized.includes(needle))) return value;
+  }
+  return fallback;
+}
+
+function moneyToCents(value) {
+  const raw = String(value || '').replace(/[^\d,.-]/g, '');
+  const normalized = raw.includes(',') ? raw.replace(/\./g, '').replace(',', '.') : raw.replace(/,/g, '');
+  const amount = Number.parseFloat(normalized);
+  return Number.isFinite(amount) ? Math.round(amount * 100) : 0;
+}
+
+function isoOrNow(value) {
+  return value && !Number.isNaN(Date.parse(value)) ? new Date(value).toISOString() : new Date().toISOString();
+}
+
+function numberFromInput(value) {
+  const parsed = Number(String(value ?? '').replace(',', '.'));
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function speciesIdFor(code) {
+  const map = {
+    cat: 'species-cat',
+    dog: 'species-dog',
+    bird: 'species-bird',
+    fish: 'species-fish',
+    reptile: 'species-reptile',
+    small_mammal: 'species-small-mammal',
+    exotic: 'species-exotic'
+  };
+  return map[code] || 'species-cat';
+}
+
+async function ensureSpecies(db) {
+  const species = [
+    ['species-cat', 'cat', 'Kedi', 'Cat', 'mammal'],
+    ['species-dog', 'dog', 'Köpek', 'Dog', 'mammal'],
+    ['species-bird', 'bird', 'Kuş', 'Bird', 'avian'],
+    ['species-fish', 'fish', 'Balık', 'Fish', 'aquatic'],
+    ['species-reptile', 'reptile', 'Sürüngen', 'Reptile', 'reptile'],
+    ['species-small-mammal', 'small_mammal', 'Küçük Memeli', 'Small mammal', 'mammal'],
+    ['species-exotic', 'exotic', 'Egzotik', 'Exotic', 'exotic']
+  ];
+  for (const item of species) {
+    await db.execute({
+      sql: `INSERT OR IGNORE INTO pet_species (id, code, default_name_tr, default_name_en, category)
+            VALUES (?, ?, ?, ?, ?)`,
+      args: item
+    });
+  }
+}
+
 async function ensureAuthSchema(db) {
   await executeOptional(db, `ALTER TABLE users ADD COLUMN password_hash TEXT`);
   await executeOptional(db, `CREATE INDEX IF NOT EXISTS idx_users_phone ON users(phone)`);
@@ -179,6 +264,401 @@ async function handleLogin(req, res) {
   if (!user?.id || !verifyPassword(password, user.password_hash)) return sendJson(res, 401, { ok: false, error: 'invalid_credentials' });
   const wallet = await ensureInitialWallet(db, user.id);
   return sendJson(res, 200, { ok: true, user: safeUser(user), wallet });
+}
+
+async function handleGetPets(req, res, url) {
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  const userId = url.searchParams.get('userId') || 'user-1';
+  const result = await db.execute({
+    sql: `SELECT p.*, s.code AS species_code
+          FROM pets p
+          JOIN pet_species s ON s.id = p.species_id
+          WHERE p.primary_owner_user_id = ? AND p.status <> 'deleted'
+          ORDER BY p.created_at ASC`,
+    args: [userId]
+  });
+  return sendJson(res, 200, { ok: true, data: { pets: result.rows.map(rowToObject) } });
+}
+
+async function handleSavePet(req, res) {
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  await ensureSpecies(db);
+  const body = await readBody(req);
+  const pet = body.pet || {};
+  const userId = body.userId || 'user-1';
+  const petId = id('pet');
+  const now = new Date().toISOString();
+  const metadata = JSON.stringify({
+    breed: pet.breed || '',
+    gender: pet.gender || 'unknown',
+    weight: numberFromInput(pet.weight),
+    neutered: pet.neutered || 'unknown',
+    chronic: pet.chronic || '',
+    allergies: pet.allergies || '',
+    medications: pet.medications || '',
+    location: pet.location || '',
+    volunteerNote: pet.volunteerNote || '',
+    extractedTags: pet.extractedTags || []
+  });
+  if (!pet.name) return sendJson(res, 400, { ok: false, error: 'pet_name_required' });
+  await db.batch([
+    {
+      sql: `INSERT INTO pets
+        (id, primary_owner_user_id, species_id, name, sex, birth_date, approximate_age_label, weight_kg, neutered_status, ownership_type, medical_summary, metadata, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      args: [
+        petId,
+        userId,
+        speciesIdFor(pet.type),
+        pet.name,
+        pet.gender || 'unknown',
+        pet.birthDate || null,
+        '',
+        numberFromInput(pet.weight),
+        pet.neutered || 'unknown',
+        pet.ownership || 'owned',
+        pet.rawHistory || '',
+        metadata,
+        now,
+        now
+      ]
+    },
+    {
+      sql: `INSERT OR IGNORE INTO pet_members (id, pet_id, user_id, role_id, status)
+            VALUES (?, ?, ?, 'role-owner', 'active')`,
+      args: [`member-${userId}-${petId}`, petId, userId]
+    }
+  ]);
+  return sendJson(res, 200, { ok: true, id: petId });
+}
+
+async function handleUpdatePet(req, res) {
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  const body = await readBody(req);
+  const pet = body.pet || {};
+  const userId = body.userId || 'user-1';
+  const petId = body.petId;
+  if (!petId) return sendJson(res, 400, { ok: false, error: 'pet_required' });
+  const current = (await db.execute({ sql: `SELECT * FROM pets WHERE id = ? AND primary_owner_user_id = ? LIMIT 1`, args: [petId, userId] })).rows[0];
+  if (!current?.id) return sendJson(res, 404, { ok: false, error: 'pet_not_found' });
+  const currentMeta = parseJson(current.metadata);
+  const metadata = JSON.stringify({
+    ...currentMeta,
+    breed: pet.breed ?? currentMeta.breed ?? '',
+    gender: pet.gender ?? current.sex ?? currentMeta.gender ?? 'unknown',
+    weight: numberFromInput(pet.weight ?? current.weight_kg ?? currentMeta.weight),
+    neutered: pet.neutered ?? current.neutered_status ?? currentMeta.neutered ?? 'unknown',
+    chronic: pet.chronic ?? currentMeta.chronic ?? '',
+    allergies: pet.allergies ?? currentMeta.allergies ?? '',
+    medications: pet.medications ?? currentMeta.medications ?? '',
+    location: pet.location ?? currentMeta.location ?? '',
+    volunteerNote: pet.volunteerNote ?? currentMeta.volunteerNote ?? '',
+    photo: pet.photo ?? current.avatar_url ?? currentMeta.photo ?? ''
+  });
+  await db.execute({
+    sql: `UPDATE pets
+          SET name = ?, sex = ?, birth_date = ?, weight_kg = ?, neutered_status = ?, ownership_type = ?,
+              medical_summary = ?, avatar_url = ?, metadata = ?, updated_at = ?
+          WHERE id = ? AND primary_owner_user_id = ?`,
+    args: [
+      pet.name ?? current.name,
+      pet.gender ?? current.sex ?? 'unknown',
+      pet.birthDate ?? current.birth_date,
+      numberFromInput(pet.weight ?? current.weight_kg),
+      pet.neutered ?? current.neutered_status ?? 'unknown',
+      pet.ownership ?? current.ownership_type ?? 'owned',
+      pet.rawHistory ?? current.medical_summary ?? '',
+      pet.photo ?? current.avatar_url ?? null,
+      metadata,
+      new Date().toISOString(),
+      petId,
+      userId
+    ]
+  });
+  return sendJson(res, 200, { ok: true, id: petId });
+}
+
+const healthFeatureTypes = {
+  'photo-followup': 'photo_followup',
+  'poop-score': 'poop_score',
+  'diet-log': 'diet_log',
+  chronic: 'chronic_followup',
+  postop: 'postop_followup',
+  reproduction: 'reproduction_followup',
+  senior: 'senior_followup',
+  toxic: 'toxin_foreign_body',
+  issue: 'issue'
+};
+
+function genericTitle(payload, fallback) {
+  const value = firstValue(pickPayload(payload, ['başlık', 'baslik', 'title', 'konu', 'ad', 'name', 'tip', 'type', 'skor', 'score']));
+  return value || fallback;
+}
+
+async function insertFormMedia(db, record, payload) {
+  const files = Array.isArray(payload.__media_files) ? payload.__media_files : [];
+  for (const [index, file] of files.entries()) {
+    await db.execute({
+      sql: `INSERT INTO media_files
+        (id, pet_id, uploaded_by_user_id, related_entity_type, related_entity_id, media_type, url, local_uri, mime_type, file_size_bytes, metadata)
+        VALUES (?, ?, ?, 'form_submission', ?, ?, ?, ?, ?, ?, ?)`,
+      args: [
+        id('media'),
+        record.pet_id,
+        record.user_id,
+        record.id,
+        String(file.mime_type || '').startsWith('image/') ? 'image' : 'document',
+        file.object_key || file.url || null,
+        file.local_uri || null,
+        file.mime_type || '',
+        Number(file.file_size_bytes || 0),
+        JSON.stringify({ index, label: file.label || '', name: file.name || '' })
+      ]
+    });
+  }
+  return files.length;
+}
+
+async function insertFormDomainRecord(db, record, payload) {
+  if (!record.pet_id) return null;
+  if (record.feature_code === 'expense') {
+    const category = firstValue(pickPayload(payload, ['kategori', 'category'], 'Masraf')) || 'Masraf';
+    await db.execute({
+      sql: `INSERT INTO expenses
+        (id, pet_id, created_by_user_id, category, amount_cents, currency, spent_at, title, note, metadata)
+        VALUES (?, ?, ?, ?, ?, 'TRY', ?, ?, ?, ?)`,
+      args: [
+        id('expense'),
+        record.pet_id,
+        record.user_id,
+        category,
+        moneyToCents(pickPayload(payload, ['tutar', 'amount', 'price'])),
+        isoOrNow(pickPayload(payload, ['tarih', 'date'])),
+        category,
+        firstValue(pickPayload(payload, ['not', 'note', 'açıklama', 'aciklama'])),
+        JSON.stringify({ form_submission_id: record.id, payload })
+      ]
+    });
+    return 'expenses';
+  }
+  if (record.feature_code === 'reminders') {
+    const reminderType = firstValue(pickPayload(payload, ['hatırlatma tipi', 'hatirlatma tipi', 'reminder type', 'tip'], 'Genel')) || 'Genel';
+    const title = firstValue(pickPayload(payload, ['başlık', 'baslik', 'title'], reminderType)) || reminderType;
+    await db.execute({
+      sql: `INSERT INTO reminders
+        (id, pet_id, created_by_user_id, reminder_type, title, due_at, repeat_rule, status, note, metadata)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'scheduled', ?, ?)`,
+      args: [
+        id('reminder'),
+        record.pet_id,
+        record.user_id,
+        reminderType,
+        title,
+        isoOrNow(pickPayload(payload, ['tarih', 'date'])),
+        firstValue(pickPayload(payload, ['tekrar', 'repeat'], 'Bir kez')),
+        firstValue(pickPayload(payload, ['not', 'note', 'açıklama', 'aciklama'])),
+        JSON.stringify({ form_submission_id: record.id, payload })
+      ]
+    });
+    return 'reminders';
+  }
+  if (healthFeatureTypes[record.feature_code]) {
+    await db.execute({
+      sql: `INSERT INTO health_records
+        (id, pet_id, created_by_user_id, record_type, title, occurred_at, summary, payload, source)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'feature_form')`,
+      args: [
+        id('health'),
+        record.pet_id,
+        record.user_id,
+        healthFeatureTypes[record.feature_code],
+        genericTitle(payload, record.feature_code),
+        new Date().toISOString(),
+        firstValue(pickPayload(payload, ['not', 'note', 'özet', 'ozet', 'açıklama', 'aciklama', 'detay', 'detail'])),
+        JSON.stringify({ form_submission_id: record.id, feature_code: record.feature_code, ...payload })
+      ]
+    });
+    return 'health_records';
+  }
+  if (['clinic-export', 'document-ai', 'vet-prep'].includes(record.feature_code)) {
+    await db.execute({
+      sql: `INSERT INTO documents
+        (id, pet_id, uploaded_by_user_id, document_type, title, extracted_text, extracted_data, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'draft')`,
+      args: [
+        id('document'),
+        record.pet_id,
+        record.user_id,
+        record.feature_code,
+        genericTitle(payload, 'Belge'),
+        firstValue(pickPayload(payload, ['not', 'note', 'özet', 'ozet'])),
+        JSON.stringify({ form_submission_id: record.id, feature_code: record.feature_code, payload })
+      ]
+    });
+    return 'documents';
+  }
+  return null;
+}
+
+async function handleSubmitForm(req, res) {
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  const body = await readBody(req);
+  const now = new Date().toISOString();
+  const record = {
+    id: id('form'),
+    user_id: body.userId || 'user-1',
+    pet_id: body.petId || null,
+    feature_code: body.featureCode || 'form',
+    locale: body.locale || 'tr',
+    status: 'submitted',
+    payload: body.payload || {},
+    created_at: now,
+    updated_at: now
+  };
+  await db.execute({
+    sql: `INSERT INTO form_submissions
+      (id, user_id, pet_id, feature_code, locale, status, payload, created_at, updated_at, synced_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    args: [record.id, record.user_id, record.pet_id, record.feature_code, record.locale, record.status, JSON.stringify(record.payload), now, now, now]
+  });
+  const mediaCount = await insertFormMedia(db, record, record.payload);
+  const domainTable = await insertFormDomainRecord(db, record, record.payload);
+  return sendJson(res, 200, { ok: true, id: record.id, domainTable, mediaCount });
+}
+
+async function mediaBySubmission(db, petId, ids) {
+  const submissionIds = [...new Set((ids || []).filter(Boolean))];
+  if (!submissionIds.length) return {};
+  const placeholders = submissionIds.map(() => '?').join(', ');
+  const args = petId ? [petId, ...submissionIds] : submissionIds;
+  const petClause = petId ? 'pet_id = ? AND ' : '';
+  const result = await db.execute({
+    sql: `SELECT id, related_entity_id, media_type, local_uri, mime_type, file_size_bytes, metadata, created_at
+          FROM media_files
+          WHERE ${petClause}related_entity_type = 'form_submission'
+            AND related_entity_id IN (${placeholders})
+          ORDER BY created_at DESC`,
+    args
+  });
+  return result.rows.map(rowToObject).reduce((acc, item) => {
+    acc[item.related_entity_id] = acc[item.related_entity_id] || [];
+    acc[item.related_entity_id].push({ ...item, metadata: parseJson(item.metadata) });
+    return acc;
+  }, {});
+}
+
+async function handleGetRecords(req, res, url) {
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  const petId = url.searchParams.get('petId') || '';
+  const limit = Math.max(1, Math.min(100, Number(url.searchParams.get('limit') || 20)));
+  const args = petId ? [petId, limit] : [limit];
+  const where = petId ? 'WHERE pet_id = ?' : '';
+  const [expensesResult, remindersResult, healthResult] = await Promise.all([
+    db.execute({ sql: `SELECT id, category, amount_cents, currency, spent_at, title, note, metadata, created_at FROM expenses ${where} ORDER BY spent_at DESC, created_at DESC LIMIT ?`, args }),
+    db.execute({ sql: `SELECT id, reminder_type, title, due_at, repeat_rule, status, note, metadata, created_at FROM reminders ${where} ORDER BY due_at ASC, created_at DESC LIMIT ?`, args }),
+    db.execute({ sql: `SELECT id, record_type, title, occurred_at, summary, payload, source, created_at FROM health_records ${where} ORDER BY occurred_at DESC, created_at DESC LIMIT ?`, args })
+  ]);
+  const expenses = expensesResult.rows.map((row) => ({ ...rowToObject(row), metadata: parseJson(row.metadata) }));
+  const reminders = remindersResult.rows.map((row) => ({ ...rowToObject(row), metadata: parseJson(row.metadata) }));
+  const healthRecords = healthResult.rows.map((row) => ({ ...rowToObject(row), payload: parseJson(row.payload) }));
+  const media = await mediaBySubmission(db, petId, [
+    ...expenses.map((item) => item.metadata?.form_submission_id),
+    ...reminders.map((item) => item.metadata?.form_submission_id),
+    ...healthRecords.map((item) => item.payload?.form_submission_id)
+  ]);
+  return sendJson(res, 200, {
+    ok: true,
+    data: {
+      storage: 'api',
+      expenses: expenses.map((item) => ({ ...item, mediaFiles: media[item.metadata?.form_submission_id] || [] })),
+      reminders: reminders.map((item) => ({ ...item, mediaFiles: media[item.metadata?.form_submission_id] || [] })),
+      healthRecords: healthRecords.map((item) => ({ ...item, mediaFiles: media[item.payload?.form_submission_id] || [] }))
+    }
+  });
+}
+
+async function handleSaveMeasurement(req, res) {
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  const body = await readBody(req);
+  if (!body.petId) return sendJson(res, 400, { ok: false, error: 'pet_required' });
+  const measurementId = id('measurement');
+  await db.execute({
+    sql: `INSERT INTO measurements
+      (id, pet_id, created_by_user_id, measurement_type, value, unit, measured_at, note, metadata)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    args: [
+      measurementId,
+      body.petId,
+      body.userId || 'user-1',
+      body.type || 'other',
+      numberFromInput(body.value),
+      body.unit || '',
+      body.measuredAt || new Date().toISOString(),
+      body.note || '',
+      JSON.stringify(body.metadata || {})
+    ]
+  });
+  return sendJson(res, 200, { ok: true, id: measurementId });
+}
+
+async function handleGetMeasurements(req, res, url) {
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  const where = [];
+  const args = [];
+  const petId = url.searchParams.get('petId');
+  const type = url.searchParams.get('type');
+  const limit = Math.max(1, Math.min(100, Number(url.searchParams.get('limit') || 50)));
+  if (petId) {
+    where.push('pet_id = ?');
+    args.push(petId);
+  }
+  if (type) {
+    where.push('measurement_type = ?');
+    args.push(type);
+  }
+  args.push(limit);
+  const result = await db.execute({
+    sql: `SELECT id, pet_id, created_by_user_id, measurement_type, value, unit, measured_at, note, metadata, created_at
+          FROM measurements
+          ${where.length ? `WHERE ${where.join(' AND ')}` : ''}
+          ORDER BY measured_at DESC, created_at DESC
+          LIMIT ?`,
+    args
+  });
+  return sendJson(res, 200, { ok: true, data: { measurements: result.rows.map(rowToObject) } });
+}
+
+async function handleReminderStatus(req, res) {
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  const body = await readBody(req);
+  const reminderId = body.reminderId;
+  if (!reminderId) return sendJson(res, 400, { ok: false, error: 'reminder_required' });
+  let dueAt = null;
+  if (Number(body.snoozeDays || 0)) {
+    const date = new Date();
+    date.setDate(date.getDate() + Number(body.snoozeDays || 0));
+    dueAt = date.toISOString();
+  }
+  if (dueAt) {
+    await db.execute({
+      sql: `UPDATE reminders SET status = ?, due_at = ?, updated_at = ? WHERE id = ?`,
+      args: [body.status || 'scheduled', dueAt, new Date().toISOString(), reminderId]
+    });
+  } else {
+    await db.execute({
+      sql: `UPDATE reminders SET status = ?, updated_at = ? WHERE id = ?`,
+      args: [body.status || 'scheduled', new Date().toISOString(), reminderId]
+    });
+  }
+  return sendJson(res, 200, { ok: true });
 }
 
 async function handleDocumentOcr(req, res) {
@@ -481,6 +961,14 @@ async function route(req, res) {
     }
     if (req.method === 'POST' && url.pathname === '/api/auth/register') return handleRegister(req, res);
     if (req.method === 'POST' && url.pathname === '/api/auth/login') return handleLogin(req, res);
+    if (req.method === 'GET' && url.pathname === '/api/pets') return handleGetPets(req, res, url);
+    if (req.method === 'POST' && url.pathname === '/api/pets') return handleSavePet(req, res);
+    if (req.method === 'POST' && url.pathname === '/api/pets/update') return handleUpdatePet(req, res);
+    if (req.method === 'POST' && url.pathname === '/api/forms/submit') return handleSubmitForm(req, res);
+    if (req.method === 'GET' && url.pathname === '/api/records') return handleGetRecords(req, res, url);
+    if (req.method === 'POST' && url.pathname === '/api/reminders/status') return handleReminderStatus(req, res);
+    if (req.method === 'POST' && url.pathname === '/api/measurements') return handleSaveMeasurement(req, res);
+    if (req.method === 'GET' && url.pathname === '/api/measurements') return handleGetMeasurements(req, res, url);
     if (url.pathname.startsWith('/api/admin/')) return handleAdminRequest(req, res, url, sendJson);
     if (req.method === 'POST' && url.pathname === '/api/media/sign-upload') return handleSignUpload(req, res);
     if (req.method === 'POST' && url.pathname === '/api/media/complete') return handleCompleteUpload(req, res);
