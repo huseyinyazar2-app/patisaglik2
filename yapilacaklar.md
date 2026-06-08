@@ -593,4 +593,5 @@ Bu fazın ürün dili teşhis değil; çekim kalitesini artırma, değişim taki
 - [x] Signed release AAB icin secret tabanli keystore/Gradle imza altyapisi hazirlandi.
 - [x] Build notlari eklendi: `docs/ANDROID_BUILD.md`.
 - [x] Store oncesi Pet Help launcher/adaptive ikonlari tasarlanip Android ve PWA kaynaklarina islendi.
+- [x] Play Console app icon ve feature graphic hazirlandi: `store/play-console/`.
 - [ ] GitHub Secrets girildikten sonra signed AAB workflow ciktisi Play Console icin test edilecek.

@@ -27,4 +27,5 @@ Workflow, secret'lardan `android/keystore.properties` dosyasini gecici olarak ur
 ## Store oncesi notlar
 
 - Pet Help launcher/adaptive ikonlari Android ve PWA kaynaklarina islendi.
+- Play Console icon ve feature graphic hazirlandi: `store/play-console/`.
 - OTP ve odeme ekranlari ilk store surumu icin pasif tutuldu; sonradan guncelleme ile acilacak.
