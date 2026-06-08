@@ -5,8 +5,9 @@ import { submitFeatureForm } from '../../services/formSubmissions.js';
 import { showToast } from '../../ui/toast.js';
 import { buildPetRiskContext } from '../../services/petContext.js';
 import { generateGeminiJson, isGeminiConfigured } from '../../services/geminiClient.js';
-import { postApiJson } from '../../services/apiClient.js';
+import { postApiJson, uploadMediaFile } from '../../services/apiClient.js';
 import { getFeatureCreditAvailability, recordFeatureUsage } from '../../services/billing.js';
+import { formatErrorForDeveloper } from '../../services/errorCodes.js';
 import { getLocale, t, translateForLocale } from '../../i18n/tr.js';
 
 function escapeHtml(value) {
@@ -344,7 +345,41 @@ export function afterRender() {
           throw new Error('insufficient_credits');
         }
         const prompt = buildAiPrompt({ productName, ingredientText, amount, timing, symptoms, petContext }, lastResult);
-        let ai = await postApiJson('/api/ai/package-risk', { prompt }).catch(() => null);
+        const packageFile = document.getElementById('packagePhoto')?.files?.[0];
+        let mediaRefs = packageFile ? [{
+          fileName: packageFile.name || '',
+          mimeType: packageFile.type || '',
+          sizeBytes: packageFile.size || 0,
+          source: 'package_photo'
+        }] : [];
+        if (packageFile && state.user?.id && state.activePetId) {
+          try {
+            const uploaded = await uploadMediaFile({
+              userId: state.user.id,
+              petId: state.activePetId,
+              category: 'ai-inputs',
+              file: packageFile,
+              relatedEntityType: 'ai_input'
+            });
+            mediaRefs = mediaRefs.map((item) => ({
+              ...item,
+              mediaId: uploaded.id || '',
+              objectKey: uploaded.objectKey || '',
+              category: 'ai-inputs'
+            }));
+          } catch {}
+        }
+        let aiError = null;
+        let ai = await postApiJson('/api/ai/package-risk', {
+          userId: state.user?.id || 'user-1',
+          petId: state.activePetId || '',
+          prompt,
+          mediaRefs,
+          context: { productName, ingredientText, amount, timing, symptoms, petContext }
+        }).catch((error) => {
+          aiError = error;
+          return null;
+        });
         if (!ai?.ok && isGeminiConfigured()) ai = await generateGeminiJson({
           system: t('packageRisk.system_prompt'),
           prompt,
@@ -360,9 +395,14 @@ export function afterRender() {
               lastResult.meta = levelMeta(lastResult.level) || lastResult.meta;
             }
           }
+        } else if (aiError) {
+          showToast(formatErrorForDeveloper(aiError, t('packageRisk.ai_failed_note')), { duration: 5000 });
         }
-      } catch {
+      } catch (err) {
         lastResult.ai = null;
+        if (err?.message !== 'insufficient_credits') {
+          showToast(formatErrorForDeveloper(err, t('packageRisk.ai_failed_note')), { duration: 5000 });
+        }
       }
 
     const output = document.getElementById('packageRiskResult');
@@ -411,7 +451,7 @@ export function afterRender() {
       showToast(t('packageRisk.record_created'));
       navigate('/history/health-records?filter=toxin_foreign_body&sort=newest');
     } catch (err) {
-      showToast(`${t('packageRisk.record_failed')}: ${err.message}`);
+      showToast(formatErrorForDeveloper(err, t('packageRisk.record_failed')));
       button.disabled = false;
       button.textContent = original;
     }

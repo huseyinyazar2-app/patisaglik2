@@ -5,6 +5,7 @@ import { submitFeatureForm } from '../../services/formSubmissions.js';
 import { isDocumentOcrConfigured, runDocumentOcr } from '../../services/documentOcr.js';
 import { uploadMediaFile } from '../../services/apiClient.js';
 import { PAYMENTS_DISABLED, getFeatureCreditAvailability, recordFeatureUsage } from '../../services/billing.js';
+import { formatErrorForDeveloper } from '../../services/errorCodes.js';
 import QRCode from 'qrcode';
 import { t } from '../../i18n/tr.js';
 
@@ -448,6 +449,8 @@ export function afterRender() {
     try {
       const response = await runDocumentOcr({
         file,
+        userId: state.user?.id || 'user-1',
+        petId: state.activePetId || '',
         documentKind: firstSelected(t('featureForm.labels.document_type')),
         readGoal: firstSelected(t('featureForm.labels.read_goal')),
         extractionOptions: checkedValues(t('featureForm.labels.extraction_options')),
@@ -462,7 +465,7 @@ export function afterRender() {
         ?.querySelector('textarea');
       if (visibleValues && !visibleValues.value.trim()) visibleValues.value = ocrSummaryText(response.data);
     } catch (err) {
-      showNotice(`${t('featureForm.ocr_failed')}: ${err.message}`, 'error');
+      showNotice(formatErrorForDeveloper(err, t('featureForm.ocr_failed')), 'error');
     } finally {
       btn.textContent = originalText;
       btn.disabled = false;
@@ -580,7 +583,7 @@ export function afterRender() {
         : '/home';
       navigate(nextRoute);
     } catch (err) {
-      showNotice(`${t('featureForm.save_failed')}: ${err.message}`, 'error');
+      showNotice(formatErrorForDeveloper(err, t('featureForm.save_failed')), 'error');
       btn.textContent = originalText;
       btn.disabled = false;
     }

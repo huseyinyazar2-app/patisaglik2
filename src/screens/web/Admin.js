@@ -10,6 +10,7 @@ let adminState = {
   records: [],
   documents: [],
   usage: [],
+  aiJobs: [],
   plans: [],
   creditPackages: [],
   payments: [],
@@ -23,6 +24,7 @@ let adminState = {
     pets: { q: '', status: '', ownerId: '', limit: 30 },
     records: { q: '', kind: '', petId: '', userId: '', limit: 40 },
     documents: { q: '', status: '', type: '', limit: 30 },
+    aiJobs: { q: '', status: '', limit: 40 },
     payments: { q: '', status: '', limit: 40 }
   }
 };
@@ -276,6 +278,28 @@ function renderUsage(items = []) {
   `).join('');
 }
 
+function renderAiJobs(items = []) {
+  if (!items.length) return `<div class="admin-empty">Henüz AI log kaydı yok.</div>`;
+  return items.map((item) => {
+    const input = item.input_payload || {};
+    const output = item.output_payload || {};
+    const duration = output.durationMs ? ` · ${escapeHtml(output.durationMs)} ms` : '';
+    const code = output.errorCode ? ` · hata ${escapeHtml(output.errorCode)}` : '';
+    return `
+      <div class="admin-row admin-row-wide">
+        <div>
+          <strong>${escapeHtml(item.feature_code || 'ai')} · ${escapeHtml(input.model || '-')}</strong>
+          <small>${escapeHtml(item.user_name || item.user_email || item.user_id || '-')} · ${escapeHtml(item.pet_name || item.pet_id || '-')} · ${fmtDate(item.created_at)}${duration}${code}</small>
+        </div>
+        <div class="admin-actions">
+          <span>${escapeHtml(item.status || '-')}</span>
+          <button data-action="ai-job-view" data-id="${escapeHtml(item.id)}">Gör</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
 function renderPrice(cents, currency = 'TRY') {
   return new Intl.NumberFormat('tr-TR', { style: 'currency', currency }).format(Number(cents || 0) / 100);
 }
@@ -488,6 +512,21 @@ function renderFilters() {
       </article>
 
       <article class="admin-panel">
+        <div class="admin-panel-head"><div><span>AI Log</span><h2>Prompt, Medya ve Cevap Kayitlari</h2></div></div>
+        <div class="admin-filters-inline">
+          <input id="aiJobsQ" placeholder="Kullanici, pet, ozellik veya hata ara" value="${escapeHtml(adminState.filters.aiJobs.q)}" />
+          <select id="aiJobsStatus">
+            <option value="">Tum durumlar</option>
+            <option value="running" ${adminState.filters.aiJobs.status === 'running' ? 'selected' : ''}>Calisiyor</option>
+            <option value="completed" ${adminState.filters.aiJobs.status === 'completed' ? 'selected' : ''}>Tamamlandi</option>
+            <option value="failed" ${adminState.filters.aiJobs.status === 'failed' ? 'selected' : ''}>Hatali</option>
+          </select>
+          <button data-action="ai-jobs-search">Ara</button>
+        </div>
+        <div id="adminAiJobs">${renderAiJobs(adminState.aiJobs)}</div>
+      </article>
+
+      <article class="admin-panel">
         <div class="admin-panel-head"><div><span>AI & Medya</span><h2>Uygulama Kontrolleri</h2></div></div>
         <form class="admin-settings-form" id="appSettingsForm">
           <label>
@@ -577,6 +616,7 @@ function renderState() {
   const recordsTarget = document.getElementById('adminRecords');
   const docsTarget = document.getElementById('adminDocuments');
   const usageTarget = document.getElementById('adminUsage');
+  const aiJobsTarget = document.getElementById('adminAiJobs');
   const plansTarget = document.getElementById('adminPlans');
   const creditPackagesTarget = document.getElementById('adminCreditPackages');
   const paymentsTarget = document.getElementById('adminPayments');
@@ -585,6 +625,7 @@ function renderState() {
   if (recordsTarget) recordsTarget.innerHTML = renderRecords(adminState.records);
   if (docsTarget) docsTarget.innerHTML = renderDocuments(adminState.documents);
   if (usageTarget) usageTarget.innerHTML = renderUsage(adminState.usage);
+  if (aiJobsTarget) aiJobsTarget.innerHTML = renderAiJobs(adminState.aiJobs);
   if (plansTarget) plansTarget.innerHTML = renderPlans(adminState.plans);
   if (creditPackagesTarget) creditPackagesTarget.innerHTML = renderCreditPackages(adminState.creditPackages);
   if (paymentsTarget) paymentsTarget.innerHTML = renderPayments(adminState.payments);
@@ -644,6 +685,10 @@ async function loadUsage() {
   adminState.usage = await api('/api/admin/usage?limit=40');
 }
 
+async function loadAiJobs() {
+  adminState.aiJobs = await api(`/api/admin/ai-jobs${queryString(adminState.filters.aiJobs)}`);
+}
+
 async function loadPlans() {
   adminState.plans = await api('/api/admin/plans');
 }
@@ -671,7 +716,7 @@ async function loadAll() {
   const statusCard = document.getElementById('apiStatusCard');
   try {
     await loadLookups();
-    await Promise.all([loadOverview(), loadUsers(), loadPets(), loadRecords(), loadDocuments(), loadUsage(), loadPlans(), loadCreditPackages(), loadPayments(), loadSettings()]);
+    await Promise.all([loadOverview(), loadUsers(), loadPets(), loadRecords(), loadDocuments(), loadUsage(), loadAiJobs(), loadPlans(), loadCreditPackages(), loadPayments(), loadSettings()]);
     renderState();
     if (statusCard) statusCard.innerHTML = `<span>Yönetim API</span><strong>Bağlı</strong><small>Canlı veritabanı yönetimi</small>`;
   } catch (error) {
@@ -1288,6 +1333,12 @@ async function handleAction(button) {
     renderState();
     return;
   }
+  if (action === 'ai-jobs-search') {
+    adminState.filters.aiJobs = { ...adminState.filters.aiJobs, q: getValue('aiJobsQ').trim(), status: getValue('aiJobsStatus') };
+    await loadAiJobs();
+    renderState();
+    return;
+  }
 
   if (action === 'user-add') return openUserForm();
   if (action === 'pet-add') return openPetForm();
@@ -1342,6 +1393,10 @@ async function handleAction(button) {
   if (action === 'plan-edit') {
     const plan = adminState.plans.find((item) => item.id === id);
     return openPlanForm(plan);
+  }
+  if (action === 'ai-job-view') {
+    const job = adminState.aiJobs.find((item) => item.id === id);
+    return openReadOnly('AI log detayi', job || {});
   }
   if (action === 'plan-delete') {
     if (!window.confirm('Bu plan kalıcı olarak silinsin mi?')) return;

@@ -1477,7 +1477,7 @@ function adminPermissionFor(path) {
   if (path.includes('/users')) return 'admin.manage_users';
   if (path.includes('/pets')) return 'admin.manage_pets';
   if (path.includes('/plans') || path.includes('/billing') || path.includes('/credits') || path.includes('/credit-packages') || path.includes('/payments')) return 'admin.manage_billing';
-  if (path.includes('/records') || path.includes('/documents')) return 'admin.manage_records';
+  if (path.includes('/records') || path.includes('/documents') || path.includes('/ai-jobs')) return 'admin.manage_records';
   if (path.includes('/settings')) return 'admin.manage_settings';
   return 'admin.read';
 }
@@ -1552,6 +1552,7 @@ export async function handleAdminRequest(req, res, url, sendJson) {
     if (req.method === 'DELETE' && /^\/api\/admin\/documents\/[^/]+$/.test(path)) return sendJson(res, 200, { ok: true, data: await deleteRecord(db, admin, 'document', path.split('/').pop()) });
 
     if (req.method === 'GET' && path === '/api/admin/usage') return sendJson(res, 200, { ok: true, data: await usage(db, limit) });
+    if (req.method === 'GET' && path === '/api/admin/ai-jobs') return sendJson(res, 200, { ok: true, data: await aiJobs(db, { limit, q, status }) });
     if (req.method === 'GET' && path === '/api/admin/plans') return sendJson(res, 200, { ok: true, data: await plans(db) });
     if (req.method === 'POST' && path === '/api/admin/plans') return sendJson(res, 200, { ok: true, data: await createPlan(db, admin, await readJson(req)) });
     if (req.method === 'POST' && /^\/api\/admin\/plans\/[^/]+$/.test(path)) return sendJson(res, 200, { ok: true, data: await updatePlan(db, admin, path.split('/').pop(), await readJson(req)) });
@@ -1589,4 +1590,44 @@ async function usage(db, limit) {
     args: [limit]
   });
   return result.rows.map(row);
+}
+
+async function aiJobs(db, { limit = 40, q = '', status = '' } = {}) {
+  const filters = [];
+  const args = [];
+  if (status) {
+    filters.push(`j.status = ?`);
+    args.push(status);
+  }
+  if (q) {
+    filters.push(`(
+      LOWER(COALESCE(j.feature_code, '')) LIKE ?
+      OR LOWER(COALESCE(j.error_message, '')) LIKE ?
+      OR LOWER(COALESCE(u.display_name, '')) LIKE ?
+      OR LOWER(COALESCE(p.name, '')) LIKE ?
+    )`);
+    args.push(likeValue(q), likeValue(q), likeValue(q), likeValue(q));
+  }
+  args.push(limit);
+  const result = await db.execute({
+    sql: `
+      SELECT
+        j.id, j.user_id, j.pet_id, j.feature_code, j.status, j.input_payload, j.output_payload,
+        j.credit_cost, j.error_message, j.created_at, j.completed_at,
+        u.display_name AS user_name,
+        u.email AS user_email,
+        p.name AS pet_name
+      FROM ai_analysis_jobs j
+      LEFT JOIN users u ON u.id = j.user_id
+      LEFT JOIN pets p ON p.id = j.pet_id
+      ${filters.length ? `WHERE ${filters.join(' AND ')}` : ''}
+      ORDER BY j.created_at DESC
+      LIMIT ?`,
+    args
+  });
+  return result.rows.map((item) => ({
+    ...row(item),
+    input_payload: parseJson(item.input_payload),
+    output_payload: parseJson(item.output_payload)
+  }));
 }

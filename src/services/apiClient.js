@@ -1,3 +1,5 @@
+import { CLIENT_ERROR_CODES, makeCodedError } from './errorCodes.js';
+
 const API_FALLBACK = 'https://api.pethelp.app';
 const API_BASE_URL = import.meta.env?.VITE_API_BASE_URL || (import.meta.env?.DEV ? '' : API_FALLBACK);
 
@@ -6,13 +8,21 @@ function apiUrl(path) {
 }
 
 async function postJson(path, body) {
-  const response = await fetch(apiUrl(path), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
+  let response;
+  try {
+    response = await fetch(apiUrl(path), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+  } catch (error) {
+    throw makeCodedError('network_error', { code: CLIENT_ERROR_CODES.network_error, message: error.message || 'network_error' });
+  }
   const data = await response.json().catch(() => ({}));
-  if (!response.ok || data.ok === false) throw new Error(data.error || `http_${response.status}`);
+  if (!response.ok || data.ok === false) {
+    const reason = data.error || data.reason || `http_${response.status}`;
+    throw makeCodedError(reason, { code: data.errorCode, message: reason });
+  }
   return data;
 }
 
@@ -50,7 +60,7 @@ export async function uploadMediaFile({ userId, petId, category, file, relatedEn
     headers: signed.headers || {},
     body: file
   });
-  if (!upload.ok) throw new Error(`upload_${upload.status}`);
+  if (!upload.ok) throw makeCodedError('upload_failed', { code: CLIENT_ERROR_CODES.upload_failed, message: `upload_${upload.status}` });
   const completed = await completeMediaUpload({
     userId,
     petId,

@@ -1,13 +1,14 @@
 import fs from 'node:fs/promises';
 import http from 'node:http';
 import path from 'node:path';
-import { pbkdf2Sync, randomBytes, timingSafeEqual } from 'node:crypto';
+import { createHash, pbkdf2Sync, randomBytes, timingSafeEqual } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { mediaCategories, optionalEnv } from './config.js';
-import { getDb, insertMediaMetadata } from './db.js';
+import { completeAiJob, createAiJob, getDb, insertMediaMetadata } from './db.js';
 import { handleAdminRequest, publicAppSettings } from './admin.js';
 import { presignGetObject, presignPutObject } from './s3Presign.js';
 import { documentOcrPrompt, generateGeminiJson, normalizeOcrResult } from './ai.js';
+import { codedError, errorCodeFor } from './errorCodes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -30,6 +31,9 @@ const mimeTypes = {
 };
 
 function sendJson(res, status, data) {
+  if (data?.ok === false && !data.errorCode) {
+    data.errorCode = errorCodeFor(data.error || data.reason);
+  }
   res.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': optionalEnv('CORS_ORIGIN', '*'),
@@ -179,12 +183,42 @@ async function handleLogin(req, res) {
 
 async function handleDocumentOcr(req, res) {
   const body = await readBody(req);
-  if (!body.fileBase64) return sendJson(res, 400, { ok: false, error: 'missing_file' });
+  if (!body.fileBase64) return sendJson(res, 400, codedError('missing_file'));
   const { system, prompt } = documentOcrPrompt(body);
+  const model = process.env.GEMINI_STANDARD_MODEL || 'gemini-3-flash-preview';
+  const startedAt = Date.now();
+  const mediaRefs = [
+    ...(Array.isArray(body.mediaRefs) ? body.mediaRefs : []),
+    {
+    fileName: body.fileName || '',
+    mimeType: body.mimeType || 'application/octet-stream',
+    sizeBytes: Number(body.sizeBytes || 0),
+    inlineSha256: createHash('sha256').update(String(body.fileBase64)).digest('hex')
+    }
+  ];
+  const job = await createAiJob({
+    userId: body.userId,
+    petId: body.petId || null,
+    featureCode: 'document-ocr',
+    status: 'running',
+    creditCost: 1,
+    inputPayload: {
+      model,
+      systemPrompt: system,
+      userPrompt: prompt,
+      mediaRefs,
+      request: {
+        documentKind: body.documentKind || '',
+        readGoal: body.readGoal || '',
+        extractionOptions: body.extractionOptions || [],
+        note: body.note || ''
+      }
+    }
+  });
   const result = await generateGeminiJson({
     system,
     prompt,
-    model: process.env.GEMINI_STANDARD_MODEL || 'gemini-3-flash-preview',
+    model,
     parts: [{
       inlineData: {
         mimeType: body.mimeType || 'application/octet-stream',
@@ -192,8 +226,20 @@ async function handleDocumentOcr(req, res) {
       }
     }]
   });
-  if (!result.ok) return sendJson(res, 502, result);
-  return sendJson(res, 200, { ok: true, data: normalizeOcrResult(result.data, body.documentKind) });
+  if (!result.ok) {
+    await completeAiJob(job.id, {
+      status: 'failed',
+      errorMessage: result.reason || 'ai_request_failed',
+      outputPayload: { ...result, durationMs: Date.now() - startedAt }
+    });
+    return sendJson(res, 502, { ...result, error: result.reason || 'ai_request_failed' });
+  }
+  const normalized = normalizeOcrResult(result.data, body.documentKind);
+  await completeAiJob(job.id, {
+    status: 'completed',
+    outputPayload: { data: normalized, raw: result.data, durationMs: Date.now() - startedAt }
+  });
+  return sendJson(res, 200, { ok: true, data: normalized, aiJobId: job.id || null });
 }
 
 async function handlePackageRisk(req, res) {
@@ -241,6 +287,66 @@ function sanitizePackageRiskResult(data) {
       'Yolda yalnızca gözlemlemem gereken belirtiler neler?'
     ]).slice(0, 3)
   };
+}
+
+async function handlePackageRiskLogged(req, res) {
+  const body = await readBody(req);
+  const model = process.env.GEMINI_CRITICAL_MODEL || 'gemini-3.5-flash';
+  const system = 'Sen veteriner yerine gecmeyen, guvenli aciliyet yonlendirmesi yapan bir pet saglik asistanisin.';
+  const startedAt = Date.now();
+  const job = await createAiJob({
+    userId: body.userId,
+    petId: body.petId || null,
+    featureCode: 'package-risk',
+    status: 'running',
+    creditCost: 1,
+    inputPayload: {
+      model,
+      systemPrompt: system,
+      userPrompt: body.prompt || '',
+      mediaRefs: Array.isArray(body.mediaRefs) ? body.mediaRefs : [],
+      request: body.context || {}
+    }
+  });
+  const result = await generateGeminiJson({
+    system,
+    prompt: body.prompt || '',
+    model,
+    responseSchema: {
+      type: 'object',
+      properties: {
+        level: { type: 'string', enum: ['critical', 'high', 'foreign', 'watch', 'unknown'] },
+        headline: { type: 'string' },
+        reason: { type: 'string' },
+        doNotDo: { type: 'array', items: { type: 'string' } },
+        prepare: { type: 'array', items: { type: 'string' } },
+        askVet: { type: 'array', items: { type: 'string' } }
+      },
+      required: ['level', 'headline', 'reason', 'doNotDo', 'prepare', 'askVet']
+    }
+  });
+  if (!result.ok) {
+    await completeAiJob(job.id, {
+      status: 'failed',
+      errorMessage: result.reason || 'ai_request_failed',
+      outputPayload: { ...result, durationMs: Date.now() - startedAt }
+    });
+    return sendJson(res, 502, { ...result, error: result.reason || 'ai_request_failed' });
+  }
+  if (!result.data?.level || !Array.isArray(result.data?.prepare)) {
+    await completeAiJob(job.id, {
+      status: 'failed',
+      errorMessage: 'invalid_schema',
+      outputPayload: { data: result.data || {}, durationMs: Date.now() - startedAt }
+    });
+    return sendJson(res, 502, codedError('invalid_schema'));
+  }
+  const sanitized = sanitizePackageRiskResult(result.data);
+  await completeAiJob(job.id, {
+    status: 'completed',
+    outputPayload: { data: sanitized, raw: result.data, durationMs: Date.now() - startedAt }
+  });
+  return sendJson(res, 200, { ok: true, data: sanitized, aiJobId: job.id || null });
 }
 
 function safeSegment(value, fallback) {
@@ -380,7 +486,7 @@ async function route(req, res) {
     if (req.method === 'POST' && url.pathname === '/api/media/complete') return handleCompleteUpload(req, res);
     if (req.method === 'GET' && url.pathname === '/api/media/sign-download') return handleSignDownload(req, res, url);
     if (req.method === 'POST' && url.pathname === '/api/ai/document-ocr') return handleDocumentOcr(req, res);
-    if (req.method === 'POST' && url.pathname === '/api/ai/package-risk') return handlePackageRisk(req, res);
+    if (req.method === 'POST' && url.pathname === '/api/ai/package-risk') return handlePackageRiskLogged(req, res);
     if (url.pathname.startsWith('/api/')) return sendJson(res, 404, { ok: false, error: 'not_found' });
     return serveStatic(req, res, url);
   } catch (err) {

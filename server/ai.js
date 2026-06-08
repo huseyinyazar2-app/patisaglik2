@@ -1,3 +1,5 @@
+import { ERROR_CODES, errorCodeFor } from './errorCodes.js';
+
 const GEMINI_STANDARD_MODEL = process.env.GEMINI_STANDARD_MODEL || 'gemini-3-flash-preview';
 const GEMINI_CRITICAL_MODEL = process.env.GEMINI_CRITICAL_MODEL || 'gemini-3.5-flash';
 
@@ -26,7 +28,7 @@ export function isAiConfigured() {
 
 export async function generateGeminiJson({ system, prompt, parts = [], responseSchema = null, model = GEMINI_STANDARD_MODEL }) {
   const key = apiKey();
-  if (!key) return { ok: false, reason: 'missing_key' };
+  if (!key) return { ok: false, reason: 'missing_key', errorCode: ERROR_CODES.missing_key };
   const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -45,11 +47,11 @@ export async function generateGeminiJson({ system, prompt, parts = [], responseS
       }]
     })
   });
-  if (!response.ok) return { ok: false, reason: `http_${response.status}` };
+  if (!response.ok) return { ok: false, reason: `http_${response.status}`, errorCode: errorCodeFor(`http_${response.status}`) };
   const data = await response.json();
   const text = data?.candidates?.[0]?.content?.parts?.map(part => part.text || '').join('\n') || '';
   const json = extractJson(text);
-  return json ? { ok: true, data: json } : { ok: false, reason: 'invalid_json' };
+  return json ? { ok: true, data: json } : { ok: false, reason: 'invalid_json_ai', errorCode: ERROR_CODES.invalid_json_ai };
 }
 
 export function normalizeOcrResult(value, fallbackKind = '') {

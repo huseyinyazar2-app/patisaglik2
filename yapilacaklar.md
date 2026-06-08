@@ -594,4 +594,5 @@ Bu fazın ürün dili teşhis değil; çekim kalitesini artırma, değişim taki
 - [x] Build notlari eklendi: `docs/ANDROID_BUILD.md`.
 - [x] Store oncesi Pet Help launcher/adaptive ikonlari tasarlanip Android ve PWA kaynaklarina islendi.
 - [x] Play Console app icon ve feature graphic hazirlandi: `store/play-console/`.
+- [x] Mobil developer testleri icin numerik hata kodlari, AI audit log, admin AI log ekrani ve B2/AI hata gorunurlugu eklendi.
 - [ ] GitHub Secrets girildikten sonra signed AAB workflow ciktisi Play Console icin test edilecek.

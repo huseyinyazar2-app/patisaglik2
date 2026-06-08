@@ -1,5 +1,6 @@
 import { generateGeminiJsonWithParts, isGeminiConfigured } from './geminiClient.js';
-import { postApiJson } from './apiClient.js';
+import { postApiJson, uploadMediaFile } from './apiClient.js';
+import { CLIENT_ERROR_CODES, makeCodedError } from './errorCodes.js';
 import { translateForLocale } from '../i18n/tr.js';
 
 const MAX_INLINE_FILE_BYTES = 8 * 1024 * 1024;
@@ -8,7 +9,10 @@ function fileToBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(String(reader.result || '').split(',')[1] || '');
-    reader.onerror = () => reject(new Error(translateForLocale('tr', 'documentOcr.file_read_error')));
+    reader.onerror = () => reject(makeCodedError('local_file_read_failed', {
+      code: CLIENT_ERROR_CODES.local_file_read_failed,
+      message: translateForLocale('tr', 'documentOcr.file_read_error')
+    }));
     reader.readAsDataURL(file);
   });
 }
@@ -38,15 +42,40 @@ export function isDocumentOcrConfigured() {
   return true;
 }
 
-export async function runDocumentOcr({ file, documentKind, readGoal, extractionOptions = [], note = '' }) {
+export async function runDocumentOcr({ file, documentKind, readGoal, extractionOptions = [], note = '', userId = '', petId = '' }) {
   if (!file) return { ok: false, reason: 'missing_file' };
   if (file.size > MAX_INLINE_FILE_BYTES) return { ok: false, reason: 'file_too_large' };
 
   const base64 = await fileToBase64(file);
+  let mediaRefs = [];
+  if (userId && petId) {
+    try {
+      const uploaded = await uploadMediaFile({
+        userId,
+        petId,
+        category: 'ai-inputs',
+        file,
+        relatedEntityType: 'ai_input'
+      });
+      mediaRefs = [{
+        mediaId: uploaded.id || '',
+        objectKey: uploaded.objectKey || '',
+        fileName: file.name || '',
+        mimeType: file.type || '',
+        sizeBytes: file.size || 0,
+        category: 'ai-inputs'
+      }];
+    } catch {}
+  }
   try {
     const server = await postApiJson('/api/ai/document-ocr', {
+      userId,
+      petId,
       fileBase64: base64,
+      fileName: file.name || '',
+      sizeBytes: file.size || 0,
       mimeType: file.type || 'application/octet-stream',
+      mediaRefs,
       documentKind,
       readGoal,
       extractionOptions,
