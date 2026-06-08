@@ -1,21 +1,23 @@
 import { navigate } from '../../router.js';
 import { getState, resetSession } from '../../store.js';
 import { t } from '../../i18n/tr.js';
-import { redFlagQuestions } from '../../data/questions.js';
+import { redFlagDisplayText, redFlagForcesEmergency, redFlagQuestions } from '../../data/questions.js';
+import { getActivePet } from '../../services/pets.js';
 
 export function render(params = {}, query = {}) {
   const state = getState();
   const session = state.session || {};
+  const pet = getActivePet(state.activePetId);
   
   // Find which ones were answered "yes"
   const emergencyFindings = [];
   if (session.redFlagAnswers) {
     Object.keys(session.redFlagAnswers).forEach(qId => {
-      if (session.redFlagAnswers[qId] === 'yes') {
+      if (redFlagForcesEmergency(qId, session.redFlagAnswers[qId], pet)) {
         // Find question text
         for (const cat in redFlagQuestions) {
           const q = redFlagQuestions[cat].find(x => x.id === qId);
-          if (q) emergencyFindings.push(q.text);
+          if (q) emergencyFindings.push(redFlagDisplayText(q, pet));
         }
       }
     });

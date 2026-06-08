@@ -124,6 +124,26 @@ Object.values(questionSets).forEach(set => {
   }
 });
 
+function isCatPet(pet = null) {
+  return String(pet?.type || pet?.species_code || pet?.species || '').toLowerCase() === 'cat';
+}
+
+export function redFlagDisplayText(question, pet = null, locale = getLocale()) {
+  const id = typeof question === 'string' ? question : question?.id;
+  if (id === 'resp_open_mouth') {
+    return isCatPet(pet)
+      ? localText(locale, 'redflags.open_mouth_cat', question?.text || '')
+      : localText(locale, 'redflags.open_mouth_context', question?.text || '');
+  }
+  return typeof question === 'string' ? question : question?.text || '';
+}
+
+export function redFlagForcesEmergency(questionId, answer = 'yes', pet = null) {
+  if (answer !== 'yes') return false;
+  if (questionId === 'resp_open_mouth') return isCatPet(pet);
+  return true;
+}
+
 function normalizeText(value = '') {
   return value
     .toLocaleLowerCase('tr-TR')

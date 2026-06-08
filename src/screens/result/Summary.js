@@ -1,13 +1,15 @@
 import { navigate, goBack } from '../../router.js';
 import { getState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
-import { categoryLabels, redFlagQuestions } from '../../data/questions.js';
+import { categoryLabels, redFlagDisplayText, redFlagForcesEmergency, redFlagQuestions } from '../../data/questions.js';
+import { getActivePet } from '../../services/pets.js';
 import { getFeatureCreditAvailability } from '../../services/billing.js';
 import { showToast } from '../../ui/toast.js';
 
 export function render(params = {}, query = {}) {
   const state = getState();
   const session = state.session || {};
+  const pet = getActivePet(state.activePetId);
   
   const cats = (session.categories || []).map(c => categoryLabels[c] || c).join(', ');
   
@@ -15,10 +17,10 @@ export function render(params = {}, query = {}) {
   const emergencyFindings = [];
   if (session.redFlagAnswers) {
     Object.keys(session.redFlagAnswers).forEach(qId => {
-      if (session.redFlagAnswers[qId] === 'yes') {
+      if (redFlagForcesEmergency(qId, session.redFlagAnswers[qId], pet)) {
         for (const cat in redFlagQuestions) {
           const q = redFlagQuestions[cat].find(x => x.id === qId);
-          if (q) emergencyFindings.push(q.text);
+          if (q) emergencyFindings.push(redFlagDisplayText(q, pet));
         }
       }
     });

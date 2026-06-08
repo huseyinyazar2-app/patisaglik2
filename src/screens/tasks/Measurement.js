@@ -79,6 +79,9 @@ export function render(params = {}, query = {}) {
 
 export function afterRender(params = {}) {
   const taskId = params.taskId;
+  const initialState = getState();
+  const currentTask = initialState.session?.tasks?.find(t => t.id === taskId) || { title: t('measurementTask.fallback_title'), key: 'temperature_measurement' };
+  const currentMeta = measurementMeta[currentTask.key] || measurementMeta.temperature_measurement;
   
   document.getElementById('btnBack')?.addEventListener('click', () => goBack());
   document.getElementById('btnSkip')?.addEventListener('click', () => {
@@ -124,9 +127,9 @@ export function afterRender(params = {}) {
         // Push to session measurements
         state.session.measurements = state.session.measurements || [];
         state.session.measurements.push({
-          type: task.key,
+          type: currentTask.key,
           value: parseFloat(val),
-          unit: measurementMeta[task.key]?.unit || unit
+          unit: currentMeta.unit
         });
       }
     });
@@ -135,16 +138,16 @@ export function afterRender(params = {}) {
       await saveMeasurement({
         userId: state.user?.id || 'user-1',
         petId: state.activePetId,
-        type: measurementMeta[task.key]?.type || 'temperature',
+        type: currentMeta.type || 'temperature',
         value: val,
-        unit: measurementMeta[task.key]?.unit || unit,
+        unit: currentMeta.unit,
         measuredAt: new Date().toISOString(),
-        note: t('measurementTask.ai_note', { title: task.title }),
+        note: t('measurementTask.ai_note', { title: currentTask.title }),
         metadata: {
           source: 'ai_triage',
           triageSessionId: state.session?.id || '',
           taskId,
-          taskKey: task.key
+          taskKey: currentTask.key
         }
       });
     } catch (err) {

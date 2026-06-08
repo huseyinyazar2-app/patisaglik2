@@ -1,12 +1,14 @@
 import { navigate, goBack } from '../../router.js';
 import { getState, setState } from '../../store.js';
 import { t } from '../../i18n/tr.js';
-import { redFlagQuestions } from '../../data/questions.js';
+import { redFlagDisplayText, redFlagForcesEmergency, redFlagQuestions } from '../../data/questions.js';
+import { getActivePet } from '../../services/pets.js';
 import { showToast } from '../../ui/toast.js';
 
 export function render() {
   const state = getState();
   const session = state.session || {};
+  const pet = getActivePet(state.activePetId);
   const groups = session.redFlagGroups || ['general'];
   const matchedIds = session.matchedComplaintIds || [];
   const generalCoreIds = new Set([
@@ -41,7 +43,7 @@ export function render() {
 
   const questionsHtml = questions.map(q => `
     <div class="card mb-4" data-question-id="${q.id}" style="padding: 20px;">
-      <p class="font-bold text-base mb-3" style="color: var(--text-primary); line-height: 1.4;">${q.text}</p>
+      <p class="font-bold text-base mb-3" style="color: var(--text-primary); line-height: 1.4;">${redFlagDisplayText(q, pet)}</p>
       <div class="form-group flex gap-2" style="margin-bottom: 0;">
         <label class="radio-item flex-1 text-center" style="padding: 12px 4px; border-radius: var(--radius-md); justify-content: center;">
           <input type="radio" name="rf_${q.id}" value="yes" class="hidden">
@@ -128,6 +130,8 @@ export function afterRender() {
 
 
   document.getElementById('btnContinue')?.addEventListener('click', () => {
+    const state = getState();
+    const pet = getActivePet(state.activePetId);
     const allQuestions = document.querySelectorAll('.red-flag-list .card');
     const answeredCount = document.querySelectorAll('.red-flag-list input:checked').length;
     
@@ -143,7 +147,7 @@ export function afterRender() {
     document.querySelectorAll('.red-flag-list input:checked').forEach(input => {
       const qId = input.name.replace('rf_', '');
       answers[qId] = input.value;
-      if (input.value === 'yes') hasEmergency = true;
+      if (redFlagForcesEmergency(qId, input.value, pet)) hasEmergency = true;
       if (input.value === 'unsure') uncertainRedFlags.push(qId);
     });
 

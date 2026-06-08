@@ -1,8 +1,9 @@
 import { navigate } from '../../router.js';
 import { getState, resetSession } from '../../store.js';
 import { getActivePet } from '../../services/pets.js';
-import { getAccountBilling } from '../../services/billing.js';
+import { getAccountBilling, getFeatureCreditAvailability } from '../../services/billing.js';
 import { t } from '../../i18n/tr.js';
+import { showToast } from '../../ui/toast.js';
 
 const premiumAssistants = [
   {
@@ -117,7 +118,12 @@ export function render() {
 export function afterRender() {
   const state = getState();
   const handlers = {
-    smart: () => {
+    smart: async () => {
+      const credit = await getFeatureCreditAvailability({ userId: state.user?.id || 'user-1', featureCode: 'ai-triage' });
+      if (!credit.ok) {
+        showToast(t('planScreen.insufficient_credits'));
+        return;
+      }
       resetSession();
       navigate('/check/new/complaint');
     },
@@ -138,7 +144,18 @@ export function afterRender() {
 
   document.querySelectorAll('[data-assistant]').forEach(btn => {
     if (btn.disabled) return;
-    btn.addEventListener('click', () => handlers[btn.dataset.assistant]?.());
+    btn.addEventListener('click', async () => {
+      const handler = handlers[btn.dataset.assistant];
+      if (!handler) return;
+      btn.disabled = true;
+      try {
+        await handler();
+      } catch (error) {
+        showToast(`${t('summary.credit_check_failed')}: ${error.message || error}`);
+      } finally {
+        btn.disabled = false;
+      }
+    });
   });
 
   document.getElementById('btnAiCredits')?.addEventListener('click', () => navigate('/profile/plan'));

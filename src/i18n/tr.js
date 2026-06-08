@@ -222,6 +222,8 @@ const tr = {
     desc: 'Aşağıdaki belirtilerden biri varsa beklemeden veteriner desteği gerekebilir.',
     step_title: 'Adım 1/5',
     required_all: 'Lütfen tüm acil durum sorularını yanıtlayın.',
+    open_mouth_cat: 'Kedide ağzı açık şekilde nefes alma var mı?',
+    open_mouth_context: 'Dinlenirken veya zorlanır gibi ağzı açık nefes alıyor mu?',
     yes: 'Evet', no: 'Hayır', unsure: 'Emin değilim'
   },
   emergency: {

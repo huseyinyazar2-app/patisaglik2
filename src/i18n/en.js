@@ -193,6 +193,8 @@ const en = {
     desc: 'If any of these signs are present, veterinary help may be needed without delay.',
     step_title: 'Step 1/5',
     required_all: 'Please answer all emergency questions.',
+    open_mouth_cat: 'Is the cat breathing with an open mouth?',
+    open_mouth_context: 'Breathing open-mouthed while resting or looking strained?',
     yes: 'Yes', no: 'No', unsure: 'Not sure'
   },
   emergency: {

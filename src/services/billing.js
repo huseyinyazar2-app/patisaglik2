@@ -104,6 +104,19 @@ function setLocalWalletBalance(userId = 'user-1', balance = 0) {
   return wallets[userId];
 }
 
+async function remoteCreditSnapshot(userId = 'user-1', featureCode = 'ai-triage') {
+  try {
+    const availability = await postApiJson('/api/billing/feature-availability', { userId, featureCode });
+    return {
+      ok: availability.ok !== false,
+      balance: Number(availability.remaining || 0),
+      source: availability.source || 'api'
+    };
+  } catch {
+    return null;
+  }
+}
+
 export function saveLocalPlanCode(code) {
   const plan = fallbackPlans.find((item) => item.code === code) || fallbackPlans[0];
   localStorage.setItem(LOCAL_PLAN_KEY, plan.code);
@@ -114,14 +127,16 @@ export async function getAccountBilling({ userId = 'user-1' } = {}) {
   const localPlanCode = localStorage.getItem(LOCAL_PLAN_KEY);
   const db = getDbClient();
   if (!db) {
+    const remoteCredit = !import.meta.env?.DEV ? await remoteCreditSnapshot(userId) : null;
+    const balance = remoteCredit ? remoteCredit.balance : import.meta.env?.DEV ? getLocalWalletBalance(userId) : 0;
     const plans = fallbackPlans.map(normalizePlan);
     const creditPackages = fallbackCreditPackages.map(normalizeCreditPackage);
     const selected = plans.find((item) => item.code === localPlanCode) || plans[0];
     return {
       plans,
       creditPackages,
-      subscription: subscriptionFromPlan(selected, { balance: getLocalWalletBalance(userId) }),
-      wallet: { balance: getLocalWalletBalance(userId), currency: 'credit' }
+      subscription: subscriptionFromPlan(selected, { balance }, remoteCredit?.source || (import.meta.env?.DEV ? 'local-fallback' : 'billing_unavailable')),
+      wallet: { balance, currency: 'credit' }
     };
   }
 
