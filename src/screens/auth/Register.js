@@ -123,6 +123,7 @@ export function afterRender(params = {}, query = {}) {
     }
 
     let profile;
+    let localDataReset = false;
     try {
       const result = await registerAccount({
         name,
@@ -145,7 +146,31 @@ export function afterRender(params = {}, query = {}) {
       }
       profile = saveLocalUserProfile({ name, phone, email });
     }
+    localDataReset = Boolean(profile.localDataReset);
+    delete profile.localDataReset;
     setState(s => {
+      if (localDataReset) {
+        s.activePetId = null;
+        s.followups = [];
+        s.session = {
+          id: null,
+          petId: null,
+          complaintText: '',
+          selectedChips: [],
+          duration: null,
+          severity: null,
+          categories: [],
+          secondaryCategories: [],
+          redFlagAnswers: {},
+          questionAnswers: {},
+          tasks: [],
+          measurements: [],
+          media: [],
+          riskLevel: null,
+          riskScore: null,
+          status: 'draft'
+        };
+      }
       s.user.isLoggedIn = true;
       s.user = { ...s.user, ...profile, isLoggedIn: true };
     });

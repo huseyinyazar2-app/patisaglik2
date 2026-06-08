@@ -50,6 +50,11 @@ function normalizeYesNoUnknown(value) {
   return value || 'unknown';
 }
 
+function numberFromInput(value) {
+  const parsed = Number(String(value ?? '').replace(',', '.'));
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
 function ageLabel(birthDate) {
   if (!birthDate || Number.isNaN(Date.parse(birthDate))) return '';
   const birth = new Date(birthDate);
@@ -72,7 +77,7 @@ function normalize(row) {
     age: row.approximate_age_label || row.age || ageLabel(row.birth_date || row.birthDate),
     gender: row.sex || row.gender || 'unknown',
     neutered: normalizeYesNoUnknown(row.neutered_status ?? row.neutered),
-    weight: Number(row.weight_kg ?? row.weight ?? 0),
+    weight: numberFromInput(row.weight_kg ?? row.weight),
     ownership: row.ownership_type || row.ownership || 'owned',
     location: metadata.location || row.location || '',
     volunteerNote: metadata.volunteerNote || row.volunteerNote || '',
@@ -168,7 +173,7 @@ export async function savePet({ userId = 'user-1', pet }) {
     sex: pet.gender || 'unknown',
     birth_date: pet.birthDate || null,
     approximate_age_label: ageLabel(pet.birthDate),
-    weight_kg: Number(pet.weight || 0),
+    weight_kg: numberFromInput(pet.weight),
     neutered_status: pet.neutered || 'unknown',
     ownership_type: pet.ownership || 'owned',
     medical_summary: pet.rawHistory || '',
@@ -255,7 +260,7 @@ export async function updatePet({ userId = 'user-1', petId, pet }) {
     sex: pet.gender ?? current?.sex ?? 'unknown',
     birth_date: pet.birthDate ?? current?.birth_date ?? null,
     approximate_age_label: ageLabel(pet.birthDate ?? current?.birth_date),
-    weight_kg: Number(pet.weight ?? current?.weight_kg ?? 0),
+    weight_kg: numberFromInput(pet.weight ?? current?.weight_kg),
     neutered_status: pet.neutered ?? current?.neutered_status ?? 'unknown',
     ownership_type: pet.ownership ?? current?.ownership_type ?? 'owned',
     medical_summary: pet.rawHistory ?? current?.medical_summary ?? '',

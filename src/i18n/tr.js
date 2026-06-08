@@ -160,6 +160,7 @@ const tr = {
     no_expense: 'Henüz masraf yok',
     no_reminder: 'Hatırlatıcı eklenmedi',
     clean: 'Temiz',
+    available: 'Var',
     history_source: 'Sağlık geçmişinden',
     health_archive_source: 'Sağlık arşivinden',
     profile_note_flagged: 'Öyküde işaretli bilgi var',
@@ -177,7 +178,8 @@ const tr = {
       last_record: 'Son kayıt',
       expense: 'Masraf',
       next_task: 'Sıradaki iş',
-      followup_note: 'Takip notu'
+      followup_note: 'Takip notu',
+      profile_note: 'Profil notu'
     },
     free_tools: [
       { id: 'photo', icon: 'camera', title: 'Foto Takip', desc: 'Yara ve deri karşılaştırma', route: '/feature/photo-followup' },

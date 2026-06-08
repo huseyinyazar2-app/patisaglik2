@@ -57,6 +57,21 @@ function formatMoney(amountCents, currency = 'TRY') {
   }).format((amountCents || 0) / 100);
 }
 
+function formatWeight(weight) {
+  const value = Number(String(weight ?? '').replace(',', '.'));
+  if (!Number.isFinite(value) || value <= 0) return '';
+  return `${value.toLocaleString('tr-TR', { maximumFractionDigits: 1 })} kg`;
+}
+
+function petProfileLine(pet) {
+  return [
+    t(`pets.${pet.type}`),
+    pet.breed,
+    pet.age,
+    formatWeight(pet.weight)
+  ].filter(Boolean).join(' &middot; ');
+}
+
 function getRecordTitle(record) {
   if (!record) return '';
   if (record.kind === 'expense') return record.title || record.category || t('home.expense_record');
@@ -74,7 +89,8 @@ function getInsightCards(pet, activeFollowups, records = null) {
   const lastRecord = recent[0];
   const expenseTotal = records?.expenses?.reduce((sum, item) => sum + Number(item.amount_cents || 0), 0) || 0;
   const nextReminder = records?.reminders?.[0];
-  const healthCount = records?.healthRecords?.length || activeFollowups.length;
+  const healthCount = (records?.healthRecords?.length || 0) + activeFollowups.length;
+  const hasProfileNotes = profileNotes.filter(Boolean).length > 0;
 
   return [
     {
@@ -100,10 +116,10 @@ function getInsightCards(pet, activeFollowups, records = null) {
     },
     {
       icon: 'shield',
-      route: '/history/health-records',
-      title: t('home.insights.followup_note'),
-      value: healthCount ? tx('home.record_count', { count: healthCount }) : (profileNotes.length ? tx('home.record_count', { count: profileNotes.length }) : t('home.clean')),
-      desc: healthCount ? t('home.health_archive_source') : (profileNotes.length ? t('home.profile_note_flagged') : t('home.no_risk_note'))
+      route: healthCount ? '/history/health-records' : '/profile/passport',
+      title: healthCount ? t('home.insights.followup_note') : t('home.insights.profile_note'),
+      value: healthCount ? tx('home.record_count', { count: healthCount }) : (hasProfileNotes ? t('home.available') : t('home.clean')),
+      desc: healthCount ? t('home.health_archive_source') : (hasProfileNotes ? t('home.profile_note_flagged') : t('home.no_risk_note'))
     }
   ];
 }
@@ -207,7 +223,7 @@ export function render() {
             <div>
               <div class="premium-screen-kicker">${t('home.free_area')}</div>
               <h1>${pet.name}</h1>
-              <p>${t(`pets.${pet.type}`)} · ${pet.breed} · ${pet.age || tx('home.age_years', { age: 4 })} · ${pet.weight} kg</p>
+              <p>${petProfileLine(pet)}</p>
               <span class="premium-status ${status.cls}">${status.label} ${window.__icons?.checkCircle}</span>
             </div>
           </div>

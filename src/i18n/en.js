@@ -131,6 +131,7 @@ const en = {
     no_expense: 'No expense yet',
     no_reminder: 'No reminder added',
     clean: 'Clear',
+    available: 'Available',
     history_source: 'From health history',
     health_archive_source: 'From health archive',
     profile_note_flagged: 'There is flagged profile history',
@@ -148,7 +149,8 @@ const en = {
       last_record: 'Last record',
       expense: 'Expense',
       next_task: 'Next task',
-      followup_note: 'Follow-up note'
+      followup_note: 'Follow-up note',
+      profile_note: 'Profile note'
     },
     free_tools: [
       { id: 'photo', icon: 'camera', title: 'Photo Follow-up', desc: 'Wound and skin comparison', route: '/feature/photo-followup' },
