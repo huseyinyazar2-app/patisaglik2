@@ -103,22 +103,22 @@ function renderListControls(type, query = {}) {
 
   return `
     <div class="record-filter-panel">
-      <div>
+      <label>
         <span>${t('freeRecords.list.filter')}</span>
-        <div class="record-filter-row">
+        <select id="recordFilterSelect">
           ${filterOptions(type).map(([value, label]) => `
-            <button class="${activeFilter === value ? 'active' : ''}" data-filter="${value}">${label}</button>
+            <option value="${value}" ${activeFilter === value ? 'selected' : ''}>${label}</option>
           `).join('')}
-        </div>
-      </div>
-      <div>
+        </select>
+      </label>
+      <label>
         <span>${t('freeRecords.list.sort')}</span>
-        <div class="record-filter-row compact">
+        <select id="recordSortSelect">
           ${sortOptions(type).map(([value, label]) => `
-            <button class="${activeSort === value ? 'active' : ''}" data-sort="${value}">${label}</button>
+            <option value="${value}" ${activeSort === value ? 'selected' : ''}>${label}</option>
           `).join('')}
-        </div>
-      </div>
+        </select>
+      </label>
     </div>
   `;
 }
@@ -376,10 +376,12 @@ function renderRecords(type, records = null, query = {}) {
   const items = filterAndSortItems(type, allItems, query);
   if (!items.length) {
     return `
-      <div class="empty-state">
-        <div class="empty-state-icon">${window.__icons?.[config.icon] || ''}</div>
-        <div class="empty-state-title">${allItems.length ? t('freeRecords.list.empty_filter') : config.empty}</div>
-        <div class="empty-state-desc">${allItems.length ? t('freeRecords.list.empty_filter_desc') : t('freeRecords.list.empty_desc')}</div>
+      <div class="record-empty-state">
+        <div class="premium-icon-box">${window.__icons?.[config.icon] || ''}</div>
+        <div>
+          <strong>${allItems.length ? t('freeRecords.list.empty_filter') : config.empty}</strong>
+          <p>${allItems.length ? t('freeRecords.list.empty_filter_desc') : t('freeRecords.list.empty_desc')}</p>
+        </div>
       </div>
     `;
   }
@@ -425,11 +427,11 @@ export function render(params = {}, query = {}) {
           ${renderSummary(type)}
         </div>
 
+        <button class="btn btn-primary btn-full btn-lg mt-4" id="btnAddRecord" data-add-route="${addAction.route}">${addAction.label}</button>
+
         <div class="record-list-stack" id="recordList">
           ${renderRecords(type, null, query)}
         </div>
-
-        <button class="btn btn-primary btn-full btn-lg mt-4" id="btnAddRecord" data-add-route="${addAction.route}">${addAction.label}</button>
       </div>
     </div>
   `;
@@ -447,11 +449,11 @@ export function afterRender(params = {}, query = {}) {
   document.querySelectorAll('[data-record-tab]').forEach((btn) => {
     btn.addEventListener('click', () => navigate(btn.dataset.recordTab));
   });
-  document.querySelectorAll('[data-filter]').forEach((btn) => {
-    btn.addEventListener('click', () => navigate(`${routeForType(type)}?filter=${btn.dataset.filter}&sort=${activeSort}`));
+  document.getElementById('recordFilterSelect')?.addEventListener('change', (event) => {
+    navigate(`${routeForType(type)}?filter=${event.currentTarget.value}&sort=${activeSort}`);
   });
-  document.querySelectorAll('[data-sort]').forEach((btn) => {
-    btn.addEventListener('click', () => navigate(`${routeForType(type)}?filter=${activeFilter}&sort=${btn.dataset.sort}`));
+  document.getElementById('recordSortSelect')?.addEventListener('change', (event) => {
+    navigate(`${routeForType(type)}?filter=${activeFilter}&sort=${event.currentTarget.value}`);
   });
 
   const bindProgramRoutes = () => {

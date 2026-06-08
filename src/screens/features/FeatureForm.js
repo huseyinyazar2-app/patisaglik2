@@ -36,9 +36,8 @@ function renderField(field, preset = {}) {
   const presetValue = presetForField(field, preset);
 
   if (field.type === 'text' || field.type === 'money' || field.type === 'date' || field.type === 'datetime') {
-    const inputType = field.type === 'date' ? 'date' : field.type === 'datetime' ? 'datetime-local' : field.type === 'money' ? 'number' : 'text';
+    const inputType = field.type === 'date' ? 'date' : field.type === 'datetime' ? 'datetime-local' : 'text';
     const inputMode = field.type === 'money' ? 'decimal' : '';
-    const step = field.type === 'money' ? '0.01' : '';
     return `
       <label class="feature-field">
         <span>${field.label}${field.required ? `<em>${t('featureForm.required_marker')}</em>` : ''}</span>
@@ -47,7 +46,7 @@ function renderField(field, preset = {}) {
           placeholder="${field.placeholder || ''}"
           value="${escapeHtml(presetValue)}"
           ${inputMode ? `inputmode="${inputMode}"` : ''}
-          ${step ? `step="${step}" min="0"` : ''}
+          ${field.type === 'money' ? 'autocomplete="off"' : ''}
           ${field.required ? 'data-required="true"' : ''}
         />
       </label>
