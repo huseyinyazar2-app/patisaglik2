@@ -89,11 +89,7 @@ function renderMeasurementBody(records = null, activeTabInfo = MEASUREMENT_TABS[
         <div class="empty-state-icon">${measureIcon(activeTabInfo.iconKey)}</div>
         <div class="empty-state-title">${t('measurements.no_data_title', { label: activeTabInfo.label })}</div>
         <div class="empty-state-desc">${t('measurements.no_data_desc', { label: activeTabInfo.label.toLowerCase() })}</div>
-        <button class="btn btn-primary" id="emptyAddBtn">${window.__icons?.plus} ${t('history.add_new')}</button>
       </div>
-      <button class="btn btn-primary btn-full btn-lg mb-4" id="addMeasurementBtn">
-        ${window.__icons?.plus} ${t('history.add_new')}
-      </button>
     `;
   }
 
@@ -175,10 +171,6 @@ function renderMeasurementBody(records = null, activeTabInfo = MEASUREMENT_TABS[
         `).join('')}
       </div>
     </div>
-
-    <button class="btn btn-primary btn-full btn-lg mb-4" id="addMeasurementBtn">
-      ${window.__icons?.plus} ${t('history.add_new')}
-    </button>
   `;
 }
 
@@ -199,6 +191,9 @@ export function render(params = {}, query = {}) {
       </div>
 
       <div style="padding: var(--space-3) var(--space-4);">
+        <button class="btn btn-primary btn-full btn-lg record-primary-action" id="addMeasurementBtn">
+          ${window.__icons?.plus} ${t('history.add_new')}
+        </button>
         <div class="filter-tabs">
           ${MEASUREMENT_TABS.map((tab) => `
             <button class="filter-tab ${activeTab === tab.id ? 'active' : ''}" data-type="${tab.id}">
@@ -243,7 +238,6 @@ export function afterRender(params = {}, query = {}) {
     });
     const addHandler = () => navigate(`/history/measurements/new?type=${activeTab}`);
     document.getElementById('addMeasurementBtn')?.addEventListener('click', addHandler);
-    document.getElementById('emptyAddBtn')?.addEventListener('click', addHandler);
   }
 
   getMeasurements({ petId: state.activePetId, type: activeTab, limit: 30 }).then((records) => {

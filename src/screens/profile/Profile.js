@@ -14,6 +14,7 @@ const accountItems = [
 const settingsItems = [
   { id: 'account', icon: 'profile', route: '/profile/account' },
   { id: 'devices', icon: 'kit', route: '/profile/devices' },
+  { id: 'categories', icon: 'briefcase', route: '/profile/categories' },
   { id: 'privacy', icon: 'lock', route: '/profile/privacy' },
   { id: 'notifications', icon: 'bell', route: '/profile/notifications' },
   { id: 'language', icon: 'message', route: '/profile/language', valueKey: 'profilePage.language_value' }

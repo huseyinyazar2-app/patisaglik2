@@ -57,7 +57,7 @@ let appInitialized = false;
 const tabBarRoutes = ['/home', '/check', '/history', '/history/timeline', '/history/measurements',
   '/history/issues', '/history/expenses', '/history/reminders', '/history/health-records',
   '/reports', '/profile', '/pets/select', '/profile/devices', '/profile/privacy',
-  '/profile/account', '/profile/notifications', '/profile/plan', '/profile/language', '/profile/passport', '/feature/photo-followup', '/feature/poop-score',
+  '/profile/account', '/profile/categories', '/profile/notifications', '/profile/plan', '/profile/language', '/profile/passport', '/feature/photo-followup', '/feature/poop-score',
   '/feature/diet-log', '/feature/expense', '/feature/reminders', '/feature/clinic-export',
   '/feature/chronic', '/feature/postop', '/feature/reproduction', '/feature/senior', '/feature/qr', '/check/knowledge', '/check/package-risk', '/check/safety-radar',
   '/feature/sitter', '/feature/document-ai', '/feature/vet-prep', '/feature/toxic'];
@@ -261,6 +261,7 @@ function setupRoutes() {
   registerRoute('/profile/passport', (p, q) => loadScreen('./screens/profile/HealthPassport.js', p, q));
   registerRoute('/profile/account', (p, q) => loadScreen('./screens/profile/Account.js', p, q));
   registerRoute('/profile/devices', (p, q) => loadScreen('./screens/profile/Devices.js', p, q));
+  registerRoute('/profile/categories', (p, q) => loadScreen('./screens/profile/Categories.js', p, q));
   registerRoute('/profile/privacy', (p, q) => loadScreen('./screens/profile/Privacy.js', p, q));
   registerRoute('/profile/settings', (p, q) => loadScreen('./screens/profile/Profile.js', p, q));
   registerRoute('/profile/notifications', (p, q) => loadScreen('./screens/profile/Notifications.js', p, q));

@@ -5,6 +5,7 @@ import { submitFeatureForm } from '../../services/formSubmissions.js';
 import { isDocumentOcrConfigured, runDocumentOcr } from '../../services/documentOcr.js';
 import { uploadMediaFile } from '../../services/apiClient.js';
 import { PAYMENTS_DISABLED, getFeatureCreditAvailability, recordFeatureUsage } from '../../services/billing.js';
+import { addRecordCategory, getRecordCategoryOptions, otherCategoryValue } from '../../services/recordCategories.js';
 import { formatErrorForDeveloper } from '../../services/errorCodes.js';
 import QRCode from 'qrcode';
 import { t } from '../../i18n/tr.js';
@@ -20,6 +21,28 @@ function escapeHtml(value) {
 
 function featureForms() {
   return t('featureForms.configs');
+}
+
+function withDynamicFields(featureId, config) {
+  if (!config) return config;
+  if (!['expense', 'reminders'].includes(featureId)) return config;
+  return {
+    ...config,
+    fields: config.fields.map((field) => {
+      const isExpenseCategory = featureId === 'expense' && field.label === t('featureForm.labels.category');
+      const isReminderType = featureId === 'reminders' && field.label === t('featureForm.labels.reminder_type');
+      if (!isExpenseCategory && !isReminderType) return field;
+      const kind = isExpenseCategory ? 'expense' : 'reminder';
+      return {
+        ...field,
+        options: getRecordCategoryOptions(kind).map((item) => item.label),
+        optionValues: getRecordCategoryOptions(kind).map((item) => item.value),
+        allowCustomCategory: true,
+        categoryKind: kind,
+        defaultFirst: false
+      };
+    })
+  };
 }
 
 function presetForField(field, preset = {}) {
@@ -69,9 +92,13 @@ function renderField(field, preset = {}) {
         <span>${field.label}${field.required ? `<em>${t('featureForm.required_marker')}</em>` : ''}</span>
         <div class="${field.type === 'score' ? 'feature-score-row' : 'feature-chip-row'}" data-choice-mode="${mode}" ${field.required ? 'data-required-choice="true"' : ''}>
           ${field.options.map((option, index) => `
-            <button class="${(presetValue ? option === presetValue : index === 0) ? 'selected' : ''}" type="button">${option}</button>
+            <button class="${(presetValue ? option === presetValue : field.defaultFirst !== false && index === 0) ? 'selected' : ''}" type="button" data-choice-value="${escapeHtml(field.optionValues?.[index] || option)}">${option}</button>
           `).join('')}
         </div>
+        ${field.allowCustomCategory ? `
+          <input class="feature-custom-choice hidden" data-custom-choice-for="${escapeHtml(field.label)}" data-category-kind="${field.categoryKind || 'expense'}" placeholder="${t('recordCategories.custom_placeholder')}" />
+          <small class="feature-field-hint">${t('recordCategories.custom_hint')}</small>
+        ` : ''}
       </div>
     `;
   }
@@ -173,7 +200,7 @@ function renderDocumentOcrPanel() {
 export function render(params = {}, query = {}) {
   const state = getState();
   const pet = getActivePet(state.activePetId);
-  const config = featureForms()[params.featureId];
+  const config = withDynamicFields(params.featureId, featureForms()[params.featureId]);
 
   if (!config) {
     return `
@@ -376,7 +403,12 @@ export function afterRender() {
         return;
       }
 
-      const selectedButtons = [...field.querySelectorAll('button.selected')].map((btn) => btn.textContent.trim());
+      const selectedButtons = [...field.querySelectorAll('button.selected')].map((btn) => {
+        if (btn.dataset.choiceValue === otherCategoryValue()) {
+          return field.querySelector('.feature-custom-choice')?.value?.trim() || btn.textContent.trim();
+        }
+        return btn.textContent.trim();
+      });
       if (selectedButtons.length) {
         fields[label] = selectedButtons;
         return;
@@ -417,8 +449,10 @@ export function afterRender() {
       .filter((input) => !input.value?.trim());
     const missingChoice = [...document.querySelectorAll('[data-required-choice="true"]')]
       .filter((group) => !group.querySelector('button.selected'));
-    if (!missingText.length && !missingChoice.length) return true;
-    const target = missingText[0] || missingChoice[0]?.closest('.feature-field');
+    const missingCustom = [...document.querySelectorAll('.feature-custom-choice:not(.hidden)')]
+      .filter((input) => !input.value?.trim());
+    if (!missingText.length && !missingChoice.length && !missingCustom.length) return true;
+    const target = missingText[0] || missingCustom[0] || missingChoice[0]?.closest('.feature-field');
     target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     missingText[0]?.focus?.();
     showNotice(t('featureForm.required_error'), 'error');
@@ -480,6 +514,11 @@ export function afterRender() {
       if (group?.dataset.choiceMode === 'single') {
         group.querySelectorAll('button').forEach((item) => item.classList.remove('selected'));
         btn.classList.add('selected');
+        const customInput = group.parentElement?.querySelector('.feature-custom-choice');
+        if (customInput) {
+          customInput.classList.toggle('hidden', btn.dataset.choiceValue !== otherCategoryValue());
+          if (btn.dataset.choiceValue === otherCategoryValue()) customInput.focus();
+        }
         return;
       }
       btn.classList.toggle('selected');
@@ -528,6 +567,14 @@ export function afterRender() {
     try {
       const featureCode = window.location.hash.split('/feature/')[1]?.split('?')[0] || 'unknown';
       const featurePayload = collectPayload();
+      if (featureCode === 'expense') {
+        const category = featurePayload[t('featureForm.labels.category')];
+        if (category && category !== t('recordCategories.other')) addRecordCategory('expense', category);
+      }
+      if (featureCode === 'reminders') {
+        const category = featurePayload[t('featureForm.labels.reminder_type')];
+        if (category && category !== t('recordCategories.other')) addRecordCategory('reminder', category);
+      }
       if (featureCode === 'document-ai') {
         const file = document.querySelector('.feature-upload-input')?.files?.[0];
         if (file) {

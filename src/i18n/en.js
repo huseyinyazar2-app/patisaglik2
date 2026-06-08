@@ -527,9 +527,30 @@ const en = {
     settings_items: {
       account: 'Account Details',
       devices: 'My Devices',
+      categories: 'Category Management',
       privacy: 'Privacy and Data',
       notifications: 'Notifications',
       language: 'Language'
+    }
+  },
+  recordCategories: {
+    title: 'Category Management',
+    eyebrow: 'Record settings',
+    desc: 'Edit the category lists shown in expense and reminder forms.',
+    add: 'Add',
+    remove: 'Remove',
+    other: 'Other',
+    default_badge: 'Default',
+    add_placeholder: 'New category name',
+    custom_placeholder: 'Type category name',
+    custom_hint: 'If it is not on the list, choose Other and type your own category.',
+    defaults: {
+      expense: ['Veterinary', 'Food', 'Vaccine', 'Medication', 'Care'],
+      reminder: ['Vaccine', 'Medication', 'Appointment', 'Flea/Parasite']
+    },
+    kinds: {
+      expense: { title: 'Expense categories', desc: 'For food, clinic, litter, care and other spending.' },
+      reminder: { title: 'Reminder types', desc: 'For vaccines, medication, appointments and custom follow-ups.' }
     }
   },
   healthPassport: {
@@ -1229,6 +1250,8 @@ const en = {
       },
       filter: 'Filter',
       sort: 'Sort',
+      view_options: 'View options',
+      view_options_desc: 'Filter and sort only change the record list; use the button above to add a new record.',
       programs_title: 'Tracking programs',
       programs_summary: 'Template status summary',
       last_7_days: 'Last 7 days',
@@ -2407,6 +2430,8 @@ Return JSON:
       pet_desc: 'For {name}, {desc}',
       filter: 'Filter',
       sort: 'Sort',
+      view_options: 'View options',
+      view_options_desc: 'Filter and sort only change the record list; use the button above to add a new record.',
       summary: 'Summary',
       records_preparing: 'Preparing records',
       distribution: 'Distribution',

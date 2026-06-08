@@ -556,9 +556,30 @@ const tr = {
     settings_items: {
       account: 'Hesap Bilgileri',
       devices: 'Cihazlarım',
+      categories: 'Kategori Yönetimi',
       privacy: 'Gizlilik ve Veri',
       notifications: 'Bildirimler',
       language: 'Dil'
+    }
+  },
+  recordCategories: {
+    title: 'Kategori Yönetimi',
+    eyebrow: 'Kayıt ayarları',
+    desc: 'Masraf ve hatırlatıcı formlarında göreceğiniz kategori listelerini buradan düzenleyin.',
+    add: 'Ekle',
+    remove: 'Kaldır',
+    other: 'Diğer',
+    default_badge: 'Varsayılan',
+    add_placeholder: 'Yeni kategori adı',
+    custom_placeholder: 'Kategori adı yazın',
+    custom_hint: 'Listede yoksa Diğer seçip kendi kategorinizi yazabilirsiniz.',
+    defaults: {
+      expense: ['Veteriner', 'Mama', 'Aşı', 'İlaç', 'Bakım'],
+      reminder: ['Aşı', 'İlaç', 'Randevu', 'Pire/Parazit']
+    },
+    kinds: {
+      expense: { title: 'Masraf kategorileri', desc: 'Mama, klinik, kum, bakım ve diğer harcamalar için.' },
+      reminder: { title: 'Hatırlatıcı türleri', desc: 'Aşı, ilaç, randevu ve özel takip hatırlatmaları için.' }
     }
   },
   healthPassport: {
@@ -1258,6 +1279,8 @@ const tr = {
     },
     filter: 'Filtre',
     sort: 'Sıralama',
+    view_options: 'Görünüm seçenekleri',
+    view_options_desc: 'Filtre ve sıralama sadece kayıt listesini değiştirir; yeni kayıt için yukarıdaki butonu kullanın.',
     programs_title: 'Takip programları',
     programs_summary: 'Şablon durum özeti',
     last_7_days: 'Son 7 gün yoğunluğu',
@@ -2338,6 +2361,8 @@ JSON döndür:
       pet_desc: '{name} için {desc}',
       filter: 'Filtre',
       sort: 'Sıralama',
+      view_options: 'Görünüm seçenekleri',
+      view_options_desc: 'Filtre ve sıralama sadece kayıt listesini değiştirir; yeni kayıt için yukarıdaki butonu kullanın.',
       summary: 'Özet',
       records_preparing: 'Kayıtlar hazırlanıyor',
       distribution: 'Dağılım',

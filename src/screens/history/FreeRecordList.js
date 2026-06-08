@@ -2,6 +2,7 @@ import { navigate, goBack } from '../../router.js';
 import { getState } from '../../store.js';
 import { getLocalPets } from '../../services/pets.js';
 import { getFreeRecords } from '../../services/freeRecords.js';
+import { getRecordCategories } from '../../services/recordCategories.js';
 import { getLocale, t, translateForLocale } from '../../i18n/tr.js';
 
 const staticConfig = {
@@ -70,6 +71,20 @@ function normalizeText(value) {
 
 function filterOptions(type) {
   const options = t(`freeRecords.list.filters.${type}`);
+  if (type === 'expenses') {
+    const existing = new Map((Array.isArray(options) ? options : []).map(([value, label]) => [normalizeText(label), [value, label]]));
+    getRecordCategories('expense').forEach((label) => {
+      if (!existing.has(normalizeText(label))) existing.set(normalizeText(label), [label, label]);
+    });
+    return [...existing.values()];
+  }
+  if (type === 'reminders') {
+    const existing = new Map((Array.isArray(options) ? options : []).map(([value, label]) => [normalizeText(label), [value, label]]));
+    getRecordCategories('reminder').forEach((label) => {
+      if (!existing.has(normalizeText(label))) existing.set(normalizeText(label), [label, label]);
+    });
+    return [...existing.values()];
+  }
   return Array.isArray(options) ? options : t('freeRecords.list.filters.health');
 }
 
@@ -102,7 +117,11 @@ function renderListControls(type, query = {}) {
   const activeSort = query.sort || defaultSort(type);
 
   return `
-    <div class="record-filter-panel">
+    <div class="record-filter-panel" aria-label="${t('freeRecords.list.view_options')}">
+      <div class="record-filter-intro">
+        <strong>${t('freeRecords.list.view_options')}</strong>
+        <small>${t('freeRecords.list.view_options_desc')}</small>
+      </div>
       <label>
         <span>${t('freeRecords.list.filter')}</span>
         <select id="recordFilterSelect">
@@ -421,13 +440,14 @@ export function render(params = {}, query = {}) {
         </div>
 
         ${renderTabs(type)}
+        <button class="btn btn-primary btn-full btn-lg record-primary-action" id="btnAddRecord" data-add-route="${addAction.route}">
+          ${window.__icons?.plus || ''} ${addAction.label}
+        </button>
         ${renderListControls(type, query)}
 
         <div id="recordSummary">
           ${renderSummary(type)}
         </div>
-
-        <button class="btn btn-primary btn-full btn-lg mt-4" id="btnAddRecord" data-add-route="${addAction.route}">${addAction.label}</button>
 
         <div class="record-list-stack" id="recordList">
           ${renderRecords(type, null, query)}
