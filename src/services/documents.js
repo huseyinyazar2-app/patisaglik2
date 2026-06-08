@@ -1,4 +1,5 @@
 import { getDbClient } from './dbClient.js';
+import { getApiJson } from './apiClient.js';
 import { translateForLocale } from '../i18n/tr.js';
 
 function label(key) {
@@ -123,7 +124,16 @@ function fromLocalStorage(petId) {
 
 export async function getClinicExportDocuments({ petId, limit = 20 } = {}) {
   const db = getDbClient();
-  if (!db) return fromLocalStorage(petId);
+  if (!db) {
+    try {
+      const query = new URLSearchParams();
+      if (petId) query.set('petId', petId);
+      query.set('limit', String(limit));
+      const result = await getApiJson(`/api/documents?${query.toString()}`);
+      return (result.data?.documents || result.documents || []).map(rowToDocument);
+    } catch {}
+    return fromLocalStorage(petId);
+  }
 
   const args = petId ? [petId, limit] : [limit];
   const petFilter = petId ? 'AND pet_id = ?' : '';
@@ -142,7 +152,13 @@ export async function getClinicExportDocuments({ petId, limit = 20 } = {}) {
 
 export async function getClinicExportDocumentById(id) {
   const db = getDbClient();
-  if (!db) return fromLocalStorage().find((item) => item.id === id) || null;
+  if (!db) {
+    try {
+      const result = await getApiJson(`/api/documents/${encodeURIComponent(id)}`);
+      return result.data?.document ? rowToDocument(result.data.document) : null;
+    } catch {}
+    return fromLocalStorage().find((item) => item.id === id) || null;
+  }
 
   const result = await db.execute({
     sql: `SELECT id, pet_id, document_type, title, extracted_text, extracted_data, status, created_at, updated_at

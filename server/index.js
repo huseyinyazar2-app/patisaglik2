@@ -685,6 +685,39 @@ async function handleGetRecords(req, res, url) {
   });
 }
 
+async function handleGetDocuments(req, res, url) {
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  const petId = url.searchParams.get('petId') || '';
+  const limit = Math.max(1, Math.min(100, Number(url.searchParams.get('limit') || 20)));
+  const args = petId ? [petId, limit] : [limit];
+  const petFilter = petId ? 'AND pet_id = ?' : '';
+  const result = await db.execute({
+    sql: `SELECT id, pet_id, document_type, title, extracted_text, extracted_data, status, created_at, updated_at
+          FROM documents
+          WHERE document_type IN ('clinic_export', 'health_document', 'vet_prep') ${petFilter}
+          ORDER BY created_at DESC
+          LIMIT ?`,
+    args
+  });
+  return sendJson(res, 200, { ok: true, data: { documents: result.rows.map(rowToObject) } });
+}
+
+async function handleGetDocument(req, res, documentId) {
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  const result = await db.execute({
+    sql: `SELECT id, pet_id, document_type, title, extracted_text, extracted_data, status, created_at, updated_at
+          FROM documents
+          WHERE id = ? AND document_type IN ('clinic_export', 'health_document', 'vet_prep')
+          LIMIT 1`,
+    args: [documentId]
+  });
+  const document = result.rows[0] ? rowToObject(result.rows[0]) : null;
+  if (!document) return sendJson(res, 404, { ok: false, error: 'document_not_found' });
+  return sendJson(res, 200, { ok: true, data: { document } });
+}
+
 async function handleSaveMeasurement(req, res) {
   const db = getDb();
   if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
@@ -1069,6 +1102,8 @@ async function route(req, res) {
     if (req.method === 'POST' && url.pathname === '/api/pets/update') return handleUpdatePet(req, res);
     if (req.method === 'POST' && url.pathname === '/api/forms/submit') return handleSubmitForm(req, res);
     if (req.method === 'GET' && url.pathname === '/api/records') return handleGetRecords(req, res, url);
+    if (req.method === 'GET' && url.pathname === '/api/documents') return handleGetDocuments(req, res, url);
+    if (req.method === 'GET' && /^\/api\/documents\/[^/]+$/.test(url.pathname)) return handleGetDocument(req, res, url.pathname.split('/').pop());
     if (req.method === 'POST' && url.pathname === '/api/reminders/status') return handleReminderStatus(req, res);
     if (req.method === 'POST' && url.pathname === '/api/measurements') return handleSaveMeasurement(req, res);
     if (req.method === 'GET' && url.pathname === '/api/measurements') return handleGetMeasurements(req, res, url);
