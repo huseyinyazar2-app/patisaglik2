@@ -1,17 +1,17 @@
 // Pet Help — i18n English translations
 const en = {
-  app: { name: 'Pet Help', tagline: 'Track your pet’s health history and notice changes earlier.' },
+  app: { name: 'Pet Help', tagline: 'Your pet health passport, guided pre-checks and vet-ready reports in one place.' },
   splash: { start: 'Get Started', login: 'Log In' },
   onboarding: {
-    s1_title: 'Your pet health assistant', s1_desc: 'Keep your pet’s health records in one place.',
-    s2_title: 'Describe the concern, get guided next steps', s2_desc: 'Write what you noticed; the app chooses the right questions and records.',
-    s3_title: 'Photos, video, audio and measurements', s3_desc: 'When useful, complete the check with photos, video, audio or manual measurements.',
-    s4_title: 'A clear report before the vet visit', s4_desc: 'The app does not diagnose. It prepares a structured summary for your veterinarian.',
+    s1_title: 'Start with a health passport', s1_desc: 'Keep profile, reminders, documents, measurements and care notes together for every pet.',
+    s2_title: 'Turn concerns into a clear flow', s2_desc: 'Choose the main concern and answer focused questions instead of getting lost in long forms.',
+    s3_title: 'Add useful evidence when needed', s3_desc: 'Photos, videos, audio and measurements help create a clearer picture for follow-up.',
+    s4_title: 'Share a vet-ready link', s4_desc: 'Pet Help does not diagnose. It prepares a structured case summary you can share before the visit.',
     next: 'Continue', skip: 'Skip'
   },
   auth: {
-    login_title: 'Welcome Back', login_subtitle: 'Sign in to your account',
-    register_title: 'Create Account', register_subtitle: 'Set up your Pet Help account',
+    login_title: 'Welcome Back', login_subtitle: 'Continue your pet health records securely',
+    register_title: 'Create Account', register_subtitle: 'Start with one free AI credit and build your first pet profile',
     email: 'Email', password: 'Password', password_confirm: 'Confirm Password', fullname: 'Full Name',
     login_btn: 'Log In', register_btn: 'Create Account',
     login_failed: 'Could not sign in.', register_failed: 'Could not create account.',

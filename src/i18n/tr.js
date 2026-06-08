@@ -29,18 +29,18 @@ export const supportedLocales = [
 ];
 
 const tr = {
-  app: { name: 'Pet Help', tagline: 'Evcil dostunuzun sağlık geçmişini takip edin, değişimleri erken fark edin.' },
+  app: { name: 'Pet Help', tagline: 'Pet sağlık pasaportu, yönlendirmeli ön kontrol ve veteriner raporu tek yerde.' },
   splash: { start: 'Başlayalım', login: 'Giriş Yap' },
   onboarding: {
-    s1_title: 'Pet sağlık asistanınız', s1_desc: 'Evcil dostunuzun sağlık kayıtlarını tek yerde toplayın.',
-    s2_title: 'Şikayeti anlatın, uygulama yönlendirsin', s2_desc: 'Gözlemlediğiniz belirtiyi yazın; uygulama uygun soruları ve gerekli kayıtları seçsin.',
-    s3_title: 'Fotoğraf, video, ses ve ölçümler', s3_desc: 'Gerekli durumlarda fotoğraf, video, ses veya ölçüm görevleriyle kontrolü tamamlayın.',
-    s4_title: 'Veteriner öncesi düzenli rapor', s4_desc: 'Uygulama teşhis koymaz; veteriner görüşmesi için anlaşılır rapor hazırlar.',
+    s1_title: 'Sağlık pasaportuyla başlayın', s1_desc: 'Profil, hatırlatıcı, belge, ölçüm ve bakım notlarını her pet için tek yerde tutun.',
+    s2_title: 'Şikayeti net bir akışa çevirin', s2_desc: 'Ana problemi seçin; gereksiz uzun formlar yerine odaklı sorularla ilerleyin.',
+    s3_title: 'Gerektiğinde kanıt ekleyin', s3_desc: 'Fotoğraf, video, ses ve ölçümler takip için daha anlaşılır bir dosya oluşturur.',
+    s4_title: 'Veterinere hazır link paylaşın', s4_desc: 'Pet Help teşhis koymaz; veteriner görüşmesi için düzenli vaka özeti hazırlar.',
     next: 'Devam Et', skip: 'Atla'
   },
   auth: {
-    login_title: 'Hoş Geldiniz', login_subtitle: 'Hesabınıza giriş yapın',
-    register_title: 'Hesap Oluştur', register_subtitle: 'Yeni bir hesap oluşturun',
+    login_title: 'Hoş geldiniz', login_subtitle: 'Pet sağlık kayıtlarınıza güvenle devam edin',
+    register_title: 'Hesap oluştur', register_subtitle: '1 ücretsiz AI hakkıyla başlayın ve ilk pet profilinizi oluşturun',
     email: 'E-posta', password: 'Şifre', password_confirm: 'Şifre Tekrar', fullname: 'Ad Soyad',
     login_btn: 'Giriş Yap', register_btn: 'Hesap Oluştur',
     login_failed: 'Giriş yapılamadı.', register_failed: 'Kayıt oluşturulamadı.',

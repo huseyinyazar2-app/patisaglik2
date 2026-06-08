@@ -10,7 +10,7 @@ export function render(params = {}, query = {}) {
     <div class="screen splash-screen">
       <div class="version-badge">${state.version}</div>
 
-      <div class="splash-logo auth-visual auth-visual-care" style="animation: bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);" aria-hidden="true"></div>
+      <div class="splash-logo auth-visual auth-visual-splash" style="animation: bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);" aria-hidden="true"></div>
 
       <h1 class="splash-title" style="animation: fadeIn 0.6s ease 0.25s both;">
         ${t('app.name')}

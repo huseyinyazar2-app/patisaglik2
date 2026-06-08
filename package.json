@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --configLoader runner",
     "build": "vite build --configLoader runner",
-    "preview": "vite preview",
+    "preview": "vite preview --configLoader runner",
     "start": "node server/index.js",
     "server": "node server/index.js",
     "cap:sync": "npm run build && npx cap sync",

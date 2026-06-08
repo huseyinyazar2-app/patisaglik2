@@ -119,7 +119,7 @@
 
 .onboarding-illustration::after,
 .auth-visual::after {
-  content: "";
+  content: none;
   position: absolute;
   right: 14px;
   bottom: 14px;
@@ -136,31 +136,32 @@
 
 .onboarding-visual-care,
 .auth-visual-care {
-  background-image:
-    radial-gradient(circle at 24% 24%, rgba(255, 255, 255, 0.96) 0 8%, transparent 8.5%),
-    radial-gradient(circle at 68% 36%, rgba(255, 255, 255, 0.9) 0 6%, transparent 6.5%),
-    linear-gradient(135deg, rgba(0, 106, 90, 0.9) 0%, rgba(14, 165, 164, 0.72) 45%, rgba(255, 247, 237, 0.96) 100%) !important;
+  background-image: url("/assets/auth/onboarding-passport.jpg") !important;
 }
 
 .onboarding-visual-triage {
-  background-image:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.86) 0 30%, transparent 30%),
-    radial-gradient(circle at 70% 28%, rgba(255, 255, 255, 0.92) 0 7%, transparent 7.5%),
-    linear-gradient(135deg, rgba(247, 181, 74, 0.88) 0%, rgba(0, 106, 90, 0.76) 100%) !important;
+  background-image: url("/assets/auth/onboarding-triage.jpg") !important;
 }
 
 .onboarding-visual-media {
-  background-image:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0 22%, transparent 22%),
-    radial-gradient(circle at 28% 64%, rgba(255, 255, 255, 0.9) 0 9%, transparent 9.5%),
-    linear-gradient(135deg, rgba(11, 92, 79, 0.92) 0%, rgba(148, 210, 189, 0.8) 50%, rgba(245, 158, 11, 0.48) 100%) !important;
+  background-image: url("/assets/auth/onboarding-media.jpg") !important;
 }
 
 .onboarding-visual-report {
-  background-image:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.94) 0 34%, transparent 34%),
-    linear-gradient(0deg, rgba(255, 255, 255, 0.72) 0 16%, transparent 16%),
-    linear-gradient(135deg, rgba(0, 61, 52, 0.92) 0%, rgba(0, 106, 90, 0.76) 52%, rgba(255, 247, 237, 0.94) 100%) !important;
+  background-image: url("/assets/auth/onboarding-report.jpg") !important;
+}
+
+.auth-visual-splash {
+  background-image: url("/assets/auth/splash-hero.jpg") !important;
+  background-position: center !important;
+}
+
+.auth-visual-login {
+  background-image: url("/assets/auth/auth-secure.jpg") !important;
+}
+
+.auth-visual-register {
+  background-image: url("/assets/auth/auth-register.jpg") !important;
 }
 
 .onboarding-title {
@@ -213,9 +214,9 @@
 }
 
 .splash-logo.auth-visual {
-  width: 168px;
-  height: 168px;
-  border-radius: 34px;
+  width: min(300px, 78vw);
+  height: 220px;
+  border-radius: 30px;
 }
 
 .auth-title {

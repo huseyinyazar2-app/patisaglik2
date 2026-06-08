@@ -18,7 +18,7 @@ export function render(params = {}, query = {}) {
       <div class="version-badge">${state.version}</div>
 
       <div class="auth-header" style="animation: fadeIn 0.5s ease both;">
-        <div class="auth-visual auth-visual-care" aria-hidden="true"></div>
+        <div class="auth-visual auth-visual-login" aria-hidden="true"></div>
         <h1 class="auth-title">${t('auth.login_title')}</h1>
         <p class="auth-subtitle">${t('auth.login_subtitle')}</p>
       </div>
