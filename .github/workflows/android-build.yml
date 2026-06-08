@@ -14,6 +14,9 @@ on:
       - "capacitor.config.json"
       - ".github/workflows/android-build.yml"
 
+permissions:
+  contents: write
+
 jobs:
   android:
     name: Build Android artifacts
@@ -81,6 +84,18 @@ jobs:
         with:
           name: pet-help-debug-apk
           path: android/app/build/outputs/apk/debug/*.apk
+
+      - name: Publish latest test APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p release-apk
+          cp android/app/build/outputs/apk/debug/*.apk release-apk/pet-help-debug.apk
+          if gh release view mobile-test-latest >/dev/null 2>&1; then
+            gh release upload mobile-test-latest release-apk/pet-help-debug.apk --clobber
+          else
+            gh release create mobile-test-latest release-apk/pet-help-debug.apk --title "Pet Help Mobile Test APK" --notes "Latest debug APK for mobile testing." --prerelease
+          fi
 
       - name: Build signed release AAB
         if: env.ANDROID_KEYSTORE_BASE64 != '' && env.ANDROID_KEYSTORE_PASSWORD != '' && env.ANDROID_KEY_ALIAS != '' && env.ANDROID_KEY_PASSWORD != ''
