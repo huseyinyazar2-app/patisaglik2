@@ -17,6 +17,397 @@
   overflow: hidden;
 }
 
+/* ---------- Product UI Engineer Pass ---------- */
+button,
+input,
+select,
+textarea,
+a {
+  min-width: 0;
+}
+
+button {
+  touch-action: manipulation;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid rgba(0, 91, 76, 0.22);
+  outline-offset: 3px;
+}
+
+.splash-screen::before,
+.splash-screen::after,
+.card-hero::before,
+.card-hero::after,
+.home-hero-panel::before,
+.home-tool-grid button::after,
+.feature-menu-card::before,
+.premium-ai-card::after {
+  display: none !important;
+}
+
+.premium-home,
+.premium-check,
+.premium-result {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F4FBF9 48%, #F7FAFC 100%) !important;
+}
+
+.screen {
+  min-width: 0;
+}
+
+.premium-home .section,
+.premium-check .section,
+.record-list-screen .section,
+.feature-form-screen .section {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.section {
+  margin-bottom: 18px;
+}
+
+.section-header,
+.flex.justify-between.items-center {
+  gap: 12px;
+}
+
+.section-title,
+.header-title,
+.report-card-title,
+.care-program-card strong,
+.feature-menu-card strong,
+.ai-assistant-card strong,
+.profile-settings-row strong,
+.home-insight-card strong,
+.free-record-row strong {
+  overflow-wrap: anywhere;
+}
+
+.header,
+.premium-home-header {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.header-icon,
+.header-back,
+.tab-item,
+.capture-btn-small {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.tab-bar-inner {
+  height: calc(var(--tab-height) + 2px);
+}
+
+.tab-item {
+  gap: 3px;
+  padding: 6px 0 7px;
+}
+
+.tab-item svg {
+  width: 22px;
+  height: 22px;
+}
+
+.tab-item-label {
+  max-width: 100%;
+  padding: 0 3px;
+  line-height: 1.15;
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.home-hero-panel,
+.ai-premium-hero,
+.history-summary-panel,
+.profile-premium-header,
+.profile-plan-card,
+.report-export-card,
+.card,
+.summary-section,
+.report-card,
+.free-record-panel,
+.feature-form-card,
+.feature-form-hero,
+.knowledge-hero,
+.media-quality-panel {
+  border-radius: 10px !important;
+  box-shadow: 0 10px 28px rgba(17, 24, 39, 0.06) !important;
+}
+
+.home-hero-panel,
+.history-summary-panel,
+.profile-premium-header,
+.report-export-card {
+  padding: 16px;
+}
+
+.home-hero-top {
+  align-items: flex-start;
+}
+
+.home-hero-top > div,
+.history-summary-panel > div:not(.avatar),
+.profile-premium-header > div:not(.profile-avatar),
+.report-export-card > div:nth-child(2),
+.feature-menu-card > div,
+.ai-assistant-card > div:not(.premium-icon-box),
+.care-program-card > div,
+.profile-settings-row strong {
+  min-width: 0;
+}
+
+.home-hero-photo {
+  width: 82px;
+  height: 82px;
+  border-radius: 10px;
+  animation: none !important;
+}
+
+.home-hero-panel h1,
+.profile-premium-header h1,
+.ai-premium-hero h1 {
+  font-size: 23px;
+  line-height: 1.15;
+}
+
+.home-hero-panel p,
+.ai-premium-hero p,
+.profile-plan-card p,
+.report-export-card p,
+.history-summary-panel p,
+.feature-menu-card p,
+.ai-assistant-card p,
+.care-program-card p,
+.report-card-summary,
+.free-record-row p {
+  overflow-wrap: anywhere;
+}
+
+.home-hero-actions {
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.btn,
+.home-credit-strip,
+.ai-credit-inline-pill,
+.pet-switcher-btn,
+.feature-menu-card,
+.ai-assistant-card,
+.care-program-card,
+.profile-settings-row,
+.home-insight-card,
+.report-card {
+  min-height: 44px;
+}
+
+.btn {
+  border-radius: 10px;
+  white-space: normal;
+  text-align: center;
+}
+
+.btn-primary {
+  box-shadow: 0 10px 22px rgba(0, 91, 76, 0.22);
+}
+
+.pet-switcher-btn {
+  max-width: min(220px, 58vw);
+  border-radius: 999px;
+}
+
+.pet-switcher-btn > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.premium-icon-box,
+.home-tool-grid button svg,
+.home-insight-card .premium-icon-box,
+.media-quality-head > span {
+  border-radius: 8px !important;
+}
+
+.home-tool-grid,
+.home-insight-grid {
+  gap: 9px;
+}
+
+.home-tool-grid button,
+.home-insight-card,
+.feature-menu-card,
+.ai-assistant-card,
+.care-program-card,
+.profile-settings-row,
+.premium-followup,
+.premium-list-button {
+  border-radius: 10px;
+  box-shadow: 0 8px 22px rgba(17, 24, 39, 0.05);
+}
+
+.home-tool-grid button {
+  min-height: 108px;
+  background: #FFFFFF !important;
+}
+
+.home-tool-grid button small,
+.home-insight-card small,
+.feature-menu-card p,
+.ai-assistant-card p,
+.care-program-card p {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.home-insight-card {
+  min-height: 100px;
+  background: #FFFFFF !important;
+}
+
+.care-program-card,
+.feature-menu-card,
+.ai-assistant-card,
+.profile-settings-row {
+  align-items: flex-start;
+}
+
+.care-program-card > span,
+.feature-menu-card > span,
+.ai-assistant-card span,
+.plan-pill {
+  max-width: 34%;
+  text-align: center;
+  line-height: 1.15;
+  white-space: normal;
+}
+
+.ai-premium-hero {
+  color: var(--text-primary);
+  background: #FFFFFF !important;
+  border-color: rgba(214, 233, 227, 0.95) !important;
+}
+
+.ai-premium-hero h1 {
+  color: var(--text-primary);
+}
+
+.ai-premium-hero p {
+  color: var(--text-secondary);
+}
+
+.ai-credit-inline-pill {
+  border-radius: 999px;
+}
+
+.report-export-card {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+}
+
+.report-export-card .btn {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-left: 0;
+}
+
+.profile-premium-header {
+  grid-template-columns: 60px minmax(0, 1fr);
+  margin: 14px 16px 18px;
+}
+
+.profile-premium-header .profile-avatar {
+  width: 60px;
+  height: 60px;
+}
+
+.profile-settings-row {
+  align-items: center;
+}
+
+.free-record-metrics {
+  grid-template-columns: 1fr;
+}
+
+.free-record-metrics span {
+  text-align: left;
+}
+
+.free-record-row {
+  align-items: flex-start;
+}
+
+.empty-state {
+  padding: 32px 16px;
+}
+
+@media (min-width: 390px) {
+  .home-hero-actions {
+    grid-template-columns: 1.2fr 1fr;
+  }
+
+  .free-record-metrics {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .free-record-metrics span {
+    text-align: center;
+  }
+}
+
+@media (max-width: 380px) {
+  .premium-home .section,
+  .premium-check .section,
+  .record-list-screen .section,
+  .feature-form-screen .section {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .home-hero-top,
+  .history-summary-panel,
+  .report-export-card {
+    gap: 12px;
+  }
+
+  .home-hero-photo {
+    width: 72px;
+    height: 72px;
+  }
+
+  .home-hero-panel h1,
+  .profile-premium-header h1,
+  .ai-premium-hero h1 {
+    font-size: 21px;
+  }
+
+  .care-program-card,
+  .feature-menu-card,
+  .ai-assistant-card {
+    padding: 12px;
+  }
+
+  .care-program-card > span,
+  .feature-menu-card > span,
+  .ai-assistant-card span {
+    max-width: 38%;
+  }
+}
+
 .splash-screen::before {
   content: '';
   position: absolute;
@@ -6172,4 +6563,93 @@
   .web-side-card strong {
     font-size: 14px;
   }
+}
+
+/* ---------- Product UI Engineer Final Overrides ---------- */
+.splash-screen::before,
+.splash-screen::after,
+.card-hero::before,
+.card-hero::after,
+.home-hero-panel::before,
+.home-tool-grid button::after,
+.feature-menu-card::before,
+.premium-ai-card::after {
+  display: none !important;
+}
+
+.premium-home,
+.premium-check,
+.premium-result {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F4FBF9 48%, #F7FAFC 100%) !important;
+}
+
+.home-hero-panel,
+.ai-premium-hero,
+.history-summary-panel,
+.profile-premium-header,
+.profile-plan-card,
+.report-export-card,
+.card,
+.summary-section,
+.report-card,
+.free-record-panel,
+.feature-form-card,
+.feature-form-hero,
+.knowledge-hero,
+.media-quality-panel {
+  border-radius: 10px !important;
+  box-shadow: 0 10px 28px rgba(17, 24, 39, 0.06) !important;
+}
+
+.home-tool-grid button,
+.home-insight-card,
+.feature-menu-card,
+.ai-assistant-card,
+.care-program-card,
+.profile-settings-row,
+.premium-followup,
+.premium-list-button {
+  border-radius: 10px !important;
+  box-shadow: 0 8px 22px rgba(17, 24, 39, 0.05) !important;
+}
+
+.premium-icon-box,
+.home-tool-grid button svg,
+.home-insight-card .premium-icon-box,
+.media-quality-head > span {
+  border-radius: 8px !important;
+}
+
+.home-tool-grid button,
+.home-insight-card {
+  background: #FFFFFF !important;
+}
+
+.ai-premium-hero {
+  color: var(--text-primary) !important;
+  background: #FFFFFF !important;
+  border-color: rgba(214, 233, 227, 0.95) !important;
+}
+
+.ai-premium-hero h1 {
+  color: var(--text-primary) !important;
+}
+
+.ai-premium-hero p {
+  color: var(--text-secondary) !important;
+}
+
+.home-hero-photo {
+  animation: none !important;
+}
+
+.home-tool-grid button small,
+.home-insight-card small,
+.feature-menu-card p,
+.ai-assistant-card p,
+.care-program-card p {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }

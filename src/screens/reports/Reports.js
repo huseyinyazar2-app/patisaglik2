@@ -102,7 +102,7 @@ export function render() {
         <div class="header-left"></div>
         <div class="header-title">${t('reports.title')}</div>
         <div class="header-right">
-          <button class="header-icon" id="btnAddReport">${window.__icons?.plus || ''}</button>
+          <button class="header-icon" id="btnAddReport" aria-label="${t('reportsScreen.add_document')}">${window.__icons?.plus || ''}</button>
         </div>
       </div>
 

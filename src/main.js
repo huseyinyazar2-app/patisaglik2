@@ -85,7 +85,7 @@ function renderTabBar(activeTab) {
     <nav class="tab-bar" id="tabBar">
       <div class="tab-bar-inner">
         ${tabRoutes.map((route, i) => `
-          <button class="tab-item ${activeTab === route ? 'active' : ''}" data-route="${route}">
+          <button class="tab-item ${activeTab === route ? 'active' : ''}" data-route="${route}" aria-label="${t(tabLabelKeys[i])}">
             ${icons[tabIcons[i]]}
             <span class="tab-item-label">${t(tabLabelKeys[i])}</span>
           </button>

@@ -223,13 +223,13 @@ export function render() {
   return `
     <div class="screen premium-home">
       <div class="premium-home-header">
-        <button class="header-icon" id="btnMenu">${window.__icons?.check}</button>
-        <button class="pet-switcher-btn" id="btnPetSelectHeader">
+        <button class="header-icon" id="btnMenu" aria-label="${t('tabs.check')}">${window.__icons?.check}</button>
+        <button class="pet-switcher-btn" id="btnPetSelectHeader" aria-label="${t('profilePage.account_items.pets.title')}">
           ${renderPetVisual(pet, 'pet-switcher-avatar')}
           <span>${pet.name}</span>
           ${window.__icons?.chevronRight}
         </button>
-        <button class="header-icon" id="btnProfile">${window.__icons?.profile}</button>
+        <button class="header-icon" id="btnProfile" aria-label="${t('tabs.profile')}">${window.__icons?.profile}</button>
       </div>
 
       <div class="section pt-0">
