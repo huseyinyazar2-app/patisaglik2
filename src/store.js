@@ -36,7 +36,7 @@ const state = {
     timezone: storedUser.timezone || 'Europe/Istanbul',
     location: storedUser.location || { country: translateForLocale('tr', 'userDefaults.country'), province: '', district: '', neighborhood: '' },
     notificationPreference: storedUser.notificationPreference || 'push',
-    isLoggedIn: true
+    isLoggedIn: Boolean(storedUser.id || storedUser.phone || storedUser.email)
   },
   subscription: {
     tier: 'free', // 'free' | 'pro'

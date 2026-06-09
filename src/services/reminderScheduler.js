@@ -1,6 +1,13 @@
 import { getState } from '../store.js';
 import { getFreeRecords } from './freeRecords.js';
-import { getNotificationPermissionState, getNotificationSettings } from './notifications.js';
+import {
+  getNativeNotificationState,
+  getNotificationPermissionState,
+  getNotificationSettings,
+  getReminderNotificationPlan,
+  sendImmediateNativeNotification,
+  syncNativeReminderPlan
+} from './notifications.js';
 import { t } from '../i18n/tr.js';
 
 const NOTIFIED_KEY = 'pati_notified_reminders';
@@ -46,9 +53,20 @@ function inQuietHours(quietHours) {
   return current >= startMinutes || current < endMinutes;
 }
 
-function notifyReminder(reminder) {
+async function notifyReminder(reminder, badge = 1) {
+  const title = t('notificationService.reminder_title');
+  const body = t('notificationService.reminder_due_now', { title: reminder.title || reminder.reminder_type || t('notificationService.reminder_fallback') });
+  const nativeSent = await sendImmediateNativeNotification({
+    id: `due-${reminder.id}-${reminder.due_at}`,
+    title,
+    body,
+    badge,
+    extra: { reminderId: reminder.id, dueAt: reminder.due_at }
+  });
+  if (nativeSent) return;
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
   new Notification(t('notificationService.reminder_title'), {
-    body: t('notificationService.reminder_due_now', { title: reminder.title || reminder.reminder_type || t('notificationService.reminder_fallback') }),
+    body,
     tag: `pati-reminder-${reminder.id}-${reminder.due_at}`,
     data: { reminderId: reminder.id, dueAt: reminder.due_at }
   });
@@ -67,13 +85,14 @@ export function getReminderSchedulerStatus() {
 export async function checkDueReminders() {
   const settings = getNotificationSettings();
   const permission = getNotificationPermissionState();
+  const native = getNativeNotificationState();
   const state = getState();
 
   if (!settings.reminders) {
     return writeStatus({ running: Boolean(intervalId), lastResult: 'disabled', sentCount: 0, dueCount: 0 });
   }
 
-  if (permission !== 'granted') {
+  if (permission !== 'granted' && !native.available) {
     return writeStatus({ running: Boolean(intervalId), lastResult: 'waiting_permission', sentCount: 0, dueCount: 0 });
   }
 
@@ -95,12 +114,12 @@ export async function checkDueReminders() {
 
   const notified = readJson(NOTIFIED_KEY, {});
   let sentCount = 0;
-  due.forEach((item) => {
-    if (notified[item.id] === item.due_at) return;
-    notifyReminder(item);
+  for (const item of due) {
+    if (notified[item.id] === item.due_at) continue;
+    await notifyReminder(item, sentCount + 1);
     notified[item.id] = item.due_at;
     sentCount += 1;
-  });
+  }
   localStorage.setItem(NOTIFIED_KEY, JSON.stringify(notified));
 
   return writeStatus({
@@ -112,6 +131,13 @@ export async function checkDueReminders() {
   });
 }
 
+export async function syncUpcomingNativeReminders({ requestPermission = false } = {}) {
+  const state = getState();
+  if (!state.activePetId) return { ok: false, reason: 'no_active_pet', scheduled: 0 };
+  const records = await getFreeRecords({ petId: state.activePetId, limit: 50 });
+  return syncNativeReminderPlan(getReminderNotificationPlan(records.reminders), { requestPermission });
+}
+
 export function startReminderScheduler({ intervalMs = 60_000 } = {}) {
   if (intervalId) {
     return getReminderSchedulerStatus();
@@ -119,13 +145,16 @@ export function startReminderScheduler({ intervalMs = 60_000 } = {}) {
 
   writeStatus({ running: true, lastResult: 'started', intervalMs });
   checkDueReminders().catch((err) => writeStatus({ running: true, lastResult: 'error', error: err.message }));
+  syncUpcomingNativeReminders({ requestPermission: false }).catch(() => {});
   intervalId = window.setInterval(() => {
     checkDueReminders().catch((err) => writeStatus({ running: true, lastResult: 'error', error: err.message }));
+    syncUpcomingNativeReminders({ requestPermission: false }).catch(() => {});
   }, intervalMs);
 
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
       checkDueReminders().catch((err) => writeStatus({ running: true, lastResult: 'error', error: err.message }));
+      syncUpcomingNativeReminders({ requestPermission: false }).catch(() => {});
     }
   });
 

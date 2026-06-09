@@ -50,6 +50,7 @@ export function saveNotificationSettings(settings) {
 }
 
 export async function requestNotificationPermission() {
+  if (nativeLocalNotifications()) return requestNativeNotificationPermission();
   if (!('Notification' in window)) return 'unsupported';
   if (Notification.permission === 'granted') return 'granted';
   return Notification.requestPermission();
@@ -62,11 +63,15 @@ export function getNativeNotificationState() {
   };
 }
 
-export async function requestNativeNotificationPermission() {
+async function getNativePermission({ request = false } = {}) {
   const plugin = nativeLocalNotifications();
   if (!plugin) return 'unsupported';
-  const result = await plugin.requestPermissions?.();
+  const result = request ? await plugin.requestPermissions?.() : await plugin.checkPermissions?.();
   return result?.display || result?.receive || 'granted';
+}
+
+export async function requestNativeNotificationPermission() {
+  return getNativePermission({ request: true });
 }
 
 export function sendTestNotification() {
@@ -78,11 +83,11 @@ export function sendTestNotification() {
   return true;
 }
 
-export async function syncNativeReminderPlan(plan = []) {
+export async function syncNativeReminderPlan(plan = [], { requestPermission = true } = {}) {
   const plugin = nativeLocalNotifications();
   if (!plugin) return { ok: false, reason: 'unsupported', scheduled: 0 };
 
-  const permission = await requestNativeNotificationPermission();
+  const permission = await getNativePermission({ request: requestPermission });
   if (!['granted', 'prompt-with-rationale'].includes(permission)) {
     return { ok: false, reason: 'permission', permission, scheduled: 0 };
   }
@@ -96,11 +101,12 @@ export async function syncNativeReminderPlan(plan = []) {
   const notifications = plan
     .filter((item) => item.dueAt && new Date(item.dueAt).getTime() > now)
     .slice(0, 16)
-    .map((item) => ({
+    .map((item, index) => ({
       id: notificationId(`${item.id}-${item.dueAt}`),
       title: t('notificationService.reminder_title'),
       body: t('notificationService.reminder_due_soon', { title: item.title || item.type || t('notificationService.reminder_fallback') }),
       schedule: { at: new Date(item.dueAt) },
+      badge: index + 1,
       extra: { reminderId: item.id, dueAt: item.dueAt, type: item.type }
     }));
 
@@ -112,6 +118,24 @@ export async function syncNativeReminderPlan(plan = []) {
   await plugin.schedule({ notifications });
   localStorage.setItem(NATIVE_IDS_KEY, JSON.stringify(notifications.map((item) => item.id)));
   return { ok: true, reason: 'scheduled', scheduled: notifications.length };
+}
+
+export async function sendImmediateNativeNotification({ id, title, body, extra = {}, badge = 1 }) {
+  const plugin = nativeLocalNotifications();
+  if (!plugin) return false;
+  const permission = await getNativePermission({ request: false });
+  if (!['granted', 'prompt-with-rationale'].includes(permission)) return false;
+  await plugin.schedule({
+    notifications: [{
+      id: notificationId(`${id}-${Date.now()}`),
+      title,
+      body,
+      schedule: { at: new Date(Date.now() + 1000) },
+      badge,
+      extra
+    }]
+  });
+  return true;
 }
 
 export function getReminderNotificationPlan(reminders = []) {

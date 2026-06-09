@@ -331,6 +331,26 @@ async function handleFeatureAvailability(req, res) {
   return sendJson(res, 200, await featureAvailability(db, { userId, featureCode }));
 }
 
+async function handleBillingAccount(req, res, url) {
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  const userId = url.searchParams.get('userId') || 'user-1';
+  const context = await activeBillingContext(db, userId);
+  const [plansResult, packagesResult] = await Promise.all([
+    db.execute({ sql: `SELECT * FROM plans WHERE is_active = 1 ORDER BY price_cents ASC, code ASC`, args: [] }).catch(() => ({ rows: [] })),
+    db.execute({ sql: `SELECT * FROM credit_packages WHERE is_active = 1 ORDER BY sort_order ASC, price_cents ASC`, args: [] }).catch(() => ({ rows: [] }))
+  ]);
+  return sendJson(res, 200, {
+    ok: true,
+    data: {
+      plan: context.plan,
+      wallet: context.wallet,
+      plans: plansResult.rows.map(rowToObject),
+      creditPackages: packagesResult.rows.map(rowToObject)
+    }
+  });
+}
+
 async function handleFeatureUsage(req, res) {
   const db = getDb();
   if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
@@ -1459,6 +1479,7 @@ async function route(req, res) {
     if (req.method === 'POST' && url.pathname === '/api/media/complete') return handleCompleteUpload(req, res);
     if (req.method === 'GET' && url.pathname === '/api/media/sign-download') return handleSignDownload(req, res, url);
     if (req.method === 'POST' && url.pathname === '/api/billing/feature-availability') return handleFeatureAvailability(req, res);
+    if (req.method === 'GET' && url.pathname === '/api/billing/account') return handleBillingAccount(req, res, url);
     if (req.method === 'POST' && url.pathname === '/api/billing/record-usage') return handleFeatureUsage(req, res);
     if (req.method === 'POST' && url.pathname === '/api/ai/document-ocr') return handleDocumentOcr(req, res);
     if (req.method === 'POST' && url.pathname === '/api/ai/package-risk') return handlePackageRiskLogged(req, res);

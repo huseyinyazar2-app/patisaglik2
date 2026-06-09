@@ -1,5 +1,5 @@
 import { getDbClient } from './dbClient.js';
-import { postApiJson } from './apiClient.js';
+import { getApiJson, postApiJson } from './apiClient.js';
 import { translateForLocale } from '../i18n/tr.js';
 
 const LOCAL_PLAN_KEY = 'pati_local_plan_code';
@@ -127,6 +127,33 @@ export async function getAccountBilling({ userId = 'user-1' } = {}) {
   const localPlanCode = localStorage.getItem(LOCAL_PLAN_KEY);
   const db = getDbClient();
   if (!db) {
+    if (!import.meta.env?.DEV && userId && userId !== 'user-1') {
+      try {
+        const query = new URLSearchParams({ userId });
+        const result = await getApiJson(`/api/billing/account?${query.toString()}`);
+        const data = result.data || {};
+        const plans = (data.plans?.length ? data.plans : fallbackPlans).map(normalizePlan);
+        const creditPackages = (data.creditPackages?.length ? data.creditPackages : fallbackCreditPackages).map(normalizeCreditPackage);
+        const activePlan = data.plan?.code
+          ? normalizePlan({
+              ...fallbackPlans.find((item) => item.code === data.plan.code),
+              ...data.plan,
+              billing_type: data.plan.billing_type || 'free',
+              name_tr: data.plan.name_tr || fallbackPlans.find((item) => item.code === data.plan.code)?.name_tr || data.plan.code,
+              max_pets: data.plan.max_pets || 1,
+              price_cents: data.plan.price_cents || 0,
+              currency: data.plan.currency || 'TRY'
+            })
+          : plans.find((item) => item.code === localPlanCode) || plans[0];
+        const wallet = data.wallet || { balance: 0, currency: 'credit' };
+        return {
+          plans,
+          creditPackages,
+          subscription: subscriptionFromPlan(activePlan, wallet, 'api'),
+          wallet: { balance: Number(wallet.balance || 0), currency: wallet.currency || 'credit' }
+        };
+      } catch {}
+    }
     const remoteCredit = !import.meta.env?.DEV ? await remoteCreditSnapshot(userId) : null;
     const balance = remoteCredit ? remoteCredit.balance : import.meta.env?.DEV ? getLocalWalletBalance(userId) : 0;
     const plans = fallbackPlans.map(normalizePlan);

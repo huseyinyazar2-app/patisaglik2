@@ -16,6 +16,8 @@ const petIllustrations = {
   exotic: '🐾'
 };
 
+let creditRefreshListener = null;
+
 function tx(key, vars = {}) {
   return String(t(key)).replace(/\{(\w+)\}/g, (_, name) => vars[name] ?? '');
 }
@@ -325,6 +327,26 @@ export function render() {
 
 export function afterRender() {
   const state = getState();
+  const refreshCreditStatus = () => {
+    getAccountBilling({ userId: state.user?.id || 'user-1' }).then((billing) => {
+      const target = document.getElementById('homeCreditStatus');
+      if (target) {
+        target.innerHTML = renderCreditStatus(billing.wallet);
+        document.getElementById('btnHomeCredits')?.addEventListener('click', () => navigate('/profile/plan'));
+      }
+    }).catch(() => {});
+  };
+
+  if (creditRefreshListener) {
+    document.removeEventListener('visibilitychange', creditRefreshListener);
+    window.removeEventListener('focus', creditRefreshListener);
+  }
+  creditRefreshListener = () => {
+    if (!document.hidden) refreshCreditStatus();
+  };
+  document.addEventListener('visibilitychange', creditRefreshListener);
+  window.addEventListener('focus', creditRefreshListener);
+
   document.getElementById('btnProfile')?.addEventListener('click', () => navigate('/profile'));
   document.getElementById('btnPetSelectHeader')?.addEventListener('click', () => navigate('/pets/select'));
   document.getElementById('btnPetImage')?.addEventListener('click', () => document.getElementById('petPhotoInput')?.click());
@@ -394,11 +416,5 @@ export function afterRender() {
     if (count) count.textContent = activeFollowups.length ? tx('home.file_count', { count: activeFollowups.length }) : tx('home.record_count', { count: records.healthRecords.length });
   }).catch(() => {});
 
-  getAccountBilling({ userId: state.user?.id || 'user-1' }).then((billing) => {
-    const target = document.getElementById('homeCreditStatus');
-    if (target) {
-      target.innerHTML = renderCreditStatus(billing.wallet);
-      document.getElementById('btnHomeCredits')?.addEventListener('click', () => navigate('/profile/plan'));
-    }
-  }).catch(() => {});
+  refreshCreditStatus();
 }

@@ -614,3 +614,10 @@ Bu fazın ürün dili teşhis değil; çekim kalitesini artırma, değişim taki
 - [x] API tarafina `qr` ve `sitter` form domain kayitlari eklendi; `publicPath` ve `invitePath` cevaplari donuyor.
 - [x] Mobil/rapor belge servisi icin `/api/documents` ve `/api/documents/:id` okuma endpointleri eklendi.
 - [x] Canli smoke test yapildi: expense, reminders, 9 saglik kaydi tipi, 3 belge tipi, QR, sitter, measurements ve reminder status update basarili.
+
+## Mobil Oturum / Kredi / Bildirim - 09.06.2026
+
+- [x] Mobil splash ekrani, kullanici logout yapmadigi surece kayitli oturumu otomatik ana ekrana tasiyacak sekilde duzeltildi.
+- [x] Native kabuk hash olmadan acilirsa web tanitim yerine uygulama splash akisina alinacak sekilde ayarlandi.
+- [x] Kredi bakiyesi canli `/api/billing/account` endpointinden okunacak ve ana ekran/Pet AI ekrani gorunur olunca yeniden tazelenecek sekilde baglandi.
+- [x] Hatirlatici kaydindan sonra native LocalNotifications plani senkronlanacak, yaklasan/gelmis hatirlaticilar icin bildirim ve destekleyen launcher'larda badge sayisi best-effort calisacak sekilde baglandi.

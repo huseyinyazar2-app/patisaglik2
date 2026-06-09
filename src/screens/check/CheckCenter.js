@@ -55,6 +55,8 @@ const premiumAssistants = [
   }
 ];
 
+let creditRefreshListener = null;
+
 function formatCredit(balance = null) {
   return balance === null ? t('common.loading') : t('checkCenter.credit_balance', { count: Number(balance || 0) });
 }
@@ -117,6 +119,23 @@ export function render() {
 
 export function afterRender() {
   const state = getState();
+  const refreshCreditStatus = () => {
+    getAccountBilling({ userId: state.user?.id || 'user-1' }).then((billing) => {
+      const target = document.querySelector('#btnAiCredits b');
+      if (target) target.textContent = formatCredit(billing.wallet?.balance);
+    }).catch(() => {});
+  };
+
+  if (creditRefreshListener) {
+    document.removeEventListener('visibilitychange', creditRefreshListener);
+    window.removeEventListener('focus', creditRefreshListener);
+  }
+  creditRefreshListener = () => {
+    if (!document.hidden) refreshCreditStatus();
+  };
+  document.addEventListener('visibilitychange', creditRefreshListener);
+  window.addEventListener('focus', creditRefreshListener);
+
   const handlers = {
     smart: async () => {
       const credit = await getFeatureCreditAvailability({ userId: state.user?.id || 'user-1', featureCode: 'ai-triage' });
@@ -159,8 +178,5 @@ export function afterRender() {
   });
 
   document.getElementById('btnAiCredits')?.addEventListener('click', () => navigate('/profile/plan'));
-  getAccountBilling({ userId: state.user?.id || 'user-1' }).then((billing) => {
-    const target = document.querySelector('#btnAiCredits b');
-    if (target) target.textContent = formatCredit(billing.wallet?.balance);
-  }).catch(() => {});
+  refreshCreditStatus();
 }

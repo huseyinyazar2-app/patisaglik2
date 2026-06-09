@@ -7,6 +7,7 @@ import { uploadMediaFile } from '../../services/apiClient.js';
 import { PAYMENTS_DISABLED, getFeatureCreditAvailability, recordFeatureUsage } from '../../services/billing.js';
 import { addRecordCategory, getRecordCategoryOptions, otherCategoryValue } from '../../services/recordCategories.js';
 import { formatErrorForDeveloper } from '../../services/errorCodes.js';
+import { syncUpcomingNativeReminders } from '../../services/reminderScheduler.js';
 import QRCode from 'qrcode';
 import { t } from '../../i18n/tr.js';
 
@@ -622,6 +623,9 @@ export function afterRender() {
           if (navigator.share) await navigator.share({ title: t('featureForm.sitter_invite_title'), text: shareText, url: inviteUrl });
           else await navigator.clipboard.writeText(`${shareText}\n${inviteUrl}`);
         } catch {}
+      }
+      if (featureCode === 'reminders') {
+        syncUpcomingNativeReminders({ requestPermission: true }).catch(() => {});
       }
       const nextRoute = featureCode === 'expense' ? '/history/expenses'
         : featureCode === 'reminders' ? '/history/reminders'

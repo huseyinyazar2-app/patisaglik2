@@ -285,6 +285,9 @@ async function init() {
   if (appInitialized) return;
   appInitialized = true;
   syncNativeShellClass();
+  if (!window.location.hash && document.documentElement.classList.contains('native-shell')) {
+    window.location.hash = '#/auth/splash';
+  }
   setLocale(getLocale());
   await refreshAppSettings();
   await cleanupSmokeTestArtifacts();

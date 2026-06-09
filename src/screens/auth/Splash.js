@@ -1,7 +1,8 @@
 // Pet Help — Splash Screen
 import { navigate } from '../../router.js';
-import { getState } from '../../store.js';
+import { getState, setActivePet } from '../../store.js';
 import { t } from '../../i18n/tr.js';
+import { getPets } from '../../services/pets.js';
 
 export function render(params = {}, query = {}) {
   const state = getState();
@@ -33,6 +34,27 @@ export function render(params = {}, query = {}) {
 }
 
 export function afterRender(params = {}, query = {}) {
+  const state = getState();
+  if (state.user?.isLoggedIn) {
+    setTimeout(async () => {
+      if (getState().activePetId) {
+        navigate('/home');
+        return;
+      }
+      try {
+        const pets = await getPets({ userId: state.user.id || 'user-1' });
+        if (pets.length) {
+          setActivePet(pets[0].id);
+          navigate('/home');
+        } else {
+          navigate('/pets/select');
+        }
+      } catch {
+        navigate('/pets/select');
+      }
+    }, 250);
+  }
+
   document.getElementById('splash-start-btn')?.addEventListener('click', () => {
     navigate('/auth/onboarding');
   });
