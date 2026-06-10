@@ -15,6 +15,7 @@ const rootDir = path.resolve(__dirname, '..');
 const distDir = path.join(rootDir, 'dist');
 const port = Number(process.env.PORT || 3000);
 const INITIAL_AI_CREDITS = 1;
+const VET_LIVE_TEST_CREDIT_PHONES = new Set(['5336565251', '+905336565251'].map(normalizePhone));
 const AI_CREDIT_FEATURES = new Set(['document-ai', 'document-ocr', 'package-risk', 'toxic-ai', 'ai-triage', 'vet-prep-ai']);
 
 const mimeTypes = {
@@ -96,14 +97,16 @@ function normalizePhone(value) {
   return String(value || '').replace(/[^\d+]/g, '').trim();
 }
 
-function safeUser(row = {}) {
+function safeUser(row = {}, extras = {}) {
   return {
     id: row.id,
     name: row.display_name || '',
     email: row.email || '',
     phone: row.phone || '',
     locale: row.locale || 'tr',
-    timezone: row.timezone || 'Europe/Istanbul'
+    timezone: row.timezone || 'Europe/Istanbul',
+    accountRole: extras.accountRole || 'owner',
+    vetProfileId: extras.vetProfileId || null
   };
 }
 
@@ -155,6 +158,10 @@ function isoOrNow(value) {
   return value && !Number.isNaN(Date.parse(value)) ? new Date(value).toISOString() : new Date().toISOString();
 }
 
+function isoOrNull(value) {
+  return value && !Number.isNaN(Date.parse(value)) ? new Date(value).toISOString() : null;
+}
+
 function numberFromInput(value) {
   const parsed = Number(String(value ?? '').replace(',', '.'));
   return Number.isFinite(parsed) ? parsed : 0;
@@ -195,6 +202,47 @@ async function ensureSpecies(db) {
 async function ensureAuthSchema(db) {
   await executeOptional(db, `ALTER TABLE users ADD COLUMN password_hash TEXT`);
   await executeOptional(db, `CREATE INDEX IF NOT EXISTS idx_users_phone ON users(phone)`);
+  await db.execute({
+    sql: `CREATE TABLE IF NOT EXISTS user_roles (
+      user_id TEXT NOT NULL,
+      role_id TEXT NOT NULL,
+      assigned_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+      PRIMARY KEY (user_id, role_id)
+    )`,
+    args: []
+  });
+  await db.execute({
+    sql: `INSERT OR IGNORE INTO roles (id, code, name_tr, description_tr)
+          VALUES ('role-vet-live', 'vet_live', 'Canli Gorusme Veterineri', 'Canli veteriner gorusme paneli erisimi')`,
+    args: []
+  }).catch(() => {});
+  await db.batch([
+    `INSERT OR IGNORE INTO permissions (id, code, name_tr) VALUES ('perm-vet-live-panel', 'vet_live_panel', 'Canli veteriner panelini kullan')`,
+    `INSERT OR IGNORE INTO permissions (id, code, name_tr) VALUES ('perm-vet-live-notes', 'vet_live_notes', 'Canli gorusme notu ekle')`,
+    `INSERT OR IGNORE INTO role_permissions (role_id, permission_id) VALUES ('role-vet-live', 'perm-vet-live-panel')`,
+    `INSERT OR IGNORE INTO role_permissions (role_id, permission_id) VALUES ('role-vet-live', 'perm-vet-live-notes')`
+  ].map(sql => ({ sql, args: [] }))).catch(() => {});
+}
+
+async function accountAccessForUser(db, userId) {
+  const roleResult = await db.execute({
+    sql: `SELECT r.code
+          FROM user_roles ur
+          JOIN roles r ON r.id = ur.role_id
+          WHERE ur.user_id = ?
+          ORDER BY CASE WHEN r.code = 'vet_live' THEN 0 ELSE 1 END
+          LIMIT 1`,
+    args: [userId]
+  }).catch(() => ({ rows: [] }));
+  const vetProfile = await db.execute({
+    sql: `SELECT id FROM vet_profiles WHERE user_id = ? AND status = 'approved' LIMIT 1`,
+    args: [userId]
+  }).catch(() => ({ rows: [] }));
+  const vetProfileId = vetProfile.rows[0]?.id || null;
+  return {
+    accountRole: roleResult.rows[0]?.code || (vetProfileId ? 'vet_live' : 'owner'),
+    vetProfileId
+  };
 }
 
 async function ensureInitialWallet(db, userId, createdAt = new Date().toISOString()) {
@@ -218,6 +266,32 @@ async function ensureInitialWallet(db, userId, createdAt = new Date().toISOStrin
     }).catch(() => {});
   }
   return wallet || { balance: INITIAL_AI_CREDITS, currency: 'credit' };
+}
+
+async function grantTestCredits(db, phones = [], balance = 100, createdAt = new Date().toISOString()) {
+  const normalizedPhones = phones.map(normalizePhone).filter((phone) => VET_LIVE_TEST_CREDIT_PHONES.has(phone));
+  if (!normalizedPhones.length) return;
+  const placeholders = normalizedPhones.map(() => '?').join(',');
+  const users = await db.execute({
+    sql: `SELECT id FROM users WHERE phone IN (${placeholders})`,
+    args: normalizedPhones
+  }).catch(() => ({ rows: [] }));
+  for (const user of users.rows) {
+    const wallet = await ensureInitialWallet(db, user.id, createdAt);
+    if (Number(wallet.balance || 0) >= balance) continue;
+    await db.batch([
+      {
+        sql: `UPDATE credit_wallets SET balance = ?, updated_at = ? WHERE user_id = ?`,
+        args: [balance, createdAt, user.id]
+      },
+      {
+        sql: `INSERT INTO credit_transactions
+          (id, wallet_id, user_id, amount, direction, reason, metadata, created_at)
+          VALUES (?, ?, ?, ?, 'in', 'manual_test_credit', ?, ?)`,
+        args: [id('credit'), wallet.id, user.id, balance - Number(wallet.balance || 0), JSON.stringify({ source: 'vet_live_test_setup' }), createdAt]
+      }
+    ]);
+  }
 }
 
 async function activeBillingContext(db, userId) {
@@ -371,6 +445,7 @@ async function handleRegister(req, res) {
   const db = getDb();
   if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
   await ensureAuthSchema(db);
+  await ensureVetLiveSchema(db);
   const body = await readBody(req);
   const displayName = String(body.name || body.displayName || '').trim();
   const phone = normalizePhone(body.phone);
@@ -395,8 +470,14 @@ async function handleRegister(req, res) {
           VALUES (?, ?, ?, ?, ?, ?, ?, 'active', ?, ?, ?)`,
     args: [userId, email, phone, displayName, hashPassword(password), locale, timezone, metadata, createdAt, createdAt]
   });
+  await db.execute({
+    sql: `INSERT OR IGNORE INTO user_roles (user_id, role_id) VALUES (?, 'role-owner')`,
+    args: [userId]
+  }).catch(() => {});
+  await ensureInitialWallet(db, userId, createdAt);
+  await grantTestCredits(db, [phone], 100, createdAt);
   const wallet = await ensureInitialWallet(db, userId, createdAt);
-  return sendJson(res, 200, { ok: true, user: { id: userId, name: displayName, email, phone, locale, timezone }, wallet });
+  return sendJson(res, 200, { ok: true, user: { id: userId, name: displayName, email, phone, locale, timezone, accountRole: 'owner', vetProfileId: null }, wallet });
 }
 
 async function handleLogin(req, res) {
@@ -404,14 +485,18 @@ async function handleLogin(req, res) {
   if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
   await ensureAuthSchema(db);
   const body = await readBody(req);
-  const phone = normalizePhone(body.phone);
+  const login = String(body.phone || body.email || body.login || '').trim().toLowerCase();
+  const phone = normalizePhone(login);
   const password = String(body.password || '');
-  if (!phone || !password) return sendJson(res, 400, { ok: false, error: 'invalid_login_fields' });
-  const result = await db.execute({ sql: `SELECT * FROM users WHERE phone = ? AND status <> 'deleted' LIMIT 1`, args: [phone] });
+  if (!login || !password) return sendJson(res, 400, { ok: false, error: 'invalid_login_fields' });
+  const result = await db.execute({ sql: `SELECT * FROM users WHERE (phone = ? OR lower(email) = ?) AND status <> 'deleted' LIMIT 1`, args: [phone, login] });
   const user = result.rows[0];
   if (!user?.id || !verifyPassword(password, user.password_hash)) return sendJson(res, 401, { ok: false, error: 'invalid_credentials' });
+  await ensureInitialWallet(db, user.id);
+  await grantTestCredits(db, [user.phone], 100);
   const wallet = await ensureInitialWallet(db, user.id);
-  return sendJson(res, 200, { ok: true, user: safeUser(user), wallet });
+  const access = await accountAccessForUser(db, user.id);
+  return sendJson(res, 200, { ok: true, user: safeUser(user, access), wallet });
 }
 
 async function handleGetPets(req, res, url) {
@@ -945,6 +1030,758 @@ async function handleReminderStatus(req, res) {
   return sendJson(res, 200, { ok: true });
 }
 
+async function ensureVetLiveSchema(db) {
+  await ensureAuthSchema(db);
+  await db.execute({
+    sql: `CREATE TABLE IF NOT EXISTS vet_profiles (
+      id TEXT PRIMARY KEY,
+      user_id TEXT,
+      display_name TEXT NOT NULL,
+      license_no TEXT,
+      specialties TEXT NOT NULL DEFAULT '[]',
+      bio TEXT,
+      status TEXT NOT NULL DEFAULT 'pending',
+      is_active INTEGER NOT NULL DEFAULT 1,
+      rating_avg REAL NOT NULL DEFAULT 0,
+      rating_count INTEGER NOT NULL DEFAULT 0,
+      commission_rate INTEGER NOT NULL DEFAULT 0,
+      metadata TEXT NOT NULL DEFAULT '{}',
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+      updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+    )`,
+    args: []
+  });
+  await db.execute({
+    sql: `CREATE TABLE IF NOT EXISTS vet_availability (
+      id TEXT PRIMARY KEY,
+      vet_id TEXT NOT NULL,
+      weekday INTEGER NOT NULL,
+      starts_at TEXT NOT NULL,
+      ends_at TEXT NOT NULL,
+      timezone TEXT NOT NULL DEFAULT 'Europe/Istanbul',
+      is_active INTEGER NOT NULL DEFAULT 1,
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+      updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+    )`,
+    args: []
+  });
+  await db.execute({
+    sql: `CREATE TABLE IF NOT EXISTS vet_consultation_bookings (
+      id TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      pet_id TEXT NOT NULL,
+      vet_id TEXT,
+      ai_session_id TEXT,
+      report_id TEXT,
+      status TEXT NOT NULL DEFAULT 'requested',
+      scheduled_at TEXT,
+      duration_minutes INTEGER NOT NULL DEFAULT 15,
+      price_cents INTEGER NOT NULL DEFAULT 0,
+      currency TEXT NOT NULL DEFAULT 'TRY',
+      payment_id TEXT,
+      credit_hold_id TEXT,
+      daily_room_name TEXT,
+      daily_room_url TEXT,
+      joined_owner_at TEXT,
+      joined_vet_at TEXT,
+      case_summary TEXT,
+      red_flags TEXT NOT NULL DEFAULT '[]',
+      metadata TEXT NOT NULL DEFAULT '{}',
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+      updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+    )`,
+    args: []
+  });
+  await executeOptional(db, `ALTER TABLE vet_profiles ADD COLUMN is_active INTEGER NOT NULL DEFAULT 1`);
+  await executeOptional(db, `ALTER TABLE vet_profiles ADD COLUMN rating_count INTEGER NOT NULL DEFAULT 0`);
+  await executeOptional(db, `ALTER TABLE vet_consultation_bookings ADD COLUMN credit_hold_id TEXT`);
+  await executeOptional(db, `ALTER TABLE vet_consultation_bookings ADD COLUMN joined_owner_at TEXT`);
+  await executeOptional(db, `ALTER TABLE vet_consultation_bookings ADD COLUMN joined_vet_at TEXT`);
+  await db.execute({
+    sql: `CREATE TABLE IF NOT EXISTS vet_credit_holds (
+      id TEXT PRIMARY KEY,
+      booking_id TEXT NOT NULL UNIQUE,
+      wallet_id TEXT NOT NULL,
+      user_id TEXT NOT NULL,
+      amount INTEGER NOT NULL,
+      status TEXT NOT NULL DEFAULT 'held',
+      hold_transaction_id TEXT,
+      capture_transaction_id TEXT,
+      release_transaction_id TEXT,
+      metadata TEXT NOT NULL DEFAULT '{}',
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+      updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+    )`,
+    args: []
+  });
+  await db.execute({
+    sql: `CREATE TABLE IF NOT EXISTS vet_consultation_notes (
+      id TEXT PRIMARY KEY,
+      booking_id TEXT NOT NULL,
+      vet_id TEXT,
+      summary TEXT NOT NULL,
+      urgency_level TEXT NOT NULL DEFAULT 'routine',
+      next_step TEXT,
+      followup_at TEXT,
+      clinic_visit_recommended INTEGER NOT NULL DEFAULT 0,
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+      updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+    )`,
+    args: []
+  });
+  await db.execute({
+    sql: `CREATE TABLE IF NOT EXISTS vet_consultation_surveys (
+      id TEXT PRIMARY KEY,
+      booking_id TEXT NOT NULL,
+      reviewer_role TEXT NOT NULL,
+      reviewer_user_id TEXT,
+      reviewed_user_id TEXT,
+      vet_id TEXT,
+      rating INTEGER NOT NULL,
+      feedback TEXT,
+      tags TEXT NOT NULL DEFAULT '[]',
+      metadata TEXT NOT NULL DEFAULT '{}',
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+      updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+      UNIQUE(booking_id, reviewer_role)
+    )`,
+    args: []
+  });
+  await db.execute({
+    sql: `CREATE TABLE IF NOT EXISTS vet_consultation_events (
+      id TEXT PRIMARY KEY,
+      booking_id TEXT,
+      type TEXT NOT NULL,
+      payload_json TEXT NOT NULL DEFAULT '{}',
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+    )`,
+    args: []
+  });
+  await db.batch([
+    `CREATE INDEX IF NOT EXISTS idx_vet_profiles_status ON vet_profiles(status)`,
+    `CREATE INDEX IF NOT EXISTS idx_vet_availability_vet ON vet_availability(vet_id, is_active)`,
+    `CREATE INDEX IF NOT EXISTS idx_vet_bookings_user ON vet_consultation_bookings(user_id, created_at)`,
+    `CREATE INDEX IF NOT EXISTS idx_vet_bookings_pet ON vet_consultation_bookings(pet_id, created_at)`,
+    `CREATE INDEX IF NOT EXISTS idx_vet_bookings_vet ON vet_consultation_bookings(vet_id, scheduled_at)`,
+    `CREATE INDEX IF NOT EXISTS idx_vet_credit_holds_status ON vet_credit_holds(status, created_at)`,
+    `CREATE INDEX IF NOT EXISTS idx_vet_notes_booking ON vet_consultation_notes(booking_id)`,
+    `CREATE INDEX IF NOT EXISTS idx_vet_surveys_booking ON vet_consultation_surveys(booking_id, reviewer_role)`,
+    `CREATE INDEX IF NOT EXISTS idx_vet_surveys_vet ON vet_consultation_surveys(vet_id, reviewer_role)`,
+    `CREATE INDEX IF NOT EXISTS idx_vet_events_booking ON vet_consultation_events(booking_id, created_at)`
+  ].map(sql => ({ sql, args: [] })));
+  await seedVetLive(db);
+}
+
+async function seedVetLive(db) {
+  const now = new Date().toISOString();
+  await db.batch([
+    {
+      sql: `INSERT INTO users (id, email, display_name, password_hash, locale, status, metadata, created_at, updated_at)
+            VALUES ('user-vet-1', 'vet1@vet.com', 'Dr. Deniz Kara', ?, 'tr', 'active', ?, ?, ?)
+            ON CONFLICT(id) DO UPDATE SET email = excluded.email, display_name = excluded.display_name, password_hash = excluded.password_hash, status = 'active', updated_at = excluded.updated_at`,
+      args: [hashPassword('vet123'), JSON.stringify({ authProvider: 'email_password', scope: 'vet_live_seed' }), now, now]
+    },
+    {
+      sql: `INSERT INTO users (id, email, display_name, password_hash, locale, status, metadata, created_at, updated_at)
+            VALUES ('user-vet-2', 'vet2@vet.com', 'Dr. Ece Arslan', ?, 'tr', 'active', ?, ?, ?)
+            ON CONFLICT(id) DO UPDATE SET email = excluded.email, display_name = excluded.display_name, password_hash = excluded.password_hash, status = 'active', updated_at = excluded.updated_at`,
+      args: [hashPassword('vet456'), JSON.stringify({ authProvider: 'email_password', scope: 'vet_live_seed' }), now, now]
+    },
+    { sql: `INSERT OR IGNORE INTO user_roles (user_id, role_id) VALUES ('user-vet-1', 'role-vet-live')`, args: [] },
+    { sql: `INSERT OR IGNORE INTO user_roles (user_id, role_id) VALUES ('user-vet-2', 'role-vet-live')`, args: [] },
+    {
+      sql: `INSERT INTO vet_profiles
+        (id, user_id, display_name, license_no, specialties, bio, status, is_active, rating_avg, rating_count, commission_rate, metadata, created_at, updated_at)
+        VALUES ('vet-demo-1', 'user-vet-1', 'Dr. Deniz Kara', 'VET-TEST-001', ?, 'Canli gorusme pilot akislari icin test veterineri.', 'approved', 1, 4.8, 0, 0, ?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET user_id = excluded.user_id, display_name = excluded.display_name, status = 'approved', is_active = 1, updated_at = excluded.updated_at`,
+      args: [JSON.stringify(['genel danisma', 'kedi/kopek', 'acil on degerlendirme']), JSON.stringify({ source: 'seed', scope: 'vet_live_mvp' }), now, now]
+    },
+    {
+      sql: `INSERT INTO vet_profiles
+        (id, user_id, display_name, license_no, specialties, bio, status, is_active, rating_avg, rating_count, commission_rate, metadata, created_at, updated_at)
+        VALUES ('vet-demo-2', 'user-vet-2', 'Dr. Ece Arslan', 'VET-TEST-002', ?, 'Canli gorusme pilot akislari icin ikinci test veterineri.', 'approved', 1, 4.7, 0, 0, ?, ?, ?)
+        ON CONFLICT(id) DO UPDATE SET user_id = excluded.user_id, display_name = excluded.display_name, status = 'approved', is_active = 1, updated_at = excluded.updated_at`,
+      args: [JSON.stringify(['beslenme', 'davranis', 'genel danisma']), JSON.stringify({ source: 'seed', scope: 'vet_live_mvp' }), now, now]
+    }
+  ]);
+  for (const vet of [
+    ['vet-demo-1', '10:00', '18:00'],
+    ['vet-demo-2', '12:00', '20:00']
+  ]) {
+    for (const day of [1, 2, 3, 4, 5]) {
+      await db.execute({
+        sql: `INSERT OR IGNORE INTO vet_availability (id, vet_id, weekday, starts_at, ends_at, timezone, is_active, created_at, updated_at)
+              VALUES (?, ?, ?, ?, ?, 'Europe/Istanbul', 1, ?, ?)`,
+        args: [`vet-slot-${vet[0]}-${day}`, vet[0], day, vet[1], vet[2], now, now]
+      });
+    }
+  }
+  await grantTestCredits(db, ['5336565251', '+905336565251'], 100, now);
+}
+
+function normalizeVet(row = {}) {
+  return {
+    ...rowToObject(row),
+    specialties: parseJson(row.specialties, []),
+    metadata: parseJson(row.metadata, {})
+  };
+}
+
+function normalizeVetBooking(row = {}, noteRows = [], surveyRows = []) {
+  return {
+    ...rowToObject(row),
+    red_flags: parseJson(row.red_flags, []),
+    metadata: parseJson(row.metadata, {}),
+    notes: noteRows.map((note) => ({
+      ...rowToObject(note),
+      clinic_visit_recommended: Boolean(note.clinic_visit_recommended)
+    })),
+    surveys: surveyRows.map((survey) => ({
+      ...rowToObject(survey),
+      tags: parseJson(survey.tags, []),
+      metadata: parseJson(survey.metadata, {})
+    }))
+  };
+}
+
+async function holdVetLiveCredits(db, { bookingId, userId, amount, createdAt }) {
+  const creditAmount = Math.max(1, Number(amount || process.env.VET_LIVE_PRICE_CREDITS || 8));
+  const wallet = await ensureInitialWallet(db, userId, createdAt);
+  const balance = Number(wallet.balance || 0);
+  if (balance < creditAmount) {
+    const error = new Error('insufficient_credits');
+    error.required = creditAmount;
+    error.remaining = balance;
+    throw error;
+  }
+  const holdId = id('vet-hold');
+  const transactionId = id('credit');
+  await db.batch([
+    {
+      sql: `UPDATE credit_wallets SET balance = ?, updated_at = ? WHERE user_id = ?`,
+      args: [balance - creditAmount, createdAt, userId]
+    },
+    {
+      sql: `INSERT INTO credit_transactions
+        (id, wallet_id, user_id, amount, direction, reason, related_entity_type, related_entity_id, metadata, created_at)
+        VALUES (?, ?, ?, ?, 'out', 'vet_live_hold', 'vet_consultation_booking', ?, ?, ?)`,
+      args: [transactionId, wallet.id, userId, creditAmount, bookingId, JSON.stringify({ holdId }), createdAt]
+    },
+    {
+      sql: `INSERT INTO vet_credit_holds
+        (id, booking_id, wallet_id, user_id, amount, status, hold_transaction_id, metadata, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, 'held', ?, ?, ?, ?)`,
+      args: [holdId, bookingId, wallet.id, userId, creditAmount, transactionId, JSON.stringify({ mode: 'pre_consultation_hold' }), createdAt, createdAt]
+    }
+  ]);
+  return { holdId, amount: creditAmount };
+}
+
+async function captureVetLiveHold(db, bookingId, createdAt = new Date().toISOString()) {
+  const hold = (await db.execute({
+    sql: `SELECT * FROM vet_credit_holds WHERE booking_id = ? LIMIT 1`,
+    args: [bookingId]
+  })).rows[0];
+  if (!hold || hold.status === 'captured') return hold;
+  if (hold.status !== 'held') throw new Error('vet_hold_not_held');
+  const transactionId = id('credit');
+  await db.batch([
+    {
+      sql: `INSERT INTO credit_transactions
+        (id, wallet_id, user_id, amount, direction, reason, related_entity_type, related_entity_id, metadata, created_at)
+        VALUES (?, ?, ?, ?, 'out', 'vet_live_consultation', 'vet_consultation_booking', ?, ?, ?)`,
+      args: [transactionId, hold.wallet_id, hold.user_id, 0, bookingId, JSON.stringify({ holdId: hold.id, capturedAmount: hold.amount }), createdAt]
+    },
+    {
+      sql: `UPDATE vet_credit_holds SET status = 'captured', capture_transaction_id = ?, updated_at = ? WHERE id = ?`,
+      args: [transactionId, createdAt, hold.id]
+    }
+  ]);
+  return { ...hold, status: 'captured', capture_transaction_id: transactionId };
+}
+
+async function releaseVetLiveHold(db, bookingId, createdAt = new Date().toISOString()) {
+  const hold = (await db.execute({
+    sql: `SELECT * FROM vet_credit_holds WHERE booking_id = ? LIMIT 1`,
+    args: [bookingId]
+  })).rows[0];
+  if (!hold || hold.status === 'released') return hold;
+  if (hold.status !== 'held') throw new Error('vet_hold_not_held');
+  const transactionId = id('credit');
+  const wallet = await ensureInitialWallet(db, hold.user_id, createdAt);
+  const nextBalance = Number(wallet.balance || 0) + Number(hold.amount || 0);
+  await db.batch([
+    {
+      sql: `UPDATE credit_wallets SET balance = ?, updated_at = ? WHERE user_id = ?`,
+      args: [nextBalance, createdAt, hold.user_id]
+    },
+    {
+      sql: `INSERT INTO credit_transactions
+        (id, wallet_id, user_id, amount, direction, reason, related_entity_type, related_entity_id, metadata, created_at)
+        VALUES (?, ?, ?, ?, 'in', 'vet_live_hold_release', 'vet_consultation_booking', ?, ?, ?)`,
+      args: [transactionId, hold.wallet_id, hold.user_id, hold.amount, bookingId, JSON.stringify({ holdId: hold.id }), createdAt]
+    },
+    {
+      sql: `UPDATE vet_credit_holds SET status = 'released', release_transaction_id = ?, updated_at = ? WHERE id = ?`,
+      args: [transactionId, createdAt, hold.id]
+    }
+  ]);
+  return { ...hold, status: 'released', release_transaction_id: transactionId };
+}
+
+async function refreshVetRating(db, vetId) {
+  if (!vetId) return;
+  const stats = (await db.execute({
+    sql: `SELECT AVG(rating) AS avg_rating, COUNT(*) AS rating_count
+          FROM vet_consultation_surveys
+          WHERE vet_id = ? AND reviewer_role = 'owner'`,
+    args: [vetId]
+  })).rows[0] || {};
+  await db.execute({
+    sql: `UPDATE vet_profiles SET rating_avg = ?, rating_count = ?, updated_at = ? WHERE id = ?`,
+    args: [Number(stats.avg_rating || 0), Number(stats.rating_count || 0), new Date().toISOString(), vetId]
+  });
+}
+
+async function dailyRoomForBooking(booking) {
+  const roomName = booking.daily_room_name || `pethelp-${booking.id}`;
+  const dailyDomain = String(process.env.DAILY_DOMAIN || 'pethelp.daily.co').replace(/^https?:\/\//, '').replace(/\/$/, '');
+  const fallbackUrl = booking.daily_room_url || `https://${dailyDomain}/${roomName}`;
+  const apiKey = process.env.DAILY_API_KEY;
+  if (!apiKey) return { roomName, roomUrl: fallbackUrl, provider: 'local_mock' };
+  try {
+    const response = await fetch('https://api.daily.co/v1/rooms', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        name: roomName,
+        privacy: 'private',
+        properties: {
+          enable_prejoin_ui: true,
+          enable_network_ui: true,
+          exp: Math.floor(Date.now() / 1000) + 60 * 60 * 2
+        }
+      })
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || `daily_${response.status}`);
+    return { roomName: data.name || roomName, roomUrl: data.url || fallbackUrl, provider: 'daily' };
+  } catch {
+    return { roomName, roomUrl: fallbackUrl, provider: 'local_mock' };
+  }
+}
+
+async function dailyJoinToken(booking, role = 'owner') {
+  const apiKey = process.env.DAILY_API_KEY;
+  if (!apiKey || !booking.daily_room_name) {
+    return { token: `local-${booking.id}-${role}`, provider: 'local_mock' };
+  }
+  try {
+    const response = await fetch('https://api.daily.co/v1/meeting-tokens', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        properties: {
+          room_name: booking.daily_room_name,
+          is_owner: role === 'vet',
+          user_name: role === 'vet' ? 'Veteriner' : 'Pet sahibi',
+          exp: Math.floor(Date.now() / 1000) + 60 * 60
+        }
+      })
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || `daily_token_${response.status}`);
+    return { token: data.token, provider: 'daily' };
+  } catch {
+    return { token: `local-${booking.id}-${role}`, provider: 'local_mock' };
+  }
+}
+
+async function getVetBooking(db, bookingId) {
+  const booking = (await db.execute({
+    sql: `SELECT b.*, v.display_name AS vet_name, h.status AS credit_hold_status, h.amount AS credit_hold_amount
+          FROM vet_consultation_bookings b
+          LEFT JOIN vet_profiles v ON v.id = b.vet_id
+          LEFT JOIN vet_credit_holds h ON h.booking_id = b.id
+          WHERE b.id = ?
+          LIMIT 1`,
+    args: [bookingId]
+  })).rows[0];
+  if (!booking) return null;
+  const notes = await db.execute({
+    sql: `SELECT * FROM vet_consultation_notes WHERE booking_id = ? ORDER BY created_at DESC`,
+    args: [bookingId]
+  });
+  const surveys = await db.execute({
+    sql: `SELECT * FROM vet_consultation_surveys WHERE booking_id = ? ORDER BY created_at DESC`,
+    args: [bookingId]
+  }).catch(() => ({ rows: [] }));
+  return normalizeVetBooking(booking, notes.rows, surveys.rows);
+}
+
+async function listVetBookings(db, url) {
+  const userId = url.searchParams.get('userId') || '';
+  const petId = url.searchParams.get('petId') || '';
+  const vetId = url.searchParams.get('vetId') || '';
+  const includePool = url.searchParams.get('includePool') === '1';
+  const where = [];
+  const args = [];
+  if (userId) {
+    where.push('b.user_id = ?');
+    args.push(userId);
+  }
+  if (petId) {
+    where.push('b.pet_id = ?');
+    args.push(petId);
+  }
+  if (vetId) {
+    where.push(includePool ? '(b.vet_id = ? OR b.vet_id IS NULL)' : 'b.vet_id = ?');
+    args.push(vetId);
+  }
+  args.push(Math.max(1, Math.min(100, Number(url.searchParams.get('limit') || 30))));
+  const result = await db.execute({
+    sql: `SELECT b.*, v.display_name AS vet_name, h.status AS credit_hold_status, h.amount AS credit_hold_amount
+          FROM vet_consultation_bookings b
+          LEFT JOIN vet_profiles v ON v.id = b.vet_id
+          LEFT JOIN vet_credit_holds h ON h.booking_id = b.id
+          ${where.length ? `WHERE ${where.join(' AND ')}` : ''}
+          ORDER BY COALESCE(b.scheduled_at, b.created_at) DESC
+          LIMIT ?`,
+    args
+  });
+  return result.rows.map((row) => normalizeVetBooking(row));
+}
+
+async function handleVetLiveRequest(req, res, url) {
+  const db = getDb();
+  if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
+  await ensureVetLiveSchema(db);
+  const pathName = url.pathname;
+
+  if (req.method === 'GET' && pathName === '/api/vet-live/vets') {
+    const vets = await db.execute({
+      sql: `SELECT * FROM vet_profiles WHERE status = 'approved' AND is_active = 1 ORDER BY rating_avg DESC, display_name ASC`,
+      args: []
+    });
+    const availability = await db.execute({
+      sql: `SELECT * FROM vet_availability WHERE is_active = 1 ORDER BY weekday ASC, starts_at ASC`,
+      args: []
+    });
+    return sendJson(res, 200, {
+      ok: true,
+      data: {
+        vets: vets.rows.map(normalizeVet),
+        availability: availability.rows.map(rowToObject)
+      }
+    });
+  }
+
+  if (req.method === 'POST' && pathName === '/api/vet-live/quote') {
+    const body = await readBody(req);
+    return sendJson(res, 200, {
+      ok: true,
+      data: {
+        durationMinutes: Number(body.durationMinutes || 15),
+        priceCents: Number(process.env.VET_LIVE_PRICE_CREDITS || 8),
+        currency: 'credit',
+        provider: process.env.DAILY_API_KEY ? 'daily' : 'local_mock'
+      }
+    });
+  }
+
+  if (req.method === 'GET' && pathName === '/api/vet-live/bookings') {
+    return sendJson(res, 200, { ok: true, data: { bookings: await listVetBookings(db, url) } });
+  }
+
+  if (req.method === 'POST' && pathName === '/api/vet-live/bookings') {
+    const body = await readBody(req);
+    if (!body.userId) return sendJson(res, 400, { ok: false, error: 'user_required' });
+    if (!body.petId) return sendJson(res, 400, { ok: false, error: 'pet_required' });
+    const legalConsentAccepted = body.legalConsentAccepted === true || body.legalConsentAccepted === 'true';
+    if (!legalConsentAccepted) return sendJson(res, 400, { ok: false, error: 'legal_consent_required' });
+    const requestedVetId = String(body.vetId || '').trim();
+    const selectedVet = requestedVetId ? (await db.execute({
+      sql: `SELECT id FROM vet_profiles WHERE id = ? AND status = 'approved' AND is_active = 1 LIMIT 1`,
+      args: [requestedVetId]
+    })).rows[0] : null;
+    const vetId = selectedVet?.id || null;
+    const quote = {
+      durationMinutes: Math.max(10, Math.min(60, Number(body.durationMinutes || 15))),
+      priceCents: Number(body.priceCents || process.env.VET_LIVE_PRICE_CREDITS || 8),
+      currency: body.currency || 'credit'
+    };
+    const bookingId = id('vet-booking');
+    const now = new Date().toISOString();
+    const wallet = await ensureInitialWallet(db, body.userId, now);
+    if (Number(wallet.balance || 0) < quote.priceCents) {
+      return sendJson(res, 402, { ok: false, error: 'insufficient_credits', required: quote.priceCents, remaining: Number(wallet.balance || 0) });
+    }
+    await db.execute({
+      sql: `INSERT INTO vet_consultation_bookings
+        (id, user_id, pet_id, vet_id, ai_session_id, report_id, status, scheduled_at, duration_minutes, price_cents, currency, case_summary, red_flags, metadata, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      args: [
+        bookingId,
+        body.userId,
+        body.petId,
+        vetId,
+        body.aiSessionId || null,
+        body.reportId || null,
+        vetId ? 'credit_held' : 'requested',
+        isoOrNow(body.scheduledAt || now),
+        quote.durationMinutes,
+        quote.priceCents,
+        quote.currency,
+        String(body.caseSummary || '').trim(),
+        JSON.stringify(Array.isArray(body.redFlags) ? body.redFlags : []),
+        JSON.stringify({
+          source: 'vet_live',
+          paymentMode: 'credit_hold',
+          vetAssignment: vetId ? 'selected' : 'pool',
+          legalConsentAccepted: true,
+          legalConsentAcceptedAt: now,
+          legalTextVersion: 'vet_live_v1'
+        }),
+        now,
+        now
+      ]
+    });
+    const hold = await holdVetLiveCredits(db, { bookingId, userId: body.userId, amount: quote.priceCents, createdAt: now });
+    await db.execute({
+      sql: `UPDATE vet_consultation_bookings SET credit_hold_id = ?, updated_at = ? WHERE id = ?`,
+      args: [hold.holdId, now, bookingId]
+    });
+    await db.execute({
+      sql: `INSERT INTO vet_consultation_events (id, booking_id, type, payload_json, created_at)
+            VALUES (?, ?, 'booking_created', ?, ?)`,
+      args: [id('vet-event'), bookingId, JSON.stringify({ status: vetId ? 'credit_held' : 'requested', holdId: hold.holdId }), now]
+    });
+    return sendJson(res, 200, { ok: true, data: { booking: await getVetBooking(db, bookingId) } });
+  }
+
+  const bookingMatch = pathName.match(/^\/api\/vet-live\/bookings\/([^/]+)(?:\/([^/]+))?$/);
+  if (bookingMatch) {
+    const bookingId = decodeURIComponent(bookingMatch[1]);
+    const action = bookingMatch[2] || '';
+    const booking = await getVetBooking(db, bookingId);
+    if (!booking) return sendJson(res, 404, { ok: false, error: 'vet_booking_not_found' });
+
+    if (req.method === 'GET' && !action) {
+      return sendJson(res, 200, { ok: true, data: { booking } });
+    }
+
+    if (req.method === 'POST' && action === 'pay') {
+      return sendJson(res, 409, { ok: false, error: 'payment_replaced_by_credit_hold' });
+    }
+
+    if (req.method === 'POST' && action === 'claim') {
+      const body = await readBody(req);
+      const vetProfileId = String(body.vetId || '').trim();
+      if (!vetProfileId) return sendJson(res, 400, { ok: false, error: 'vet_required' });
+      if (['completed', 'cancelled', 'refunded'].includes(booking.status)) {
+        return sendJson(res, 409, { ok: false, error: 'booking_not_claimable' });
+      }
+      if (booking.vet_id && booking.vet_id !== vetProfileId) {
+        return sendJson(res, 409, { ok: false, error: 'booking_already_assigned' });
+      }
+      const vet = (await db.execute({
+        sql: `SELECT id FROM vet_profiles WHERE id = ? AND status = 'approved' AND is_active = 1 LIMIT 1`,
+        args: [vetProfileId]
+      })).rows[0];
+      if (!vet) return sendJson(res, 404, { ok: false, error: 'vet_not_available' });
+      const now = new Date().toISOString();
+      await db.execute({
+        sql: `UPDATE vet_consultation_bookings
+              SET vet_id = COALESCE(vet_id, ?),
+                  status = CASE WHEN status = 'requested' THEN 'credit_held' ELSE status END,
+                  updated_at = ?
+              WHERE id = ?`,
+        args: [vetProfileId, now, bookingId]
+      });
+      await db.execute({
+        sql: `INSERT INTO vet_consultation_events (id, booking_id, type, payload_json, created_at)
+              VALUES (?, ?, 'booking_claimed', ?, ?)`,
+        args: [id('vet-event'), bookingId, JSON.stringify({ vetId: vetProfileId }), now]
+      });
+      return sendJson(res, 200, { ok: true, data: { booking: await getVetBooking(db, bookingId) } });
+    }
+
+    if (req.method === 'POST' && action === 'join-token') {
+      const body = await readBody(req);
+      const now = new Date().toISOString();
+      const room = await dailyRoomForBooking(booking);
+      const role = body.role || 'owner';
+      const vetProfileId = role === 'vet' ? String(body.vetId || '').trim() : '';
+      await captureVetLiveHold(db, bookingId, now);
+      await db.execute({
+        sql: `UPDATE vet_consultation_bookings
+              SET status = CASE WHEN status IN ('completed', 'cancelled', 'refunded') THEN status ELSE 'live' END,
+                  daily_room_name = ?,
+                  daily_room_url = ?,
+                  joined_owner_at = CASE WHEN ? = 'owner' AND joined_owner_at IS NULL THEN ? ELSE joined_owner_at END,
+                  joined_vet_at = CASE WHEN ? = 'vet' AND joined_vet_at IS NULL THEN ? ELSE joined_vet_at END,
+                  vet_id = CASE WHEN ? = 'vet' AND vet_id IS NULL AND ? <> '' THEN ? ELSE vet_id END,
+                  updated_at = ?
+              WHERE id = ?`,
+        args: [room.roomName, room.roomUrl, role, now, role, now, role, vetProfileId, vetProfileId, now, bookingId]
+      });
+      await db.execute({
+        sql: `INSERT INTO vet_consultation_events (id, booking_id, type, payload_json, created_at)
+              VALUES (?, ?, 'join_token_requested', ?, ?)`,
+        args: [id('vet-event'), bookingId, JSON.stringify({ role, provider: room.provider, holdCaptured: true }), now]
+      });
+      const token = await dailyJoinToken({ ...booking, daily_room_name: room.roomName }, role);
+      return sendJson(res, 200, { ok: true, data: { roomUrl: room.roomUrl, roomName: room.roomName, token: token.token, provider: token.provider } });
+    }
+
+    if (req.method === 'POST' && action === 'cancel') {
+      if (booking.status === 'completed' || booking.status === 'live' || booking.joined_owner_at || booking.joined_vet_at) {
+        return sendJson(res, 409, { ok: false, error: 'booking_already_started' });
+      }
+      const now = new Date().toISOString();
+      await releaseVetLiveHold(db, bookingId, now);
+      await db.execute({
+        sql: `UPDATE vet_consultation_bookings SET status = 'refunded', updated_at = ? WHERE id = ?`,
+        args: [now, bookingId]
+      });
+      await db.execute({
+        sql: `INSERT INTO vet_consultation_events (id, booking_id, type, payload_json, created_at)
+              VALUES (?, ?, 'booking_cancelled_refunded', ?, ?)`,
+        args: [id('vet-event'), bookingId, JSON.stringify({ reason: 'cancelled_before_completion' }), now]
+      });
+      return sendJson(res, 200, { ok: true, data: { booking: await getVetBooking(db, bookingId) } });
+    }
+
+    if (req.method === 'POST' && action === 'notes') {
+      const body = await readBody(req);
+      if (!String(body.summary || '').trim()) return sendJson(res, 400, { ok: false, error: 'summary_required' });
+      const now = new Date().toISOString();
+      const noteId = id('vet-note');
+      const noteVetId = body.vetId || booking.vet_id || null;
+      await db.execute({
+        sql: `INSERT INTO vet_consultation_notes
+          (id, booking_id, vet_id, summary, urgency_level, next_step, followup_at, clinic_visit_recommended, created_at, updated_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        args: [
+          noteId,
+          bookingId,
+          noteVetId,
+          String(body.summary || '').trim(),
+          body.urgencyLevel || 'routine',
+          String(body.nextStep || '').trim(),
+          isoOrNull(body.followupAt),
+          body.clinicVisitRecommended ? 1 : 0,
+          now,
+          now
+        ]
+      });
+      await captureVetLiveHold(db, bookingId, now);
+      await db.execute({
+        sql: `UPDATE vet_consultation_bookings
+              SET status = 'completed',
+                  vet_id = COALESCE(vet_id, ?),
+                  updated_at = ?
+              WHERE id = ?`,
+        args: [noteVetId, now, bookingId]
+      });
+      await db.execute({
+        sql: `INSERT INTO health_records
+          (id, pet_id, created_by_user_id, record_type, title, occurred_at, summary, payload, source, created_at, updated_at)
+          VALUES (?, ?, ?, 'vet_consultation', ?, ?, ?, ?, 'vet_live', ?, ?)`,
+        args: [
+          id('health'),
+          booking.pet_id,
+          booking.user_id,
+          'Veteriner canli gorusme notu',
+          now,
+          String(body.summary || '').trim(),
+          JSON.stringify({ vet_booking_id: bookingId, urgency_level: body.urgencyLevel || 'routine', next_step: body.nextStep || '' }),
+          now,
+          now
+        ]
+      }).catch(() => {});
+      await db.execute({
+        sql: `INSERT INTO vet_consultation_events (id, booking_id, type, payload_json, created_at)
+              VALUES (?, ?, 'note_created', ?, ?)`,
+        args: [id('vet-event'), bookingId, JSON.stringify({ noteId, holdCaptured: true }), now]
+      });
+      return sendJson(res, 200, { ok: true, data: { booking: await getVetBooking(db, bookingId) } });
+    }
+
+    if (req.method === 'POST' && action === 'survey') {
+      if (booking.status !== 'completed') return sendJson(res, 409, { ok: false, error: 'booking_not_completed' });
+      const body = await readBody(req);
+      const role = body.role === 'vet' ? 'vet' : 'owner';
+      const rating = Math.max(1, Math.min(5, Math.trunc(Number(body.rating || 0))));
+      if (!rating) return sendJson(res, 400, { ok: false, error: 'rating_required' });
+      const now = new Date().toISOString();
+      const reviewerUserId = role === 'owner' ? booking.user_id : String(body.userId || '').trim() || null;
+      const reviewedUserId = role === 'vet' ? booking.user_id : null;
+      const vetId = booking.vet_id || String(body.vetId || '').trim() || null;
+      await db.execute({
+        sql: `INSERT INTO vet_consultation_surveys
+          (id, booking_id, reviewer_role, reviewer_user_id, reviewed_user_id, vet_id, rating, feedback, tags, metadata, created_at, updated_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          ON CONFLICT(booking_id, reviewer_role) DO UPDATE SET
+            reviewer_user_id = excluded.reviewer_user_id,
+            reviewed_user_id = excluded.reviewed_user_id,
+            vet_id = excluded.vet_id,
+            rating = excluded.rating,
+            feedback = excluded.feedback,
+            tags = excluded.tags,
+            metadata = excluded.metadata,
+            updated_at = excluded.updated_at`,
+        args: [
+          id('vet-survey'),
+          bookingId,
+          role,
+          reviewerUserId,
+          reviewedUserId,
+          vetId,
+          rating,
+          String(body.feedback || '').trim(),
+          JSON.stringify(Array.isArray(body.tags) ? body.tags : []),
+          JSON.stringify({ source: 'vet_live_after_call' }),
+          now,
+          now
+        ]
+      });
+      if (role === 'owner' && vetId) await refreshVetRating(db, vetId);
+      await db.execute({
+        sql: `INSERT INTO vet_consultation_events (id, booking_id, type, payload_json, created_at)
+              VALUES (?, ?, 'survey_saved', ?, ?)`,
+        args: [id('vet-event'), bookingId, JSON.stringify({ role, rating }), now]
+      });
+      return sendJson(res, 200, { ok: true, data: { booking: await getVetBooking(db, bookingId) } });
+    }
+  }
+
+  if (req.method === 'POST' && (pathName === '/api/vet-live/webhooks/daily' || pathName === '/api/vet-live/webhooks/payment')) {
+    const body = await readBody(req);
+    const now = new Date().toISOString();
+    await db.execute({
+      sql: `INSERT INTO vet_consultation_events (id, booking_id, type, payload_json, created_at)
+            VALUES (?, ?, ?, ?, ?)`,
+      args: [
+        id('vet-event'),
+        body.bookingId || body.booking_id || null,
+        pathName.endsWith('/daily') ? 'daily_webhook' : 'payment_webhook',
+        JSON.stringify(body),
+        now
+      ]
+    });
+    return sendJson(res, 200, { ok: true });
+  }
+
+  return sendJson(res, 404, { ok: false, error: 'not_found' });
+}
+
 async function handleDocumentOcr(req, res) {
   const body = await readBody(req);
   if (!body.fileBase64) return sendJson(res, 400, codedError('missing_file'));
@@ -1474,6 +2311,7 @@ async function route(req, res) {
     if (req.method === 'POST' && url.pathname === '/api/reminders/status') return handleReminderStatus(req, res);
     if (req.method === 'POST' && url.pathname === '/api/measurements') return handleSaveMeasurement(req, res);
     if (req.method === 'GET' && url.pathname === '/api/measurements') return handleGetMeasurements(req, res, url);
+    if (url.pathname.startsWith('/api/vet-live/')) return handleVetLiveRequest(req, res, url);
     if (url.pathname.startsWith('/api/admin/')) return handleAdminRequest(req, res, url, sendJson);
     if (req.method === 'POST' && url.pathname === '/api/media/sign-upload') return handleSignUpload(req, res);
     if (req.method === 'POST' && url.pathname === '/api/media/complete') return handleCompleteUpload(req, res);

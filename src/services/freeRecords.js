@@ -36,7 +36,8 @@ const localHealthTypeMap = {
   reproduction: 'reproduction_followup',
   senior: 'senior_followup',
   toxic: 'toxin_foreign_body',
-  issue: 'issue'
+  issue: 'issue',
+  vet_consultation: 'vet_consultation'
 };
 
 function localHealthType(featureCode) {

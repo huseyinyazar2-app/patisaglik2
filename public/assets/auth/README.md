@@ -2,7 +2,8 @@
 
 Bu klasordeki gorseller mobil giris/onboarding ekranlarinda kullanilir.
 
-- `splash-hero.jpg`: ilk acilis ekrani
+- `pet-hero.png`: ilk acilis ekrani
+- `splash-hero.jpg`: eski ilk acilis gorseli
 - `onboarding-passport.jpg`: saglik pasaportu slayti
 - `onboarding-triage.jpg`: on kontrol/aciliyet slayti
 - `onboarding-media.jpg`: fotograf, video, ses ve olcum slayti

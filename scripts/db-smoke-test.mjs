@@ -23,6 +23,7 @@ for (const table of [
   'pets',
   'plans',
   'roles',
+  'user_roles',
   'permissions',
   'pet_members',
   'pet_member_permission_overrides',
@@ -32,7 +33,14 @@ for (const table of [
   'health_records',
   'measurements',
   'documents',
-  'media_files'
+  'media_files',
+  'vet_profiles',
+  'vet_availability',
+  'vet_consultation_bookings',
+  'vet_credit_holds',
+  'vet_consultation_notes',
+  'vet_consultation_surveys',
+  'vet_consultation_events'
 ]) {
   const result = await client.execute(`SELECT COUNT(*) AS count FROM ${table}`);
   checks[table] = Number(result.rows[0].count);

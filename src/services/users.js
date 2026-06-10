@@ -72,6 +72,8 @@ export function getLocalUserProfile(base = {}) {
     name: base.name || local.name || local.displayName || '',
     email: base.email || local.email || '',
     phone: base.phone || local.phone || '',
+    accountRole: base.accountRole || local.accountRole || 'owner',
+    vetProfileId: base.vetProfileId || local.vetProfileId || null,
     locale: base.locale || local.locale || 'tr',
     timezone: base.timezone || local.timezone || 'Europe/Istanbul',
     location: {

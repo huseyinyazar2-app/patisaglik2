@@ -36,6 +36,10 @@ export function render(params = {}, query = {}) {
 export function afterRender(params = {}, query = {}) {
   const state = getState();
   if (state.user?.isLoggedIn) {
+    if (state.user.accountRole === 'vet_live') {
+      setTimeout(() => navigate('/vet-live/vet'), 250);
+      return;
+    }
     setTimeout(async () => {
       if (getState().activePetId) {
         navigate('/home');

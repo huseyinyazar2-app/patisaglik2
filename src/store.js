@@ -32,6 +32,8 @@ const state = {
     name: storedUser.name || '',
     email: storedUser.email || '',
     phone: storedUser.phone || '',
+    accountRole: storedUser.accountRole || 'owner',
+    vetProfileId: storedUser.vetProfileId || null,
     locale: storedUser.locale || 'tr',
     timezone: storedUser.timezone || 'Europe/Istanbul',
     location: storedUser.location || { country: translateForLocale('tr', 'userDefaults.country'), province: '', district: '', neighborhood: '' },

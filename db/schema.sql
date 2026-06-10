@@ -107,6 +107,15 @@ CREATE TABLE IF NOT EXISTS role_permissions (
   FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS user_roles (
+  user_id TEXT NOT NULL,
+  role_id TEXT NOT NULL,
+  assigned_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  PRIMARY KEY (user_id, role_id),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS pet_members (
   id TEXT PRIMARY KEY,
   pet_id TEXT NOT NULL,
@@ -392,6 +401,138 @@ CREATE TABLE IF NOT EXISTS form_submissions (
   FOREIGN KEY (locale) REFERENCES locales(code)
 );
 
+CREATE TABLE IF NOT EXISTS vet_profiles (
+  id TEXT PRIMARY KEY,
+  user_id TEXT,
+  display_name TEXT NOT NULL,
+  license_no TEXT,
+  specialties TEXT NOT NULL DEFAULT '[]',
+  bio TEXT,
+  status TEXT NOT NULL DEFAULT 'pending',
+  is_active INTEGER NOT NULL DEFAULT 1,
+  rating_avg REAL NOT NULL DEFAULT 0,
+  rating_count INTEGER NOT NULL DEFAULT 0,
+  commission_rate INTEGER NOT NULL DEFAULT 0,
+  metadata TEXT NOT NULL DEFAULT '{}',
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS vet_availability (
+  id TEXT PRIMARY KEY,
+  vet_id TEXT NOT NULL,
+  weekday INTEGER NOT NULL,
+  starts_at TEXT NOT NULL,
+  ends_at TEXT NOT NULL,
+  timezone TEXT NOT NULL DEFAULT 'Europe/Istanbul',
+  is_active INTEGER NOT NULL DEFAULT 1,
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  FOREIGN KEY (vet_id) REFERENCES vet_profiles(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS vet_consultation_bookings (
+  id TEXT PRIMARY KEY,
+  user_id TEXT NOT NULL,
+  pet_id TEXT NOT NULL,
+  vet_id TEXT,
+  ai_session_id TEXT,
+  report_id TEXT,
+  status TEXT NOT NULL DEFAULT 'requested',
+  scheduled_at TEXT,
+  duration_minutes INTEGER NOT NULL DEFAULT 15,
+  price_cents INTEGER NOT NULL DEFAULT 0,
+  currency TEXT NOT NULL DEFAULT 'TRY',
+  payment_id TEXT,
+  credit_hold_id TEXT,
+  daily_room_name TEXT,
+  daily_room_url TEXT,
+  joined_owner_at TEXT,
+  joined_vet_at TEXT,
+  case_summary TEXT,
+  red_flags TEXT NOT NULL DEFAULT '[]',
+  metadata TEXT NOT NULL DEFAULT '{}',
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (pet_id) REFERENCES pets(id) ON DELETE CASCADE,
+  FOREIGN KEY (vet_id) REFERENCES vet_profiles(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS vet_credit_holds (
+  id TEXT PRIMARY KEY,
+  booking_id TEXT NOT NULL UNIQUE,
+  wallet_id TEXT NOT NULL,
+  user_id TEXT NOT NULL,
+  amount INTEGER NOT NULL,
+  status TEXT NOT NULL DEFAULT 'held',
+  hold_transaction_id TEXT,
+  capture_transaction_id TEXT,
+  release_transaction_id TEXT,
+  metadata TEXT NOT NULL DEFAULT '{}',
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  FOREIGN KEY (booking_id) REFERENCES vet_consultation_bookings(id) ON DELETE CASCADE,
+  FOREIGN KEY (wallet_id) REFERENCES credit_wallets(id) ON DELETE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS vet_consultation_notes (
+  id TEXT PRIMARY KEY,
+  booking_id TEXT NOT NULL,
+  vet_id TEXT,
+  summary TEXT NOT NULL,
+  urgency_level TEXT NOT NULL DEFAULT 'routine',
+  next_step TEXT,
+  followup_at TEXT,
+  clinic_visit_recommended INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  FOREIGN KEY (booking_id) REFERENCES vet_consultation_bookings(id) ON DELETE CASCADE,
+  FOREIGN KEY (vet_id) REFERENCES vet_profiles(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS vet_consultation_surveys (
+  id TEXT PRIMARY KEY,
+  booking_id TEXT NOT NULL,
+  reviewer_role TEXT NOT NULL,
+  reviewer_user_id TEXT,
+  reviewed_user_id TEXT,
+  vet_id TEXT,
+  rating INTEGER NOT NULL,
+  feedback TEXT,
+  tags TEXT NOT NULL DEFAULT '[]',
+  metadata TEXT NOT NULL DEFAULT '{}',
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  UNIQUE(booking_id, reviewer_role),
+  FOREIGN KEY (booking_id) REFERENCES vet_consultation_bookings(id) ON DELETE CASCADE,
+  FOREIGN KEY (reviewer_user_id) REFERENCES users(id) ON DELETE SET NULL,
+  FOREIGN KEY (reviewed_user_id) REFERENCES users(id) ON DELETE SET NULL,
+  FOREIGN KEY (vet_id) REFERENCES vet_profiles(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS vet_consultation_events (
+  id TEXT PRIMARY KEY,
+  booking_id TEXT,
+  type TEXT NOT NULL,
+  payload_json TEXT NOT NULL DEFAULT '{}',
+  created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+  FOREIGN KEY (booking_id) REFERENCES vet_consultation_bookings(id) ON DELETE SET NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_vet_profiles_status ON vet_profiles(status);
+CREATE INDEX IF NOT EXISTS idx_vet_availability_vet ON vet_availability(vet_id, is_active);
+CREATE INDEX IF NOT EXISTS idx_vet_bookings_user ON vet_consultation_bookings(user_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_vet_bookings_pet ON vet_consultation_bookings(pet_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_vet_bookings_vet ON vet_consultation_bookings(vet_id, scheduled_at);
+CREATE INDEX IF NOT EXISTS idx_vet_credit_holds_status ON vet_credit_holds(status, created_at);
+CREATE INDEX IF NOT EXISTS idx_vet_notes_booking ON vet_consultation_notes(booking_id);
+CREATE INDEX IF NOT EXISTS idx_vet_surveys_booking ON vet_consultation_surveys(booking_id, reviewer_role);
+CREATE INDEX IF NOT EXISTS idx_vet_surveys_vet ON vet_consultation_surveys(vet_id, reviewer_role);
+CREATE INDEX IF NOT EXISTS idx_vet_events_booking ON vet_consultation_events(booking_id, created_at);
+
 CREATE TABLE IF NOT EXISTS translation_keys (
   id TEXT PRIMARY KEY,
   namespace TEXT NOT NULL,
@@ -552,6 +693,20 @@ INSERT OR IGNORE INTO role_permissions (role_id, permission_id) VALUES
   ('role-vet-viewer', 'perm-view-health'),
   ('role-vet-viewer', 'perm-view-reports');
 
+INSERT OR IGNORE INTO roles (id, code, name_tr, description_tr) VALUES
+  ('role-vet-live', 'vet_live', 'Canli Gorusme Veterineri', 'Canli veteriner gorusme paneli erisimi');
+
+INSERT OR IGNORE INTO permissions (id, code, name_tr) VALUES
+  ('perm-vet-live-panel', 'vet_live_panel', 'Canli veteriner panelini kullan'),
+  ('perm-vet-live-notes', 'vet_live_notes', 'Canli gorusme notu ekle');
+
+INSERT OR IGNORE INTO role_permissions (role_id, permission_id) VALUES
+  ('role-vet-live', 'perm-vet-live-panel'),
+  ('role-vet-live', 'perm-vet-live-notes'),
+  ('role-vet-live', 'perm-view-pet'),
+  ('role-vet-live', 'perm-view-health'),
+  ('role-vet-live', 'perm-view-reports');
+
 INSERT OR IGNORE INTO app_settings (key, value, description) VALUES
   ('media_quality_check_enabled', 'false', 'Enable automatic client-side photo/video quality checks.'),
   ('ai_ignore_low_quality_media', 'true', 'Exclude user-marked poor or irrelevant media from vet-ready reports.');
@@ -569,6 +724,33 @@ INSERT OR IGNORE INTO credit_packages (id, code, name_tr, credit_amount, price_c
 INSERT OR IGNORE INTO users (id, email, phone, display_name, locale, metadata) VALUES
   ('user-1', 'ayse@email.com', '+905551112233', 'Ayşe Yılmaz', 'tr', '{"location":{"country":"Türkiye","province":"","district":"","neighborhood":""},"notificationPreference":"push"}');
 
+INSERT OR IGNORE INTO users (id, email, phone, display_name, password_hash, locale, status, metadata) VALUES
+  ('user-vet-1', 'vet1@vet.com', NULL, 'Dr. Deniz Kara', '1bcdebe2de0c5df0fc41e7475511ba21:5c665ebf39bc12107fe9a74251079a4ad43cb75a672dcf674c0f3dee3f2339cc', 'tr', 'active', '{"authProvider":"email_password","scope":"vet_live_seed"}'),
+  ('user-vet-2', 'vet2@vet.com', NULL, 'Dr. Ece Arslan', 'd2a601e5ee0fa277127786d0efaeabbd:5e29028fff859e080239d30f11f7e1eb3d3fb4c00e10ef1ad5871bf80114f02f', 'tr', 'active', '{"authProvider":"email_password","scope":"vet_live_seed"}');
+
+INSERT OR IGNORE INTO user_roles (user_id, role_id) VALUES
+  ('user-1', 'role-owner'),
+  ('user-vet-1', 'role-vet-live'),
+  ('user-vet-2', 'role-vet-live');
+
+INSERT OR IGNORE INTO vet_profiles
+  (id, user_id, display_name, license_no, specialties, bio, status, is_active, rating_avg, rating_count, commission_rate, metadata)
+VALUES
+  ('vet-demo-1', 'user-vet-1', 'Dr. Deniz Kara', 'VET-TEST-001', '["genel danisma","kedi/kopek","acil on degerlendirme"]', 'Canli gorusme pilot akislari icin test veterineri.', 'approved', 1, 4.8, 0, 0, '{"source":"seed","scope":"vet_live_mvp"}'),
+  ('vet-demo-2', 'user-vet-2', 'Dr. Ece Arslan', 'VET-TEST-002', '["beslenme","davranis","genel danisma"]', 'Canli gorusme pilot akislari icin ikinci test veterineri.', 'approved', 1, 4.7, 0, 0, '{"source":"seed","scope":"vet_live_mvp"}');
+
+INSERT OR IGNORE INTO vet_availability (id, vet_id, weekday, starts_at, ends_at, timezone, is_active) VALUES
+  ('vet-slot-1-mon', 'vet-demo-1', 1, '10:00', '18:00', 'Europe/Istanbul', 1),
+  ('vet-slot-1-tue', 'vet-demo-1', 2, '10:00', '18:00', 'Europe/Istanbul', 1),
+  ('vet-slot-1-wed', 'vet-demo-1', 3, '10:00', '18:00', 'Europe/Istanbul', 1),
+  ('vet-slot-1-thu', 'vet-demo-1', 4, '10:00', '18:00', 'Europe/Istanbul', 1),
+  ('vet-slot-1-fri', 'vet-demo-1', 5, '10:00', '18:00', 'Europe/Istanbul', 1),
+  ('vet-slot-2-mon', 'vet-demo-2', 1, '12:00', '20:00', 'Europe/Istanbul', 1),
+  ('vet-slot-2-tue', 'vet-demo-2', 2, '12:00', '20:00', 'Europe/Istanbul', 1),
+  ('vet-slot-2-wed', 'vet-demo-2', 3, '12:00', '20:00', 'Europe/Istanbul', 1),
+  ('vet-slot-2-thu', 'vet-demo-2', 4, '12:00', '20:00', 'Europe/Istanbul', 1),
+  ('vet-slot-2-fri', 'vet-demo-2', 5, '12:00', '20:00', 'Europe/Istanbul', 1);
+
 INSERT OR IGNORE INTO pets (id, primary_owner_user_id, species_id, name, sex, birth_date, approximate_age_label, weight_kg, ownership_type, medical_summary) VALUES
   ('pet-1', 'user-1', 'species-dog', 'Milo', 'male', '2021-03-15', '4 yaş', 28.5, 'owned', 'Genel durum iyi görünüyor'),
   ('pet-2', 'user-1', 'species-cat', 'Boncuk', 'female', '2022-08-10', '3 yaş', 4.2, 'owned', 'Takip gereken kayıt var');
@@ -579,3 +761,12 @@ INSERT OR IGNORE INTO pet_members (id, pet_id, user_id, role_id, status) VALUES
 
 INSERT OR IGNORE INTO credit_wallets (id, user_id, balance) VALUES
   ('wallet-user-1', 'user-1', 1);
+
+INSERT OR IGNORE INTO credit_wallets (id, user_id, balance)
+SELECT 'wallet-huseyin-test', id, 100
+FROM users
+WHERE phone IN ('5336565251', '+905336565251');
+
+UPDATE credit_wallets
+SET balance = CASE WHEN balance < 100 THEN 100 ELSE balance END
+WHERE user_id IN (SELECT id FROM users WHERE phone IN ('5336565251', '+905336565251'));

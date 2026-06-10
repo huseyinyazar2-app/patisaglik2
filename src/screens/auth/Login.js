@@ -26,8 +26,8 @@ export function render(params = {}, query = {}) {
 
       <div class="auth-form" style="animation: slideUp 0.5s ease 0.15s both;">
         <div class="form-group">
-          <label for="login-phone">Telefon</label>
-          <input type="tel" id="login-phone" placeholder="+90 5xx xxx xx xx" autocomplete="tel" />
+          <label for="login-phone">${t('auth.phone_or_email')}</label>
+          <input type="text" id="login-phone" placeholder="${t('auth.phone_or_email_placeholder')}" autocomplete="username" />
         </div>
 
         <div class="form-group">
@@ -117,6 +117,14 @@ export function afterRender(params = {}, query = {}) {
       }
       s.user = { ...s.user, ...profile, isLoggedIn: true };
     });
+    if (profile.accountRole === 'vet_live') {
+      navigate('/vet-live/vet');
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
+      return;
+    }
     try {
       const pets = await getPets({ userId: profile.id || 'user-1' });
       if (pets.length) {

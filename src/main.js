@@ -203,6 +203,11 @@ function setupRoutes() {
   registerRoute('/web', (p, q) => loadScreen('./screens/web/Landing.js', p, q));
   registerRoute('/admin', (p, q) => loadScreen('./screens/web/Admin.js', p, q));
   registerRoute('/home', (p, q) => loadScreen('./screens/home/Home.js', p, q));
+  registerRoute('/vet-live', (p, q) => loadScreen('./screens/vet-live/VetLive.js', p, q));
+  registerRoute('/vet-live/book', (p, q) => loadScreen('./screens/vet-live/VetLive.js', p, q));
+  registerRoute('/vet-live/bookings/:bookingId', (p, q) => loadScreen('./screens/vet-live/VetLive.js', p, q));
+  registerRoute('/vet-live/room/:bookingId', (p, q) => loadScreen('./screens/vet-live/VetLive.js', p, q));
+  registerRoute('/vet-live/vet', (p, q) => loadScreen('./screens/vet-live/VetLive.js', p, q));
   registerRoute('/feature/:featureId', (p, q) => loadScreen('./screens/features/FeatureForm.js', p, q));
   registerRoute('/public/pet/:token', (p, q) => loadScreen('./screens/public/PublicPetCard.js', p, q));
   registerRoute('/public/report/:reportId', (p, q) => loadScreen('./screens/public/PublicVetReport.js', p, q));
@@ -298,6 +303,15 @@ async function init() {
     // Allow auth routes and pet creation/selection
     if (path.startsWith('/auth') || path.startsWith('/public') || path.startsWith('/invite') || path.startsWith('/web') || path.startsWith('/admin') || path.startsWith('/pets')) {
       return true;
+    }
+    if (path.startsWith('/vet-live/vet') && state.user.accountRole !== 'vet_live') {
+      navigate('/vet-live');
+      return false;
+    }
+    if (state.user.accountRole === 'vet_live') {
+      if (path.startsWith('/vet-live/vet') || path.startsWith('/vet-live/bookings/') || path.startsWith('/vet-live/room/')) return true;
+      navigate('/vet-live/vet');
+      return false;
     }
     // If user is logged in but hasn't selected a pet
     if (state.user.isLoggedIn && !state.activePetId) {

@@ -11,6 +11,7 @@ let adminState = {
   documents: [],
   usage: [],
   aiJobs: [],
+  vets: [],
   plans: [],
   creditPackages: [],
   payments: [],
@@ -25,7 +26,8 @@ let adminState = {
     records: { q: '', kind: '', petId: '', userId: '', limit: 40 },
     documents: { q: '', status: '', type: '', limit: 30 },
     aiJobs: { q: '', status: '', limit: 40 },
-    payments: { q: '', status: '', limit: 40 }
+    payments: { q: '', status: '', limit: 40 },
+    vets: { q: '', status: '', limit: 50 }
   }
 };
 
@@ -300,6 +302,23 @@ function renderAiJobs(items = []) {
   }).join('');
 }
 
+function renderVets(items = []) {
+  if (!items.length) return `<div class="admin-empty">Bu filtreye uyan veteriner yok.</div>`;
+  return items.map((vet) => `
+    <div class="admin-row admin-row-wide">
+      <div>
+        <strong>${escapeHtml(vet.display_name || 'Veteriner')}</strong>
+        <small>${escapeHtml(vet.email || vet.phone || '-')} · ${escapeHtml(vet.license_no || '-')} · puan ${escapeHtml(Number(vet.rating_avg || 0).toFixed(1))}/${escapeHtml(vet.rating_count || 0)} · görüşme ${escapeHtml(vet.completed_count || 0)}/${escapeHtml(vet.booking_count || 0)}</small>
+      </div>
+      <div class="admin-actions">
+        <span>${Number(vet.is_active) ? 'Aktif' : 'Pasif'}</span>
+        <button data-action="vet-toggle" data-id="${escapeHtml(vet.id)}">${Number(vet.is_active) ? 'Pasif yap' : 'Aktif yap'}</button>
+        <button data-action="vet-view" data-id="${escapeHtml(vet.id)}">Gör</button>
+      </div>
+    </div>
+  `).join('');
+}
+
 function renderPrice(cents, currency = 'TRY') {
   return new Intl.NumberFormat('tr-TR', { style: 'currency', currency }).format(Number(cents || 0) / 100);
 }
@@ -380,6 +399,7 @@ function renderFilters() {
   const recordsFilter = adminState.filters.records;
   const documentsFilter = adminState.filters.documents;
   const paymentsFilter = adminState.filters.payments;
+  const vetsFilter = adminState.filters.vets;
 
   return `
     <section class="admin-grid admin-grid-2">
@@ -527,6 +547,22 @@ function renderFilters() {
       </article>
 
       <article class="admin-panel">
+        <div class="admin-panel-head"><div><span>Canlı Görüşme</span><h2>Veteriner Yönetimi</h2></div></div>
+        <div class="admin-filters-inline">
+          <input id="vetsQ" placeholder="Veteriner, lisans veya e-posta ara" value="${escapeHtml(vetsFilter.q)}" />
+          <select id="vetsStatus">
+            <option value="">Tüm durumlar</option>
+            <option value="active" ${vetsFilter.status === 'active' ? 'selected' : ''}>Aktif</option>
+            <option value="inactive" ${vetsFilter.status === 'inactive' ? 'selected' : ''}>Pasif</option>
+            <option value="approved" ${vetsFilter.status === 'approved' ? 'selected' : ''}>Onaylı</option>
+            <option value="suspended" ${vetsFilter.status === 'suspended' ? 'selected' : ''}>Askıda</option>
+          </select>
+          <button data-action="vets-search">Ara</button>
+        </div>
+        <div id="adminVets">${renderVets(adminState.vets)}</div>
+      </article>
+
+      <article class="admin-panel">
         <div class="admin-panel-head"><div><span>AI & Medya</span><h2>Uygulama Kontrolleri</h2></div></div>
         <form class="admin-settings-form" id="appSettingsForm">
           <label>
@@ -617,6 +653,7 @@ function renderState() {
   const docsTarget = document.getElementById('adminDocuments');
   const usageTarget = document.getElementById('adminUsage');
   const aiJobsTarget = document.getElementById('adminAiJobs');
+  const vetsTarget = document.getElementById('adminVets');
   const plansTarget = document.getElementById('adminPlans');
   const creditPackagesTarget = document.getElementById('adminCreditPackages');
   const paymentsTarget = document.getElementById('adminPayments');
@@ -626,6 +663,7 @@ function renderState() {
   if (docsTarget) docsTarget.innerHTML = renderDocuments(adminState.documents);
   if (usageTarget) usageTarget.innerHTML = renderUsage(adminState.usage);
   if (aiJobsTarget) aiJobsTarget.innerHTML = renderAiJobs(adminState.aiJobs);
+  if (vetsTarget) vetsTarget.innerHTML = renderVets(adminState.vets);
   if (plansTarget) plansTarget.innerHTML = renderPlans(adminState.plans);
   if (creditPackagesTarget) creditPackagesTarget.innerHTML = renderCreditPackages(adminState.creditPackages);
   if (paymentsTarget) paymentsTarget.innerHTML = renderPayments(adminState.payments);
@@ -689,6 +727,10 @@ async function loadAiJobs() {
   adminState.aiJobs = await api(`/api/admin/ai-jobs${queryString(adminState.filters.aiJobs)}`);
 }
 
+async function loadVets() {
+  adminState.vets = await api(`/api/admin/vets${queryString(adminState.filters.vets)}`);
+}
+
 async function loadPlans() {
   adminState.plans = await api('/api/admin/plans');
 }
@@ -716,7 +758,7 @@ async function loadAll() {
   const statusCard = document.getElementById('apiStatusCard');
   try {
     await loadLookups();
-    await Promise.all([loadOverview(), loadUsers(), loadPets(), loadRecords(), loadDocuments(), loadUsage(), loadAiJobs(), loadPlans(), loadCreditPackages(), loadPayments(), loadSettings()]);
+    await Promise.all([loadOverview(), loadUsers(), loadPets(), loadRecords(), loadDocuments(), loadUsage(), loadAiJobs(), loadVets(), loadPlans(), loadCreditPackages(), loadPayments(), loadSettings()]);
     renderState();
     if (statusCard) statusCard.innerHTML = `<span>Yönetim API</span><strong>Bağlı</strong><small>Canlı veritabanı yönetimi</small>`;
   } catch (error) {
@@ -1339,6 +1381,12 @@ async function handleAction(button) {
     renderState();
     return;
   }
+  if (action === 'vets-search') {
+    adminState.filters.vets = { ...adminState.filters.vets, q: getValue('vetsQ').trim(), status: getValue('vetsStatus') };
+    await loadVets();
+    renderState();
+    return;
+  }
 
   if (action === 'user-add') return openUserForm();
   if (action === 'pet-add') return openPetForm();
@@ -1397,6 +1445,17 @@ async function handleAction(button) {
   if (action === 'ai-job-view') {
     const job = adminState.aiJobs.find((item) => item.id === id);
     return openReadOnly('AI log detayi', job || {});
+  }
+  if (action === 'vet-view') {
+    const vet = adminState.vets.find((item) => item.id === id);
+    return openReadOnly('Veteriner detayı', vet || {});
+  }
+  if (action === 'vet-toggle') {
+    const vet = adminState.vets.find((item) => item.id === id);
+    await api(`/api/admin/vets/${id}`, { method: 'POST', body: { isActive: !Number(vet?.is_active) } });
+    await loadVets();
+    renderState();
+    return;
   }
   if (action === 'plan-delete') {
     if (!window.confirm('Bu plan kalıcı olarak silinsin mi?')) return;

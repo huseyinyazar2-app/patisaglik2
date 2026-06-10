@@ -1,9 +1,10 @@
-const CACHE_NAME = 'pet-help-shell-v2';
+const CACHE_NAME = 'pet-help-shell-v3';
 const APP_SHELL = [
   '/',
   '/index.html',
   '/manifest.webmanifest',
   '/pwa-icon.svg',
+  '/assets/auth/pet-hero.png',
   '/assets/auth/splash-hero.jpg',
   '/assets/auth/onboarding-passport.jpg',
   '/assets/auth/onboarding-triage.jpg',

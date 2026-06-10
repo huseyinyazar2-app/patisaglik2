@@ -247,6 +247,7 @@ export function render() {
             <button class="btn btn-primary btn-full" id="btnStartCheck">${window.__icons?.spark} ${t('home.start_ai_check')}</button>
             <button class="btn btn-secondary btn-full" id="btnTimeline">${window.__icons?.clipboard} ${t('tabs.history')}</button>
           </div>
+          <button class="btn btn-secondary btn-full home-vet-live-entry" id="btnVetLive">${window.__icons?.video} ${t('home.vet_live_entry')}</button>
           <div id="homeCreditStatus">${renderCreditStatus()}</div>
         </div>
       </div>
@@ -371,6 +372,7 @@ export function afterRender() {
   });
   document.getElementById('btnStartCheck')?.addEventListener('click', () => navigate('/check'));
   document.getElementById('btnTimeline')?.addEventListener('click', () => navigate('/history'));
+  document.getElementById('btnVetLive')?.addEventListener('click', () => navigate('/vet-live'));
   document.getElementById('btnReports')?.addEventListener('click', () => navigate('/reports'));
   document.getElementById('btnHomeCredits')?.addEventListener('click', () => navigate('/profile/plan'));
   function bindRouteButtons(root = document) {

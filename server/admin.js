@@ -248,6 +248,27 @@ async function ensureAdminSchema(db) {
       ('ai_ignore_low_quality_media', 'true', 'Exclude user-marked poor or irrelevant media from vet-ready reports.')`,
     args: []
   });
+  await db.execute({
+    sql: `CREATE TABLE IF NOT EXISTS vet_profiles (
+      id TEXT PRIMARY KEY,
+      user_id TEXT,
+      display_name TEXT NOT NULL,
+      license_no TEXT,
+      specialties TEXT NOT NULL DEFAULT '[]',
+      bio TEXT,
+      status TEXT NOT NULL DEFAULT 'pending',
+      is_active INTEGER NOT NULL DEFAULT 1,
+      rating_avg REAL NOT NULL DEFAULT 0,
+      rating_count INTEGER NOT NULL DEFAULT 0,
+      commission_rate INTEGER NOT NULL DEFAULT 0,
+      metadata TEXT NOT NULL DEFAULT '{}',
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now')),
+      updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ','now'))
+    )`,
+    args: []
+  });
+  await executeOptional(db, `ALTER TABLE vet_profiles ADD COLUMN is_active INTEGER NOT NULL DEFAULT 1`);
+  await executeOptional(db, `ALTER TABLE vet_profiles ADD COLUMN rating_count INTEGER NOT NULL DEFAULT 0`);
 
   const billingSeeds = [
     {
@@ -1361,6 +1382,62 @@ async function payments(db, { limit = 40, q = '', status = '' } = {}) {
   return result.rows.map((item) => ({ ...row(item), metadata: parseJson(item.metadata) }));
 }
 
+async function vets(db, { limit = 50, q = '', status = '' } = {}) {
+  const where = [];
+  const args = [];
+  if (status) {
+    if (status === 'active') where.push('v.is_active = 1');
+    else if (status === 'inactive') where.push('v.is_active = 0');
+    else {
+      where.push('v.status = ?');
+      args.push(status);
+    }
+  }
+  if (q) {
+    const like = likeValue(q);
+    where.push(`(
+      LOWER(COALESCE(v.display_name, '')) LIKE ?
+      OR LOWER(COALESCE(v.license_no, '')) LIKE ?
+      OR LOWER(COALESCE(u.email, '')) LIKE ?
+    )`);
+    args.push(like, like, like);
+  }
+  const result = await db.execute({
+    sql: `SELECT v.*, u.email, u.phone, u.status AS user_status,
+            COUNT(DISTINCT b.id) AS booking_count,
+            COUNT(DISTINCT CASE WHEN b.status = 'completed' THEN b.id END) AS completed_count
+          FROM vet_profiles v
+          LEFT JOIN users u ON u.id = v.user_id
+          LEFT JOIN vet_consultation_bookings b ON b.vet_id = v.id
+          ${where.length ? `WHERE ${where.join(' AND ')}` : ''}
+          GROUP BY v.id
+          ORDER BY v.is_active DESC, v.rating_avg DESC, v.display_name ASC
+          LIMIT ?`,
+    args: [...args, limit]
+  });
+  return result.rows.map((item) => ({ ...row(item), specialties: parseJson(item.specialties, []), metadata: parseJson(item.metadata) }));
+}
+
+async function updateVet(db, admin, vetId, input) {
+  const current = row((await db.execute({ sql: `SELECT * FROM vet_profiles WHERE id = ? LIMIT 1`, args: [vetId] })).rows[0]);
+  if (!current.id) throw new Error('vet_not_found');
+  const next = {
+    displayName: requireText(input.displayName ?? input.display_name ?? current.display_name, 'display_name'),
+    status: String(input.status ?? current.status ?? 'approved'),
+    isActive: input.isActive === undefined ? Number(current.is_active || 0) : (input.isActive ? 1 : 0),
+    bio: nullableText(input.bio ?? current.bio),
+    specialties: jsonString(input.specialties ?? parseJson(current.specialties, []), [])
+  };
+  await db.execute({
+    sql: `UPDATE vet_profiles
+          SET display_name = ?, status = ?, is_active = ?, bio = ?, specialties = ?, updated_at = ?
+          WHERE id = ?`,
+    args: [next.displayName, next.status, next.isActive, next.bio, next.specialties, now(), vetId]
+  });
+  await audit(db, admin, 'update_vet', 'vet_profile', vetId, { status: next.status, isActive: next.isActive });
+  return vets(db, { limit: 100 });
+}
+
 async function createPayment(db, admin, input) {
   const paymentId = id('payment');
   await db.execute({
@@ -1479,6 +1556,7 @@ function adminPermissionFor(path) {
   if (path.includes('/plans') || path.includes('/billing') || path.includes('/credits') || path.includes('/credit-packages') || path.includes('/payments')) return 'admin.manage_billing';
   if (path.includes('/records') || path.includes('/documents') || path.includes('/ai-jobs')) return 'admin.manage_records';
   if (path.includes('/settings')) return 'admin.manage_settings';
+  if (path.includes('/vets')) return 'admin.manage_settings';
   return 'admin.read';
 }
 
@@ -1512,6 +1590,8 @@ export async function handleAdminRequest(req, res, url, sendJson) {
     if (req.method === 'POST' && path === '/api/admin/settings') return sendJson(res, 200, { ok: true, data: await updateAppSettings(db, admin, await readJson(req)) });
     if (req.method === 'POST' && path === '/api/admin/settings/password') return sendJson(res, 200, { ok: true, data: await changePassword(db, admin, await readJson(req)) });
     if (req.method === 'GET' && path === '/api/admin/overview') return sendJson(res, 200, { ok: true, data: await overview(db) });
+    if (req.method === 'GET' && path === '/api/admin/vets') return sendJson(res, 200, { ok: true, data: await vets(db, { limit, q, status }) });
+    if (req.method === 'POST' && /^\/api\/admin\/vets\/[^/]+$/.test(path)) return sendJson(res, 200, { ok: true, data: await updateVet(db, admin, path.split('/').pop(), await readJson(req)) });
 
     if (req.method === 'GET' && path === '/api/admin/users') return sendJson(res, 200, { ok: true, data: await users(db, { limit, q, status }) });
     if (req.method === 'POST' && path === '/api/admin/users') return sendJson(res, 200, { ok: true, data: await createUser(db, admin, await readJson(req)) });

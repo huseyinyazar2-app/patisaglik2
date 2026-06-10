@@ -200,6 +200,10 @@ textarea:focus-visible,
   gap: 8px;
 }
 
+.home-vet-live-entry {
+  margin-top: 10px;
+}
+
 .btn,
 .home-credit-strip,
 .ai-credit-inline-pill,
@@ -543,7 +547,7 @@ textarea:focus-visible,
 }
 
 .auth-visual-splash {
-  background-image: url("/assets/auth/splash-hero.jpg") !important;
+  background-image: url("/assets/auth/pet-hero.png") !important;
   background-position: center !important;
 }
 
@@ -660,6 +664,125 @@ textarea:focus-visible,
 .auth-checkbox input[type="checkbox"] {
   width: auto;
   margin-top: 2px;
+}
+
+/* ---------- Vet Live Consultation ---------- */
+.vet-live-screen {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F4FBF9 52%, #F7FAFC 100%);
+}
+
+.vet-live-hero,
+.vet-live-room {
+  margin: 14px 16px 18px;
+  padding: 18px;
+  border: 1px solid rgba(214, 233, 227, 0.95);
+  border-radius: 10px;
+  background: #FFFFFF;
+  box-shadow: 0 10px 28px rgba(17, 24, 39, 0.06);
+}
+
+.vet-live-hero h1,
+.vet-live-room h1 {
+  font-size: 24px;
+  line-height: 1.16;
+  margin: 8px 0;
+}
+
+.vet-live-hero p,
+.vet-live-room p,
+.vet-live-step p,
+.vet-live-booking-card p,
+.vet-live-note p {
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.vet-live-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.vet-live-step-grid,
+.vet-live-list {
+  display: grid;
+  gap: 10px;
+}
+
+.vet-live-step,
+.vet-live-booking-card,
+.vet-live-note,
+.vet-live-quote,
+.vet-live-room-state {
+  border: 1px solid rgba(214, 233, 227, 0.95);
+  border-radius: 10px;
+  background: #FFFFFF;
+  padding: 14px;
+}
+
+.vet-live-step span {
+  display: inline-grid;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 10px;
+  place-items: center;
+  border-radius: 8px;
+  background: #E6F5F1;
+  color: var(--primary);
+  font-weight: 800;
+}
+
+.vet-live-step strong,
+.vet-live-booking-card strong,
+.vet-live-note strong {
+  display: block;
+  color: var(--text-primary);
+}
+
+.vet-live-booking-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  text-align: left;
+  width: 100%;
+}
+
+.vet-live-booking-card p {
+  margin-top: 4px;
+  font-size: 13px;
+}
+
+.vet-live-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.vet-live-card-actions .plan-pill {
+  max-width: none;
+}
+
+.vet-live-room-frame {
+  width: 100%;
+  min-height: 420px;
+  margin-top: 14px;
+  border: 1px solid rgba(214, 233, 227, 0.95);
+  border-radius: 10px;
+  background: #FFFFFF;
+}
+
+@media (min-width: 430px) {
+  .vet-live-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vet-live-step-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 /* ---------- Home Screen ---------- */
