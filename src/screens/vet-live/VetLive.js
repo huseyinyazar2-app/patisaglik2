@@ -59,6 +59,22 @@ function currentPet() {
   return getActivePet(state.activePetId) || { id: state.activePetId, name: t('vetLive.active_pet') };
 }
 
+function roomUrlWithToken(roomUrl, token) {
+  if (!token || !roomUrl) return roomUrl;
+  try {
+    const url = new URL(roomUrl);
+    url.searchParams.set('t', token);
+    return url.toString();
+  } catch {
+    const separator = String(roomUrl).includes('?') ? '&' : '?';
+    return `${roomUrl}${separator}t=${encodeURIComponent(token)}`;
+  }
+}
+
+function vetSpecialties(vet) {
+  return escapeHtml((vet.specialties || []).slice(0, 2).join(', ') || t('vetLive.general_consultation'));
+}
+
 function shell(inner) {
   return `
     <div class="screen vet-live-screen">
@@ -83,24 +99,30 @@ function renderHome() {
       <h1>${t('vetLive.home_title')}</h1>
       <p>${t('vetLive.home_desc', { name: escapeHtml(pet.name) })}</p>
       <div class="vet-live-actions">
-        <button class="btn btn-primary btn-full" id="btnVetBook">${window.__icons?.video} ${t('vetLive.book_cta')}</button>
+        <button class="btn btn-primary btn-full" id="btnVetQuickFocus">${window.__icons?.video} ${t('vetLive.quick_start_cta')}</button>
         <button class="btn btn-secondary btn-full" id="btnVetBookings">${window.__icons?.calendar} ${t('vetLive.my_bookings')}</button>
       </div>
     </section>
 
-    <section class="section">
+    <section class="feature-form-card vet-live-quick-card" id="vetLiveQuickCard">
       <div class="section-header">
-        <h3 class="section-title">${t('vetLive.flow_title')}</h3>
+        <h3 class="section-title">${t('vetLive.quick_title')}</h3>
       </div>
-      <div class="vet-live-step-grid">
-        ${['flow_ai', 'flow_booking', 'flow_room', 'flow_note'].map((key, index) => `
-          <article class="vet-live-step">
-            <span>${index + 1}</span>
-            <strong>${t(`vetLive.${key}.title`)}</strong>
-            <p>${t(`vetLive.${key}.desc`)}</p>
-          </article>
-        `).join('')}
+      <p class="text-sm text-secondary">${t('vetLive.quick_desc')}</p>
+      <div class="vet-live-quote" id="vetLiveQuickQuote">${t('common.loading')}</div>
+      <div class="vet-live-vet-list" id="vetLiveQuickVets">
+        <div class="free-record-panel">${t('common.loading')}</div>
       </div>
+      <label class="feature-field">
+        <span>${t('vetLive.case_summary_label')}</span>
+        <textarea id="vetLiveQuickSummary" rows="3" placeholder="${t('vetLive.quick_summary_placeholder')}"></textarea>
+      </label>
+      <label class="auth-checkbox">
+        <input id="vetLiveQuickConsent" type="checkbox" />
+        <span>${t('vetLive.legal_consent_label')}</span>
+      </label>
+      <button class="btn btn-primary btn-full" id="btnVetQuickStart">${window.__icons?.video} ${t('vetLive.quick_start_cta')}</button>
+      <button class="btn btn-secondary btn-full mt-2" id="btnVetBook">${t('vetLive.schedule_later_cta')}</button>
     </section>
 
     <section class="section">
@@ -169,6 +191,7 @@ function bookingCard(booking) {
 }
 
 function vetQueueCard(booking) {
+  const canStart = !['completed', 'cancelled', 'refunded'].includes(booking.status);
   return `
     <div class="vet-live-booking-card" data-vet-queue-card="${escapeHtml(booking.id)}">
       <div>
@@ -179,6 +202,7 @@ function vetQueueCard(booking) {
       <div class="vet-live-card-actions">
         <span class="plan-pill">${statusLabel(booking.status)}</span>
         ${booking.vet_id ? '' : `<button class="btn btn-secondary btn-sm" data-claim-booking-id="${escapeHtml(booking.id)}">${t('vetLive.claim_booking')}</button>`}
+        ${canStart ? `<button class="btn btn-primary btn-sm" data-start-booking-id="${escapeHtml(booking.id)}">${t('vetLive.start_consultation')}</button>` : ''}
         <button class="btn btn-secondary btn-sm" data-open-booking-id="${escapeHtml(booking.id)}">${t('vetLive.open_detail')}</button>
         <button class="btn btn-primary btn-sm" data-note-booking-id="${escapeHtml(booking.id)}">${t('vetLive.select_for_note')}</button>
       </div>
@@ -215,7 +239,7 @@ function detailHtml(booking) {
       <p class="text-xs text-secondary mt-2">${t('vetLive.credit_hold_label')}: ${escapeHtml(t(`vetLive.hold_status.${booking.credit_hold_status || 'held'}`))}</p>
       <div class="vet-live-actions mt-4">
         ${canCancel ? `<button class="btn btn-secondary btn-full" id="btnVetCancel">${t('vetLive.cancel_booking')}</button>` : ''}
-        <button class="btn btn-primary btn-full" id="btnVetJoin">${window.__icons?.video} ${t('vetLive.join_room')}</button>
+        <button class="btn btn-primary btn-full" id="btnVetJoin">${window.__icons?.video} ${t('vetLive.start_consultation')}</button>
       </div>
       <p class="text-xs text-tertiary mt-3">${t('vetLive.duration_warning')}</p>
     </section>
@@ -282,17 +306,18 @@ function renderVetPanel() {
     </section>
     <section class="feature-form-card">
       <h3>${t('vetLive.note_form_title')}</h3>
+      <p class="text-sm text-secondary">${t('vetLive.note_form_desc')}</p>
       <label class="feature-field">
         <span>${t('vetLive.booking_id_label')}</span>
         <input id="vetLiveNoteBookingId" placeholder="${t('vetLive.booking_id_placeholder')}" />
       </label>
       <label class="feature-field">
         <span>${t('vetLive.note_summary_label')}</span>
-        <textarea id="vetLiveNoteSummary" rows="4"></textarea>
+        <textarea id="vetLiveNoteSummary" rows="4" placeholder="${t('vetLive.note_summary_placeholder')}"></textarea>
       </label>
       <label class="feature-field">
         <span>${t('vetLive.next_step_label')}</span>
-        <input id="vetLiveNextStep" />
+        <input id="vetLiveNextStep" placeholder="${t('vetLive.next_step_placeholder')}" />
       </label>
       <label class="auth-checkbox">
         <input id="vetLiveClinicVisit" type="checkbox" />
@@ -319,12 +344,77 @@ function bindShell() {
 
 async function hydrateHome() {
   const state = getState();
+  const quickCard = document.getElementById('vetLiveQuickCard');
+  const quickQuote = document.getElementById('vetLiveQuickQuote');
+  const quickVets = document.getElementById('vetLiveQuickVets');
   document.getElementById('btnVetBook')?.addEventListener('click', () => navigate('/vet-live/book'));
+  document.getElementById('btnVetQuickFocus')?.addEventListener('click', () => quickCard?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
   document.getElementById('btnVetBookings')?.addEventListener('click', () => navigate('/vet-live'));
   document.getElementById('btnVetPanel')?.addEventListener('click', () => navigate('/vet-live/vet'));
   const target = document.getElementById('vetLiveRecent');
+  let quote = { durationMinutes: 15, priceCents: 8, currency: 'credit' };
+  let vets = [];
+  const setQuickButtonsDisabled = (disabled) => {
+    document.querySelectorAll('[data-quick-vet-id], #btnVetQuickStart').forEach((button) => {
+      button.disabled = disabled;
+    });
+  };
+  const quickCreate = async (vetId = '') => {
+    const summary = document.getElementById('vetLiveQuickSummary')?.value.trim();
+    if (!summary) {
+      showToast(t('vetLive.summary_required'));
+      return;
+    }
+    if (!document.getElementById('vetLiveQuickConsent')?.checked) {
+      showToast(t('vetLive.legal_consent_required'));
+      return;
+    }
+    setQuickButtonsDisabled(true);
+    try {
+      const booking = await createVetLiveBooking({
+        userId: state.user?.id || 'user-1',
+        petId: state.activePetId,
+        vetId,
+        scheduledAt: new Date().toISOString(),
+        durationMinutes: quote.durationMinutes,
+        priceCents: quote.priceCents,
+        currency: quote.currency,
+        caseSummary: summary,
+        redFlags: [],
+        legalConsentAccepted: true
+      });
+      showToast(t('vetLive.booking_created'));
+      navigate(booking.vet_id ? `/vet-live/room/${booking.id}` : `/vet-live/bookings/${booking.id}`);
+    } catch (error) {
+      showToast(String(error.message || '').includes('insufficient_credits') ? t('vetLive.insufficient_credits') : t('vetLive.booking_failed', { error: error.message || '' }));
+    } finally {
+      setQuickButtonsDisabled(false);
+    }
+  };
+  document.getElementById('btnVetQuickStart')?.addEventListener('click', () => quickCreate(vets[0]?.id || ''));
   try {
-    const bookings = await listVetLiveBookings({ userId: state.user?.id || 'user-1', petId: state.activePetId });
+    const [bookings, lookups, quoteResult] = await Promise.all([
+      listVetLiveBookings({ userId: state.user?.id || 'user-1', petId: state.activePetId }),
+      getVetLiveLookups(),
+      getVetLiveQuote({ durationMinutes: 15 })
+    ]);
+    vets = lookups.vets || [];
+    quote = quoteResult || quote;
+    quickQuote.textContent = t('vetLive.quote_text', { price: money(quote.priceCents, quote.currency), duration: quote.durationMinutes });
+    quickVets.innerHTML = vets.length
+      ? vets.map((vet) => `
+        <button class="vet-live-vet-option" data-quick-vet-id="${escapeHtml(vet.id)}">
+          <span>
+            <strong>${escapeHtml(vet.display_name)}</strong>
+            <small>${vetSpecialties(vet)}</small>
+          </span>
+          <em>${t('vetLive.active_now')}</em>
+        </button>
+      `).join('')
+      : `<div class="empty-state"><div class="empty-state-title">${t('vetLive.no_active_vets')}</div><div class="empty-state-desc">${t('vetLive.pool_request_desc')}</div></div>`;
+    quickVets.querySelectorAll('[data-quick-vet-id]').forEach((button) => {
+      button.addEventListener('click', () => quickCreate(button.dataset.quickVetId || ''));
+    });
     target.innerHTML = bookings.length
       ? bookings.map(bookingCard).join('')
       : `<div class="empty-state"><div class="empty-state-title">${t('vetLive.no_bookings')}</div><div class="empty-state-desc">${t('vetLive.no_bookings_desc')}</div></div>`;
@@ -332,6 +422,8 @@ async function hydrateHome() {
       button.addEventListener('click', () => navigate(`/vet-live/bookings/${button.dataset.bookingId}`));
     });
   } catch {
+    quickQuote.textContent = t('vetLive.quote_failed');
+    quickVets.innerHTML = `<div class="free-record-panel">${t('vetLive.lookup_failed')}</div>`;
     target.innerHTML = `<div class="free-record-panel">${t('vetLive.load_failed')}</div>`;
   }
 }
@@ -450,11 +542,12 @@ async function hydrateRoom(params) {
     const state = getState();
     const role = state.user?.accountRole === 'vet_live' ? 'vet' : 'owner';
     const join = await requestVetLiveJoin(params.bookingId, role, { vetId: state.user?.vetProfileId });
-    frame.src = join.roomUrl;
+    const meetingUrl = roomUrlWithToken(join.roomUrl, join.token);
+    frame.src = meetingUrl;
     stateTarget.innerHTML = `
       <strong>${permission === 'denied' ? t('vetLive.permission_denied') : t('vetLive.room_ready')}</strong>
       <p>${join.provider === 'daily' ? t('vetLive.daily_ready') : t('vetLive.local_room_notice')}</p>
-      <a class="btn btn-secondary btn-full mt-3" href="${escapeHtml(join.roomUrl)}" target="_blank" rel="noreferrer">${t('vetLive.open_room')}</a>
+      <a class="btn btn-secondary btn-full mt-3" href="${escapeHtml(meetingUrl)}" target="_blank" rel="noreferrer">${t('vetLive.open_room')}</a>
     `;
   } catch {
     stateTarget.innerHTML = `<strong>${t('vetLive.room_failed')}</strong><p>${t('vetLive.retry_later')}</p>`;
@@ -472,7 +565,12 @@ async function hydrateVetPanel() {
     queue.querySelectorAll('[data-note-booking-id]').forEach((button) => {
       button.addEventListener('click', () => {
         document.getElementById('vetLiveNoteBookingId').value = button.dataset.noteBookingId;
+        document.getElementById('vetLiveNoteSummary')?.focus();
+        document.getElementById('vetLiveNoteBookingId')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
+    });
+    queue.querySelectorAll('[data-start-booking-id]').forEach((button) => {
+      button.addEventListener('click', () => navigate(`/vet-live/room/${button.dataset.startBookingId}`));
     });
     queue.querySelectorAll('[data-open-booking-id]').forEach((button) => {
       button.addEventListener('click', () => navigate(`/vet-live/bookings/${button.dataset.openBookingId}`));

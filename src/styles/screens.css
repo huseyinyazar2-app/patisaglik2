@@ -711,6 +711,46 @@ textarea:focus-visible,
   gap: 10px;
 }
 
+.vet-live-vet-list {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.vet-live-vet-option {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid rgba(214, 233, 227, 0.95);
+  border-radius: 8px;
+  background: #F8FCFB;
+  text-align: left;
+}
+
+.vet-live-vet-option strong,
+.vet-live-vet-option small {
+  display: block;
+}
+
+.vet-live-vet-option small {
+  margin-top: 3px;
+  color: var(--text-secondary);
+}
+
+.vet-live-vet-option em {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 5px 8px;
+  background: #E6F5F1;
+  color: var(--primary);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 800;
+}
+
 .vet-live-step,
 .vet-live-booking-card,
 .vet-live-note,
