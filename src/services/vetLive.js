@@ -258,8 +258,7 @@ export async function cancelVetLiveBooking(bookingId) {
   } catch {
     const booking = await getVetLiveBooking(bookingId);
     if (!booking) throw new Error('vet_booking_not_found');
-    if (booking.status === 'live' || booking.status === 'completed' || booking.joined_owner_at || booking.joined_vet_at) throw new Error('booking_already_started');
-    if (booking.status === 'completed') throw new Error('booking_already_completed');
+    if (booking.status === 'completed' || (booking.joined_owner_at && booking.joined_vet_at)) throw new Error('booking_already_started');
     if (booking.credit_hold_status === 'held') {
       const balance = localWalletBalance(booking.user_id);
       setLocalWalletBalance(booking.user_id, balance + Math.max(1, Number(booking.credit_hold_amount || booking.price_cents || 8)));
@@ -277,14 +276,17 @@ export async function requestVetLiveJoin(bookingId, role = 'owner', options = {}
     if (!booking) throw new Error('vet_booking_not_found');
     const roomName = booking.daily_room_name || `pethelp-${booking.id}`;
     const roomUrl = booking.daily_room_url || `https://pethelp.daily.co/${roomName}`;
+    const joinedOwnerAt = role === 'owner' && !booking.joined_owner_at ? nowIso() : booking.joined_owner_at;
+    const joinedVetAt = role === 'vet' && !booking.joined_vet_at ? nowIso() : booking.joined_vet_at;
+    const bothJoined = Boolean(joinedOwnerAt && joinedVetAt);
     saveLocalBooking({
       ...booking,
       status: booking.status === 'completed' ? booking.status : 'live',
       daily_room_name: roomName,
       daily_room_url: roomUrl,
-      joined_owner_at: role === 'owner' && !booking.joined_owner_at ? nowIso() : booking.joined_owner_at,
-      joined_vet_at: role === 'vet' && !booking.joined_vet_at ? nowIso() : booking.joined_vet_at,
-      credit_hold_status: booking.credit_hold_status === 'held' ? 'captured' : booking.credit_hold_status,
+      joined_owner_at: joinedOwnerAt,
+      joined_vet_at: joinedVetAt,
+      credit_hold_status: bothJoined && booking.credit_hold_status === 'held' ? 'captured' : booking.credit_hold_status,
       updated_at: nowIso()
     });
     return { roomName, roomUrl, token: `local-${booking.id}-${role}`, provider: 'local_fallback' };

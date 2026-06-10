@@ -524,6 +524,8 @@ CREATE TABLE IF NOT EXISTS vet_consultation_events (
 
 CREATE INDEX IF NOT EXISTS idx_vet_profiles_status ON vet_profiles(status);
 CREATE INDEX IF NOT EXISTS idx_vet_availability_vet ON vet_availability(vet_id, is_active);
+DELETE FROM vet_availability WHERE id LIKE 'vet-slot-vet-demo-%';
+CREATE UNIQUE INDEX IF NOT EXISTS idx_vet_availability_unique_slot ON vet_availability(vet_id, weekday, starts_at, ends_at);
 CREATE INDEX IF NOT EXISTS idx_vet_bookings_user ON vet_consultation_bookings(user_id, created_at);
 CREATE INDEX IF NOT EXISTS idx_vet_bookings_pet ON vet_consultation_bookings(pet_id, created_at);
 CREATE INDEX IF NOT EXISTS idx_vet_bookings_vet ON vet_consultation_bookings(vet_id, scheduled_at);

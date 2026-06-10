@@ -1160,6 +1160,8 @@ async function ensureVetLiveSchema(db) {
   await db.batch([
     `CREATE INDEX IF NOT EXISTS idx_vet_profiles_status ON vet_profiles(status)`,
     `CREATE INDEX IF NOT EXISTS idx_vet_availability_vet ON vet_availability(vet_id, is_active)`,
+    `DELETE FROM vet_availability WHERE id LIKE 'vet-slot-vet-demo-%'`,
+    `CREATE UNIQUE INDEX IF NOT EXISTS idx_vet_availability_unique_slot ON vet_availability(vet_id, weekday, starts_at, ends_at)`,
     `CREATE INDEX IF NOT EXISTS idx_vet_bookings_user ON vet_consultation_bookings(user_id, created_at)`,
     `CREATE INDEX IF NOT EXISTS idx_vet_bookings_pet ON vet_consultation_bookings(pet_id, created_at)`,
     `CREATE INDEX IF NOT EXISTS idx_vet_bookings_vet ON vet_consultation_bookings(vet_id, scheduled_at)`,
@@ -1205,14 +1207,15 @@ async function seedVetLive(db) {
     }
   ]);
   for (const vet of [
-    ['vet-demo-1', '10:00', '18:00'],
-    ['vet-demo-2', '12:00', '20:00']
+    ['vet-demo-1', '1', '10:00', '18:00'],
+    ['vet-demo-2', '2', '12:00', '20:00']
   ]) {
     for (const day of [1, 2, 3, 4, 5]) {
       await db.execute({
-        sql: `INSERT OR IGNORE INTO vet_availability (id, vet_id, weekday, starts_at, ends_at, timezone, is_active, created_at, updated_at)
-              VALUES (?, ?, ?, ?, ?, 'Europe/Istanbul', 1, ?, ?)`,
-        args: [`vet-slot-${vet[0]}-${day}`, vet[0], day, vet[1], vet[2], now, now]
+        sql: `INSERT INTO vet_availability (id, vet_id, weekday, starts_at, ends_at, timezone, is_active, created_at, updated_at)
+              VALUES (?, ?, ?, ?, ?, 'Europe/Istanbul', 1, ?, ?)
+              ON CONFLICT(id) DO UPDATE SET starts_at = excluded.starts_at, ends_at = excluded.ends_at, is_active = 1, updated_at = excluded.updated_at`,
+        args: [`vet-slot-${vet[1]}-${['sun', 'mon', 'tue', 'wed', 'thu', 'fri'][day]}`, vet[0], day, vet[2], vet[3], now, now]
       });
     }
   }
@@ -1618,7 +1621,6 @@ async function handleVetLiveRequest(req, res, url) {
       const room = await dailyRoomForBooking(booking);
       const role = body.role || 'owner';
       const vetProfileId = role === 'vet' ? String(body.vetId || '').trim() : '';
-      await captureVetLiveHold(db, bookingId, now);
       await db.execute({
         sql: `UPDATE vet_consultation_bookings
               SET status = CASE WHEN status IN ('completed', 'cancelled', 'refunded') THEN status ELSE 'live' END,
@@ -1631,17 +1633,20 @@ async function handleVetLiveRequest(req, res, url) {
               WHERE id = ?`,
         args: [room.roomName, room.roomUrl, role, now, role, now, role, vetProfileId, vetProfileId, now, bookingId]
       });
+      const updated = await getVetBooking(db, bookingId);
+      const holdCaptured = Boolean(updated?.joined_owner_at && updated?.joined_vet_at);
+      if (holdCaptured) await captureVetLiveHold(db, bookingId, now);
       await db.execute({
         sql: `INSERT INTO vet_consultation_events (id, booking_id, type, payload_json, created_at)
               VALUES (?, ?, 'join_token_requested', ?, ?)`,
-        args: [id('vet-event'), bookingId, JSON.stringify({ role, provider: room.provider, holdCaptured: true }), now]
+        args: [id('vet-event'), bookingId, JSON.stringify({ role, provider: room.provider, holdCaptured }), now]
       });
       const token = await dailyJoinToken({ ...booking, daily_room_name: room.roomName }, role);
       return sendJson(res, 200, { ok: true, data: { roomUrl: room.roomUrl, roomName: room.roomName, token: token.token, provider: token.provider } });
     }
 
     if (req.method === 'POST' && action === 'cancel') {
-      if (booking.status === 'completed' || booking.status === 'live' || booking.joined_owner_at || booking.joined_vet_at) {
+      if (booking.status === 'completed' || (booking.joined_owner_at && booking.joined_vet_at)) {
         return sendJson(res, 409, { ok: false, error: 'booking_already_started' });
       }
       const now = new Date().toISOString();

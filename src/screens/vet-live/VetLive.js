@@ -199,7 +199,7 @@ function detailHtml(booking) {
   const state = getState();
   const surveyRole = state.user?.accountRole === 'vet_live' ? 'vet' : 'owner';
   const survey = (booking.surveys || []).find((item) => item.reviewer_role === surveyRole);
-  const canCancel = !['live', 'completed', 'refunded', 'cancelled'].includes(booking.status) && !booking.joined_owner_at && !booking.joined_vet_at;
+  const canCancel = !['completed', 'refunded', 'cancelled'].includes(booking.status) && !(booking.joined_owner_at && booking.joined_vet_at);
   return `
     <section class="feature-form-hero slate">
       <div>
