@@ -48,9 +48,9 @@ const icons = {
 window.__icons = icons;
 
 // Tab bar configuration
-const tabRoutes = ['/home', '/check', '/history', '/reports', '/profile'];
-const tabLabelKeys = ['tabs.home', 'tabs.check', 'tabs.history', 'tabs.reports', 'tabs.profile'];
-const tabIcons = ['home', 'spark', 'history', 'reports', 'profile'];
+const tabRoutes = ['/home', '/history', '/reports', '/check', '/profile'];
+const tabLabelKeys = ['tabs.home', 'tabs.history', 'tabs.reports', 'tabs.check', 'tabs.profile'];
+const tabIcons = ['home', 'history', 'reports', 'spark', 'profile'];
 let appInitialized = false;
 
 function syncNativeShellClass() {

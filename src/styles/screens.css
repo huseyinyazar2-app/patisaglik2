@@ -3501,6 +3501,23 @@ textarea:focus-visible,
   margin-left: auto;
 }
 
+.premium-check .report-export-card {
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr);
+  align-items: start;
+}
+
+.premium-check .report-export-card .premium-icon-box {
+  width: 56px;
+  height: 56px;
+}
+
+.premium-check .report-export-card .btn {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-left: 0;
+}
+
 .pet-card {
   border: 1px solid var(--border-color);
   font-family: var(--font-family);
