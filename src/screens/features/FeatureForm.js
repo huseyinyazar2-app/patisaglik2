@@ -448,14 +448,22 @@ export function afterRender() {
   function validateRequiredFields() {
     const missingText = [...document.querySelectorAll('[data-required="true"]')]
       .filter((input) => !input.value?.trim());
+    const invalidMoney = [...document.querySelectorAll('input[inputmode="decimal"]')]
+      .filter((input) => input.value?.trim())
+      .filter((input) => {
+        const raw = String(input.value || '');
+        const normalized = raw.replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.');
+        const parsed = Number(normalized);
+        return !/\d/.test(raw) || !Number.isFinite(parsed) || parsed < 0;
+      });
     const missingChoice = [...document.querySelectorAll('[data-required-choice="true"]')]
       .filter((group) => !group.querySelector('button.selected'));
     const missingCustom = [...document.querySelectorAll('.feature-custom-choice:not(.hidden)')]
       .filter((input) => !input.value?.trim());
-    if (!missingText.length && !missingChoice.length && !missingCustom.length) return true;
-    const target = missingText[0] || missingCustom[0] || missingChoice[0]?.closest('.feature-field');
+    if (!missingText.length && !invalidMoney.length && !missingChoice.length && !missingCustom.length) return true;
+    const target = missingText[0] || invalidMoney[0] || missingCustom[0] || missingChoice[0]?.closest('.feature-field');
     target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    missingText[0]?.focus?.();
+    (missingText[0] || invalidMoney[0])?.focus?.();
     showNotice(t('featureForm.required_error'), 'error');
     return false;
   }

@@ -99,7 +99,8 @@ export function afterRender() {
   });
 
   document.getElementById('btnSaveOutcome')?.addEventListener('click', async (event) => {
-    if (!state.activePetId) {
+    const currentState = getState();
+    if (!currentState.activePetId) {
       showToast(t('petsService.pet_required'));
       return;
     }
@@ -108,10 +109,10 @@ export function afterRender() {
     button.textContent = t('common.saving');
     try {
       await submitFeatureForm({
-        userId: state.user?.id || 'user-1',
-        petId: state.activePetId || '',
+        userId: currentState.user?.id || 'user-1',
+        petId: currentState.activePetId || '',
         featureCode: 'ai-vet-outcome',
-        locale: state.user?.locale || 'tr',
+        locale: currentState.user?.locale || 'tr',
         payload: {
           [translateForLocale('tr', 'vetOutcome.visited')]: selected('vetVisited'),
           [translateForLocale('tr', 'vetOutcome.diagnosis_payload')]: value('vetDiagnosis'),
@@ -119,11 +120,11 @@ export function afterRender() {
           [translateForLocale('tr', 'vetOutcome.triage_accuracy')]: selected('triageAccuracy'),
           [translateForLocale('tr', 'vetOutcome.current_status')]: selected('currentStatus'),
           [translateForLocale('tr', 'vetOutcome.extra_note')]: value('vetNote'),
-          triage_session_id: state.session?.id || '',
-          primary_complaint: state.session?.primaryComplaintLabel || '',
-          matched_complaints: state.session?.matchedComplaintIds || [],
-          risk_categories: state.session?.categories || [],
-          history_snapshot: state.session?.historySnapshot || {}
+          triage_session_id: currentState.session?.id || '',
+          primary_complaint: currentState.session?.primaryComplaintLabel || '',
+          matched_complaints: currentState.session?.matchedComplaintIds || [],
+          risk_categories: currentState.session?.categories || [],
+          history_snapshot: currentState.session?.historySnapshot || {}
         }
       });
       showToast(t('vetOutcome.saved'));

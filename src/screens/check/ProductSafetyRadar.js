@@ -1,5 +1,7 @@
 import { goBack, navigate } from '../../router.js';
+import { getState } from '../../store.js';
 import { runProductSafetyCheck } from '../../services/productSafety.js';
+import { submitFeatureForm } from '../../services/formSubmissions.js';
 import { showToast } from '../../ui/toast.js';
 import { t } from '../../i18n/tr.js';
 
@@ -130,6 +132,7 @@ export function render() {
 
         <div class="feature-bottom-actions">
           <button class="btn btn-primary btn-full" id="btnRunSafety">${t('productSafetyRadar.run')}</button>
+          <button class="btn btn-secondary btn-full hidden" id="btnSaveSafetyRecord">${t('packageRisk.save_record')}</button>
           <button class="btn btn-ghost btn-full" id="btnPackageRisk">${t('productSafetyRadar.package_risk')}</button>
         </div>
       </div>
@@ -138,6 +141,7 @@ export function render() {
 }
 
 export function afterRender() {
+  let lastResult = null;
   document.getElementById('btnBack')?.addEventListener('click', () => goBack());
   document.getElementById('btnPackageRisk')?.addEventListener('click', () => navigate('/check/package-risk'));
 
@@ -168,12 +172,54 @@ export function afterRender() {
       barcode: value('barcode'),
       lot: value('lotNumber')
     });
+    lastResult = result;
 
     const target = document.getElementById('safetyRadarResult');
     target.innerHTML = renderResult(result);
     target.classList.remove('hidden');
+    document.getElementById('btnSaveSafetyRecord')?.classList.remove('hidden');
     button.disabled = false;
     button.textContent = original;
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  document.getElementById('btnSaveSafetyRecord')?.addEventListener('click', async (event) => {
+    const state = getState();
+    if (!state.activePetId) {
+      showToast(t('petsService.pet_required'));
+      return;
+    }
+    if (!lastResult) {
+      showToast(t('productSafetyRadar.name_required'));
+      return;
+    }
+    const button = event.currentTarget;
+    const original = button.textContent;
+    button.disabled = true;
+    button.textContent = t('common.saving');
+    try {
+      await submitFeatureForm({
+        userId: state.user?.id || 'user-1',
+        petId: state.activePetId,
+        featureCode: 'toxic',
+        locale: state.user?.locale || 'tr',
+        payload: {
+          name: lastResult.input?.productName || lastResult.input?.brand || t('productSafetyRadar.title'),
+          type: t('productSafetyRadar.title'),
+          detail: [
+            t('productSafetyRadar.source_status', { status: lastResult.apiStatus }),
+            ...(lastResult.warnings || []),
+            ...(lastResult.recalls || []).map((item) => [item.product, item.firm, item.reason].filter(Boolean).join(' - '))
+          ].filter(Boolean).join('\n'),
+          product_safety_result: lastResult
+        }
+      });
+      showToast(t('packageRisk.record_created'));
+      navigate('/history/health-records?filter=toxin_foreign_body&sort=newest');
+    } catch (error) {
+      showToast(t('packageRisk.record_failed', { error: error.message || '' }));
+      button.disabled = false;
+      button.textContent = original;
+    }
   });
 }

@@ -164,6 +164,14 @@ export function afterRender(params = {}, query = {}) {
       showMeasurementToast(`${window.__icons?.alert || ''} ${t('measurementAdd.invalid_value')}`);
       return;
     }
+    if (numericValue < typeInfo.min || numericValue > typeInfo.max) {
+      showMeasurementToast(`${window.__icons?.alert || ''} ${t('measurementAdd.valid_range', { min: typeInfo.min, max: typeInfo.max, unit: typeInfo.unit })}`);
+      return;
+    }
+    if (!date || Number.isNaN(Date.parse(`${date}T${time}:00`))) {
+      showMeasurementToast(`${window.__icons?.alert || ''} ${t('measurementAdd.invalid_value')}`);
+      return;
+    }
 
     btn.disabled = true;
     btn.textContent = t('common.saving');

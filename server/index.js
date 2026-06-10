@@ -1742,6 +1742,17 @@ async function handleVetLiveRequest(req, res, url) {
       const room = await dailyRoomForBooking(booking);
       const role = body.role || 'owner';
       const vetProfileId = role === 'vet' ? String(body.vetId || '').trim() : '';
+      if (role === 'vet') {
+        if (!vetProfileId) return sendJson(res, 400, { ok: false, error: 'vet_required' });
+        if (booking.vet_id && booking.vet_id !== vetProfileId) {
+          return sendJson(res, 403, { ok: false, error: 'booking_assigned_to_another_vet' });
+        }
+        const vet = (await db.execute({
+          sql: `SELECT id FROM vet_profiles WHERE id = ? AND status = 'approved' AND is_active = 1 LIMIT 1`,
+          args: [vetProfileId]
+        })).rows[0];
+        if (!vet) return sendJson(res, 404, { ok: false, error: 'vet_not_available' });
+      }
       await db.execute({
         sql: `UPDATE vet_consultation_bookings
               SET status = CASE WHEN status IN ('completed', 'cancelled', 'refunded') THEN status ELSE 'live' END,
@@ -1789,7 +1800,16 @@ async function handleVetLiveRequest(req, res, url) {
       if (!String(body.summary || '').trim()) return sendJson(res, 400, { ok: false, error: 'summary_required' });
       const now = new Date().toISOString();
       const noteId = id('vet-note');
-      const noteVetId = body.vetId || booking.vet_id || null;
+      const noteVetId = String(body.vetId || booking.vet_id || '').trim();
+      if (!noteVetId) return sendJson(res, 400, { ok: false, error: 'vet_required' });
+      if (booking.vet_id && booking.vet_id !== noteVetId) {
+        return sendJson(res, 403, { ok: false, error: 'booking_assigned_to_another_vet' });
+      }
+      const vet = (await db.execute({
+        sql: `SELECT id FROM vet_profiles WHERE id = ? AND status = 'approved' AND is_active = 1 LIMIT 1`,
+        args: [noteVetId]
+      })).rows[0];
+      if (!vet) return sendJson(res, 404, { ok: false, error: 'vet_not_available' });
       await db.execute({
         sql: `INSERT INTO vet_consultation_notes
           (id, booking_id, vet_id, summary, urgency_level, next_step, followup_at, clinic_visit_recommended, created_at, updated_at)

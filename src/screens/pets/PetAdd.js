@@ -229,6 +229,25 @@ export function afterRender(params = {}) {
       setTimeout(() => input?.style.removeProperty('border-color'), 1600);
       return;
     }
+    const birthDate = fieldValue('pet-birthdate');
+    if (birthDate && new Date(birthDate).getTime() > Date.now()) {
+      const input = document.getElementById('pet-birthdate');
+      input?.focus();
+      input?.style.setProperty('border-color', 'var(--risk-critical)');
+      showToast(t('pets.save_error'));
+      setTimeout(() => input?.style.removeProperty('border-color'), 1600);
+      return;
+    }
+    const weightText = fieldValue('pet-weight');
+    const weightValue = Number(String(weightText || '0').replace(',', '.'));
+    if (weightText && (!Number.isFinite(weightValue) || weightValue < 0 || weightValue > 300)) {
+      const input = document.getElementById('pet-weight');
+      input?.focus();
+      input?.style.setProperty('border-color', 'var(--risk-critical)');
+      showToast(t('pets.save_error'));
+      setTimeout(() => input?.style.removeProperty('border-color'), 1600);
+      return;
+    }
 
     const originalText = btn.textContent;
     btn.textContent = t('pets.saving');
@@ -244,8 +263,8 @@ export function afterRender(params = {}) {
         volunteerNote: fieldValue('pet-volunteer-note'),
         gender: document.querySelector('#pet-gender-group button.selected')?.dataset.gender || 'unknown',
         breed: fieldValue('pet-breed'),
-        birthDate: fieldValue('pet-birthdate'),
-        weight: fieldValue('pet-weight'),
+        birthDate,
+        weight: weightText,
         neutered: document.querySelector('#pet-neutered-group button.selected')?.dataset.neutered || 'unknown',
         chronic: fieldValue('pet-chronic'),
         allergies: fieldValue('pet-allergies'),
