@@ -1,9 +1,11 @@
 import { getApiJson, postApiJson } from './apiClient.js';
+import { saveLocalUserProfile } from './users.js';
 import { translateForLocale } from '../i18n/tr.js';
 
 const STORAGE_BOOKINGS = 'pati_vet_live_bookings';
 const STORAGE_NOTES = 'pati_vet_live_notes';
 const STORAGE_SURVEYS = 'pati_vet_live_surveys';
+const STORAGE_PROFILES = 'pati_vet_live_profiles';
 const LOCAL_WALLET_KEY = 'pati_credit_wallets';
 
 const demoVet = {
@@ -81,6 +83,50 @@ function localBookings(filter = {}) {
     .map(attachNotes);
 }
 
+function localVetProfile(input = {}) {
+  const profiles = readList(STORAGE_PROFILES);
+  const profile = profiles.find((item) => item.id === input.vetId || item.user_id === input.userId);
+  const fallback = input.vetId === demoVet2.id || input.userId === 'user-vet-2' ? demoVet2 : demoVet;
+  return profile || {
+    ...fallback,
+    user_id: input.userId || (fallback.id === demoVet2.id ? 'user-vet-2' : 'user-vet-1'),
+    email: fallback.id === demoVet2.id ? 'vet2@vet.com' : 'vet1@vet.com',
+    phone: '',
+    timezone: 'Europe/Istanbul',
+    is_active: 1
+  };
+}
+
+function saveLocalVetProfile(input = {}) {
+  const current = localVetProfile(input);
+  const next = {
+    ...current,
+    display_name: input.displayName || input.display_name || current.display_name,
+    license_no: input.licenseNo || input.license_no || current.license_no || '',
+    specialties: Array.isArray(input.specialties)
+      ? input.specialties
+      : String(input.specialties || current.specialties?.join?.(', ') || '').split(',').map((item) => item.trim()).filter(Boolean),
+    bio: input.bio ?? current.bio ?? '',
+    is_active: input.isActive === false || input.isActive === 0 ? 0 : 1,
+    email: input.email ?? current.email ?? '',
+    phone: input.phone ?? current.phone ?? '',
+    timezone: input.timezone || current.timezone || 'Europe/Istanbul',
+    updated_at: nowIso()
+  };
+  const profiles = readList(STORAGE_PROFILES).filter((item) => item.id !== next.id && item.user_id !== next.user_id);
+  writeList(STORAGE_PROFILES, [next, ...profiles]);
+  saveLocalUserProfile({
+    id: next.user_id,
+    name: next.display_name,
+    email: next.email,
+    phone: next.phone,
+    accountRole: 'vet_live',
+    vetProfileId: next.id,
+    timezone: next.timezone
+  });
+  return next;
+}
+
 function saveLocalBooking(booking) {
   const list = readList(STORAGE_BOOKINGS);
   const next = list.filter((item) => item.id !== booking.id);
@@ -150,6 +196,51 @@ export async function getVetLiveQuote(input = {}) {
       currency: 'credit',
       provider: 'local_fallback'
     };
+  }
+}
+
+export async function getVetLiveProfile(input = {}) {
+  try {
+    const query = new URLSearchParams();
+    if (input.vetId) query.set('vetId', input.vetId);
+    if (input.userId) query.set('userId', input.userId);
+    const result = await getApiJson(`/api/vet-live/profile?${query.toString()}`);
+    return result.data?.profile || null;
+  } catch {
+    return localVetProfile(input);
+  }
+}
+
+export async function saveVetLiveProfile(input = {}) {
+  try {
+    const result = await postApiJson('/api/vet-live/profile', input);
+    const profile = result.data?.profile;
+    if (profile) {
+      saveLocalUserProfile({
+        id: profile.user_id || input.userId,
+        name: profile.display_name,
+        email: profile.email,
+        phone: profile.phone,
+        accountRole: 'vet_live',
+        vetProfileId: profile.id,
+        timezone: profile.timezone
+      });
+    }
+    return profile;
+  } catch (error) {
+    if (error.message !== 'network_error') throw error;
+    return saveLocalVetProfile(input);
+  }
+}
+
+export async function changeVetLivePassword(input = {}) {
+  try {
+    const result = await postApiJson('/api/vet-live/profile/password', input);
+    return result.data || { ok: true };
+  } catch (error) {
+    if (error.message !== 'network_error') throw error;
+    if (!String(input.newPassword || '').trim()) throw new Error('password_required');
+    return { ok: true, provider: 'local_fallback' };
   }
 }
 

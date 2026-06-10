@@ -1180,13 +1180,13 @@ async function seedVetLive(db) {
     {
       sql: `INSERT INTO users (id, email, display_name, password_hash, locale, status, metadata, created_at, updated_at)
             VALUES ('user-vet-1', 'vet1@vet.com', 'Dr. Deniz Kara', ?, 'tr', 'active', ?, ?, ?)
-            ON CONFLICT(id) DO UPDATE SET email = excluded.email, display_name = excluded.display_name, password_hash = excluded.password_hash, status = 'active', updated_at = excluded.updated_at`,
+            ON CONFLICT(id) DO UPDATE SET email = COALESCE(users.email, excluded.email), display_name = COALESCE(users.display_name, excluded.display_name), password_hash = COALESCE(users.password_hash, excluded.password_hash), status = 'active', updated_at = excluded.updated_at`,
       args: [hashPassword('vet123'), JSON.stringify({ authProvider: 'email_password', scope: 'vet_live_seed' }), now, now]
     },
     {
       sql: `INSERT INTO users (id, email, display_name, password_hash, locale, status, metadata, created_at, updated_at)
             VALUES ('user-vet-2', 'vet2@vet.com', 'Dr. Ece Arslan', ?, 'tr', 'active', ?, ?, ?)
-            ON CONFLICT(id) DO UPDATE SET email = excluded.email, display_name = excluded.display_name, password_hash = excluded.password_hash, status = 'active', updated_at = excluded.updated_at`,
+            ON CONFLICT(id) DO UPDATE SET email = COALESCE(users.email, excluded.email), display_name = COALESCE(users.display_name, excluded.display_name), password_hash = COALESCE(users.password_hash, excluded.password_hash), status = 'active', updated_at = excluded.updated_at`,
       args: [hashPassword('vet456'), JSON.stringify({ authProvider: 'email_password', scope: 'vet_live_seed' }), now, now]
     },
     { sql: `INSERT OR IGNORE INTO user_roles (user_id, role_id) VALUES ('user-vet-1', 'role-vet-live')`, args: [] },
@@ -1195,14 +1195,14 @@ async function seedVetLive(db) {
       sql: `INSERT INTO vet_profiles
         (id, user_id, display_name, license_no, specialties, bio, status, is_active, rating_avg, rating_count, commission_rate, metadata, created_at, updated_at)
         VALUES ('vet-demo-1', 'user-vet-1', 'Dr. Deniz Kara', 'VET-TEST-001', ?, 'Canli gorusme pilot akislari icin test veterineri.', 'approved', 1, 4.8, 0, 0, ?, ?, ?)
-        ON CONFLICT(id) DO UPDATE SET user_id = excluded.user_id, display_name = excluded.display_name, status = 'approved', is_active = 1, updated_at = excluded.updated_at`,
+        ON CONFLICT(id) DO UPDATE SET user_id = excluded.user_id, status = 'approved', updated_at = excluded.updated_at`,
       args: [JSON.stringify(['genel danisma', 'kedi/kopek', 'acil on degerlendirme']), JSON.stringify({ source: 'seed', scope: 'vet_live_mvp' }), now, now]
     },
     {
       sql: `INSERT INTO vet_profiles
         (id, user_id, display_name, license_no, specialties, bio, status, is_active, rating_avg, rating_count, commission_rate, metadata, created_at, updated_at)
         VALUES ('vet-demo-2', 'user-vet-2', 'Dr. Ece Arslan', 'VET-TEST-002', ?, 'Canli gorusme pilot akislari icin ikinci test veterineri.', 'approved', 1, 4.7, 0, 0, ?, ?, ?)
-        ON CONFLICT(id) DO UPDATE SET user_id = excluded.user_id, display_name = excluded.display_name, status = 'approved', is_active = 1, updated_at = excluded.updated_at`,
+        ON CONFLICT(id) DO UPDATE SET user_id = excluded.user_id, status = 'approved', updated_at = excluded.updated_at`,
       args: [JSON.stringify(['beslenme', 'davranis', 'genel danisma']), JSON.stringify({ source: 'seed', scope: 'vet_live_mvp' }), now, now]
     }
   ]);
@@ -1461,6 +1461,42 @@ async function listVetBookings(db, url) {
   return result.rows.map((row) => normalizeVetBooking(row));
 }
 
+async function getVetProfileForPanel(db, { vetId = '', userId = '' } = {}) {
+  const where = [];
+  const args = [];
+  if (vetId) {
+    where.push('v.id = ?');
+    args.push(vetId);
+  }
+  if (userId) {
+    where.push('v.user_id = ?');
+    args.push(userId);
+  }
+  if (!where.length) return null;
+  const result = await db.execute({
+    sql: `SELECT v.*, u.email, u.phone, u.display_name AS user_display_name, u.timezone, u.locale
+          FROM vet_profiles v
+          LEFT JOIN users u ON u.id = v.user_id
+          WHERE ${where.join(' OR ')}
+          LIMIT 1`,
+    args
+  });
+  const row = result.rows[0];
+  if (!row) return null;
+  return {
+    ...normalizeVet(row),
+    email: row.email || '',
+    phone: row.phone || '',
+    timezone: row.timezone || 'Europe/Istanbul',
+    locale: row.locale || 'tr'
+  };
+}
+
+function specialtyListFromInput(value) {
+  if (Array.isArray(value)) return value.map((item) => String(item || '').trim()).filter(Boolean).slice(0, 8);
+  return String(value || '').split(',').map((item) => item.trim()).filter(Boolean).slice(0, 8);
+}
+
 async function handleVetLiveRequest(req, res, url) {
   const db = getDb();
   if (!db) return sendJson(res, 503, { ok: false, error: 'db_not_configured' });
@@ -1496,6 +1532,91 @@ async function handleVetLiveRequest(req, res, url) {
         provider: process.env.DAILY_API_KEY ? 'daily' : 'local_mock'
       }
     });
+  }
+
+  if (req.method === 'GET' && pathName === '/api/vet-live/profile') {
+    const profile = await getVetProfileForPanel(db, {
+      vetId: url.searchParams.get('vetId') || '',
+      userId: url.searchParams.get('userId') || ''
+    });
+    if (!profile) return sendJson(res, 404, { ok: false, error: 'vet_profile_not_found' });
+    return sendJson(res, 200, { ok: true, data: { profile } });
+  }
+
+  if (req.method === 'POST' && pathName === '/api/vet-live/profile') {
+    const body = await readBody(req);
+    const current = await getVetProfileForPanel(db, {
+      vetId: String(body.vetId || '').trim(),
+      userId: String(body.userId || '').trim()
+    });
+    if (!current) return sendJson(res, 404, { ok: false, error: 'vet_profile_not_found' });
+    const now = new Date().toISOString();
+    const displayName = String(body.displayName || body.display_name || current.display_name || '').trim();
+    if (!displayName) return sendJson(res, 400, { ok: false, error: 'display_name_required' });
+    const specialties = specialtyListFromInput(body.specialties);
+    await db.execute({
+      sql: `UPDATE vet_profiles
+            SET display_name = ?,
+                license_no = ?,
+                specialties = ?,
+                bio = ?,
+                is_active = ?,
+                updated_at = ?
+            WHERE id = ?`,
+      args: [
+        displayName,
+        String(body.licenseNo || body.license_no || '').trim(),
+        JSON.stringify(specialties),
+        String(body.bio || '').trim(),
+        body.isActive === false || body.isActive === 0 || body.isActive === '0' ? 0 : 1,
+        now,
+        current.id
+      ]
+    });
+    if (current.user_id) {
+      await db.execute({
+        sql: `UPDATE users
+              SET display_name = ?,
+                  email = ?,
+                  phone = ?,
+                  timezone = ?,
+                  updated_at = ?
+              WHERE id = ?`,
+        args: [
+          displayName,
+          String(body.email || current.email || '').trim() || null,
+          normalizePhone(body.phone || current.phone || '') || null,
+          String(body.timezone || current.timezone || 'Europe/Istanbul').trim(),
+          now,
+          current.user_id
+        ]
+      });
+    }
+    return sendJson(res, 200, { ok: true, data: { profile: await getVetProfileForPanel(db, { vetId: current.id }) } });
+  }
+
+  if (req.method === 'POST' && pathName === '/api/vet-live/profile/password') {
+    const body = await readBody(req);
+    const current = await getVetProfileForPanel(db, {
+      vetId: String(body.vetId || '').trim(),
+      userId: String(body.userId || '').trim()
+    });
+    if (!current?.user_id) return sendJson(res, 404, { ok: false, error: 'vet_profile_not_found' });
+    const currentPassword = String(body.currentPassword || '');
+    const newPassword = String(body.newPassword || '');
+    if (newPassword.length < 4) return sendJson(res, 400, { ok: false, error: 'password_too_short' });
+    const user = (await db.execute({
+      sql: `SELECT password_hash FROM users WHERE id = ? LIMIT 1`,
+      args: [current.user_id]
+    })).rows[0];
+    if (!user?.password_hash || !verifyPassword(currentPassword, user.password_hash)) {
+      return sendJson(res, 401, { ok: false, error: 'current_password_invalid' });
+    }
+    await db.execute({
+      sql: `UPDATE users SET password_hash = ?, updated_at = ? WHERE id = ?`,
+      args: [hashPassword(newPassword), new Date().toISOString(), current.user_id]
+    });
+    return sendJson(res, 200, { ok: true, data: { changed: true } });
   }
 
   if (req.method === 'GET' && pathName === '/api/vet-live/bookings') {

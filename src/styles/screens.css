@@ -705,6 +705,65 @@ textarea:focus-visible,
   margin-top: 14px;
 }
 
+.vet-live-vet-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 16px 12px;
+}
+
+.vet-live-vet-summary div {
+  border: 1px solid rgba(214, 233, 227, 0.95);
+  border-radius: 10px;
+  background: #FFFFFF;
+  padding: 12px;
+}
+
+.vet-live-vet-summary strong,
+.vet-live-vet-summary span {
+  display: block;
+}
+
+.vet-live-vet-summary strong {
+  font-size: 22px;
+  color: var(--text-primary);
+}
+
+.vet-live-vet-summary span {
+  margin-top: 2px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.vet-live-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0 16px 12px;
+}
+
+.vet-live-tabs button {
+  min-height: 40px;
+  border: 1px solid rgba(214, 233, 227, 0.95);
+  border-radius: 8px;
+  background: #FFFFFF;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.vet-live-tabs button.active {
+  border-color: rgba(30, 132, 108, 0.35);
+  background: #E6F5F1;
+  color: var(--primary);
+}
+
+.vet-live-panel-section[hidden],
+#vetLiveNotePanel[hidden] {
+  display: none;
+}
+
 .vet-live-step-grid,
 .vet-live-list {
   display: grid;

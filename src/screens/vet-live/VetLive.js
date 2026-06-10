@@ -7,11 +7,14 @@ import {
   createVetLiveBooking,
   getVetLiveBooking,
   getVetLiveLookups,
+  getVetLiveProfile,
   getVetLiveQuote,
   listVetLiveBookings,
   requestVetLiveJoin,
+  saveVetLiveProfile,
   saveVetLiveNote,
-  saveVetLiveSurvey
+  saveVetLiveSurvey,
+  changeVetLivePassword
 } from '../../services/vetLive.js';
 import { t } from '../../i18n/tr.js';
 import { showToast } from '../../ui/toast.js';
@@ -52,6 +55,33 @@ function defaultDateTimeLocal() {
 
 function statusLabel(status) {
   return t(`vetLive.status.${status || 'requested'}`);
+}
+
+function isCompletedBooking(booking) {
+  return ['completed', 'cancelled', 'refunded'].includes(booking.status);
+}
+
+function isScheduledLater(booking) {
+  if (isCompletedBooking(booking)) return false;
+  if (!booking.scheduled_at) return false;
+  return new Date(booking.scheduled_at).getTime() > Date.now() + 30 * 60 * 1000;
+}
+
+function splitVetBookings(bookings = []) {
+  const active = [];
+  const scheduled = [];
+  const history = [];
+  bookings.forEach((booking) => {
+    if (isCompletedBooking(booking)) history.push(booking);
+    else if (isScheduledLater(booking)) scheduled.push(booking);
+    else active.push(booking);
+  });
+  return { active, scheduled, history };
+}
+
+function specialtiesText(value) {
+  if (Array.isArray(value)) return value.join(', ');
+  return String(value || '');
 }
 
 function currentPet() {
@@ -191,13 +221,15 @@ function bookingCard(booking) {
 }
 
 function vetQueueCard(booking) {
-  const canStart = !['completed', 'cancelled', 'refunded'].includes(booking.status);
+  const canStart = !isCompletedBooking(booking);
+  const hasNote = Array.isArray(booking.notes) && booking.notes.length > 0;
   return `
     <div class="vet-live-booking-card" data-vet-queue-card="${escapeHtml(booking.id)}">
       <div>
         <strong>${escapeHtml(booking.vet_name || t('vetLive.pool_request'))}</strong>
         <p>${formatDate(booking.scheduled_at)} · ${money(booking.price_cents, booking.currency)}</p>
         <p>${escapeHtml(booking.case_summary || t('vetLive.empty_case_summary'))}</p>
+        <p class="text-xs text-tertiary">${booking.joined_owner_at ? t('vetLive.owner_joined') : t('vetLive.owner_waiting')} · ${booking.joined_vet_at ? t('vetLive.vet_joined') : t('vetLive.vet_waiting')}${hasNote ? ` · ${t('vetLive.note_added')}` : ''}</p>
       </div>
       <div class="vet-live-card-actions">
         <span class="plan-pill">${statusLabel(booking.status)}</span>
@@ -291,6 +323,7 @@ function renderRoom() {
 }
 
 function renderVetPanel() {
+  const user = getState().user || {};
   return shell(`
     <section class="feature-form-hero gold">
       <div>
@@ -299,12 +332,94 @@ function renderVetPanel() {
         <p>${t('vetLive.vet_panel_desc')}</p>
       </div>
     </section>
+    <section class="vet-live-vet-summary">
+      <div><strong id="vetLiveActiveCount">0</strong><span>${t('vetLive.tab_active')}</span></div>
+      <div><strong id="vetLiveScheduledCount">0</strong><span>${t('vetLive.tab_scheduled')}</span></div>
+      <div><strong id="vetLiveHistoryCount">0</strong><span>${t('vetLive.tab_history')}</span></div>
+    </section>
+    <section class="vet-live-tabs" aria-label="${t('vetLive.vet_panel')}">
+      <button class="active" data-vet-tab="active">${t('vetLive.tab_active')}</button>
+      <button data-vet-tab="scheduled">${t('vetLive.tab_scheduled')}</button>
+      <button data-vet-tab="history">${t('vetLive.tab_history')}</button>
+      <button data-vet-tab="profile">${t('vetLive.tab_profile')}</button>
+    </section>
     <section class="section">
-      <div id="vetLiveVetQueue" class="vet-live-list">
-        <div class="free-record-panel">${t('common.loading')}</div>
+      <div class="section-header">
+        <h3 class="section-title" id="vetLivePanelTitle">${t('vetLive.active_requests_title')}</h3>
+        <button class="btn btn-secondary btn-sm" id="btnVetRefresh">${t('vetLive.refresh')}</button>
+      </div>
+      <div class="vet-live-panel-section" data-vet-panel-section="active">
+        <div id="vetLiveActiveList" class="vet-live-list">
+          <div class="free-record-panel">${t('common.loading')}</div>
+        </div>
+      </div>
+      <div class="vet-live-panel-section" data-vet-panel-section="scheduled" hidden>
+        <div id="vetLiveScheduledList" class="vet-live-list">
+          <div class="free-record-panel">${t('common.loading')}</div>
+        </div>
+      </div>
+      <div class="vet-live-panel-section" data-vet-panel-section="history" hidden>
+        <div id="vetLiveHistoryList" class="vet-live-list">
+          <div class="free-record-panel">${t('common.loading')}</div>
+        </div>
       </div>
     </section>
-    <section class="feature-form-card">
+    <section class="vet-live-panel-section" data-vet-panel-section="profile" hidden>
+      <section class="feature-form-card">
+        <h3>${t('vetLive.profile_title')}</h3>
+        <p class="text-sm text-secondary">${t('vetLive.profile_desc')}</p>
+        <label class="feature-field">
+          <span>${t('vetLive.display_name_label')}</span>
+          <input id="vetLiveProfileName" value="${escapeHtml(user.name || '')}" />
+        </label>
+        <label class="feature-field">
+          <span>${t('vetLive.license_no_label')}</span>
+          <input id="vetLiveProfileLicense" />
+        </label>
+        <label class="feature-field">
+          <span>${t('vetLive.specialties_label')}</span>
+          <input id="vetLiveProfileSpecialties" placeholder="${t('vetLive.specialties_placeholder')}" />
+        </label>
+        <label class="feature-field">
+          <span>${t('vetLive.bio_label')}</span>
+          <textarea id="vetLiveProfileBio" rows="3"></textarea>
+        </label>
+        <label class="feature-field">
+          <span>${t('vetLive.email_label')}</span>
+          <input id="vetLiveProfileEmail" type="email" value="${escapeHtml(user.email || '')}" />
+        </label>
+        <label class="feature-field">
+          <span>${t('vetLive.phone_label')}</span>
+          <input id="vetLiveProfilePhone" inputmode="tel" value="${escapeHtml(user.phone || '')}" />
+        </label>
+        <label class="feature-field">
+          <span>${t('vetLive.timezone_label')}</span>
+          <input id="vetLiveProfileTimezone" value="${escapeHtml(user.timezone || 'Europe/Istanbul')}" />
+        </label>
+        <label class="auth-checkbox">
+          <input id="vetLiveProfileActive" type="checkbox" checked />
+          <span>${t('vetLive.available_label')}</span>
+        </label>
+        <button class="btn btn-primary btn-full" id="btnSaveVetProfile">${t('vetLive.save_profile')}</button>
+      </section>
+      <section class="feature-form-card">
+        <h3>${t('vetLive.password_title')}</h3>
+        <label class="feature-field">
+          <span>${t('vetLive.current_password_label')}</span>
+          <input id="vetLiveCurrentPassword" type="password" autocomplete="current-password" />
+        </label>
+        <label class="feature-field">
+          <span>${t('vetLive.new_password_label')}</span>
+          <input id="vetLiveNewPassword" type="password" autocomplete="new-password" />
+        </label>
+        <label class="feature-field">
+          <span>${t('vetLive.confirm_password_label')}</span>
+          <input id="vetLiveConfirmPassword" type="password" autocomplete="new-password" />
+        </label>
+        <button class="btn btn-secondary btn-full" id="btnChangeVetPassword">${t('vetLive.change_password')}</button>
+      </section>
+    </section>
+    <section class="feature-form-card" id="vetLiveNotePanel">
       <h3>${t('vetLive.note_form_title')}</h3>
       <p class="text-sm text-secondary">${t('vetLive.note_form_desc')}</p>
       <label class="feature-field">
@@ -338,8 +453,17 @@ export function render(params = {}) {
 }
 
 function bindShell() {
-  document.getElementById('btnBack')?.addEventListener('click', () => goBack());
-  document.getElementById('btnVetHome')?.addEventListener('click', () => navigate('/home'));
+  const isVet = getState().user?.accountRole === 'vet_live';
+  document.getElementById('btnBack')?.addEventListener('click', () => {
+    if (!isVet) {
+      goBack();
+      return;
+    }
+    const path = (window.location.hash || '').replace('#', '').split('?')[0];
+    if (path === '/vet-live/vet') return;
+    navigate('/vet-live/vet');
+  });
+  document.getElementById('btnVetHome')?.addEventListener('click', () => navigate(isVet ? '/vet-live/vet' : '/home'));
 }
 
 async function hydrateHome() {
@@ -555,34 +679,47 @@ async function hydrateRoom(params) {
 }
 
 async function hydrateVetPanel() {
-  const queue = document.getElementById('vetLiveVetQueue');
-  try {
-    const vetId = getState().user?.vetProfileId;
-    const bookings = await listVetLiveBookings({ vetId, includePool: '1', limit: 50 });
-    queue.innerHTML = bookings.length
-      ? bookings.map(vetQueueCard).join('')
-      : `<div class="empty-state"><div class="empty-state-title">${t('vetLive.no_queue')}</div><div class="empty-state-desc">${t('vetLive.no_queue_desc')}</div></div>`;
-    queue.querySelectorAll('[data-note-booking-id]').forEach((button) => {
+  const state = getState();
+  const vetId = state.user?.vetProfileId;
+  const userId = state.user?.id;
+  const titles = {
+    active: t('vetLive.active_requests_title'),
+    scheduled: t('vetLive.scheduled_requests_title'),
+    history: t('vetLive.history_title'),
+    profile: t('vetLive.profile_title')
+  };
+  const setTab = (tab = 'active') => {
+    document.querySelectorAll('[data-vet-tab]').forEach((button) => {
+      button.classList.toggle('active', button.dataset.vetTab === tab);
+    });
+    document.querySelectorAll('[data-vet-panel-section]').forEach((section) => {
+      section.hidden = section.dataset.vetPanelSection !== tab;
+    });
+    const title = document.getElementById('vetLivePanelTitle');
+    if (title) title.textContent = titles[tab] || titles.active;
+    document.getElementById('vetLiveNotePanel')?.toggleAttribute('hidden', tab === 'profile');
+  };
+  const bindBookingActions = () => {
+    document.querySelectorAll('[data-note-booking-id]').forEach((button) => {
       button.addEventListener('click', () => {
         document.getElementById('vetLiveNoteBookingId').value = button.dataset.noteBookingId;
         document.getElementById('vetLiveNoteSummary')?.focus();
         document.getElementById('vetLiveNoteBookingId')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
     });
-    queue.querySelectorAll('[data-start-booking-id]').forEach((button) => {
+    document.querySelectorAll('[data-start-booking-id]').forEach((button) => {
       button.addEventListener('click', () => navigate(`/vet-live/room/${button.dataset.startBookingId}`));
     });
-    queue.querySelectorAll('[data-open-booking-id]').forEach((button) => {
+    document.querySelectorAll('[data-open-booking-id]').forEach((button) => {
       button.addEventListener('click', () => navigate(`/vet-live/bookings/${button.dataset.openBookingId}`));
     });
-    queue.querySelectorAll('[data-claim-booking-id]').forEach((button) => {
+    document.querySelectorAll('[data-claim-booking-id]').forEach((button) => {
       button.addEventListener('click', async () => {
         button.disabled = true;
         try {
-          const vetId = getState().user?.vetProfileId;
           await claimVetLiveBooking(button.dataset.claimBookingId, { vetId });
           showToast(t('vetLive.claim_saved'));
-          return hydrateVetPanel();
+          await loadBookings();
         } catch (error) {
           showToast(t('vetLive.claim_failed', { error: error.message || '' }));
         } finally {
@@ -590,9 +727,93 @@ async function hydrateVetPanel() {
         }
       });
     });
-  } catch {
-    queue.innerHTML = `<div class="free-record-panel">${t('vetLive.load_failed')}</div>`;
+  };
+  const empty = (title, desc) => `<div class="empty-state"><div class="empty-state-title">${title}</div><div class="empty-state-desc">${desc}</div></div>`;
+  const renderList = (elementId, list, title, desc) => {
+    const target = document.getElementById(elementId);
+    if (!target) return;
+    target.innerHTML = list.length ? list.map(vetQueueCard).join('') : empty(title, desc);
+  };
+  async function loadBookings() {
+    try {
+      const bookings = await listVetLiveBookings({ vetId, includePool: '1', limit: 100 });
+      const grouped = splitVetBookings(bookings);
+      document.getElementById('vetLiveActiveCount').textContent = grouped.active.length;
+      document.getElementById('vetLiveScheduledCount').textContent = grouped.scheduled.length;
+      document.getElementById('vetLiveHistoryCount').textContent = grouped.history.length;
+      renderList('vetLiveActiveList', grouped.active, t('vetLive.no_active_requests'), t('vetLive.no_active_requests_desc'));
+      renderList('vetLiveScheduledList', grouped.scheduled, t('vetLive.no_scheduled_requests'), t('vetLive.no_scheduled_requests_desc'));
+      renderList('vetLiveHistoryList', grouped.history, t('vetLive.no_history'), t('vetLive.no_history_desc'));
+      bindBookingActions();
+    } catch {
+      ['vetLiveActiveList', 'vetLiveScheduledList', 'vetLiveHistoryList'].forEach((id) => {
+        const target = document.getElementById(id);
+        if (target) target.innerHTML = `<div class="free-record-panel">${t('vetLive.load_failed')}</div>`;
+      });
+    }
   }
+  document.querySelectorAll('[data-vet-tab]').forEach((button) => {
+    button.addEventListener('click', () => setTab(button.dataset.vetTab));
+  });
+  document.getElementById('btnVetRefresh')?.addEventListener('click', loadBookings);
+  try {
+    const profile = await getVetLiveProfile({ vetId, userId });
+    document.getElementById('vetLiveProfileName').value = profile?.display_name || state.user?.name || '';
+    document.getElementById('vetLiveProfileLicense').value = profile?.license_no || '';
+    document.getElementById('vetLiveProfileSpecialties').value = specialtiesText(profile?.specialties);
+    document.getElementById('vetLiveProfileBio').value = profile?.bio || '';
+    document.getElementById('vetLiveProfileEmail').value = profile?.email || state.user?.email || '';
+    document.getElementById('vetLiveProfilePhone').value = profile?.phone || state.user?.phone || '';
+    document.getElementById('vetLiveProfileTimezone').value = profile?.timezone || state.user?.timezone || 'Europe/Istanbul';
+    document.getElementById('vetLiveProfileActive').checked = profile?.is_active !== 0;
+  } catch {}
+  document.getElementById('btnSaveVetProfile')?.addEventListener('click', async () => {
+    const button = document.getElementById('btnSaveVetProfile');
+    button.disabled = true;
+    try {
+      await saveVetLiveProfile({
+        vetId,
+        userId,
+        displayName: document.getElementById('vetLiveProfileName')?.value.trim(),
+        licenseNo: document.getElementById('vetLiveProfileLicense')?.value.trim(),
+        specialties: document.getElementById('vetLiveProfileSpecialties')?.value.trim(),
+        bio: document.getElementById('vetLiveProfileBio')?.value.trim(),
+        email: document.getElementById('vetLiveProfileEmail')?.value.trim(),
+        phone: document.getElementById('vetLiveProfilePhone')?.value.trim(),
+        timezone: document.getElementById('vetLiveProfileTimezone')?.value.trim(),
+        isActive: document.getElementById('vetLiveProfileActive')?.checked
+      });
+      showToast(t('vetLive.profile_saved'));
+    } catch (error) {
+      showToast(t('vetLive.profile_failed', { error: error.message || '' }));
+    } finally {
+      button.disabled = false;
+    }
+  });
+  document.getElementById('btnChangeVetPassword')?.addEventListener('click', async () => {
+    const currentPassword = document.getElementById('vetLiveCurrentPassword')?.value || '';
+    const newPassword = document.getElementById('vetLiveNewPassword')?.value || '';
+    const confirmPassword = document.getElementById('vetLiveConfirmPassword')?.value || '';
+    if (!currentPassword || !newPassword) {
+      showToast(t('vetLive.password_required'));
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      showToast(t('vetLive.password_mismatch'));
+      return;
+    }
+    try {
+      await changeVetLivePassword({ vetId, userId, currentPassword, newPassword });
+      document.getElementById('vetLiveCurrentPassword').value = '';
+      document.getElementById('vetLiveNewPassword').value = '';
+      document.getElementById('vetLiveConfirmPassword').value = '';
+      showToast(t('vetLive.password_saved'));
+    } catch (error) {
+      showToast(t('vetLive.password_failed', { error: error.message || '' }));
+    }
+  });
+  setTab('active');
+  await loadBookings();
   document.getElementById('btnSaveVetNote')?.addEventListener('click', async () => {
     const bookingId = document.getElementById('vetLiveNoteBookingId')?.value.trim();
     const summary = document.getElementById('vetLiveNoteSummary')?.value.trim();
