@@ -476,8 +476,8 @@ async function insertMediaFiles(db, record, payload) {
 
   await Promise.all(files.map((file) => db.execute({
     sql: `INSERT INTO media_files
-      (id, pet_id, uploaded_by_user_id, related_entity_type, related_entity_id, media_type, local_uri, mime_type, file_size_bytes, metadata)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      (id, pet_id, uploaded_by_user_id, related_entity_type, related_entity_id, media_type, url, local_uri, mime_type, file_size_bytes, metadata)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     args: [
       makeId('media'),
       record.pet_id,
@@ -485,6 +485,7 @@ async function insertMediaFiles(db, record, payload) {
       'form_submission',
       record.id,
       String(file.mime_type || '').startsWith('image/') ? 'image' : 'document',
+      file.object_key || file.url || null,
       file.local_uri || '',
       file.mime_type || '',
       Number(file.file_size_bytes || 0),

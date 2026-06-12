@@ -2053,6 +2053,23 @@ function sanitizePackageRiskResult(data) {
   };
 }
 
+function inlineAiMediaParts(items = []) {
+  const maxBase64Bytes = 12 * 1024 * 1024;
+  return (Array.isArray(items) ? items : [])
+    .slice(0, 2)
+    .map((item) => ({
+      mimeType: String(item?.mimeType || 'application/octet-stream'),
+      data: String(item?.base64 || item?.data || '')
+    }))
+    .filter((item) => item.data && item.data.length <= maxBase64Bytes)
+    .map((item) => ({
+      inlineData: {
+        mimeType: item.mimeType,
+        data: item.data
+      }
+    }));
+}
+
 async function handlePackageRiskLogged(req, res) {
   const body = await readBody(req);
   const db = getDb();
@@ -2062,8 +2079,9 @@ async function handlePackageRiskLogged(req, res) {
   const availability = await featureAvailability(db, { userId, featureCode: 'package-risk' });
   if (!availability.ok) return sendJson(res, 402, { ok: false, error: 'insufficient_credits', ...availability });
   const model = process.env.GEMINI_CRITICAL_MODEL || 'gemini-3.5-flash';
-  const system = 'Sen veteriner yerine gecmeyen, guvenli aciliyet yonlendirmesi yapan bir pet saglik asistanisin.';
+  const system = 'Sen veteriner yerine gecmeyen, guvenli aciliyet yonlendirmesi yapan bir pet saglik asistanisin. Paket fotografi inline geldiyse yalnizca gorunur etiket, urun ve icerik bilgisini dikkate al; okunmuyorsa uydurma.';
   const startedAt = Date.now();
+  const parts = inlineAiMediaParts(body.inlineMedia);
   const job = await createAiJob({
     userId,
     petId,
@@ -2075,6 +2093,10 @@ async function handlePackageRiskLogged(req, res) {
       systemPrompt: system,
       userPrompt: body.prompt || '',
       mediaRefs: Array.isArray(body.mediaRefs) ? body.mediaRefs : [],
+      inlineMedia: parts.map((part) => ({
+        mimeType: part.inlineData.mimeType,
+        approxBytes: Math.round((part.inlineData.data.length * 3) / 4)
+      })),
       request: body.context || {}
     }
   });
@@ -2092,6 +2114,7 @@ async function handlePackageRiskLogged(req, res) {
   const result = await generateGeminiJson({
     system,
     prompt: body.prompt || '',
+    parts,
     model,
     responseSchema: {
       type: 'object',

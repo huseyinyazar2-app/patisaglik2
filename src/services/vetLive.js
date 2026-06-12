@@ -27,6 +27,11 @@ const demoVet2 = {
   rating_avg: 4.7
 };
 
+function ensureLocalVetFallback(error) {
+  if (import.meta.env?.DEV) return;
+  throw error || new Error('network_error');
+}
+
 function readList(key) {
   try {
     const value = JSON.parse(localStorage.getItem(key) || '[]');
@@ -161,7 +166,8 @@ export async function getVetLiveLookups() {
   try {
     const result = await getApiJson('/api/vet-live/vets');
     return result.data;
-  } catch {
+  } catch (error) {
+    ensureLocalVetFallback(error);
     return {
       vets: [demoVet, demoVet2],
       availability: [1, 2, 3, 4, 5].flatMap((weekday) => [{
@@ -189,7 +195,8 @@ export async function getVetLiveQuote(input = {}) {
   try {
     const result = await postApiJson('/api/vet-live/quote', input);
     return result.data;
-  } catch {
+  } catch (error) {
+    ensureLocalVetFallback(error);
     return {
       durationMinutes: Number(input.durationMinutes || 15),
       priceCents: 8,
@@ -206,7 +213,8 @@ export async function getVetLiveProfile(input = {}) {
     if (input.userId) query.set('userId', input.userId);
     const result = await getApiJson(`/api/vet-live/profile?${query.toString()}`);
     return result.data?.profile || null;
-  } catch {
+  } catch (error) {
+    ensureLocalVetFallback(error);
     return localVetProfile(input);
   }
 }
@@ -228,7 +236,7 @@ export async function saveVetLiveProfile(input = {}) {
     }
     return profile;
   } catch (error) {
-    if (error.message !== 'network_error') throw error;
+    ensureLocalVetFallback(error);
     return saveLocalVetProfile(input);
   }
 }
@@ -238,7 +246,7 @@ export async function changeVetLivePassword(input = {}) {
     const result = await postApiJson('/api/vet-live/profile/password', input);
     return result.data || { ok: true };
   } catch (error) {
-    if (error.message !== 'network_error') throw error;
+    ensureLocalVetFallback(error);
     if (!String(input.newPassword || '').trim()) throw new Error('password_required');
     return { ok: true, provider: 'local_fallback' };
   }
@@ -252,7 +260,8 @@ export async function listVetLiveBookings(filter = {}) {
     });
     const result = await getApiJson(`/api/vet-live/bookings?${query.toString()}`);
     return result.data?.bookings || [];
-  } catch {
+  } catch (error) {
+    ensureLocalVetFallback(error);
     return localBookings(filter);
   }
 }
@@ -261,7 +270,8 @@ export async function getVetLiveBooking(bookingId) {
   try {
     const result = await getApiJson(`/api/vet-live/bookings/${encodeURIComponent(bookingId)}`);
     return result.data?.booking || null;
-  } catch {
+  } catch (error) {
+    ensureLocalVetFallback(error);
     return localBookings().find((booking) => booking.id === bookingId) || null;
   }
 }
@@ -270,7 +280,8 @@ export async function createVetLiveBooking(input) {
   try {
     const result = await postApiJson('/api/vet-live/bookings', input);
     return result.data?.booking;
-  } catch {
+  } catch (error) {
+    ensureLocalVetFallback(error);
     if (!input.legalConsentAccepted) throw new Error('legal_consent_required');
     const quote = await getVetLiveQuote(input);
     const cost = Math.max(1, Number(quote.priceCents || 8));
@@ -317,7 +328,7 @@ export async function claimVetLiveBooking(bookingId, input = {}) {
     const result = await postApiJson(`/api/vet-live/bookings/${encodeURIComponent(bookingId)}/claim`, input);
     return result.data?.booking;
   } catch (error) {
-    if (error.message !== 'network_error') throw error;
+    ensureLocalVetFallback(error);
     const booking = await getVetLiveBooking(bookingId);
     if (!booking) throw new Error('vet_booking_not_found');
     if (['completed', 'cancelled', 'refunded'].includes(booking.status)) throw new Error('booking_not_claimable');
@@ -346,7 +357,8 @@ export async function cancelVetLiveBooking(bookingId) {
   try {
     const result = await postApiJson(`/api/vet-live/bookings/${encodeURIComponent(bookingId)}/cancel`, {});
     return result.data?.booking;
-  } catch {
+  } catch (error) {
+    ensureLocalVetFallback(error);
     const booking = await getVetLiveBooking(bookingId);
     if (!booking) throw new Error('vet_booking_not_found');
     if (booking.status === 'completed' || (booking.joined_owner_at && booking.joined_vet_at)) throw new Error('booking_already_started');
@@ -362,7 +374,8 @@ export async function requestVetLiveJoin(bookingId, role = 'owner', options = {}
   try {
     const result = await postApiJson(`/api/vet-live/bookings/${encodeURIComponent(bookingId)}/join-token`, { role, vetId: options.vetId || null });
     return result.data;
-  } catch {
+  } catch (error) {
+    ensureLocalVetFallback(error);
     const booking = await getVetLiveBooking(bookingId);
     if (!booking) throw new Error('vet_booking_not_found');
     const roomName = booking.daily_room_name || `pethelp-${booking.id}`;
@@ -388,7 +401,8 @@ export async function saveVetLiveNote(bookingId, input) {
   try {
     const result = await postApiJson(`/api/vet-live/bookings/${encodeURIComponent(bookingId)}/notes`, input);
     return result.data?.booking;
-  } catch {
+  } catch (error) {
+    ensureLocalVetFallback(error);
     const booking = await getVetLiveBooking(bookingId);
     if (!booking) throw new Error('vet_booking_not_found');
     const note = {
@@ -414,7 +428,8 @@ export async function saveVetLiveSurvey(bookingId, input = {}) {
   try {
     const result = await postApiJson(`/api/vet-live/bookings/${encodeURIComponent(bookingId)}/survey`, input);
     return result.data?.booking;
-  } catch {
+  } catch (error) {
+    ensureLocalVetFallback(error);
     const booking = await getVetLiveBooking(bookingId);
     if (!booking) throw new Error('vet_booking_not_found');
     if (booking.status !== 'completed') throw new Error('booking_not_completed');

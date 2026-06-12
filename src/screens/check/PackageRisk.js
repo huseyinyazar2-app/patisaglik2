@@ -67,6 +67,20 @@ function fieldValue(id) {
   return document.getElementById(id)?.value?.trim() || '';
 }
 
+const MAX_INLINE_AI_FILE_BYTES = 8 * 1024 * 1024;
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = String(reader.result || '');
+      resolve(result.includes(',') ? result.split(',').pop() : result);
+    };
+    reader.onerror = () => reject(reader.error || new Error('file_read_failed'));
+    reader.readAsDataURL(file);
+  });
+}
+
 function filePayload(input) {
   const file = input?.files?.[0];
   if (!file) return null;
@@ -344,7 +358,9 @@ export function afterRender() {
           showToast(t('planScreen.insufficient_credits'));
           throw new Error('insufficient_credits');
         }
-        const prompt = buildAiPrompt({ productName, ingredientText, amount, timing, symptoms, petContext }, lastResult);
+        const prompt = `${buildAiPrompt({ productName, ingredientText, amount, timing, symptoms, petContext }, lastResult)}
+
+Paket fotografi eklendiyse gorselde net okunan etiket, urun veya icerik bilgisini dikkate al; okunmuyorsa uydurma.`;
         const packageFile = document.getElementById('packagePhoto')?.files?.[0];
         let mediaRefs = packageFile ? [{
           fileName: packageFile.name || '',
@@ -352,6 +368,16 @@ export function afterRender() {
           sizeBytes: packageFile.size || 0,
           source: 'package_photo'
         }] : [];
+        let inlineMedia = [];
+        if (packageFile && packageFile.size <= MAX_INLINE_AI_FILE_BYTES) {
+          try {
+            inlineMedia = [{
+              mimeType: packageFile.type || 'application/octet-stream',
+              base64: await fileToBase64(packageFile)
+            }];
+            mediaRefs = mediaRefs.map((item) => ({ ...item, inlineIncluded: true }));
+          } catch {}
+        }
         if (packageFile && state.user?.id && state.activePetId) {
           try {
             const uploaded = await uploadMediaFile({
@@ -375,6 +401,7 @@ export function afterRender() {
           petId: state.activePetId || '',
           prompt,
           mediaRefs,
+          inlineMedia,
           context: { productName, ingredientText, amount, timing, symptoms, petContext }
         }).catch((error) => {
           aiError = error;
