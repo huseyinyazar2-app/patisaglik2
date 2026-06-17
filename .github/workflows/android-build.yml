@@ -86,16 +86,28 @@ jobs:
           name: pet-help-debug-apk
           path: android/app/build/outputs/apk/debug/*.apk
 
+      - name: Build release APK
+        working-directory: android
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Upload release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: pet-help-release-apk
+          path: android/app/build/outputs/apk/release/*.apk
+
       - name: Publish latest test APK
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p release-apk
           cp android/app/build/outputs/apk/debug/*.apk release-apk/pet-help-debug.apk
+          cp android/app/build/outputs/apk/release/*.apk release-apk/pet-help-release.apk
           if gh release view mobile-test-latest >/dev/null 2>&1; then
             gh release upload mobile-test-latest release-apk/pet-help-debug.apk --clobber
+            gh release upload mobile-test-latest release-apk/pet-help-release.apk --clobber
           else
-            gh release create mobile-test-latest release-apk/pet-help-debug.apk --title "Pet Help Mobile Test APK" --notes "Latest debug APK for mobile testing." --prerelease || echo "Release publish skipped; APK artifact was uploaded successfully."
+            gh release create mobile-test-latest release-apk/pet-help-debug.apk release-apk/pet-help-release.apk --title "Pet Help Mobile Test APK" --notes "Latest debug and release APKs for mobile testing." --prerelease || echo "Release publish skipped; APK artifacts were uploaded successfully."
           fi
 
       - name: Build signed release AAB
